@@ -8,7 +8,7 @@
 
 body {
   height: 100vh;
-  background-color: rgb(238, 228, 196);
+  background-color: #fff;
 }
 
 .container {
@@ -22,7 +22,7 @@ body {
     align-items: center;
     padding-top: 1rem;
     padding-bottom: 1rem;
-    background-color: rgb(187, 187, 187);
+    background-color: #dadada;
 }
 
 .navbar{
@@ -34,8 +34,8 @@ body {
 }
 
 .sweet_logo{
-  width: 200px;
-  height: 200px;
+  width: 60px;
+  height: 60px;
   left: 5em;
   object-fit: cover;
 }
@@ -53,7 +53,7 @@ body {
   justify-content: center;
   align-items: center;
   gap: 2em;
-  background-color: rgb(218, 214, 214);
+  background-color: rgb(245, 245, 245);
   box-shadow: -7px -7px 10px #ffffff, 5px 5px 10px rgba(0, 0, 0, 0.585);
 }
 
@@ -65,7 +65,7 @@ input {
   border: none;
   outline: none;
   border-radius: 25px;
-  background-color: rgb(218, 214, 214);
+  background-color: rgb(226, 226, 226);
   box-shadow: inset -5px -5px 10px white,
     inset 5px 5px 10px rgba(0, 0, 0, 0.485);
 }
@@ -80,7 +80,7 @@ button {
   font-size: 1rem;
   border-radius: 25px;
   box-shadow: -5px -5px 10px white, 5px 5px 10px rgba(0, 0, 0, 0.485);
-  background-color: rgb(218, 214, 214);
+  background-color: rgb(245, 245, 245);
   border: none;
 }
 

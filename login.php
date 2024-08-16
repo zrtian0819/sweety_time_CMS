@@ -12,7 +12,7 @@
     </head>
 
     <body>
-        <?php include ("header.php");?>
+        <?php include ("login-header.php");?>
         <div class="container">
             <div class="card">
                 <h1>Log In</h1>
@@ -24,7 +24,7 @@
         <div class="container">
             <div class="w-50 d-flex justify-content-between gap-3 mt-lg-5">
                     <p>
-                        <a class="sign-in" href="/register?redirect=%2F">註冊帳號</a>
+                        <a class="sign-in" href="/sign.php">註冊帳號</a>
                     </p>
                     <p>
                         <a class="sign-in" href="/password/reset" class="forgot-pw">忘記密碼?</a>
