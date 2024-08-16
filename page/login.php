@@ -8,11 +8,11 @@
             name="viewport"
             content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
-        <?php include 'css.php';?>
+        <?php include("../css/css.php");?>
     </head>
 
     <body>
-        <?php include ("login-header.php");?>
+        <?php include ("../modules/login-header.php");?>
         <div class="container">
             <div class="card">
                 <h1>Log In</h1>
