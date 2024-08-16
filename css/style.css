@@ -6,6 +6,10 @@
   --bs-gutter-x: 0;
 }
 
+:root {
+  --primary-color: rgb(247, 152, 10);
+}
+
 body {
   height: 100%;
   margin: 0;
@@ -197,4 +201,19 @@ width: 100px;
 
 .nav-link:hover {
   color: #b6a7a4;
+}
+
+.shop-info-logo{
+  width: 500px;
+  height: 500px;
+}
+.shop-info-text{
+  font-size: 20px;
+  font-weight: 600;
+  color: #968c8a;
+}
+.shop-info-text p{
+  font-size: 20px;
+  font-weight: 600;
+  color: #968c8a;
 }
