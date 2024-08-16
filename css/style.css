@@ -7,8 +7,14 @@
 }
 
 body {
-  height: 100vh;
-  background-color: #fff;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #f0f0f3; 
+  color: #968c8a;
+  font-family: "Noto Sans TC", system-ui;
+  font-optical-sizing: auto;
 }
 
 .container {
@@ -104,4 +110,91 @@ button {
   &:hover{
     color: rgb(247, 152, 10);
   }
+}
+
+/* .container-fluid {
+  height: 100%;
+  padding: 20px;
+} */
+
+.neumorphic {
+  border-radius: 10px;
+  background: #ffffff; 
+  box-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff; 
+}
+
+.navbar {
+  border-radius: 10px;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  background: #ffffff; 
+  box-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff;
+}
+
+.logo{
+width: 100px;
+}
+
+.sidebar {
+  height: calc(100vh - 140px);
+  padding: 20px;
+  border-radius: 10px;
+  overflow-y: auto;
+  background: #ffffff; 
+  box-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff;
+}
+
+.content {
+  height: calc(100vh - 140px);
+  padding: 20px;
+  border-radius: 10px;
+  overflow-y: auto;
+  background: #f0f0f3; 
+  box-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff;
+}
+
+.btn-neumorphic {
+  background: #ffffff; 
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-weight: bold;
+  color: #F4A293;
+  box-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff;
+  transition: all 0.2s ease;
+  margin: 10px 5px;
+}
+
+.btn-neumorphic:hover {
+  box-shadow: 5px 5px 10px #d1d9e6, -5px -5px 10px #ffffff;
+}
+
+.btn-neumorphic:active {
+  box-shadow: inset 8px 8px 16px #d1d9e6, inset -8px -8px 16px #ffffff;
+}
+
+.form-control-neumorphic {
+  background: #ffffff; 
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: inset 8px 8px 16px #d1d9e6, inset -8px -8px 16px #ffffff;
+}
+
+.card-neumorphic {
+  background: #ffffff;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.nav-link {
+  color: #968c8a;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  color: #b6a7a4;
 }
