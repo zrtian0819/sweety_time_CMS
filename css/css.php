@@ -11,4 +11,4 @@
 
 
 <!-- 瀏覽器重置暫存的方法 可以加一個 time() 變數讓瀏覽器重新讀取一次；開發階段可以使用 -->
-<link rel="stylesheet" href="/css/style.css?t=<?=time()?>">
+<link rel="stylesheet" href="./style.css?t=<?=time()?>">
