@@ -10,7 +10,7 @@
 <body>
         <div class="row">
             <!-- Sidebar -->
-            <div class="col-md-3">
+            <div class="col-lg-2 col-md-3">
                 <div class="sidebar neumorphic">
                 <button class="btn btn-neumorphic"><h5>Admin 管理</h5></button>
                     <ul class="nav flex-column">
