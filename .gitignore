@@ -1,5 +1,5 @@
 # 照片檔先忽略不同步
 
-*.jpg
-*.jpeg
-*.png
+# *.jpg
+# *.jpeg
+# *.png
