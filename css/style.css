@@ -6,6 +6,10 @@
   --bs-gutter-x: 0;
 }
 
+:root {
+  --primary-color: rgb(247, 152, 10);
+}
+
 body {
   height: 100%;
   margin: 0;
@@ -123,7 +127,7 @@ button {
   box-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff; 
 }
 
-.navbar {
+.dashboard-navbar {
   border-radius: 10px;
   padding: 10px 20px;
   margin-bottom: 20px;
@@ -197,4 +201,23 @@ width: 100px;
 
 .nav-link:hover {
   color: #b6a7a4;
+}
+
+.shop-info-logo{
+  width: 450px;
+  height: 450px;
+  padding: 2em;
+}
+.shop-info-text{
+  color: #968c8a;
+}
+.shop-info-text p{
+  line-height: 2em;
+  font-size: 20px;
+  font-weight: 600;
+  color: #968c8a;
+}
+.shop-info-text h4{
+  font-weight: 500;
+  color:var(--primary-color);
 }

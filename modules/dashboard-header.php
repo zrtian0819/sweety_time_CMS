@@ -10,7 +10,7 @@
 <body>
     <div class="container-fluid">
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-light neumorphic">
+        <nav class="navbar dashboard-navbar navbar-expand-lg navbar-light neumorphic">
             <!-- <a class="navbar-brand" href="#">甜覓時光</a> -->
             <img class="logo" src="./img/logo.png" alt="">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
