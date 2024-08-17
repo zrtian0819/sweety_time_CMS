@@ -9,7 +9,7 @@ body {
   overflow: hidden;
   background-color: #f0f0f3; 
   color: #968c8a;
-  font-family: "Noto Sans TC","Noto Serif HK", serif;
+  font-family:"Noto Serif TC","Noto Sans TC","Noto Serif HK", "serif";
   font-optical-sizing: auto;
 }
 
@@ -133,7 +133,7 @@ button {
 }
 
 .sidebar {
-  width: 25rem;
+  /* width: 20rem; */
   height: calc(100vh - 140px);
   padding: 20px;
   border-radius: 10px;

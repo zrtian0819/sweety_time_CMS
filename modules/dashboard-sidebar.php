@@ -2,7 +2,7 @@
  <div class="container-fluid">
         <div class="row ms-3 me-3">
             <div class="col-sm-12 col-md-3 col-lg-3
-            col-xxl-3 ">
+            col-xxl-3">
                 <div class="sidebar neumorphic setting">
                     <button id="adminBtn" class="btn btn-neumorphic toggle-btn">
                         <h5 class="h5">admin管理</h5>

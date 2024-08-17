@@ -11,9 +11,14 @@
     <?php include("../css/css.php") ?>
 </head>
 <body>
+
 <?php include("../modules/dashboard-header.php");?>
+<div class="container-fluid">
+<div class="row justify-content-between">
 <?php include ("../modules/dashboard-sidebar.php");?>
 <?php include("../modules/dashboard-content.php");?>
+</div>
+</div>
 <?php include("../javascript/script.js");?>
     </body>
 </html>
