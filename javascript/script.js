@@ -1,9 +1,9 @@
 
 <script>
-      document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function() {
             const toggleBtns = document.querySelectorAll('.toggle-btn');
 
-            toggleBtns.forEach(btn => {
+            toggleBtns.forEach(btn =>() {
                 btn.addEventListener('click', function() {
                     const targetId = this.id.replace('Btn', 'List');
                     const targetList = document.getElementById(targetId);
@@ -20,4 +20,4 @@
                 });
             });
         });
-        </script>
+</script>
