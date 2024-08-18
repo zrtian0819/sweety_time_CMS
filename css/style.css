@@ -132,8 +132,8 @@ button {
   box-shadow: 10px 10px 10px -8px #f5d6d1, 8px -4px 16px #ffffff;
 }
 
+/* 原設定 */
 .sidebar {
-  /* width: 20rem; */
   height: calc(100vh - 140px);
   padding: 20px;
   border-radius: 10px;
