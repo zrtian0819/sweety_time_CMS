@@ -19,6 +19,17 @@ foreach ($rowsTea as $teacher) {
     $teacherArr[$teacher["teacher_id"]] = $teacher["name"];
 }
 
+//分類
+$sqlProductClass = "SELECT * FROM product_class ORDER BY product_class_id";
+$resultPro = $conn->query($sqlProductClass);
+$rowsPro = $resultPro->fetch_all(MYSQLI_ASSOC);
+
+//關聯式陣列
+$productClassArr = [];
+foreach ($rowsPro as $productClass) {
+    $productClassArr[$productClass["product_class_id"]] = $productClass["class_name"];
+};
+
 ?>
 
 <!DOCTYPE html>
@@ -53,6 +64,7 @@ foreach ($rowsTea as $teacher) {
                     <th>課程編號</th>
                     <th>課程狀態</th>
                     <th>課程名稱</th>
+                    <th>課程分類</th>
                     <th>授課老師</th>
                     <th>課程人數</th>
                     <th>報名人數</th>
@@ -65,6 +77,7 @@ foreach ($rowsTea as $teacher) {
                             <td><?= $id ?></td>
                             <?php echo ($row["activation"] == 1) ? "<td>" . "上架中" : "<td class='text-danger'>" . "已下架"; ?></td>
                             <td><?= $row["name"] ?></td>
+                            <td><?= $productClassArr[$row["product_class_id"]] ?></td>
                             <td><?= $teacherArr[$row["teacher_id"]] ?></td>
                             <td><?= $row["quota"] ?></td>
                             <td>

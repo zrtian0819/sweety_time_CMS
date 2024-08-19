@@ -34,7 +34,11 @@ $resultStu = $conn->query($sqlStudent);
 $count = $resultStu->num_rows;
 $rowStu = $resultStu->fetch_assoc();
 
-
+//分類
+$productClass = $row["product_class_id"];
+$sqlProductClass = "SELECT * FROM product_class WHERE product_class_id = $productClass";
+$resultProduct = $conn->query($sqlProductClass);
+$rowPro = $resultProduct->fetch_assoc();
 
 ?>
 
@@ -60,6 +64,12 @@ $rowStu = $resultStu->fetch_assoc();
                     <img src="../images/lesson/<?= $row["img_path"] ?>" alt="<?= $row["name"] ?>" class="ratio ratio-4x3">
                     <table class="table mt-2 table-hover">
                         <tbody>
+                            <tr>
+                                <th>
+                                    <h5>分類</h5>
+                                </th>
+                                <td><?= $rowPro["class_name"] ?></td>
+                            </tr>
                             <tr>
                                 <th>
                                     <h5>講師</h5>
