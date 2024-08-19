@@ -7,7 +7,7 @@ $sql = "SELECT * FROM lesson";
 $result = $conn->query($sql);
 $rows = $result->fetch_all(MYSQLI_ASSOC);
 
-
+$whereClause = "WHERE activation = 1";
 //teacher
 $sqlTeacher = "SELECT * FROM teacher ORDER BY teacher_id";
 $resultTea = $conn->query($sqlTeacher);
@@ -47,7 +47,7 @@ foreach ($rowsPro as $productClass) {
     <div class="container-fluid d-flex flex-row px-4">
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
         <div class="main col neumorphic p-5">
-            <ul class="nav nav-tabs">
+            <ul class="nav nav-tabs-custom">
                 <li class="nav-item">
                     <a class="main-nav nav-link active" aria-current="page" href="lesson.php">全部</a>
                 </li>
@@ -88,8 +88,8 @@ foreach ($rowsPro as $productClass) {
                                 $rowStu = $resultStu->fetch_assoc();
                                 ?>
                                 <?= $count ?></td>
-                            <td><a href="lesson-details.php?id=<?= $id ?>" class="btn"><i class="fa-regular fa-eye"></i></a>
-                                <a href="lesson-details.php?id=<?= $id ?>" class="btn"><i class="fa-solid fa-pen"></i></a>
+                            <td><a href="lesson-details.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-eye"></i></i></a>
+                                <a href="lesson-details.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-pen"></i></a>
                                 <a href="doDeleteLesson.php?id=<?= $id ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
                             </td>
                         </tr>

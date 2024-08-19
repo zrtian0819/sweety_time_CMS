@@ -47,7 +47,7 @@ foreach ($rowsPro as $productClass) {
     <div class="container-fluid d-flex flex-row px-4">
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
         <div class="main col neumorphic p-5">
-            <ul class="nav nav-tabs">
+            <ul class="nav nav-tabs-custom">
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="lesson.php">全部</a>
                 </li>
