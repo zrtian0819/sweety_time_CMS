@@ -1,98 +1,39 @@
-* {
-  --bs-gutter-x: 0;
-}
-
 :root {
-  ---color: rgb(247, 152, 10);
+  --primary-color: rgb(247, 152, 10);
 }
 
 body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  font-family: "Noto Serif TC", "Noto Sans TC", "Noto Serif HK", "serif";
+  background-color: #f0f0f3; 
+  color: #968c8a;
+  font-family:"Noto Serif TC","Noto Sans TC","Noto Serif HK", "serif";
   font-optical-sizing: auto;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
   font-optical-sizing: auto;
   line-height: 1.2;
   color: #968c8a;
 }
 
-h1 {
-  font-size: 2.5rem;
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1rem; }
+
+.h2,.h4,.h5{
+  color: #F4A293;
 }
 
-h2 {
-  font-size: 2rem;
-}
-
-h3 {
-  font-size: 1.75rem;
-}
-
-h4 {
-  font-size: 1.5rem;
-}
-
-h5 {
-  font-size: 1.25rem;
-}
-
-h6 {
-  font-size: 1rem;
-}
-
-.h2,
-.h4,
-.h5 {
-  color: #f4a293;
-}
-
-/* 整個滾輪 */
-::-webkit-scrollbar {
-  width: 10px;
-  /* 寬度 */
-  height: 10px;
-  /* 高度 */
-}
-
-/* 滾動槽 */
-::-webkit-scrollbar-track {
-  background: #dbe0ea;
-
-  /* 背景顏色 */
-  border-radius: 10px;
-  /* 圓角 */
-}
-
-/* 滾動條 */
-::-webkit-scrollbar-thumb {
-  background: var(--primary-color);
-  /* 背景顏色 */
-  border-radius: 10px;
-  /* 圓角 */
-}
-
-/* 滾動條懸停效果 */
-::-webkit-scrollbar-thumb:hover {
-  /* background: var(); */
-  /* 背景顏色 */
-}
-
-.header {
-  align-items: center;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  background: var(--bg-color);
+.header{
+    align-items: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    background-color: #fff;
 }
 
 .logo {
@@ -124,16 +65,16 @@ h6 {
 }
 
 input {
-  /* width: 100%;
+  width: 100%;
   font-size: 1rem;
-  font-weight: 600; */
+  font-weight: 600;
   padding: 1.2rem;
   border: none;
   outline: none;
   border-radius: 25px;
-  background-color: rgb(255, 255, 255);
-  box-shadow: inset -5px -5px 10px rgb(245, 221, 221),
-    inset 5px 5px 10px rgba(152, 80, 80, 0.485);
+  background-color: rgb(226, 226, 226);
+  box-shadow: inset -5px -5px 10px white,
+    inset 5px 5px 10px rgba(0, 0, 0, 0.485);
 }
 
 button {
@@ -150,8 +91,8 @@ button {
   border: none;
 }
 
-.log-in-button {
-  margin-top: 2em;
+.log-in-button{
+    margin-top: 2em;
 }
 
 .log-in-button:hover {
@@ -159,22 +100,23 @@ button {
   color: black;
 }
 
-.sign-in {
+
+.sign-in{
   gap: 1em;
   text-decoration: none;
   margin-top: 3em;
   font-size: 1.2rem;
   font-weight: 600;
   color: black;
-  &:hover {
+  &:hover{
     color: rgb(247, 152, 10);
   }
 }
 
 .neumorphic {
   border-radius: 10px;
-  background: #ffffff;
-  box-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff;
+  background: #ffffff; 
+  box-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff; 
 }
 
 .dashboard-navbar {
@@ -187,18 +129,10 @@ button {
   margin-bottom: 20px;
   background: #ffffff;
   box-shadow: 10px 10px 10px -8px #f5d6d1, 8px -4px 16px #ffffff;
-
-}
-
-
-.main {
-  overflow-y: auto;
-  height: calc(100vh - 140px);
-  border: .5px solid #f4a1939f;
 }
 
 /* 原設定 */
-/* .sidebar {
+.sidebar {
   height: calc(100vh - 140px);
   padding: 20px;
   border-radius: 10px;
@@ -207,62 +141,29 @@ button {
   border: .5px solid #f4a1939f;
   background: #ffffff; 
   box-shadow: 10px 10px 10px -8px #f5d6d1, 8px -4px 16px #ffffff;
-} */
-
-.sidebar {
-  width: 250px;
-  height: calc(100vh - 140px);
-  padding: 20px;
-  border-radius: 10px;
-  border: .5px solid #f4a1939f;
-  background: #ffffff;
-  box-shadow: 10px 10px 10px -8px #f5d6d1, 8px -4px 16px #ffffff;
-  transition: 0.5s;
-  text-wrap: nowrap;
-  overflow-y: auto;
-  overflow-x: hidden;
-
-  ul{
-    height: auto;
-    transition:0.8s
-  }
 }
 
-.sideBarToggle {
-  width: 0 !important;
-  padding: 20px 15px !important;
-}
-
-.adminToggle{
-  height: 0 !important;
-  overflow: hidden;
-  opacity: 0;
-}
-
-.storeToggle{
-  height: 0 !important;
-  overflow: hidden;
-  opacity: 0;
-}
-
-/* .content {
+.content {
   height: calc(100vh - 140px);
   padding: 20px;
   border-radius: 10px;
   border: .5px solid #f4a1939f;
   overflow-y: auto;
+  margin-right: -0.80rem; ;
   background: #ffffff;
   box-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff;
-} */
+}
 
 .btn-neumorphic {
   width: 100%;
-  background: #ffffff;
+  justify-content: center;
+  align-items: center;
+  background: #ffffff; 
   border: .5px solid #f4a1939f;
   border-radius: 10px;
   padding: 10px 20px;
   font-weight: bold;
-  color: #f4a293;
+  color: #F4A293;
   box-shadow: 4px 4px 12px #d1d9e6, -4px -4px 12px #ffffff;
   transition: all 0.2s ease;
   margin: 10px 5px;
@@ -277,7 +178,7 @@ button {
 }
 
 .form-control-neumorphic {
-  background: #ffffff;
+  background: #ffffff; 
   border: none;
   border-radius: 10px;
   padding: 10px;
@@ -302,24 +203,22 @@ button {
   color: #b6a7a4;
 }
 
-.shop-info-logo {
+.shop-info-logo{
   width: 450px;
   height: 450px;
   padding: 2em;
 }
-
-.shop-info-text {
+.shop-info-text{
   color: #968c8a;
 }
-
-.shop-info-text p {
+.shop-info-text p{
   line-height: 2em;
   font-size: 20px;
   font-weight: 600;
   color: #968c8a;
 }
-
-.shop-info-text h4 {
+.shop-info-text h4{
   font-weight: 500;
-  color: var(--primary-color);
+  color:var(--primary-color);
 }
+
