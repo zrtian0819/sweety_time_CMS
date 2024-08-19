@@ -11,7 +11,6 @@ if(!isset($_GET["productId"])){
     $count = $result->num_rows;
     $row = $result -> fetch_assoc();
 
-
     if(isset($row["shop_id"])){
         $shopId = $row["shop_id"];
         $shopsql = "SELECT * from shop WHERE shop_id = $shopId";
@@ -31,17 +30,13 @@ if(!isset($_GET["productId"])){
         // $shopsql = "SELECT "
     }
 
-    //目前語法錯誤
-    // $photosql = "SELECT product_photo.*, product.product_id AS productId 
-    // FROM product_photo 
-    // JOIN product ON product_photo.product_id = product.product_id 
-    // WHERE product_photo.valid = 1";
+    //撈出照片檔
+    $photosql = "SELECT * FROM product_photo 
+    WHERE is_valid = 1 AND product_id = $id
+    ORDER BY product_id";
     
-
-    // $photorResult = $conn->query($photosql);
-    // $photoRows= $photorResult->fetch_all(MYSQLI_ASSOC);
-
-    // print_r($photoRows);
+    $photorResult = $conn->query($photosql);
+    $photoRows= $photorResult->fetch_all(MYSQLI_ASSOC);
 }
 
 ?>
@@ -79,6 +74,10 @@ if(!isset($_GET["productId"])){
             }
         }
 
+        .img-small{
+            aspect-ratio: 1;
+        }
+
         .text-attention{
             color: red !important;
         }
@@ -102,14 +101,15 @@ if(!isset($_GET["productId"])){
                             <div class="row d-flex align-items-center flex-column flex-xl-row">
                                 <div class="col col-xl-5 px-2 ">
                                     <div class="img-box">
-                                        <img class="w-100 h-100 object-fit-cover" src="../images/prdoucts/00_aki_cake_matcha.jpg" alt="">
+                                        <img class="w-100 h-100 object-fit-cover" src="../images/prdoucts/<?=$photoRows[0]["file_name"]?>" alt="">
                                     </div>
                                     <div class="d-flex justify-content-center">
                                         <div class="row row-cols-4 w-100">
-                                            <img class="px-2" src="../images/prdoucts/00_aki_cake_matcha.jpg" alt="">
-                                            <img class="px-2" src="../images/prdoucts/00_aki_cake_matcha.jpg" alt="">
-                                            <img class="px-2" src="../images/prdoucts/00_aki_cake_matcha.jpg" alt="">
-                                            <img class="px-2" src="../images/prdoucts/00_aki_cake_matcha.jpg" alt="">
+                                            <?php foreach($photoRows as $photoItem): ?>
+                                            <div class="img-small">
+                                                <img class="px-2 w-100 h-100 object-fit-cover" src="../images/prdoucts/<?=$photoItem["file_name"]?>" alt="">
+                                            </div>
+                                            <?php endforeach; ?>
                                         </div>
                                     </div>
                                     
@@ -132,7 +132,7 @@ if(!isset($_GET["productId"])){
                                     </tr>
                                     <tr>
                                         <td class="dontNextLine fw-bold">庫存</td>
-                                        <td><?php $row["stocks"] ?></td>
+                                        <td><?= $row["stocks"] ?></td>
                                     </tr>
                                     <tr>
                                         <td class="dontNextLine fw-bold">商品分類</td>
