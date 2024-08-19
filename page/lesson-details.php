@@ -1,15 +1,15 @@
 <?php
 
-// if (!isset($_GET["id"])) {
-//     header("location:lesson.php");
-//     exit;
-// }
+if (!isset($_GET["id"])) {
+    header("location:lesson.php");
+    exit;
+}
 
 require_once("../db_connect.php");
 
 
 
-$id = 1;
+$id = $_GET["id"];
 $sql = "SELECT * FROM lesson WHERE lesson_id = $id";
 $result = $conn->query($sql);
 $row = $result->fetch_assoc();
@@ -22,7 +22,7 @@ $row = $result->fetch_assoc();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=, initial-scale=1.0">
-    <title>Lesson</title>
+    <title><?= $row["name"] ?></title>
     <?php include("../css/css_Joe.php"); ?>
 </head>
 
@@ -35,7 +35,8 @@ $row = $result->fetch_assoc();
             <h1><?= $row["name"] ?></h1>
             <div class="row">
                 <div class="col-lg-3">
-                    <img src="../images/lesson/<?= $row["img_path"] ?>" alt="<?= $row["name"] ?>" class="ratio ratio-4x3"></div>
+                    <img src="../images/lesson/<?= $row["img_path"] ?>" alt="<?= $row["name"] ?>" class="ratio ratio-4x3">
+                </div>
             </div>
         </div>
     </div>

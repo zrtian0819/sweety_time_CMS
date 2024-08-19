@@ -10,7 +10,6 @@ $rowsTea = $resultTea->fetch_all(MYSQLI_ASSOC);
 $teacherArr = [];
 foreach ($rowsTea as $teacher) {
     $teacherArr[$teacher["teacher_id"]] = $teacher["name"];
- 
 }
 
 $sql = "SELECT * FROM lesson";
@@ -53,9 +52,9 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                             <td><?= $row["name"] ?></td>
                             <td><?= $teacherArr[$row["teacher_id"]] ?></td>
                             <td><?= $row["quota"] ?></td>
-                            <td><a href="lesson-details?id=<?= $row["lesson_id"] ?>.php" class="btn"><i class="fa-regular fa-eye"></i></a>
-                                <a href="lesson-details?id=<?= $row["lesson_id"] ?>.php" class="btn"><i class="fa-solid fa-pen"></i></a>
-                                <a href="lesson-details?id=<?= $row["lesson_id"] ?>.php" class="btn btn-danger"><i class="fa-solid fa-trash"></i></i></a>
+                            <td><a href="lesson-details.php?id=<?= $row["lesson_id"] ?>" class="btn"><i class="fa-regular fa-eye"></i></a>
+                                <a href="lesson-details.php?id=<?= $row["lesson_id"] ?>" class="btn"><i class="fa-solid fa-pen"></i></a>
+                                <a href="lesson-details.php?id=<?= $row["lesson_id"] ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></i></a>
                             </td>
                         </tr>
                     </tbody>
