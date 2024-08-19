@@ -1,17 +1,16 @@
 <?php
-if (!isset($_GET["id"])) {
-    echo "請正確帶入 get id 變數";
+if (!isset($_GET["user_id"])) {
+    echo "請正確帶入 get user_id 變數";
     exit;
 }
-$id = $_GET["id"];
+$user_id = $_GET["user_id"];
 
 require_once("../db_connect.php");
 
-$sql = "SELECT * FROM users WHERE id = '$id' AND activation=1";
+$sql = "SELECT * FROM users WHERE user_id = '$user_id' AND activation=1";
 $result = $conn->query($sql);
 $userCount = $result->num_rows;
 $row = $result->fetch_assoc();
-
 
 if ($userCount > 0) {
     $title = $row["name"];
@@ -51,8 +50,8 @@ if ($userCount > 0) {
                         <?php if ($userCount > 0): ?>
                             <table class="table table-bordered">
                                 <tr>
-                                    <th>id</th>
-                                    <td><?= $row["id"] ?></td>
+                                    <th>User ID</th>
+                                    <td><?= $row["user_id"] ?></td>
                                 </tr>
                                 <tr>
                                     <th>Name</th>
@@ -72,7 +71,7 @@ if ($userCount > 0) {
                                 </tr>
                             </table>
                             <div class="">
-                                <a href="user-edit.php?id=<?=$row["id"]?>" class="btn btn-neumorphic"><i class="fa-solid fa-user-pen"></i></a>
+                                <a href="user-edit.php?user_id=<?=$row["user_id"]?>" class="btn btn-neumorphic"><i class="fa-solid fa-user-pen"></i></a>
                             </div>
                         <?php else: ?>
                             使用者不存在

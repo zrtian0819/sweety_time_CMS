@@ -10,8 +10,6 @@ if (isset($_GET["search"])) {
     $sql = "SELECT * FROM users";
 }
 
-
-
 $result = $conn->query($sql);
 $userCount = $result->num_rows;
 
@@ -29,8 +27,12 @@ $userCount = $result->num_rows;
 
     <?php include("../css/css_Joe.php"); ?>
     <style>
-        .user-btn{
+        .user-btn {
             width: 100px;
+        }
+
+        .user-search {
+            width: 200px;
         }
     </style>
 </head>
@@ -51,13 +53,13 @@ $userCount = $result->num_rows;
             <div class="container">
                 <div class="row d-flex">
                     <form action="">
-                        <div class="input-group">
-                            <input type="search" class="form-control" name=" " value="<?php echo isset($_GET["search"]) ? $_GET["search"] : "" ?>" placeholder="請輸入欲搜尋的使用者">
-                            <button type="submit" class="btn btn-neumorphic m-0">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                            </button>
+                        <div class="input-group  mb-3">
+                            <input type="search" class="form-control" name="search" value="<?php echo isset($_GET["search"]) ? $_GET["search"] : "" ?>" placeholder="請輸入欲搜尋的使用者">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-warning m-0 " type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                            </div>
                         </div>
-                    </form>
+
                     <div class="d-flex justify-content-between my-3">
                         <div>
                             <a href="#" class="btn btn-neumorphic user-btn">排序
@@ -90,7 +92,7 @@ $userCount = $result->num_rows;
                             <table class="table table-bordered">
                                 <thead class="user-text">
                                     <tr>
-                                        <th>ID</th>
+                                        <th>User ID</th>
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Phone</th>
@@ -100,13 +102,13 @@ $userCount = $result->num_rows;
                                 <tbody>
                                     <?php foreach ($rows as $user): ?>
                                         <tr>
-                                            <td><?= $user["id"] ?></td>
+                                            <td><?= $user["user_id"] ?></td>
                                             <td><?= $user["name"] ?></td>
                                             <td><?= $user["email"] ?></td>
                                             <td><?= $user["phone"] ?></td>
                                             <td>
-                                                <a class="btn btn-primary" href="user.php?id=<?= $user["id"] ?>"><i class="fa-solid fa-eye"></i></a>
-                                                <a class="btn btn-danger" href="doDeleteUser.php?id=<?= $row["id"] ?>"><i class="fa-solid fa-trash"></i></a>
+                                                <a class="btn btn-primary" href="user.php?user_id=<?= $user["user_id"] ?>"><i class="fa-solid fa-eye"></i></a>
+                                                <a class="btn btn-danger" href="doDeleteUser.php?user_id=<?= $user["user_id"] ?>"><i class="fa-solid fa-trash"></i></a>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -121,7 +123,6 @@ $userCount = $result->num_rows;
             </div>
         </div>
     </div>
-
 
     <?php include("../js.php"); ?>
     <?php $conn->close() ?>
