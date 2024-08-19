@@ -14,9 +14,11 @@
     </head>
 
     <body>
-        <?php include ("../modules/login-header.php");?>
-        <div class="container">
-            <div class="create-shop-card">
+    <?php include("../modules/dashboard-header.php");?>
+    <div class="container-fluid d-flex flex-row px-4">
+        <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
+        <div class="main col neumorphic p-5">
+            <div class=" neumorphic ">
                 <h2>註冊為店家</h2>
                 <input class="login-input" type="text" placeholder="店家名稱">
                 <input class="login-input" type="text" placeholder="聯絡電話">
@@ -32,13 +34,13 @@
                     </label>
                     <input id="file-upload" type="file"/>
                 </div>
+                <div class="d-flex w-100">
+                    <button class="log-in-button">確認</button>
+                </div>
                 
-
-                <button class="log-in-button">確認</button>
             </div>
         </div>
-        
-        
+    </div>
 
 
         

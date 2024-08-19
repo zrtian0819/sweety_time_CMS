@@ -69,7 +69,7 @@
     display: inline-block;
     width: 11rem;
     height: 3.2rem;
-    margin: 1rem;
+    margin: 1rem auto;
     font-weight: bold;
     letter-spacing: 0.05rem;
     text-transform: uppercase;
