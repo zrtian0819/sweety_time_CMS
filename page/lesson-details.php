@@ -58,7 +58,7 @@ $rowStu = $resultStu->fetch_assoc();
             <div class="row justify-content-center">
                 <div class="col-lg-3 m-2">
                     <img src="../images/lesson/<?= $row["img_path"] ?>" alt="<?= $row["name"] ?>" class="ratio ratio-4x3">
-                    <table class="table mt-2">
+                    <table class="table mt-2 table-hover">
                         <tbody>
                             <tr>
                                 <th>
