@@ -23,4 +23,14 @@
         // 當視窗大小改變時，執行檢查
         $(window).resize(checkWidth);
     });
+
+    //控制side-bar內按鈕的收合
+    $("#adminBtn").click(function(){
+        $("#adminList").toggleClass("adminToggle")
+    })
+
+    $("#storeBtn").click(function(){
+        $("#storeList").toggleClass("storeToggle")
+    })
+
 </script>

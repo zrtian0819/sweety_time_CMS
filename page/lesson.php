@@ -3,7 +3,7 @@
 require_once("../db_connect.php");
 
 
-$sql = "SELECT * FROM lesson";
+$sql = "SELECT * FROM lesson WHERE activation = 1";
 $result = $conn->query($sql);
 $rows = $result->fetch_all(MYSQLI_ASSOC);
 
@@ -19,13 +19,6 @@ foreach ($rowsTea as $teacher) {
     $teacherArr[$teacher["teacher_id"]] = $teacher["name"];
 }
 
-//student
-// $sqlStudent = "SELECT * FROM student";
-// $resultStu = $conn->query($sqlStudent);
-// $count = $resultStu->num_rows;
-// $rowStu = $resultStu->fetch_assoc();
-
-// print_r($row);
 ?>
 
 <!DOCTYPE html>
@@ -71,7 +64,7 @@ foreach ($rowsTea as $teacher) {
                                 <?= $count ?></td>
                             <td><a href="lesson-details.php?id=<?= $row["lesson_id"] ?>" class="btn"><i class="fa-regular fa-eye"></i></a>
                                 <a href="lesson-details.php?id=<?= $row["lesson_id"] ?>" class="btn"><i class="fa-solid fa-pen"></i></a>
-                                <a href="lesson-details.php?id=<?= $row["lesson_id"] ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></i></a>
+                                <a href="doDeleteLesson.php?id=<?= $row["lesson_id"] ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></i></a>
                             </td>
                         </tr>
                     </tbody>
@@ -80,6 +73,7 @@ foreach ($rowsTea as $teacher) {
         </div>
     </div>
     <?php include("../js.php") ?>
+    <?php $conn->close() ?>
 </body>
 
 </html>

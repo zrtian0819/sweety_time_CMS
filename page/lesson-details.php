@@ -34,6 +34,8 @@ $resultStu = $conn->query($sqlStudent);
 $count = $resultStu->num_rows;
 $rowStu = $resultStu->fetch_assoc();
 
+
+
 ?>
 
 <!DOCTYPE html>
@@ -71,6 +73,7 @@ $rowStu = $resultStu->fetch_assoc();
         </div>
     </div>
     <?php include("../js.php") ?>
+    <?php $conn->close()?>
 </body>
 
 </html>
