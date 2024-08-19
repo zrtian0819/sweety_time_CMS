@@ -1,0 +1,32 @@
+.shop-info-logo {
+    width: 100%;
+    max-width: 400px; 
+    height: auto;
+    border: 2px solid rgb(235, 235, 235);
+    border-radius: 10px; 
+    object-fit: cover; 
+	box-shadow: -7px -7px 10px #ffffff, 5px 5px 10px rgba(0, 0, 0, 0.585);
+}
+
+.position-relative {
+    position: relative;
+}
+
+.change-image-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    z-index: 10;
+    opacity: 1;
+}
+
+.position-relative:hover .shop-info-logo {
+    opacity: 0.5; /* 滑鼠移動到圖片上時，圖片透明度變為50% */
+}
+
+.position-relative:hover .change-image-btn {
+    display: block; /* 滑鼠移動到圖片上時，顯示按鈕 */
+	opacity: 1;
+}

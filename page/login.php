@@ -1,3 +1,5 @@
+
+
 <!doctype html>
 <html lang="en">
     <head>
@@ -8,26 +10,27 @@
             name="viewport"
             content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
-        <?php include("../css/css.php");?>
+        <?php include("../css/login-style.php");?>
+        <?php include("../css/css_Joe.php");?>
     </head>
 
     <body>
         <?php include ("../modules/login-header.php");?>
         <div class="container">
-            <div class="card">
+            <div class="login-card">
                 <h1>Log In</h1>
-                <input type="text" placeholder="Account">
-                <input type="password" placeholder="password">
+                <input class="form-control form-control-custom" type="text" placeholder="Account">
+                <input class="form-control form-control-custom mt-3" type="password" placeholder="password">
                 <button class="log-in-button">Log In</button>
             </div>
         </div>
         <div class="container">
-            <div class="w-50 d-flex justify-content-between gap-3 mt-lg-5">
+            <div class="w-50 d-flex justify-content-between mx-auto py-3">
                     <p>
-                        <a class="sign-in" href="/sign.php">註冊帳號</a>
+                        <a class="sign-in" href="../page/create-shop.php">註冊帳號</a>
                     </p>
                     <p>
-                        <a class="sign-in" href="/password/reset" class="forgot-pw">忘記密碼?</a>
+                        <a class="sign-in" href="../page/password/reset" class="forgot-pw">忘記密碼?</a>
                     </p>
             </div>
         </div>
