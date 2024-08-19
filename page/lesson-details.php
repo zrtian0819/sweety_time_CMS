@@ -58,22 +58,68 @@ $rowStu = $resultStu->fetch_assoc();
             <div class="row justify-content-center">
                 <div class="col-lg-3 m-2">
                     <img src="../images/lesson/<?= $row["img_path"] ?>" alt="<?= $row["name"] ?>" class="ratio ratio-4x3">
-                    <h3 class="pt-2">講師：<?= $teacherArr[$row["teacher_id"]] ?></h3>
-                    <h4>課程時間：<?= $row["start_date"] ?></h4>
-                    <h4 class="h4">價錢：<?= $row["price"] ?></h4>
-                    <h5>地點：<?= $row["classroom_name"] ?></h5>
-                    <p>地址：<?= $row["location"] ?></p>
-                    <h5>報名人數：<?=$count?></h5>
+                    <table class="table mt-2">
+                        <tbody>
+                            <tr>
+                                <th>
+                                    <h5>講師</h5>
+                                </th>
+                                <td><?= $teacherArr[$row["teacher_id"]] ?></td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <h5>價錢</h5>
+                                </th>
+                                <td class="text-danger"><?= number_format($row["price"]) ?></td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <h5>時間</h5>
+                                </th>
+                                <td><?= $row["start_date"] ?></td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <h5>課程人數</h5>
+                                </th>
+                                <td><?= $row["quota"] ?></td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <h5>報名人數</h5>
+                                </th>
+                                <td><?= $count ?></td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <h5>地點</h5>
+                                </th>
+                                <td><?= $row["classroom_name"] ?></td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <h5>地址</h5>
+                                </th>
+                                <td><?= $row["location"] ?></td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <h5>狀態</h5>
+                                </th>
+                                <?php echo ($row["activation"] == 1) ? "<td>" . "上架中" : "<td class='text-danger'>" . "已下架"; ?></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="col-lg-8 ms-2">
                     <h3 class="p-2">課程介紹</h3>
-                    <p class="p-2"><?= $row["description"] ?></p>
+                    <p class="p-2 lh-lg"><?= $row["description"] ?></p>
                 </div>
             </div>
         </div>
     </div>
     <?php include("../js.php") ?>
-    <?php $conn->close()?>
+    <?php $conn->close() ?>
 </body>
 
 </html>
