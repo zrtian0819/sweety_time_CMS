@@ -1,34 +1,12 @@
 :root {
-    --primary-color: rgb(247, 152, 10);
-  }
-  
-  body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    background-color: #f0f0f3; 
-    color: #968c8a;
-    font-family:"Noto Serif TC","Noto Sans TC","Noto Serif HK", "serif";
-    font-optical-sizing: auto;
-  }
-  
-  h1, h2, h3, h4, h5, h6 {
-    font-optical-sizing: auto;
-    line-height: 1.2;
-    color: #968c8a;
-  }
-  
-  h1 { font-size: 2.5rem; }
-  h2 { font-size: 2rem; }
-  h3 { font-size: 1.75rem; }
-  h4 { font-size: 1.5rem; }
-  h5 { font-size: 1.25rem; }
-  h6 { font-size: 1rem; }
-  
-  .h2,.h4,.h5{
-    color: #F4A293;
-  }
-  
+  --primary-color: rgb(247, 152, 10);
+}
+
+.logo-hr{
+  border: 1px solid rgb(0, 0, 0);
+  width: 100%;
+}
+
   .header{
       align-items: center;
       padding-top: 1rem;
@@ -36,68 +14,76 @@
       background-color: #fff;
   }
   
-  .logo {
-    width: 60px;
-    height: 60px;
-    margin-left: 1rem;
-    object-fit: contain;
+  .sweet_logo {
+    width: 100%;
+    max-width: 100px;
   }
   
-  .logo-img {
-    width: 100px;
-  }
-  
-  .card {
-    min-width: 30rem;
+  .login-card {
+    min-width: 20rem;
     max-width: 40rem;
-    height: 40rem;
+    height: 20rem;
     width: 50%;
-    padding: 3em;
     margin: 5em auto 0 auto;
+    padding: 0 3em 0 3em;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 2em;
     background-color: rgb(245, 245, 245);
     box-shadow: -7px -7px 10px #ffffff, 5px 5px 10px rgba(0, 0, 0, 0.585);
   }
   
-  input {
+.create-shop-card{
+  min-width: 20rem;
+  max-width: 40rem;
+  height: auto;
+  width: 50%;
+  margin: 5em auto 0 auto;
+  padding: 0 3em 0 3em;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(245, 245, 245);
+  box-shadow: 10px 10px 10px -8px #f5d6d1, 8px -4px 16px #ffffff;
+}
+
+  .login-input {
     width: 100%;
     font-size: 1rem;
     font-weight: 600;
+    margin: .5rem 0;
     padding: 1.2rem;
     border: none;
     outline: none;
     border-radius: 25px;
     background-color: rgb(226, 226, 226);
     box-shadow: inset -5px -5px 10px white,
-      inset 5px 5px 10px rgba(0, 0, 0, 0.485);
+      inset 5px 5px 10px rgba(0, 0, 0, 0.187);
   }
   
-  button {
+  .log-in-button {
     display: inline-block;
     width: 11rem;
     height: 3.2rem;
+    margin: 1rem auto;
     font-weight: bold;
     letter-spacing: 0.05rem;
     text-transform: uppercase;
     font-size: 1rem;
     border-radius: 25px;
     box-shadow: -5px -5px 10px white, 5px 5px 10px rgba(0, 0, 0, 0.485);
-    background-color: rgb(245, 245, 245);
+    background-color: rgb(255, 255, 255);
     border: none;
-  }
-  
-  .log-in-button{
-      margin-top: 2em;
-  }
-  
-  .log-in-button:hover {
-    background-color: rgba(255, 255, 255, 0.548);
-    color: black;
+    color: #000;
+    &:hover {
+      background-color: #e8e8e8;
+      color:var(--primary-color);
+    }
+
   }
   
   
@@ -179,4 +165,26 @@
   .nav-link:hover {
     color: #b6a7a4;
   }
+
+  input[type="file"] {
+    display: none; /* 隱藏真正的file input */
+}
+
+.custom-file-upload {
+    display: inline-block;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #949392;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.custom-file-upload:hover {
+    color: #000;
+}
+
+.login-card h4{
+  margin: 0;
+  padding: 0;
+}
   

@@ -21,6 +21,7 @@ body {
   font-optical-sizing: auto;
 }
 
+
 h1,
 h2,
 h3,
@@ -233,12 +234,6 @@ button {
 }
 
 /* 樣式表 */
-
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  font-family: "Noto Serif TC", "Noto Sans TC", "Noto Serif HK", serif;
-}
 
 .form-control-custom {
   border-color: var(--primary-color);
