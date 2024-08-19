@@ -2,21 +2,28 @@
 
 require_once("../db_connect.php");
 
-$sqlTeacher = "SELECT * FROM teacher ORDER BY teacher_id";
-$resultTea = $conn->query($sqlTeacher);
-$rowsTea = $resultTea->fetch_all(MYSQLI_ASSOC);
-
-//teacher 的關聯式陣列
-$teacherArr = [];
-foreach ($rowsTea as $teacher) {
-    $teacherArr[$teacher["teacher_id"]] = $teacher["name"];
-}
 
 $sql = "SELECT * FROM lesson";
 $result = $conn->query($sql);
 $rows = $result->fetch_all(MYSQLI_ASSOC);
 
 
+//teacher
+$sqlTeacher = "SELECT * FROM teacher ORDER BY teacher_id";
+$resultTea = $conn->query($sqlTeacher);
+$rowsTea = $resultTea->fetch_all(MYSQLI_ASSOC);
+
+//關聯式陣列
+$teacherArr = [];
+foreach ($rowsTea as $teacher) {
+    $teacherArr[$teacher["teacher_id"]] = $teacher["name"];
+}
+
+//student
+// $sqlStudent = "SELECT * FROM student";
+// $resultStu = $conn->query($sqlStudent);
+// $count = $resultStu->num_rows;
+// $rowStu = $resultStu->fetch_assoc();
 
 // print_r($row);
 ?>
@@ -43,6 +50,7 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                     <th>課程名稱</th>
                     <th>授課老師</th>
                     <th>課程人數</th>
+                    <th>報名人數</th>
                     <th>詳細資訊</th>
                 </thead>
                 <?php foreach ($rows as $row): ?>
@@ -52,6 +60,15 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                             <td><?= $row["name"] ?></td>
                             <td><?= $teacherArr[$row["teacher_id"]] ?></td>
                             <td><?= $row["quota"] ?></td>
+                            <td>
+                                <?php
+                                $lessonID = $row["lesson_id"];
+                                $sqlStudent = "SELECT * FROM student WHERE lesson_id = $lessonID";
+                                $resultStu = $conn->query($sqlStudent);
+                                $count = $resultStu->num_rows;
+                                $rowStu = $resultStu->fetch_assoc();
+                                ?>
+                                <?= $count ?></td>
                             <td><a href="lesson-details.php?id=<?= $row["lesson_id"] ?>" class="btn"><i class="fa-regular fa-eye"></i></a>
                                 <a href="lesson-details.php?id=<?= $row["lesson_id"] ?>" class="btn"><i class="fa-solid fa-pen"></i></a>
                                 <a href="lesson-details.php?id=<?= $row["lesson_id"] ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></i></a>
@@ -62,6 +79,7 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
             </table>
         </div>
     </div>
+    <?php include("../js.php") ?>
 </body>
 
 </html>
