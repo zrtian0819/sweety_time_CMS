@@ -101,13 +101,13 @@ if(!isset($_GET["productId"])){
                             <div class="row d-flex align-items-center flex-column flex-xl-row">
                                 <div class="col col-xl-5 px-2 ">
                                     <div class="img-box">
-                                        <img class="w-100 h-100 object-fit-cover" src="../images/prdoucts/<?=$photoRows[0]["file_name"]?>" alt="">
+                                        <img id="majorPhoto" class="w-100 h-100 object-fit-cover" src="../images/prdoucts/<?=$photoRows[0]["file_name"]?>" alt="">
                                     </div>
                                     <div class="d-flex justify-content-center">
-                                        <div class="row row-cols-4 w-100">
+                                        <div class="row w-100">
                                             <?php foreach($photoRows as $photoItem): ?>
-                                            <div class="img-small">
-                                                <img class="px-2 w-100 h-100 object-fit-cover" src="../images/prdoucts/<?=$photoItem["file_name"]?>" alt="">
+                                            <div class="img-small col-3">
+                                                <img class="smallImg w-100 h-100 object-fit-cover" src="../images/prdoucts/<?=$photoItem["file_name"]?>" alt="">
                                             </div>
                                             <?php endforeach; ?>
                                         </div>
