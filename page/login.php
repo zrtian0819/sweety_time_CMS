@@ -8,7 +8,7 @@
             name="viewport"
             content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
-        <?php include("../css/css.php");?>
+        <?php include("../css/login-style.php");?>
     </head>
 
     <body>
@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="container">
-            <div class="w-50 d-flex justify-content-between gap-3 mt-lg-5">
+            <div class="w-50 d-flex justify-content-between gap-3 mt-lg-5 mx-auto">
                     <p>
                         <a class="sign-in" href="/sign.php">註冊帳號</a>
                     </p>
