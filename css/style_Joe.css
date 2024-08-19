@@ -179,11 +179,28 @@ button {
   text-wrap: nowrap;
   overflow-y: auto;
   overflow-x: hidden;
+  ul{
+    height: auto;
+    transition:0.6s
+  }
 }
 
 .sideBarToggle {
   width: 0px !important;
   padding: 20px 15px !important;
+  border-radius: 10px 0 0 10px;
+}
+
+.adminToggle{
+  height: 0 !important;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.storeToggle{
+  height: 0 !important;
+  overflow: hidden;
+  opacity: 0;
 }
 
 .btn-neumorphic {
@@ -266,6 +283,14 @@ button {
   box-shadow: var(--box-shadow);
   color: white;
   border-radius: 5px;
+}
+
+.btn-custom:hover {
+  box-shadow: 5px 5px 10px #efbeb6, -5px -5px 10px #ffffff;
+}
+
+.btn-custom:active {
+  box-shadow: inset 8px 8px 16px #efbeb6, inset -8px -8px 16px #ffffff;
 }
 
 .btn-enter {
