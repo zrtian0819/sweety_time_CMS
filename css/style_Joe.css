@@ -152,27 +152,6 @@ button {
   border: none;
 }
 
-.log-in-button {
-  margin-top: 2em;
-}
-
-.log-in-button:hover {
-  background-color: rgba(255, 255, 255, 0.548);
-  color: black;
-}
-
-.sign-in {
-  gap: 1em;
-  text-decoration: none;
-  margin-top: 3em;
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: black;
-  &:hover {
-    color: rgb(247, 152, 10);
-  }
-}
-
 .neumorphic {
   border-radius: 10px;
   background: #ffffff;

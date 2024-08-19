@@ -1,12 +1,12 @@
-<div class="header">
+<div class="header my-0 py-0">
     <div class="navbar navbar-dark d-flex align-content-center justify-content-around">
-        <img class="sweet_logo" src="../images/sweet_time_logo.png" alt="">
+        <img class="sweet_logo" src="../images/sweet_time_logo1.png" alt="">
         <ul class="navbar-nav flex-row gap-3 fs-5 fw-bold">
             <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#"><i class="fa-solid fa-house fa-xl"></i> Home</a>
+            <a class="nav-link" aria-current="page" href="#"><i class="fa-solid fa-house fa-l"></i> Home</a>
             </li>
             <li class="nav-item">
-            <a class="nav-link active" href="#"><i class="fa-solid fa-circle-user fa-xl"></i> Login</a>
+            <a class="nav-link" href="#"><i class="fa-solid fa-circle-user fa-l"></i> Login</a>
             </li>
         </ul>
     </div>
