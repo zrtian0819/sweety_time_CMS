@@ -100,7 +100,7 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
 
         <div class="main col neumorphic p-5">
             <div class="">
-                <a href="./coupon.php">優惠券管理</a>>
+                <a href="./coupon-home.php">優惠券管理</a>>
                 <a href="./coupon-list.php">優惠券種類一覽</a>
             </div>
             <hr>
