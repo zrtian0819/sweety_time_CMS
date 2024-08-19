@@ -58,26 +58,26 @@ foreach ($rowsTea as $teacher) {
                     <th>報名人數</th>
                     <th>詳細資訊</th>
                 </thead>
-                <?php foreach ($rows as $row): ?>
+                <?php foreach ($rows as $row):
+                    $id = $row["lesson_id"]; ?>
                     <tbody>
                         <tr class="text-center">
-                            <td><?= $row["lesson_id"] ?></td>
+                            <td><?= $id ?></td>
                             <?php echo ($row["activation"] == 1) ? "<td>" . "上架中" : "<td class='text-danger'>" . "已下架"; ?></td>
                             <td><?= $row["name"] ?></td>
                             <td><?= $teacherArr[$row["teacher_id"]] ?></td>
                             <td><?= $row["quota"] ?></td>
                             <td>
                                 <?php
-                                $lessonID = $row["lesson_id"];
-                                $sqlStudent = "SELECT * FROM student WHERE lesson_id = $lessonID";
+                                $sqlStudent = "SELECT * FROM student WHERE lesson_id = $id";
                                 $resultStu = $conn->query($sqlStudent);
                                 $count = $resultStu->num_rows;
                                 $rowStu = $resultStu->fetch_assoc();
                                 ?>
                                 <?= $count ?></td>
-                            <td><a href="lesson-details.php?id=<?= $row["lesson_id"] ?>" class="btn"><i class="fa-regular fa-eye"></i></a>
-                                <a href="lesson-details.php?id=<?= $row["lesson_id"] ?>" class="btn"><i class="fa-solid fa-pen"></i></a>
-                                <a href="doDeleteLesson.php?id=<?= $row["lesson_id"] ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></i></a>
+                            <td><a href="lesson-details.php?id=<?= $id ?>" class="btn"><i class="fa-regular fa-eye"></i></a>
+                                <a href="lesson-details.php?id=<?= $id ?>" class="btn"><i class="fa-solid fa-pen"></i></a>
+                                <a href="doDeleteLesson.php?id=<?= $id ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
                             </td>
                         </tr>
                     </tbody>
