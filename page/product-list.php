@@ -3,9 +3,12 @@
 require_once("../db_connect.php");
 include("../function/function.php");
 
-if (isset($_GET["shopid"])) {
-    $shopId = $_GET["shopid"];
-    $sql = "SELECT * FROM product WHERE id=$shopId AND available = 1 ORDER BY product_id";
+
+//篩選狀態做不出來
+if (!empty($_SESSION["shop"])) {
+    $shopId = $_SESSION["shop"]["shop_id"];
+    // echo $shopId;
+    $sql = "SELECT * FROM product WHERE shop_id=$shopId AND available = 1 ORDER BY product_id";
 } else {
     $sql = "SELECT * FROM product WHERE available = 1 ORDER BY product_id";
 }
@@ -56,8 +59,7 @@ $productCount = $result->num_rows;
                 <form action="" class="mb-4">
                     <div class="row">
                         <div class="col">
-                            <input type="text">
-                            <button></button>
+
                         </div>
                     </div>
                 </form>

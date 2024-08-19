@@ -1,10 +1,22 @@
  <!-- Sidebar -->
  <?php
-
+    // $require_once("../db_connect.php");
     // session_start();
     if (isset($_SESSION["user"])) {
         $role = $_SESSION["user"]["role"];
         $userId = $_SESSION["user"]["user_id"];
+
+        if ($role == "admin") {
+
+            $shopId = "admin";
+        } elseif ($role == "shop") {
+            $storeSql = "SELECT * from shop WHERE user_id = $userId";
+            $storeResult = $conn->query($storeSql);
+            $storeCount = $storeResult->num_rows;
+            $storeRow = $storeResult->fetch_assoc();
+
+            $shopId = $storeRow["shop_id"];
+        }
     } else {
         $role = "";
         $userId = "";
@@ -29,10 +41,10 @@
                  <a class="nav-link" href="#">師資管理</a>
              </li>
              <li class="nav-item">
-                 <a class="nav-link" href="#">課程管理</a>
+                 <a class="nav-link" href="lesson.php">課程管理</a>
              </li>
              <li class="nav-item">
-                 <a class="nav-link" href="#">優惠券管理</a>
+                 <a class="nav-link" href="coupon-list.php">優惠券管理</a>
              </li>
              <li class="nav-item">
                  <a class="nav-link" href="#">總商家管理</a>
@@ -46,10 +58,10 @@
          </button>
          <ul id="storeList" class="nav flex-column align-items-center">
              <li class="nav-item">
-                 <a class="nav-link" href="shop-info.php">店家基本資料</a>
+                 <a class="nav-link" href="shop-info.php?shopId=<?= $shopId ?>">店家基本資料</a>
              </li>
              <li class="nav-item">
-                 <a class="nav-link" href="product-list.php">商品管理</a>
+                 <a class="nav-link" href="product-list.php?shopId=<?= $shopId ?>">商品管理</a>
              </li>
              <li class="nav-item">
                  <a class="nav-link" href="#">訂單管理</a>

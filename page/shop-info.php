@@ -1,3 +1,7 @@
+<?php
+require_once("../db_connect.php");      //避免sidebar先載入錯誤,人天先加的
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -37,7 +41,7 @@
                 </div>
             </div>
 
-           
+
 
         </div>
     </div>
