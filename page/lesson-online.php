@@ -3,7 +3,7 @@
 require_once("../db_connect.php");
 
 
-$sql = "SELECT * FROM lesson";
+$sql = "SELECT * FROM lesson WHERE activation = 1";
 $result = $conn->query($sql);
 $rows = $result->fetch_all(MYSQLI_ASSOC);
 
@@ -49,20 +49,19 @@ foreach ($rowsPro as $productClass) {
         <div class="main col neumorphic p-5">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="main-nav nav-link active" aria-current="page" href="lesson.php">全部</a>
+                    <a class="nav-link" aria-current="page" href="lesson.php">全部</a>
                 </li>
                 <li class="nav-item">
-                    <a class="main-nav nav-link" href="lesson-online.php">上架中</a>
+                    <a class="nav-link active" href="lesson-online.php">上架中</a>
                 </li>
                 <li class="nav-item">
-                    <a class="main-nav nav-link" href="lesson-delete.php">已下架</a>
+                    <a class="nav-link" href="lesson-delete.php">已下架</a>
                 </li>
             </ul>
             <!-- Content -->
             <table class="table table-hover">
                 <thead class="text-center">
                     <th>課程編號</th>
-                    <th>課程狀態</th>
                     <th>課程名稱</th>
                     <th>課程分類</th>
                     <th>授課老師</th>
@@ -70,27 +69,26 @@ foreach ($rowsPro as $productClass) {
                     <th>報名人數</th>
                     <th>詳細資訊</th>
                 </thead>
-                <?php foreach ($rows as $row):
-                    $id = $row["lesson_id"]; ?>
+                <?php foreach ($rows as $row): ?>
                     <tbody>
-                        <tr class="text-center m-auto">
-                            <td><?= $id ?></td>
-                            <?php echo ($row["activation"] == 1) ? "<td>" . "上架中" : "<td class='text-danger'>" . "已下架"; ?></td>
+                        <tr class="text-center">
+                            <td><?= $row["lesson_id"] ?></td>
                             <td><?= $row["name"] ?></td>
                             <td><?= $productClassArr[$row["product_class_id"]] ?></td>
                             <td><?= $teacherArr[$row["teacher_id"]] ?></td>
                             <td><?= $row["quota"] ?></td>
                             <td>
                                 <?php
-                                $sqlStudent = "SELECT * FROM student WHERE lesson_id = $id";
+                                $lessonID = $row["lesson_id"];
+                                $sqlStudent = "SELECT * FROM student WHERE lesson_id = $lessonID";
                                 $resultStu = $conn->query($sqlStudent);
                                 $count = $resultStu->num_rows;
                                 $rowStu = $resultStu->fetch_assoc();
                                 ?>
                                 <?= $count ?></td>
-                            <td><a href="lesson-details.php?id=<?= $id ?>" class="btn"><i class="fa-regular fa-eye"></i></a>
-                                <a href="lesson-details.php?id=<?= $id ?>" class="btn"><i class="fa-solid fa-pen"></i></a>
-                                <a href="doDeleteLesson.php?id=<?= $id ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+                            <td><a href="lesson-details.php?id=<?= $row["lesson_id"] ?>" class="btn"><i class="fa-regular fa-eye"></i></a>
+                                <a href="lesson-details.php?id=<?= $row["lesson_id"] ?>" class="btn"><i class="fa-solid fa-pen"></i></a>
+                                <a href="doDeleteLesson.php?id=<?= $row["lesson_id"] ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></i></a>
                             </td>
                         </tr>
                     </tbody>
