@@ -1,3 +1,31 @@
+<?php
+
+session_start();
+
+if (!isset($_SESSION["user"])) {
+
+    $roleMessage = "非登入狀態";
+} else {
+    $role = $_SESSION["user"]["role"];
+    $name = $_SESSION["user"]["name"];
+    $HRS = date('H');
+
+    if ($HRS <= 4) {
+        $welcome = ", 請早點睡!";
+    } elseif ($HRS <= 10) {
+        $welcome = ", 早安!";
+    } elseif ($HRS <= 16) {
+        $welcome = ", 午安!";
+    } elseif ($HRS > 16) {
+        $welcome = ", 晚安!";
+    }
+
+    $roleMessage = $name . $welcome;
+    // echo $roleMessage;
+}
+
+
+?>
 <!-- Navbar -->
 <div class="container-fluid">
     <div class="row m-3 mb-0">
@@ -9,7 +37,20 @@
                 </div>
 
 
-                <ul class="fs-5 list-unstyled d-flex flex-row m-0">
+                <ul class="fs-5 list-unstyled d-flex flex-row m-0 align-items-center justify-content-center">
+
+                    <?php if (isset($_SESSION["user"])): ?>
+                        <li class="me-4 d-none d-md-block">
+                            <h6 style="color:#EC9E90" class="d-inline-block"><?= $roleMessage ?></h6>
+                        </li>
+                        <li class="rounded d-flex align-items-center justify-content-center py-1 px-2 me-3" style="background-color:#EC9E90;">
+                            <h6 class="text-white d-inline-block text-center"><?= $_SESSION["user"]["role"]; ?></h6>
+                        </li>
+                    <?php else: ?>
+                        <li class="me-4">
+                            <h6 style="color:#EC9E90" class="d-inline-block"><?= $roleMessage ?></h6>
+                        </li>
+                    <?php endif; ?>
                     <li class="nav-item px-2">
                         <a class="nav-link" href="#"><i class="fa-solid fa-house"></i></a>
                     </li>
