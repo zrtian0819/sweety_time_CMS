@@ -40,6 +40,8 @@
          </li>
      </ul>
 
+    <!-- 店家註冊並非在dashboard頁面執行 -->
+    <!--  
      <button id="registerBtn" class="btn btn-neumorphic toggle-btn">
          <h5 class="h5">店家註冊</h5>
      </button>
@@ -50,4 +52,5 @@
                  <a class="nav-link" href="#">店家基本資料填寫</a>
              </li>
          </ul>
+    -->
  </div>
