@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="container">
-            <div class="w-50 d-flex justify-content-between gap-3 mt-lg-5 mx-auto">
+            <div class="w-50 d-flex justify-content-between mx-auto py-3">
                     <p>
                         <a class="sign-in" href="/sign.php">註冊帳號</a>
                     </p>
