@@ -104,12 +104,12 @@ foreach ($rowsPro as $productClass) {
                             <td><a href="lesson-details.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-eye"></i></i></a>
                                 <a href="lesson-details.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-pen"></i></a>
                                 <?php if ($status === "off"): ?>
-                                    <a href="doReloadLesson.php?id=<?= $id ?>" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
+                                    <a href="../function/doReloadLesson.php?id=<?= $id ?>" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
                                 <?php else: ?>
                                     <?php if ($row["activation"] == 1): ?>
-                                        <a href="doDeleteLesson.php?id=<?= $id ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+                                        <a href="../function/doDeleteLesson.php?id=<?= $id ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
                                     <?php else: ?>
-                                        <a href="doReloadLesson.php?id=<?= $id ?>" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
+                                        <a href="../function/doReloadLesson.php?id=<?= $id ?>" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
                                     <?php endif; ?>
                                 <?php endif; ?>
                             </td>
