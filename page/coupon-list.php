@@ -3,17 +3,29 @@
 require_once("../db_connect.php");
 
 // 設定SQL查詢語句樣板 
-$sql = "SELECT * FROM coupon WHERE 1=1"; // 利用永遠為真的 `1=1` 以便被後續條件替換
-$params = [];
+$sql = "SELECT * FROM coupon WHERE 1=1"; // 利用永遠為真的 `1=1` 以利加後續條件
+$params = []; // 用來裝條件
+$types = ""; // 用來紀錄條件型別
 
 // 搜尋條件
 if (isset($_GET["search"]) && !empty($_GET["search"])) {
     $search = "%" . $_GET["search"] . "%";
     $sql .= " AND name LIKE ?";
-    array_unshift($params, $search);
+    array_push($params, $search);
+    $types .= "s";
 }
 
-// 排序条件
+// 啟用狀態條件
+if (isset($_GET["act_status"]) && $_GET["act_status"] !== "") {
+    $act_status = $_GET["act_status"];
+    $sql .= " AND activation = ?";
+    array_push($params, $act_status);
+    $types .= "i";
+}else{
+    $act_status = "";
+}
+
+// 排序條件
 if (!isset($_GET["sort"])){
     $sort = "coupon_id";
 }else{
@@ -49,20 +61,20 @@ if (!isset($_GET["sort"])){
     }
 }
 
-// 準備查詢
+// 準備撈資料
 $stmt = $conn->prepare($sql);
 
 // 將參數化的搜尋條件取代佔位符
 if (!empty($params)) {
-    $types = str_repeat('s', count($params));
     $stmt->bind_param($types, ...$params);
 }
 
+// 執行撈資料 & 取得結果
 $stmt->execute();
 $result = $stmt->get_result();
 $rows = $result->fetch_all(MYSQLI_ASSOC);
 
-$stmt->close();
+// $stmt->close();
 // $conn->close();
 ?>
 
@@ -72,7 +84,7 @@ $stmt->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>優惠券種類一覽</title>
+    <title>優惠券種類列表</title>
     <?php include("../css/css_Joe.php"); ?>
     <style>
 
@@ -107,6 +119,11 @@ $stmt->close();
                             <option <?php echo $sort == "created_asc" ? "selected" : ""; ?> value="created_asc">創建日由舊至新</option>
                             <option <?php echo $sort == "created_desc" ? "selected" : ""; ?> value="created_desc">創建日由新至舊</option>
                         </select>
+                        <select class="form-select" aria-label="Default select example" name="act_status">
+                            <option <?php echo is_null($act_status) ? "selected" : ""; ?> value=""><span class="text-secondery">不限啟用狀態</span></option>
+                            <option <?php echo $act_status == "1" ? "selected" : ""; ?> value="1"><span class="text-success">啟用中</span></option>
+                            <option <?php echo $act_status == "0" ? "selected" : ""; ?> value="0"><span class="text-danger">停用中</span></option>
+                        </select>
                         <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                     </div>
                 </form>
@@ -122,7 +139,7 @@ $stmt->close();
                         <th>折扣率<br>(discount_rate)</th>
                         <th>啟用日期<br>(start_time)</th>
                         <th>到期日<br>(end_date)</th>
-                        <th>啟用狀態<br>(actication)</th>
+                        <th>啟用狀態<br>(activation)</th>
                         <th>創建日期<br>(created_at)</th>
                     </tr>
                 </thead>
