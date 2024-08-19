@@ -42,6 +42,8 @@ if(!isset($_GET["productId"])){
             aspect-ratio: 1;
             border-radius: 20px;
             margin: 20px;
+            box-shadow: 0 0 15px #F4A293;
+            overflow: hidden;
         }
 
         .text-attention{
@@ -66,7 +68,7 @@ if(!isset($_GET["productId"])){
                         <div class="col-11">
                             <div class="row d-flex align-items-center flex-column flex-xl-row">
                                 <div class="col col-xl-5 px-2">
-                                    <div class="img-box overflow-hidden">
+                                    <div class="img-box">
                                         <img class="w-100 h-100 object-fit-cover" src="../images/prdoucts/00_aki_cake_matcha.jpg" alt="">
                                     </div>
                                 </div>
@@ -116,8 +118,12 @@ if(!isset($_GET["productId"])){
                                     </tr>
                                 </table>
                                 </div>
-                                <input type="text">
-                                <button></button>
+                                
+                                <div class="option-area d-flex justify-content-center mt-4 ">
+                                    <a class="btn btn-success px-4 mx-3 fw-bolder" href="product-edit.php?=productId<?=$id?>">編輯</a>
+                                    <a class="btn btn-warning px-4 mx-3 fw-bolder" href="">下架</a>
+                                    <a class="btn btn-danger px-4 mx-3 fw-bolder" href="">刪除</a>
+                                </div>
                             </div>
                         </div>
                     </div>
