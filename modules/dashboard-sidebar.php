@@ -53,5 +53,9 @@
                                 <a class="nav-link" href="#">店家基本資料填寫</a>
                             </li>
                         </ul>
+                    </ul>
                 </div>
             </div>
+        </div>
+    </div>
+    <!-- End Sidebar -->
