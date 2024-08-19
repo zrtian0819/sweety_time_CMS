@@ -223,11 +223,28 @@ button {
   text-wrap: nowrap;
   overflow-y: auto;
   overflow-x: hidden;
+
+  ul{
+    height: auto;
+    transition:0.8s
+  }
 }
 
 .sideBarToggle {
-  width: 0px !important;
+  width: 0 !important;
   padding: 20px 15px !important;
+}
+
+.adminToggle{
+  height: 0 !important;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.storeToggle{
+  height: 0 !important;
+  overflow: hidden;
+  opacity: 0;
 }
 
 /* .content {

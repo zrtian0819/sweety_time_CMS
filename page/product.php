@@ -41,6 +41,7 @@ if(!isset($_GET["productId"])){
         .img-box{
             aspect-ratio: 1;
             border-radius: 20px;
+            margin: 20px;
         }
 
         .text-attention{
@@ -63,59 +64,60 @@ if(!isset($_GET["productId"])){
                 <div class="container">
                     <div class="row d-flex justify-content-center">
                         <div class="col-11">
-                            <div class="row d-flex align-items-center flex-column flex-lg-row">
-                                <div class="col col-lg-5 px-2">
+                            <div class="row d-flex align-items-center flex-column flex-xl-row">
+                                <div class="col col-xl-5 px-2">
                                     <div class="img-box overflow-hidden">
                                         <img class="w-100 h-100 object-fit-cover" src="../images/prdoucts/00_aki_cake_matcha.jpg" alt="">
                                     </div>
                                 </div>
-                                <div class="col col-lg-7 px-2">
+                                <div class="col col-xl-7 px-2">
 
-                                <h3 class="mt-4 text-center text-lg-start"><?=$row["name"]?></h3>
+                                <h3 class="mt-4 text-center text-xl-start"><?=$row["name"]?></h3>
                                 <table class="table table-hover">
                                     <tr>
-                                        <td class="dontNextLine">id</td>
+                                        <td class="dontNextLine fw-bold">id</td>
                                         <td><?=$id?></td>
                                     </tr>
                                     <tr>
-                                        <td class="dontNextLine">上架店家</td>
+                                        <td class="dontNextLine fw-bold">上架店家</td>
                                         <td class="text-attention"><?=$row["shop_id"]?></td>
                                     </tr>
                                     <tr>
-                                        <td class="dontNextLine">價格</td>
+                                        <td class="dontNextLine fw-bold">價格</td>
                                         <td><?=$row["price"]?></td>
                                     </tr>
                                     <tr>
-                                        <td class="dontNextLine">庫存</td>
+                                        <td class="dontNextLine fw-bold">庫存</td>
                                         <td><?php $row["stocks"] ?></td>
                                     </tr>
                                     <tr>
-                                        <td class="dontNextLine">描述</td>
+                                        <td class="dontNextLine fw-bold">描述</td>
                                         <td><?=$row["description"]?></td>
                                     </tr>
                                     <tr>
-                                        <td class="dontNextLine">關鍵字</td>
+                                        <td class="dontNextLine fw-bold">關鍵字</td>
                                         <td><?=$row["keywords"]?></td>
                                     </tr>
                                     <tr>
-                                        <td class="dontNextLine">折扣</td>
+                                        <td class="dontNextLine fw-bold">折扣</td>
                                         <td><?=$row["discount"]?></td>
                                     </tr>
                                     <tr>
-                                        <td class="dontNextLine">上架</td>
+                                        <td class="dontNextLine fw-bold">上架</td>
                                         <td><?=$row["available"]?></td>
                                     </tr>
                                     <tr>
-                                        <td class="dontNextLine">標籤</td>
+                                        <td class="dontNextLine fw-bold">標籤</td>
                                         <td><?=$row["label"]?></td>
                                     </tr>
                                     <tr>
-                                        <td class="dontNextLine">建立時間</td>
+                                        <td class="dontNextLine fw-bold">建立時間</td>
                                         <td></td>
                                     </tr>
                                 </table>
                                 </div>
-
+                                <input type="text">
+                                <button></button>
                             </div>
                         </div>
                     </div>
