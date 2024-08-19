@@ -32,16 +32,16 @@ if(!isset($_GET["productId"])){
     }
 
     //目前語法錯誤
-    $photosql = "SELECT product_photo.*, product.product_id AS productId 
-    FROM product_photo 
-    JOIN product ON product_photo.product_id = product.product_id 
-    WHERE product_photo.valid = 1";
+    // $photosql = "SELECT product_photo.*, product.product_id AS productId 
+    // FROM product_photo 
+    // JOIN product ON product_photo.product_id = product.product_id 
+    // WHERE product_photo.valid = 1";
     
 
-    $photorResult = $conn->query($photosql);
-    $photoRows= $photorResult->fetch_all(MYSQLI_ASSOC);
+    // $photorResult = $conn->query($photosql);
+    // $photoRows= $photorResult->fetch_all(MYSQLI_ASSOC);
 
-    print_r($photoRows);
+    // print_r($photoRows);
 }
 
 ?>
