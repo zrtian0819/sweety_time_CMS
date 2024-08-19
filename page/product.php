@@ -11,9 +11,37 @@ if(!isset($_GET["productId"])){
     $count = $result->num_rows;
     $row = $result -> fetch_assoc();
 
+
+    if(isset($row["shop_id"])){
+        $shopId = $row["shop_id"];
+        $shopsql = "SELECT * from shop WHERE shop_id = $shopId";
+        $shopResult = $conn->query($shopsql);
+        $shopRow = $shopResult -> fetch_assoc();
+
+        $shopName = $shopRow["name"];
+    }
+
+    if(isset($row["product_class_id"])){
+        $classId = $row["product_class_id"];
+        $classsql = "SELECT * from product_class WHERE product_class_id = $classId";
+        $classResult = $conn->query($classsql);
+        $classRow = $classResult -> fetch_assoc();
+
+        $className = $classRow["class_name"];
+        // $shopsql = "SELECT "
+    }
+
+    //目前語法錯誤
+    $photosql = "SELECT product_photo.*, product.product_id AS productId 
+    FROM product_photo 
+    JOIN product ON product_photo.product_id = product.product_id 
+    WHERE product_photo.valid = 1";
     
 
-    // print_r($row);
+    $photorResult = $conn->query($photosql);
+    $photoRows= $photorResult->fetch_all(MYSQLI_ASSOC);
+
+    print_r($photoRows);
 }
 
 ?>
@@ -42,8 +70,13 @@ if(!isset($_GET["productId"])){
             aspect-ratio: 1;
             border-radius: 20px;
             margin: 20px;
-            box-shadow: 0 0 15px #F4A293;
+            /* box-shadow: 0 0 15px #F4A293; */
             overflow: hidden;
+            transition: 0.5s;
+
+            &:hover{
+                /* box-shadow: 0 0 40px #F4A293; */
+            }
         }
 
         .text-attention{
@@ -67,10 +100,19 @@ if(!isset($_GET["productId"])){
                     <div class="row d-flex justify-content-center">
                         <div class="col-11">
                             <div class="row d-flex align-items-center flex-column flex-xl-row">
-                                <div class="col col-xl-5 px-2">
+                                <div class="col col-xl-5 px-2 ">
                                     <div class="img-box">
                                         <img class="w-100 h-100 object-fit-cover" src="../images/prdoucts/00_aki_cake_matcha.jpg" alt="">
                                     </div>
+                                    <div class="d-flex justify-content-center">
+                                        <div class="row row-cols-4 w-100">
+                                            <img class="px-2" src="../images/prdoucts/00_aki_cake_matcha.jpg" alt="">
+                                            <img class="px-2" src="../images/prdoucts/00_aki_cake_matcha.jpg" alt="">
+                                            <img class="px-2" src="../images/prdoucts/00_aki_cake_matcha.jpg" alt="">
+                                            <img class="px-2" src="../images/prdoucts/00_aki_cake_matcha.jpg" alt="">
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                                 <div class="col col-xl-7 px-2">
 
@@ -82,7 +124,7 @@ if(!isset($_GET["productId"])){
                                     </tr>
                                     <tr>
                                         <td class="dontNextLine fw-bold">上架店家</td>
-                                        <td class="text-attention"><?=$row["shop_id"]?></td>
+                                        <td><?=$shopName?></td>
                                     </tr>
                                     <tr>
                                         <td class="dontNextLine fw-bold">價格</td>
@@ -91,6 +133,10 @@ if(!isset($_GET["productId"])){
                                     <tr>
                                         <td class="dontNextLine fw-bold">庫存</td>
                                         <td><?php $row["stocks"] ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="dontNextLine fw-bold">商品分類</td>
+                                        <td><?=$className?></td>
                                     </tr>
                                     <tr>
                                         <td class="dontNextLine fw-bold">描述</td>
@@ -106,7 +152,7 @@ if(!isset($_GET["productId"])){
                                     </tr>
                                     <tr>
                                         <td class="dontNextLine fw-bold">上架</td>
-                                        <td><?=$row["available"]?></td>
+                                        <td><?= $row["available"]=1?"上架中":'<span class="text-attention">下架中</span>?>'?></td>
                                     </tr>
                                     <tr>
                                         <td class="dontNextLine fw-bold">標籤</td>
@@ -114,7 +160,7 @@ if(!isset($_GET["productId"])){
                                     </tr>
                                     <tr>
                                         <td class="dontNextLine fw-bold">建立時間</td>
-                                        <td></td>
+                                        <td><?=$row["created_at"]?></td>
                                     </tr>
                                 </table>
                                 </div>
