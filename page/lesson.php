@@ -2,10 +2,22 @@
 
 require_once("../db_connect.php");
 
+$sqlTeacher = "SELECT * FROM teacher ORDER BY teacher_id";
+$resultTea = $conn->query($sqlTeacher);
+$rowsTea = $resultTea->fetch_all(MYSQLI_ASSOC);
 
-$sql = "SELECT * FROM lesson WHERE activation = 1";
+//teacher 的關聯式陣列
+$teacherArr = [];
+foreach ($rowsTea as $teacher) {
+    $teacherArr[$teacher["teacher_id"]] = $teacher["name"];
+ 
+}
+
+$sql = "SELECT * FROM lesson";
 $result = $conn->query($sql);
 $rows = $result->fetch_all(MYSQLI_ASSOC);
+
+
 
 // print_r($row);
 ?>
@@ -39,9 +51,12 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                         <tr class="text-center">
                             <td><?= $row["lesson_id"] ?></td>
                             <td><?= $row["name"] ?></td>
-                            <td><?= $row["teacher_id"] ?></td>
+                            <td><?= $teacherArr[$row["teacher_id"]] ?></td>
                             <td><?= $row["quota"] ?></td>
-                            <td><a href="" class="btn"><i class="fa-regular fa-eye"></i></a></td>
+                            <td><a href="lesson-details?id=<?= $row["lesson_id"] ?>.php" class="btn"><i class="fa-regular fa-eye"></i></a>
+                                <a href="lesson-details?id=<?= $row["lesson_id"] ?>.php" class="btn"><i class="fa-solid fa-pen"></i></a>
+                                <a href="lesson-details?id=<?= $row["lesson_id"] ?>.php" class="btn btn-danger"><i class="fa-solid fa-trash"></i></i></a>
+                            </td>
                         </tr>
                     </tbody>
                 <?php endforeach; ?>
