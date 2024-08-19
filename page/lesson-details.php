@@ -33,9 +33,15 @@ $row = $result->fetch_assoc();
         <div class="main col neumorphic p-5">
             <!-- Content -->
             <h1><?= $row["name"] ?></h1>
-            <div class="row">
-                <div class="col-lg-3">
+            <div class="row justify-content-center">
+                <div class="col-lg-3 m-2">
                     <img src="../images/lesson/<?= $row["img_path"] ?>" alt="<?= $row["name"] ?>" class="ratio ratio-4x3">
+                </div>
+                <div class="col-lg-8 m-2">
+                    <h3 class="p-2">課程介紹</h3>
+                    <p class="p-2"><?= $row["description"] ?></p>
+                    <h3 class="p-2">地點：<?= $row["classroom_name"] ?></h3>
+                    <p class="ps-2">地址：<?= $row["location"] ?></p>
                 </div>
             </div>
         </div>
