@@ -1,3 +1,5 @@
+
+
 <!doctype html>
 <html lang="en">
     <head>
@@ -17,8 +19,8 @@
         <div class="container">
             <div class="login-card">
                 <h1>Log In</h1>
-                <input class="login-input" type="text" placeholder="Account">
-                <input class="login-input" type="password" placeholder="password">
+                <input class="form-control form-control-custom" type="text" placeholder="Account">
+                <input class="form-control form-control-custom mt-3" type="password" placeholder="password">
                 <button class="log-in-button">Log In</button>
             </div>
         </div>

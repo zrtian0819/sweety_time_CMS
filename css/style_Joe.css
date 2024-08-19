@@ -183,11 +183,27 @@ button {
     height: auto;
     transition:0.6s
   }
+  ul{
+    transition:0.6s;
+  }
 }
 
 .sideBarToggle {
   width: 0px !important;
   padding: 20px 15px !important;
+  border-radius: 10px 0 0 10px;
+}
+
+.adminToggle{
+  height: 0 !important;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.storeToggle{
+  height: 0 !important;
+  overflow: hidden;
+  opacity: 0;
   border-radius: 10px 0 0 10px;
 }
 
