@@ -48,7 +48,7 @@ foreach ($rowsTea as $teacher) {
                 </li>
             </ul>
             <!-- Content -->
-            <table class="table">
+            <table class="table table-hover">
                 <thead class="text-center">
                     <th>課程編號</th>
                     <th>課程狀態</th>
@@ -61,7 +61,7 @@ foreach ($rowsTea as $teacher) {
                 <?php foreach ($rows as $row):
                     $id = $row["lesson_id"]; ?>
                     <tbody>
-                        <tr class="text-center">
+                        <tr class="text-center m-auto">
                             <td><?= $id ?></td>
                             <?php echo ($row["activation"] == 1) ? "<td>" . "上架中" : "<td class='text-danger'>" . "已下架"; ?></td>
                             <td><?= $row["name"] ?></td>

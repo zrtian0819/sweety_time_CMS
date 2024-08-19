@@ -48,7 +48,7 @@ foreach ($rowsTea as $teacher) {
                 </li>
             </ul>
             <!-- Content -->
-            <table class="table">
+            <table class="table table-hover">
                 <thead class="text-center">
                     <th>課程編號</th>
                     <th>課程名稱</th>
