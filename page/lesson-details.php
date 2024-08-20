@@ -56,8 +56,10 @@ $rowPro = $resultProduct->fetch_assoc();
     <?php include("../modules/dashboard-header_Joe.php"); ?>
     <div class="container-fluid d-flex flex-row px-4">
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
-        <div class="main col neumorphic p-5">
+
+        <div class="main col neumorphic p-5 pt-4">
             <!-- Content -->
+            <a href="lesson.php" class="btn btn-custom"><i class="fa-solid fa-arrow-left"></i></a>
             <h1><?= $row["name"] ?></h1>
             <div class="row justify-content-center">
                 <div class="col-lg-3 m-2">
