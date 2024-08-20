@@ -166,7 +166,7 @@ if(!isset($_GET["productId"])){
                                 </div>
                                 
                                 <div class="option-area d-flex justify-content-center mt-4 ">
-                                    <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="product-edit.php?=productId<?=$id?>">編輯</a>
+                                    <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="product-edit.php?productId=<?=$id?>">編輯</a>
                                     <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="">下架</a>
                                     <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="">刪除</a>
                                 </div>

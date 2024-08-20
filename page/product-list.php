@@ -1,16 +1,21 @@
 <?php
 
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 require_once("../db_connect.php");
 include("../function/function.php");
 
+$SessRole = $_SESSION["user"]["role"];
 
 //篩選狀態做不出來
-if (!empty($_SESSION["shop"])) {
+if ($SessRole == "shop") {
     $shopId = $_SESSION["shop"]["shop_id"];
     // echo $shopId;
     $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 ORDER BY product_id";
-} else {
+
+} elseif( $SessRole == "admin" ) {
     $sql = "SELECT * FROM product WHERE deleted = 0 ORDER BY product_id";
 }
 
@@ -29,7 +34,7 @@ $productCount = $result->num_rows;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>product-list</title>
+    <title>您的商品列表清單</title>
     <?php include("../css/css_Joe.php"); ?>
 
     <style>
@@ -40,6 +45,7 @@ $productCount = $result->num_rows;
         .dontNextLine {
             white-space: nowrap;
         }
+
     </style>
 </head>
 
@@ -69,24 +75,26 @@ $productCount = $result->num_rows;
                     <table class="table table-bordered table-hover bdrs">
                         <thead class="text-center table-dark">
                             <tr>
+                                <th class="dontNextLine">商品編碼</th>
                                 <th class="dontNextLine">名稱</th>
-                                <th class="dontNextLine">照片</th>
+                                <th class="dontNextLine">商家</th>
                                 <th class="dontNextLine">價格</th>
                                 <th class="dontNextLine">描述</th>
                                 <th class="dontNextLine">庫存數量</th>
-                                <th class="dontNextLine">編輯</th>
+                                <th class="dontNextLine">詳細資訊</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             <?php foreach ($rows as $row): ?>
                                 <tr>
+                                    <th><?= $row["product_id"] ?></th>
                                     <th><?= $row["name"] ?></th>
-                                    <th></th>
+                                    <th class="text-danger">待處理</th>
                                     <th class="text-center"><?= number_format($row["price"]) ?></th>
                                     <th><?= getLeftChar($row["description"], 100) . "..." ?></th>
                                     <th class="text-center"><?= $row["stocks"] ?></th>
-                                    <th><a href="product.php?productId=<?= $row["product_id"] ?>" class="btn btn-warning">
+                                    <th class="text-center"><a href="product.php?productId=<?= $row["product_id"] ?>" class="btn btn-custom">
                                             <i class="fa-solid fa-list"></i>
                                         </a></th>
                                 </tr>
