@@ -45,7 +45,6 @@ $userCount = $result->num_rows;
 
 //判定有沒有此使用者的方式
 if ($userCount > 0) {
-
     unset($_SESSION["error"]);
     $user = $result->fetch_assoc();
 
@@ -60,23 +59,24 @@ if ($userCount > 0) {
 
     $userId_api = $user["user_id"];
 
+    // 檢查使用者是否有關聯的商店訊息
     $sql_shop="SELECT * FROM shop WHERE user_id= $userId_api";
     $result_shop = $conn->query($sql_shop);
-    $row_shop = $result_shop -> fetch_assoc();
 
-    $shopId_api = $row_shop["shop_id"];
+    if ($result_shop->num_rows > 0) {
+        $row_shop = $result_shop->fetch_assoc();
+        $shopId_api = $row_shop["shop_id"];
 
-    $_SESSION["shop"] = [
-        "shop_id" => $shopId_api
-    ];
-
+        $_SESSION["shop"] = [
+            "shop_id" => $shopId_api
+        ];
+}
     $data = [
         "status" => 1,
         "message" => "登入成功",
     ];
     echo json_encode($data);
 } else {
-    // $_SESSION["error"]["message"]="帳號或密碼錯誤";
 
     if (!isset($_SESSION["error"]["times"])) {
         $_SESSION["error"]["times"] = 1;
@@ -86,8 +86,6 @@ if ($userCount > 0) {
     $errorTimes = $_SESSION["error"]["times"];
     $acceptErrorTimes = 6;
     $remainErrorTimes = $acceptErrorTimes - $errorTimes;
-
-    // $_SESSION["error"]["message"] .= "還有 $remainErrorTimes 次機會" ;
 
     $data = [
         "status" => 2,

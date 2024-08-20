@@ -74,9 +74,9 @@ if ($shop_id > 0) {
                     <div class="col-12 col-md-6 col-lg-5 px-4 shop-info-detail">
                         <h3 class="mb-3">店家資訊</h3>
                         <ul class="list-unstyled">
-                            <li class="my-2">店名：<?= $name;?></li>
-                            <li class="my-2">電話：<?= $phone;?></li>
-                            <li class="my-2">地址：<?= $address;?></li>
+                            <li class="my-2">店名：<input type="text" class="form-control" name="name" value="<?= $name;?>"></li>
+                            <li class="my-2">電話：<input type="text" class="form-control" name="phone" value="<?= $phone;?>"></li>
+                            <li class="my-2">地址：<input type="text" class="form-control" name="address" value="<?= $address;?>"></li>
                             <li class="my-2">註冊時間：<?= $sign_up_time;?></li>
                             <li class="my-2">經緯度：<?= $longitude;?>,<?= $latitude;?></li>
                         </ul>
@@ -94,7 +94,7 @@ if ($shop_id > 0) {
                         </div>
                     </div>
                     <div>
-                        <a href="shop-info-edit.php?id=<?=$row["shop_id"]?>" class="btn btn-primary"><i class="fa-solid fa-user-pen"></i></a>
+                        <a href="shop-edit.php?id=<?=$row["shop_id"]?>" class="btn btn-primary"><i class="fa-solid fa-user-pen"></i></a>
                     </div>
                 </div>
             </div>
