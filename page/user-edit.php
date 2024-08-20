@@ -29,6 +29,15 @@ if ($userCount > 0) {
         content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
     <?php include("../css/css_Joe.php"); ?>
+    <style>
+        .user-btn {
+            width: 100px;
+        }
+
+        .user-search {
+            width: 200px;
+        }
+    </style>
 </head>
 
 <body>
@@ -41,7 +50,7 @@ if ($userCount > 0) {
         <div class="container-fluid d-flex flex-row px-4">
             <div class="main col neumorphic p-5">
                 <div class="py-2">
-                    <a class="btn btn-neumorphic" href="user.php?user_id=<?=$row["user_id"]?>" title="回使用者"><i class="fa-solid fa-left-long"></i></a>
+                    <a class="btn btn-neumorphic user-btn" href="user.php?user_id=<?=$row["user_id"]?>" title="回使用者"><i class="fa-solid fa-left-long"></i></a>
                 </div>
                 <h2 class="mb-3">修改資料</h2>
                 <div class="container">
@@ -81,8 +90,8 @@ if ($userCount > 0) {
                                         <td><?= $row["sign_up_time"] ?></td>
                                     </tr>
                                 </table>
-                                <div class="">
-                                    <button type="submit" class="btn btn-neumorphic">儲存</button>
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-neumorphic user-btn">儲存</button>
                                 </div>
                             </form>
                         <?php else: ?>
