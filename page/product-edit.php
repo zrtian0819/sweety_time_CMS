@@ -3,7 +3,9 @@ require_once("../db_connect.php");
 
 if(!isset($_GET["productId"])){
     $message = "請依照正常管道進入此頁";
+
 }else{
+    // 有取得商品id時的情況
     $id = $_GET["productId"];
     $sql = "SELECT * from product WHERE product_id = $id";
 
@@ -93,84 +95,98 @@ if(!isset($_GET["productId"])){
 
         <main class="product main col neumorphic p-5">
 
-            <h2 class="mb-5 text-center">商品管理</h2>
+            <h2 class="mb-5 text-center">商品編輯</h2>
+
             <?php if(isset($_GET["productId"])): ?>
                 <div class="container">
                     <div class="row d-flex justify-content-center">
-                        <div class="col-11">
+                        <div class="col-12">
+                            <form action="">
                             <div class="row d-flex align-items-center flex-column flex-xl-row">
-                                <div class="col col-xl-5 px-2 ">
-                                    <div class="img-box">
-                                        <img id="majorPhoto" class="w-100 h-100 object-fit-cover" src="../images/prdoucts/<?=$photoRows[0]["file_name"]?>" alt="">
-                                    </div>
-                                    <div class="d-flex justify-content-center">
-                                        <div class="row w-100">
-                                            <?php foreach($photoRows as $photoItem): ?>
-                                            <div class="img-small col-3">
-                                                <img class="smallImg w-100 h-100 object-fit-cover" src="../images/prdoucts/<?=$photoItem["file_name"]?>" alt="">
-                                            </div>
-                                            <?php endforeach; ?>
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-                                <div class="col col-xl-7 px-2">
+                                
+                                <div class="col px-2">
+                                    <table class="table table-hover">
+                                        <tr>
+                                            <td class="dontNextLine fw-bold">id</td>
+                                            <td><?=$id?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="dontNextLine fw-bold">品名</td>
+                                            <td>
+                                                <input class="form-control form-control-custom" type="text" value="<?=$row["name"]?>">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="dontNextLine fw-bold">價格</td>
+                                            <td>
+                                                <input class="form-control form-control-custom" type="number" value="<?=$row["price"]?>">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="dontNextLine fw-bold">庫存</td>
+                                            <td>
+                                                <input class="form-control form-control-custom" type="number" value="<?= $row["stocks"]?>">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="dontNextLine fw-bold">商品分類</td>
+                                            <td><?=$className?>
+                                                <select class="form-select form-select-custom" id="country">
+                                                    <option selected>請選擇國家</option>
+                                                    <option value="1">台灣</option>
+                                                    <option value="2">日本</option>
+                                                    <option value="3">韓國</option>
+                                                </select>
+                                            </td>
 
-                                <h3 class="mt-4 text-center text-xl-start"><?=$row["name"]?></h3>
-                                <table class="table table-hover">
-                                    <tr>
-                                        <td class="dontNextLine fw-bold">id</td>
-                                        <td><?=$id?></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="dontNextLine fw-bold">上架店家</td>
-                                        <td><?=$shopName?></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="dontNextLine fw-bold">價格</td>
-                                        <td><?=$row["price"]?></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="dontNextLine fw-bold">庫存</td>
-                                        <td><?= $row["stocks"] ?></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="dontNextLine fw-bold">商品分類</td>
-                                        <td><?=$className?></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="dontNextLine fw-bold">描述</td>
-                                        <td><?=$row["description"]?></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="dontNextLine fw-bold">關鍵字</td>
-                                        <td><?=$row["keywords"]?></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="dontNextLine fw-bold">折扣</td>
-                                        <td><?=$row["discount"]?></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="dontNextLine fw-bold">上架</td>
-                                        <td><?= $row["available"]=1?"上架中":'<span class="text-attention">下架中</span>?>'?></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="dontNextLine fw-bold">標籤</td>
-                                        <td><?=$row["label"]?></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="dontNextLine fw-bold">建立時間</td>
-                                        <td><?=$row["created_at"]?></td>
-                                    </tr>
-                                </table>
+                                        </tr>
+                                        <tr>
+                                            <td class="dontNextLine fw-bold">描述</td>
+                                            <td>
+                                                <textarea class="form-control textarea-custom" id="message" rows="3" placeholder="請輸入描述" value="<?=$row["description"]?>"></textarea>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="dontNextLine fw-bold">關鍵字</td>
+                                            <td>
+                                                <input class="form-control form-control-custom" type="text" value="<?= $row["keywords"] ?>" placeholder="請用「,」逗號隔開字串">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="dontNextLine fw-bold">折扣</td>
+                                            <td>
+                                                <input class="form-control form-control-custom" type="number" value="<?=$row["discount"]?>">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="dontNextLine fw-bold">上架</td>
+                                            <td>
+                                                <select class="form-select form-select-custom" id="country" require>
+                                                    <option disabled >請選擇上架狀態</option>
+                                                    <option <?=$row["description"]==0?:"selected";""?> value="0">已下架</option>
+                                                    <option <?=$row["description"]==1?:"selected";""?> value="1">上架中</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="dontNextLine fw-bold">標籤</td>
+                                            <td>
+                                                <input class="form-control form-control-custom" type="text" value="<?=$row["label"]?>">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="dontNextLine fw-bold">建立時間</td>
+                                            <td><?=$row["created_at"]?></td>
+                                        </tr>
+                                    </table>
                                 </div>
                                 
                                 <div class="option-area d-flex justify-content-center mt-4 ">
-                                    <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="product-edit.php?=productId<?=$id?>">編輯</a>
-                                    <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="">下架</a>
-                                    <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="">刪除</a>
+                                    <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="#">儲存</a>
                                 </div>
                             </div>
+                            </form>
+                            
                         </div>
                     </div>
                 </div>
