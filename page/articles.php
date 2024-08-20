@@ -2,6 +2,11 @@
 
 require_once("../db_connect.php");
 
+// if (session_status() == PHP_SESSION_NONE) {
+//     session_start();
+// }
+
+
 $status = isset($_GET["status"]) ? $_GET["status"] : "all";
 
 if ($status === "on") {
@@ -55,16 +60,16 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                 <?php endif; ?>
 
             </div>
-           
-                <div class="row d-flex">
-                    <div class="input-group mb-3">
-                        <input type="search" class="form-control" name="search" value="<?php echo isset($_GET["search"]) ? $_GET["search"] : "" ?>" placeholder="輸入文字以搜尋文章">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-warning m-0 " type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-                        </div>
-                    </div>
 
-                    <?php if ($articleCount > 0): $rows = $result->fetch_all(MYSQLI_ASSOC); ?>
+            <div class="row d-flex">
+                <div class="input-group mb-3">
+                    <input type="search" class="form-control" name="search" value="<?php echo isset($_GET["search"]) ? $_GET["search"] : "" ?>" placeholder="輸入文字以搜尋文章">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-warning m-0 " type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </div>
+                </div>
+
+                <?php if ($articleCount > 0): $rows = $result->fetch_all(MYSQLI_ASSOC); ?>
                     <h3>共有<?= $articleCount ?>篇文章</h3>
 
                     <ul class="nav nav-tabs-custom">
@@ -94,29 +99,44 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                         </thead>
 
                         <tbody>
-                            <?php foreach ($rows as $articles): ?>
-                                <tr class="text-center m-auto">
-                                    <td><?= $articles["article_id"] ?></td>
-                                    <td><?= $articles["title"] ?></td>
-                                    <td><?= $articles["content"] ?></td>
-                                    <td><?= $articles["product_class_id"] ?></td>
-                                    <td><?= $articles["user_id"] ?></td>
-                                    <td><?= $articles["created_at"] ?></td>
-                                    <td>
-                                        <a class="btn btn-primary" href="user.php?user_id=<?= $user["user_id"] ?>"><i class="fa-solid fa-eye"></i></a>
-                                        <a class="btn btn-danger" href="doDeleteUser.php?user_id=<?= $user["user_id"] ?>"><i class="fa-solid fa-trash"></i></a>
-                                    </td>
-                                </tr>
-
+                            <tr class="text-center m-auto">
+                                <td><?= $id ?></td>
+                                <?php echo ($row["activation"] == 1) ? "<td>" . "上架中" : "<td class='text-danger'>" . "已下架"; ?></td>
+                                <td><?= $ ?></td>
+                                <td><?= $ ?></td>
+                                <td><?= $ ?></td>
+                                <td><?= $ ?></td>
+                                <td><?= $ ?></td>
+                                <td>
+                                    <?php
+                                    $sqlArticles = "SELECT * FROM articles WHERE article_id = $id";
+                                    $resultArticles = $conn->query($sqlArticles);
+                                    $count = $resultArticles->num_rows;
+                                    $rowArticles = $resultArticles->fetch_assoc();
+                                    ?>
+                                    <?= $count ?></td>
+                                <td><a href="lesson-details.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-eye"></i></i></a>
+                                    <a href="lesson-details.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-pen"></i></a>
+                                    <?php if ($status === "off"): ?>
+                                        <a href="../function/doReloadArticle.php?id=<?= $id ?>" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
+                                    <?php else: ?>
+                                        <?php if ($row["activation"] == 1): ?>
+                                            <a href="../function/doDeleteArticle.php?id=<?= $id ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+                                        <?php else: ?>
+                                            <a href="../function/doReloadArticle.php?id=<?= $id ?>" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
                         </tbody>
-                    <?php endforeach; ?>
+
                     </table>
                 <?php else: ?>
                     目前沒有文章
                 <?php endif; ?>
 
 
-                </div>
+            </div>
         </div>
     </div>
 
