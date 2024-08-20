@@ -68,14 +68,18 @@ $classRows = $ClassResult->fetch_all(MYSQLI_ASSOC);
             <p>共<?= $productCount ?>筆</p>
             <div class="container">
                 <form action="" class="mb-4">
-                    <ul class="nav nav-tabs nav-tabs-custom" id="myTab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Home</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Profile</button>
-                        </li>
+                    <ul class="nav nav-tabs-custom">
+                    <li class="nav-item">
+                        <a class="main-nav nav-link active <?= $status === 'all' ? 'active' : '' ?>" href="?status=all">全部</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="main-nav nav-link <?= $status === 'on' ? 'active' : '' ?>" href="?status=on">上架中</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="main-nav nav-link <?= $status === 'off' ? 'active' : '' ?>" href="?status=off">已下架</a>
+                    </li>
                     </ul>
+                    <hr>
                 </form>
 
                 <?php if ($productCount > 0): ?>

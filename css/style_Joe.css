@@ -10,7 +10,10 @@
   --box-shadow-pink: 10px 10px 10px -8px #f5d6d1, 8px -4px 16px #ffffff;
   --area-border: 0.5px solid #f4a1939f;
 }
-
+html{
+  width: 100%;
+  height: 100%;
+}
 body {
   height: 100%;
   margin: 0;
