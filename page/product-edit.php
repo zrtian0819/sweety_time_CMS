@@ -47,7 +47,7 @@ if(!isset($_GET["productId"])){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?=$row["name"]?></title>
+    <title>商品編輯頁</title>
     <?php include("../css/css_Joe.php"); ?>
 
     <style>
