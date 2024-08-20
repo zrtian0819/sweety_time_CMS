@@ -6,18 +6,12 @@ require_once("../db_connect.php");
 //     session_start();
 // }
 
-
-$status = isset($_GET["status"]) ? $_GET["status"] : "all";
-
-if ($status === "on") {
-    $sql = "SELECT * FROM articles WHERE activation = 1";
-} elseif ($status === "off") {
-    $sql = "SELECT * FROM articles WHERE activation = 0";
-} else {
-    $sql = "SELECT * FROM articles";
+function getLeftChar($text, $num)
+{
+    return substr($text, 0, $num);
 }
 
-
+// 搜尋
 if (isset($_GET["search"])) {
     $search = $_GET["search"];
     $sql = "SELECT * FROM articles WHERE title, content LIKE '%$search%' AND activation=1";
@@ -28,12 +22,10 @@ if (isset($_GET["search"])) {
 
 $result = $conn->query($sql);
 $articleCount = $result->num_rows;
-$rows = $result->fetch_all(MYSQLI_ASSOC);
-
-
 
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -53,7 +45,7 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
 
         <div class="main col neumorphic p-5">
-            <h2 class="mb-3">文章管理</h2>
+            <h2 class="mb-3 text-center">文章管理</h2>
             <div class="py-2">
                 <?php if (isset($_GET["search"])): ?>
                     <a class="btn btn-neumorphic" href="articles.php" title="回文章列表"><i class="fa-solid fa-left-long"></i></a>
@@ -72,17 +64,22 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                 <?php if ($articleCount > 0): $rows = $result->fetch_all(MYSQLI_ASSOC); ?>
                     <h3>共有<?= $articleCount ?>篇文章</h3>
 
-                    <ul class="nav nav-tabs-custom">
-                        <li class="nav-item">
-                            <a class="main-nav nav-link <?= $status === 'all' ? 'active' : '' ?>" href="status=all">全部</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="main-nav nav-link <?= $status === 'on' ? 'active' : '' ?>" href="status=on">上架中</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="main-nav nav-link <?= $status === 'off' ? 'active' : '' ?>" href="status=off">已下架</a>
-                        </li>
-                    </ul>
+                    <div class="d-flex justify-content-between my-3">
+                        <div class="d-flex justify-content-between">
+                            <a href="#" class="btn btn-neumorphic user-btn">排序
+                                <i class="fa-solid fa-arrow-up-a-z"></i>
+                            </a>
+                            <a href="#" class="btn btn-neumorphic user-btn">排序
+                                <i class="fa-solid fa-arrow-down-a-z"></i>
+                            </a>    
+                        </div>
+                        <div>
+                            <a href="#" class="btn btn-neumorphic user-btn">
+                                <i class="fa-solid fa-plus"></i>新增文章
+                            </a>
+                        </div>
+                    </div>
+
 
                     <!-- 欄位 -->
 
@@ -99,37 +96,26 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                         </thead>
 
                         <tbody>
-                            <tr class="text-center m-auto">
-                                <td><?= $id ?></td>
-                                <?php echo ($row["activation"] == 1) ? "<td>" . "上架中" : "<td class='text-danger'>" . "已下架"; ?></td>
-                                <td><?= $ ?></td>
-                                <td><?= $ ?></td>
-                                <td><?= $ ?></td>
-                                <td><?= $ ?></td>
-                                <td><?= $ ?></td>
-                                <td>
-                                    <?php
-                                    $sqlArticles = "SELECT * FROM articles WHERE article_id = $id";
-                                    $resultArticles = $conn->query($sqlArticles);
-                                    $count = $resultArticles->num_rows;
-                                    $rowArticles = $resultArticles->fetch_assoc();
-                                    ?>
-                                    <?= $count ?></td>
-                                <td><a href="lesson-details.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-eye"></i></i></a>
-                                    <a href="lesson-details.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-pen"></i></a>
-                                    <?php if ($status === "off"): ?>
-                                        <a href="../function/doReloadArticle.php?id=<?= $id ?>" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
-                                    <?php else: ?>
-                                        <?php if ($row["activation"] == 1): ?>
-                                            <a href="../function/doDeleteArticle.php?id=<?= $id ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
-                                        <?php else: ?>
-                                            <a href="../function/doReloadArticle.php?id=<?= $id ?>" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
-                                        <?php endif; ?>
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
-                        </tbody>
+                            <?php foreach ($rows as $articles): ?>
+                                <tr class="text-center m-auto">
+                                    <td><?= $articles["article_id"] ?></td>
+                                    <td><?= $articles["title"] ?></td>
+                                    <td><?= getLeftChar($articles["content"], 200) . "..." ?></td>
+                                    <td><?= $articles["product_class_id"] ?></td>
+                                    <td><?= $articles["user_id"] ?></td>
+                                    <td><?= $articles["created_at"] ?></td>
+                                    <td>
+                                        <a href="lesson-details.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-eye"></i></a>
 
+                                        <a href="lesson-details.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-pen"></i></a>
+
+
+                                        <a href="../function/doDeleteArticle.php?id=<?= $id ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+
+                                    </td>
+                                </tr>
+                        </tbody>
+                    <?php endforeach; ?>
                     </table>
                 <?php else: ?>
                     目前沒有文章

@@ -7,8 +7,14 @@ if(!isset($_GET["id"])) {
 }
 
 $id = $_GET["id"];
+
 $sql = "UPDATE articles SET activation = 0 WHERE article_id = $id";
-$conn->query($sql);
+
+if($conn->query($sql) ===TRUE){
+    echo "刪除成功";
+}else{
+    echo "刪除資料錯誤:" .$conn->error;
+}
 
 $conn->close();
 header("location:../page/articles.php");
