@@ -186,13 +186,13 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                             <td><?= $row['discount_rate'];?></td>
                             <td><?= $row['start_time'];?></td>
                             <td><?= $row['end_date'];?></td>
-                            <td>
-                                <?php if ($row['activation'] == 1) : ?>
-                                    <p class="text-success">啟用中</p>
-                                <?php elseif($row['activation'] == 0) : ?>
-                                    <p class="text-danger">停用中</p>
-                                <?php endif; ?>
-                                
+                            <td class="d-flex">
+                                <p class="activ_status-text <?= $row['activation'] == 1 ? 'text-success' : 'text-danger'; ?>" data-id="<?= $row['coupon_id']; ?>">
+                                    <?= $row['activation'] == 1 ? '啟用中' : '停用中'; ?>
+                                </p>
+                                <div class="form-check form-switch d-inline-block">
+                                    <input class="form-check-input activ_switch" type="checkbox" data-id="<?= $row['coupon_id']; ?>" <?php echo $row['activation'] == 1 ? "checked" : ""; ?>>
+                                </div>
                                 <?php if ($row['start_time'] > $now) : ?>
                                     <p class="text-secondary">尚未開始</p>
                                 <?php elseif ($row['start_time'] <= $now && $now <= $row['end_date']) : ?>
@@ -210,7 +210,53 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
 
     </div>
 
+    <!-- Javascript 寫這裡 -->
     <?php include("../js.php"); ?>
+    <script>
+        const activ_switches = document.querySelectorAll('.activ_switch');
+
+        activ_switches.forEach(function(activ_switch) {
+            activ_switch.addEventListener('click', function() {
+                let couponId = this.getAttribute('data-id');
+                let isActive = this.checked ? 1 : 0;
+                        
+                $.ajax({
+                    method: "POST",
+                    url: "../api/doCouponActivationSwitch.php",
+                    dataType: "json",
+                    data: {
+                        id: couponId,
+                        activation: isActive
+                    }
+                })
+                .done(function(response) {
+                    if (response.success) {
+                        console.log("狀態已切換，Coupon ID: " + couponId);
+
+                        let statusTextElement = document.querySelector(`.activ_status-text[data-id='${couponId}']`);
+                        if (statusTextElement) {
+                            if (isActive === 1) {
+                                statusTextElement.textContent = '啟用中';
+                                statusTextElement.classList.remove('text-danger');
+                                statusTextElement.classList.add('text-success');
+                            } else {
+                                statusTextElement.textContent = '停用中';
+                                statusTextElement.classList.remove('text-success');
+                                statusTextElement.classList.add('text-danger');
+                            }
+                        }
+                    } else {
+                        console.log("狀態切換失敗，Coupon ID: " + couponId);
+                        // alert("狀態切換失敗，請稍後再試。");
+                    }
+                })
+                .fail(function(jqXHR, textStatus, errorThrown) {
+                    console.log("Request failed: " + textStatus + ", " + errorThrown);
+                    // alert("請求失敗，請稍後再試。");
+                });
+            });
+        })
+    </script>
 </body>
 
 </html>
