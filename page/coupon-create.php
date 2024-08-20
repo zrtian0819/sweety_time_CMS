@@ -20,16 +20,9 @@ require_once("../db_connect.php");
     <div class="container-fluid d-flex flex-row px-4">
 
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
-
-        <div class="main col neumorphic p-5">
-            <div class="">
-                <a href="./coupon.php">優惠券管理</a>
-            </div>
-            <hr>
-            <a href="./coupon-list.php" class="btn-neumorphic text-decoration-none">優惠券種類一覽</a>
-            <a href="./coupon-create.php" class="btn-neumorphic text-decoration-none">新增優惠券</a>
+        <div class="container">
+            
         </div>
-
     </div>
 
     <?php include("../js.php"); ?>
