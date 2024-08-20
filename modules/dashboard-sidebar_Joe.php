@@ -1,7 +1,11 @@
  <!-- Sidebar -->
  <?php
     // $require_once("../db_connect.php");
-    // session_start();
+    
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+
     if (isset($_SESSION["user"])) {
         $role = $_SESSION["user"]["role"];
         $userId = $_SESSION["user"]["user_id"];

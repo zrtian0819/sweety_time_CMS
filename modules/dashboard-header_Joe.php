@@ -1,6 +1,8 @@
 <?php
 
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 if (!isset($_SESSION["user"])) {
 
@@ -52,7 +54,7 @@ if (!isset($_SESSION["user"])) {
                         </li>
                     <?php endif; ?>
                     <li class="nav-item px-2">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-house"></i></a>
+                        <a class="nav-link" href="dashboard-home_Joe.php"><i class="fa-solid fa-house"></i></a>
                     </li>
                     <li class="nav-item px-2">
                         <a class="nav-link" href="#"><i class="fa-solid fa-user"></i></a>
