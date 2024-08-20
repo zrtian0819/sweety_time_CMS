@@ -1,6 +1,9 @@
 <?php
 
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 require_once("../db_connect.php");
 include("../function/function.php");
 
@@ -29,7 +32,7 @@ $productCount = $result->num_rows;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>product-list</title>
+    <title>您的商品列表清單</title>
     <?php include("../css/css_Joe.php"); ?>
 
     <style>
@@ -40,6 +43,7 @@ $productCount = $result->num_rows;
         .dontNextLine {
             white-space: nowrap;
         }
+
     </style>
 </head>
 
@@ -86,7 +90,7 @@ $productCount = $result->num_rows;
                                     <th class="text-center"><?= number_format($row["price"]) ?></th>
                                     <th><?= getLeftChar($row["description"], 100) . "..." ?></th>
                                     <th class="text-center"><?= $row["stocks"] ?></th>
-                                    <th><a href="product.php?productId=<?= $row["product_id"] ?>" class="btn btn-warning">
+                                    <th class="text-center"><a href="product.php?productId=<?= $row["product_id"] ?>" class="btn btn-custom">
                                             <i class="fa-solid fa-list"></i>
                                         </a></th>
                                 </tr>
