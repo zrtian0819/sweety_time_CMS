@@ -181,8 +181,8 @@ if(!isset($_GET["productId"])){
                                                 <td>
                                                     <select name="available" class="form-select form-select-custom" id="country" require>
                                                         <option disabled >請選擇上架狀態</option>
-                                                        <option <?=$row["available"]==0?"selected":"";?> value="0">已下架</option>
-                                                        <option <?=$row["available"]==1?"selected":"";?> value="1">上架中</option>
+                                                        <option <?=$row["available"]==0?"selected":"";?> value="0">下架</option>
+                                                        <option <?=$row["available"]==1?"selected":"";?> value="1">上架</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -200,6 +200,7 @@ if(!isset($_GET["productId"])){
                                     </div>
                                     
                                     <div class="option-area d-flex justify-content-center mt-4 ">
+                                        <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="product.php?productId=<?= $row["product_id"] ?>">取消</a>
                                         <button class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="#" type="submit">儲存</button>
                                     </div>
                                 </div>

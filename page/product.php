@@ -3,6 +3,8 @@ require_once("../db_connect.php");
 
 if(!isset($_GET["productId"])){
     $message = "請依照正常管道進入此頁";
+    header("location: product-list.php");
+
 }else{
     $id = $_GET["productId"];
     $sql = "SELECT * from product WHERE product_id = $id";
@@ -96,10 +98,14 @@ if(!isset($_GET["productId"])){
         <main class="product main col neumorphic p-5">
 
             <h2 class="mb-5 text-center">商品管理</h2>
+            <a class="btn btn-custom px-4 fw-bolder mb-4"  href="product-list.php">
+                <i class="fa-solid fa-arrow-left-long"></i>
+            </a>
             <?php if(isset($_GET["productId"])): ?>
                 <div class="container">
+                    
                     <div class="row d-flex justify-content-center">
-                        <div class="col-11">
+                        <div class="col-12">
                             <div class="row d-flex align-items-center flex-column flex-xl-row">
                                 <div class="col col-xl-5 px-2 ">
                                     <div class="img-box">
