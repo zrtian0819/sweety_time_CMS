@@ -66,7 +66,7 @@ $classRows = $ClassResult->fetch_all(MYSQLI_ASSOC);
 
 
             <p>共<?= $productCount ?>筆</p>
-            <div class="container">
+            <div class="container-fluid">
                 <form action="" class="mb-4">
                     <ul class="nav nav-tabs-custom">
                     <li class="nav-item">
