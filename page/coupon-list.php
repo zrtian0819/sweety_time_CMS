@@ -2,6 +2,9 @@
 
 require_once("../db_connect.php");
 
+// 抓取現在時間以做判斷和篩選
+$now = date("Y-m-d H:i:s");
+
 // 設定SQL查詢語句樣板 
 $sql = "SELECT * FROM coupon WHERE 1=1"; // 利用永遠為真的 `1=1` 以利加後續條件
 $params = []; // 用來裝條件
@@ -23,6 +26,32 @@ if (isset($_GET["act_status"]) && $_GET["act_status"] !== "") {
     $types .= "i";
 }else{
     $act_status = "";
+}
+
+// 效期條件
+if(!isset($_GET["expr_status"])) {
+    $expr_status = "expr_all";
+}else{
+    $expr_status = $_GET["expr_status"];
+    switch ($expr_status) {
+        case "expr_all":
+            break;
+        case "expr_notStart":
+            $sql .= " AND start_time > ?";
+            array_push($params, $now);
+            $types .= "s";
+            break;
+        case "expr_canUse":
+            $sql .= " AND start_time <= ? AND end_date >= ?";
+            $params = array_merge($params, [$now, $now]);
+            $types .= str_repeat("s", 2);
+            break;
+        case "expr_notStart":
+            $sql .= " AND end_date < ?";
+            array_push($params, $now);
+            $types .= "s";
+            break;
+    }
 }
 
 // 排序條件
@@ -124,6 +153,12 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                             <option <?php echo $act_status == "1" ? "selected" : ""; ?> value="1"><span class="text-success">啟用中</span></option>
                             <option <?php echo $act_status == "0" ? "selected" : ""; ?> value="0"><span class="text-danger">停用中</span></option>
                         </select>
+                        <select class="form-select" aria-label="Default select example" name="expr_status">
+                            <option <?php echo $expr_status == "expr_all" ? "selected" : ""; ?> value="expr_all"><span class="text-secondery">不限效期狀態</span></option>
+                            <option <?php echo $expr_status == "expr_notStart" ? "selected" : ""; ?> value="expr_notStart"><span class="text-success">尚未開始</span></option>
+                            <option <?php echo $expr_status == "expr_canUse" ? "selected" : ""; ?> value="expr_canUse"><span class="text-success">效期內</span></option>
+                            <option <?php echo $expr_status == "expr_exprd" ? "selected" : ""; ?> value="expr_exprd"><span class="text-danger">已過期</span></option>
+                        </select>
                         <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                     </div>
                 </form>
@@ -152,10 +187,18 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                             <td><?= $row['start_time'];?></td>
                             <td><?= $row['end_date'];?></td>
                             <td>
-                                <?php if( $row['activation'] == 1) : ?>
+                                <?php if ($row['activation'] == 1) : ?>
                                     <p class="text-success">啟用中</p>
-                                <?php elseif( $row['activation'] == 0) : ?>
+                                <?php elseif($row['activation'] == 0) : ?>
                                     <p class="text-danger">停用中</p>
+                                <?php endif; ?>
+                                
+                                <?php if ($row['start_time'] > $now) : ?>
+                                    <p class="text-secondary">尚未開始</p>
+                                <?php elseif ($row['start_time'] <= $now && $now <= $row['end_date']) : ?>
+                                    <p class="text-success">效期內</p>
+                                <?php elseif ($row['end_date'] < $now) : ?>
+                                    <p class="text-danger">已過期</p>
                                 <?php endif; ?>
                             </td>
                             <td><?= $row['created_at'];?></td>
