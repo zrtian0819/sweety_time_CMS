@@ -7,7 +7,7 @@ $page=isset($_GET["p"])? (int)$_GET["p"]:1;
 $page=max(1,$page);
 $start_item=($page-1) * $per_page;
 
-$sql = "SELECT * FROM users WHERE activation =1 ";
+$sql = "SELECT * FROM users WHERE  activation =1 ";
 
 
 if (isset($_GET["search"])) {
@@ -34,7 +34,6 @@ if(isset($_GET["order"])){
 $sql .= " LIMIT $start_item,$per_page";
 $result = $conn->query($sql);
 
-//計算總數
 $count_sql = "SELECT COUNT(*) as count FROM users WHERE activation = 1 ";
 $count_result = $conn->query($count_sql);
 $userCount = $count_result->fetch_assoc();
@@ -98,7 +97,7 @@ $totalPage = ceil($userCount['count'] / $per_page);
                                 </a>
                             </div>
                             <div>
-                                <a href="#" class="btn btn-neumorphic user-btn">新增
+                                <a href="user-add.php" class="btn btn-neumorphic user-btn">新增
                                     <i class="fa-solid fa-plus"></i>
                                 </a>
                             </div>
