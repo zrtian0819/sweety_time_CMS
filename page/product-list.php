@@ -80,6 +80,7 @@ $productCount = $result->num_rows;
                                 <th class="dontNextLine">商家</th>
                                 <th class="dontNextLine">價格</th>
                                 <th class="dontNextLine">描述</th>
+                                <th class="dontNextLine">狀態</th>
                                 <th class="dontNextLine">庫存數量</th>
                                 <th class="dontNextLine">詳細資訊</th>
                             </tr>
@@ -88,15 +89,26 @@ $productCount = $result->num_rows;
                         <tbody>
                             <?php foreach ($rows as $row): ?>
                                 <tr>
-                                    <th><?= $row["product_id"] ?></th>
+                                    <th class="text-center"><?= $row["product_id"] ?></th>
                                     <th><?= $row["name"] ?></th>
-                                    <th class="text-danger">待處理</th>
+                                    <th class="text-danger dontNextLine">待處理</th>
                                     <th class="text-center"><?= number_format($row["price"]) ?></th>
                                     <th><?= getLeftChar($row["description"], 100) . "..." ?></th>
+                                    <th class="text-center">
+                                        <?php 
+                                            if($row["available"]==1){
+                                                echo '<span class="text-success dontNextLine">上架中</span>';
+                                            }else{
+                                                echo '<span class="text-danger dontNextLine">已下架</span>';
+                                            }   
+                                        ?>
+                                    </th>
                                     <th class="text-center"><?= $row["stocks"] ?></th>
-                                    <th class="text-center"><a href="product.php?productId=<?= $row["product_id"] ?>" class="btn btn-custom">
+                                    <th class="text-center">
+                                        <a href="product.php?productId=<?= $row["product_id"] ?>" class="btn btn-custom">
                                             <i class="fa-solid fa-list"></i>
-                                        </a></th>
+                                        </a>
+                                    </th>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
