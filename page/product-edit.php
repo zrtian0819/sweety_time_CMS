@@ -173,7 +173,7 @@ if(!isset($_GET["productId"])){
                                             <tr>
                                                 <td class="dontNextLine fw-bold">折扣</td>
                                                 <td>
-                                                    <input name="discount" class="form-control form-control-custom" type="number" value="<?=$row["discount"]?>">
+                                                    <input name="discount" class="form-control form-control-custom" placeholder="輸入小數點  例如:0.8" step="0.01" type="number" value="<?=$row["discount"]?>">
                                                 </td>
                                             </tr>
                                             <tr>

@@ -154,7 +154,7 @@ if(!isset($_GET["productId"])){
                                     </tr>
                                     <tr>
                                         <td class="dontNextLine fw-bold">上架</td>
-                                        <td><?= $row["available"]=1?"上架中":'<span class="text-attention">下架中</span>?>'?></td>
+                                        <td><?= $row["available"]==1?"上架中":'<span class="text-attention">已下架</span>'?></td>
                                     </tr>
                                     <tr>
                                         <td class="dontNextLine fw-bold">標籤</td>

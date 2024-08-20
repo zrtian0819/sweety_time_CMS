@@ -5,7 +5,7 @@ require_once("../db_connect.php");
 //避免誤點擊到此頁執行程式
 if(!isset($_POST["name"])){
     echo "非正常管道無法進入此頁";
-    sleep(3);
+    sleep(1);
     header("location: dashboard-home_Joe.php");
     exit;
 }
@@ -13,6 +13,7 @@ if(!isset($_POST["name"])){
 ?>
 <pre>
     <?php echo json_encode($_POST); ?>
+    
 </pre>
 <?php
 
@@ -32,9 +33,9 @@ name = '$name',
 price = $price,
 description = '$description',
 keywords = '$keywords',
-stocks = $stocks,
-available = $available,
-discount = $discount,
+stocks = '$stocks',
+available = '$available',
+discount = '$discount',
 label = '$label',
 product_class_id = '$class'
 WHERE product_id = '$product_id'";
@@ -46,8 +47,8 @@ if($conn->query($sql) === TRUE){
 }
 
 //導頁
-sleep(2);
-header("location: product.php?productId=$product_id");
+sleep(1);
+header("location: ../page/product.php?productId=$product_id");
 
 // 關閉資料庫連結
 $conn->close();
