@@ -9,21 +9,25 @@ include("../function/function.php");
 
 $SessRole = $_SESSION["user"]["role"];
 
-//篩選狀態做不出來
+//判定角色以決定呈現的資料結果
 if ($SessRole == "shop") {
     $shopId = $_SESSION["shop"]["shop_id"];
-    // echo $shopId;
     $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 ORDER BY product_id";
-
 } elseif( $SessRole == "admin" ) {
-    $sql = "SELECT * FROM product WHERE deleted = 0 ORDER BY product_id";
+    $sql = "SELECT * FROM product ORDER BY product_id";
 }
 
 $result = $conn->query($sql);
 $rows = $result->fetch_all(MYSQLI_ASSOC);
 $productCount = $result->num_rows;
 
-// print_r($rows);
+
+
+//商品類別
+$sqlClass = "SELECT * from product_class";
+$ClassResult = $conn->query($sqlClass);
+$classRows = $ClassResult->fetch_all(MYSQLI_ASSOC);
+
 
 ?>
 
@@ -56,7 +60,7 @@ $productCount = $result->num_rows;
 
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
 
-        <div class="main col neumorphic p-5">
+        <div class="main col neumorphic p-4">
 
             <h2>商品列表</h2>
 
@@ -64,24 +68,29 @@ $productCount = $result->num_rows;
             <p>共<?= $productCount ?>筆</p>
             <div class="container">
                 <form action="" class="mb-4">
-                    <div class="row">
-                        <div class="col">
-
-                        </div>
-                    </div>
+                    <ul class="nav nav-tabs nav-tabs-custom" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Home</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Profile</button>
+                        </li>
+                    </ul>
                 </form>
 
                 <?php if ($productCount > 0): ?>
-                    <table class="table table-bordered table-hover bdrs">
+                    <table class="table table-bordered table-hover bdrs table-responsive">
                         <thead class="text-center table-dark">
                             <tr>
                                 <th class="dontNextLine">商品編碼</th>
                                 <th class="dontNextLine">名稱</th>
                                 <th class="dontNextLine">商家</th>
+                                <th class="dontNextLine">類別</th>
                                 <th class="dontNextLine">價格</th>
                                 <th class="dontNextLine">描述</th>
                                 <th class="dontNextLine">狀態</th>
                                 <th class="dontNextLine">庫存數量</th>
+                                <?= $SessRole=="admin"?"<th class='dontNextLine'>刪除</th>":""?>
                                 <th class="dontNextLine">詳細資訊</th>
                             </tr>
                         </thead>
@@ -92,6 +101,7 @@ $productCount = $result->num_rows;
                                     <th class="text-center"><?= $row["product_id"] ?></th>
                                     <th><?= $row["name"] ?></th>
                                     <th class="text-danger dontNextLine">待處理</th>
+                                    <th class="dontNextLine">類別</th>
                                     <th class="text-center"><?= number_format($row["price"]) ?></th>
                                     <th><?= getLeftChar($row["description"], 100) . "..." ?></th>
                                     <th class="text-center">
@@ -104,6 +114,9 @@ $productCount = $result->num_rows;
                                         ?>
                                     </th>
                                     <th class="text-center"><?= $row["stocks"] ?></th>
+                                    <?php if($SessRole=="admin"): ?>
+                                        <th class="text-center"><?=$row["deleted"]==0?"<span class='text-success'></span>":"<span class='text-danger'>被刪除</span>";?></th>
+                                    <?php endif;  ?>
                                     <th class="text-center">
                                         <a href="product.php?productId=<?= $row["product_id"] ?>" class="btn btn-custom">
                                             <i class="fa-solid fa-list"></i>
