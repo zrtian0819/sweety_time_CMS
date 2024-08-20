@@ -1,5 +1,3 @@
-
-
 <!doctype html>
 <html lang="en">
     <head>
@@ -19,9 +17,11 @@
         <div class="container">
             <div class="login-card">
                 <h1>Log In</h1>
-                <input class="form-control form-control-custom" type="text" placeholder="Account">
-                <input class="form-control form-control-custom mt-3" type="password" placeholder="password">
-                <button class="log-in-button">Log In</button>
+                <form id="loginForm" action="doLogin.php" method="POST">
+                    <input class="form-control form-control-custom" type="text" placeholder="Account" id="account" name="account" required>
+                    <input class="form-control form-control-custom mt-3" type="password" placeholder="password" id="password" name="password" required>
+                    <button class="log-in-button" type="submit" id="signIn">Log In</button>
+                </form>
             </div>
         </div>
         <div class="container">
@@ -30,7 +30,7 @@
                         <a class="sign-in" href="../page/create-shop.php">註冊帳號</a>
                     </p>
                     <p>
-                        <a class="sign-in" href="../page/password/reset" class="forgot-pw">忘記密碼?</a>
+                        <a class="sign-in forgot-pw" href="../page/password/reset">忘記密碼?</a>
                     </p>
             </div>
         </div>
@@ -50,5 +50,48 @@
             integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
             crossorigin="anonymous"
         ></script>
+
+        <?php include("../js.php");?>
+
+        <script>
+            const account = document.querySelector("#account");
+            const password = document.querySelector("#password");
+            const signIn = document.querySelector("#signIn");
+
+            signIn.addEventListener("click", function(event) {
+                event.preventDefault(); // 阻止表單的默認提交行為
+                let accountVal = account.value;
+                let passwordVal = password.value;
+                $.ajax({
+                    method: "POST",
+                    url: "../api/doLogin.php",
+                    dataType: "json",
+                    data: {
+                        account: accountVal,
+                        password: passwordVal,
+                    }
+                })
+                .done(function(response) {
+                    console.log(response)
+
+                    let status = response.status;
+                    if (status == 0) {
+                        alert(response.message);
+                    } else if (status == 2) {
+                        alert(response.message);
+                        if (response.remains <= 0) {
+                            location.reload();
+                        }
+                    } else if (status == 1) {
+                        alert(response.message);
+                        location.href = "../page/dashboard-home_Joe.php";
+                    }
+                })
+                .fail(function(jqXHR, textStatus) {
+                    console.log("Request failed: " + textStatus);
+                });
+            });
+        </script>
+
     </body>
 </html>
