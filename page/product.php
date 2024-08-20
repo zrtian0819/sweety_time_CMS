@@ -108,7 +108,7 @@ if (!isset($_GET["productId"])) {
         <main class="product main col neumorphic p-5">
 
             <h2 class="mb-5 text-center">商品管理</h2>
-            <a class="btn btn-custom px-4 fw-bolder mb-4 sticky-top" href="product-list.php">
+            <a class="btn btn-custom px-4 fw-bolder mb-4" href="product-list.php">
                 <i class="fa-solid fa-arrow-left-long"></i>
             </a>
             <?php if (isset($_GET["productId"])): ?>
@@ -182,7 +182,7 @@ if (!isset($_GET["productId"])) {
                                         </tr>
                                         <tr>
                                             <td class="dontNextLine fw-bold">編輯者</td>
-                                            <td><?= $userArr[$row["edit_user_id"]] ?></td>
+                                            <td><?= isset($row["edit_user_id"]) ? $userArr[$row["edit_user_id"]] : "" ?></td>
                                         </tr>
                                         <tr>
                                             <td class="dontNextLine fw-bold">編輯時間</td>
@@ -193,7 +193,7 @@ if (!isset($_GET["productId"])) {
 
                                 <div class="option-area d-flex justify-content-center mt-4 ">
                                     <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="product-edit.php?productId=<?= $id ?>">編輯</a>
-                                    <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="">下架</a>
+                                    <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="../function/doProductValidSwitch.php?productId=<?= $id ?>">下架</a>
                                     <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="">刪除</a>
                                 </div>
                             </div>
