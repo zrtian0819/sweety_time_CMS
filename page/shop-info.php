@@ -1,5 +1,47 @@
 <?php
 require_once("../db_connect.php");      //避免sidebar先載入錯誤,人天先加的
+
+// 獲取網址中的 shopId 參數
+$shop_id = isset($_GET['shopId']) ? intval($_GET['shopId']) : 0;
+
+if ($shop_id > 0) {
+    // 根據 shop_id 查詢店家資訊
+    $sql_shop_info = "SELECT * FROM shop WHERE shop_id = $shop_id";
+    $result_shop_info = $conn->query($sql_shop_info);
+
+    if ($result_shop_info->num_rows > 0) {
+        $shop_info = $result_shop_info->fetch_assoc();
+        $name = $shop_info["name"];
+        $phone = $shop_info["phone"];
+        $address = $shop_info["address"];
+        $description = $shop_info["description"];
+        $sign_up_time = $shop_info["sign_up_time"];
+        $latitude = $shop_info["latitude"];
+        $longitude = $shop_info["longitude"];
+    } else {
+        echo "找不到指定的店家";
+        exit;
+    }
+
+    // 根據 shop_id 查詢店家照片
+    $sql_shop_photo = "SELECT * FROM shop_photo WHERE shop_id = ?";
+    $stmt_shop_photo = $conn->prepare($sql_shop_photo);
+    $stmt_shop_photo->bind_param("i", $shop_id);
+    $stmt_shop_photo->execute();
+    $result_shop_photo = $stmt_shop_photo->get_result();
+
+    if ($result_shop_photo->num_rows > 0) {
+        $shop_photo = $result_shop_photo->fetch_assoc();
+        $file_name = $shop_photo["file_name"];
+    } else {
+        echo "找不到指定的店家照片";
+        exit;
+    }
+} else {
+    echo "未提供有效的shopId";
+    exit;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -23,29 +65,39 @@ require_once("../db_connect.php");      //避免sidebar先載入錯誤,人天先
             <h2 class="mb-3">基本資料</h2>
             <div class="container">
                 <div class="row">
-                    <div class="col-12 col-md-6 col-lg-5 position-relative d-flex justify-content-center mb-3 mb-md-0">
+                    <div class="col-12 col-md-6 col-lg-5 position-relative d-flex justify-content-center align-items-center mb-3 mb-md-0">
                         <a href="">
-                            <img class="shop-info-logo" src="../images/shop_logo/法國主廚的甜點Nosif_logo.jpg" alt="店家Logo">
+                            <img class="shop-info-logo" src="../images/shop_logo/<?=$file_name;?>" alt="店家Logo">
                             <button class="btn btn-secondary change-image-btn">更換圖片</button>
                         </a>
                     </div>
                     <div class="col-12 col-md-6 col-lg-5 px-4 shop-info-detail">
                         <h3 class="mb-3">店家資訊</h3>
-                        <p>店名：法國主廚的甜點Nosif</p>
-                        <p>電話：0912345678</p>
-                        <p>地址：台北市中山區中山路一段123號</p>
-                        <p>開業時間：09:00 - 21:00</p>
-                        <p>網站：<a href="URL_ADDRESS">URL_ADDRESS</a></p>
-                        <p>電子信箱：nosif@gmail.com</p>
+                        <ul class="list-unstyled">
+                            <li class="my-2">店名：<?= $name;?></li>
+                            <li class="my-2">電話：<?= $phone;?></li>
+                            <li class="my-2">地址：<?= $address;?></li>
+                            <li class="my-2">註冊時間：<?= $sign_up_time;?></li>
+                            <li class="my-2">經緯度：<?= $longitude;?>,<?= $latitude;?></li>
+                            
+                        </ul>
                     </div>
                 </div>
             </div>
-
-
-
+            <div class="mt-3">
+                <h2 class="mb-3">店家簡介</h2>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 position-relative d-flex justify-content-center mb-3 mb-md-0">
+                            <ul class="list-unstyled">
+                                <li class="my-2"><?= $description;?></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
     <?php include("../js.php"); ?>
 </body>
 
