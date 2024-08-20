@@ -34,7 +34,6 @@ if(isset($_GET["order"])){
 $sql .= " LIMIT $start_item,$per_page";
 $result = $conn->query($sql);
 
-//計算總數
 $count_sql = "SELECT COUNT(*) as count FROM users WHERE activation = 1 ";
 $count_result = $conn->query($count_sql);
 $userCount = $count_result->fetch_assoc();
