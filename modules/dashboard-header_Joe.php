@@ -43,16 +43,17 @@ if (!isset($_SESSION["user"])) {
 
                     <?php if (isset($_SESSION["user"])): ?>
                         <li class="me-4 d-none d-md-block">
-                            <h6 style="color:#EC9E90" class="d-inline-block"><?= $roleMessage ?></h6>
+                            <h6 style="color:#EC9E90;" class="d-inline-block"><?= $roleMessage ?></h6>
                         </li>
-                        <li class="rounded d-flex align-items-center justify-content-center py-1 px-2 me-3" style="background-color:#EC9E90;">
-                            <h6 class="text-white d-inline-block text-center"><?= $_SESSION["user"]["role"]; ?></h6>
+                        <li class="rounded d-flex align-items-center justify-content-center p-2 me-3" style="background-color:#EC9E90;">
+                            <h6 class="text-white d-inline-block text-center m-0"><?= $_SESSION["user"]["role"]; ?></h6>
                         </li>
                     <?php else: ?>
                         <li class="me-4">
                             <h6 style="color:#EC9E90" class="d-inline-block"><?= $roleMessage ?></h6>
                         </li>
                     <?php endif; ?>
+
                     <li class="nav-item px-2">
                         <a class="nav-link" href="dashboard-home_Joe.php"><i class="fa-solid fa-house fa-fw"></i></a>
                     </li>
@@ -62,9 +63,9 @@ if (!isset($_SESSION["user"])) {
                             <i class="fa-solid fa-right-from-bracket fa-fw"></i>
                         </a>
                     </li>
-                    <li class="nav-item px-2">
+                    <!-- <li class="nav-item px-2">
                         <a class="nav-link" href="#"><i class="fa-solid fa-bell fa-fw"></i></a>
-                    </li>
+                    </li> -->
                     <li class="nav-item px-2" id="sideBarController">
                         <a class="nav-link" href="#"><i class="fa-solid fa-bars fa-fw"></i></a>
                     </li>

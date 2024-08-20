@@ -15,7 +15,8 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: var(--bg-color);
+  background: linear-gradient(45deg, #ffcf788c, #f1c3b48a);
+  /* background-color: var(--bg-color); */
   color: var(--text-color);
   font-family: "Noto Serif TC", "Noto Sans TC", "Noto Serif HK", "serif";
   font-optical-sizing: auto;

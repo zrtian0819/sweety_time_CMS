@@ -3,6 +3,8 @@ require_once("../db_connect.php");
 
 if(!isset($_GET["productId"])){
     $message = "請依照正常管道進入此頁";
+    header("location: product-list.php");
+
 }else{
     $id = $_GET["productId"];
     $sql = "SELECT * from product WHERE product_id = $id";
@@ -63,8 +65,8 @@ if(!isset($_GET["productId"])){
 
         .img-box{
             aspect-ratio: 1;
-            border-radius: 20px;
-            margin: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
             /* box-shadow: 0 0 15px #F4A293; */
             overflow: hidden;
             transition: 0.5s;
@@ -76,6 +78,8 @@ if(!isset($_GET["productId"])){
 
         .img-small{
             aspect-ratio: 1;
+            border-radius: 10px;
+            overflow:hidden;
         }
 
         .text-attention{
@@ -94,10 +98,14 @@ if(!isset($_GET["productId"])){
         <main class="product main col neumorphic p-5">
 
             <h2 class="mb-5 text-center">商品管理</h2>
+            <a class="btn btn-custom px-4 fw-bolder mb-4"  href="product-list.php">
+                <i class="fa-solid fa-arrow-left-long"></i>
+            </a>
             <?php if(isset($_GET["productId"])): ?>
                 <div class="container">
+                    
                     <div class="row d-flex justify-content-center">
-                        <div class="col-11">
+                        <div class="col-12">
                             <div class="row d-flex align-items-center flex-column flex-xl-row">
                                 <div class="col col-xl-5 px-2 ">
                                     <div class="img-box">
@@ -152,7 +160,7 @@ if(!isset($_GET["productId"])){
                                     </tr>
                                     <tr>
                                         <td class="dontNextLine fw-bold">上架</td>
-                                        <td><?= $row["available"]=1?"上架中":'<span class="text-attention">下架中</span>?>'?></td>
+                                        <td><?= $row["available"]==1?"上架中":'<span class="text-attention">已下架</span>'?></td>
                                     </tr>
                                     <tr>
                                         <td class="dontNextLine fw-bold">標籤</td>
