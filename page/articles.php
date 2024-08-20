@@ -6,23 +6,41 @@ require_once("../db_connect.php");
 //     session_start();
 // }
 
+
+//文字縮排
 function getLeftChar($text, $num)
 {
     return substr($text, 0, $num);
 }
 
-// 搜尋
-if (isset($_GET["search"])) {
-    $search = $_GET["search"];
-    $sql = "SELECT * FROM articles WHERE title, content LIKE '%$search%' AND activation=1";
-    echo $sql;
-} else {
-    $sql = "SELECT * FROM articles";
+//初始化SQL語句
+$sql = "SELECT * FROM articles WHERE 1 = 1";
+$params = [];
+$types = "";
+
+
+// 搜尋是否有搜尋條件
+if (isset($_GET["search"]) && !empty($_GET["search"])) {
+    $search = "%" . $_GET["search"] . "%";
+    $sql .= " AND (title LIKE ? OR content LIKE ?)";
+    array_push($params, $search, $search);
+    $types .="ss";
 }
 
-$result = $conn->query($sql);
-$articleCount = $result->num_rows;
+// 準備 SQL 語句
+$stmt = $conn->prepare($sql);
 
+// 綁定參數
+if (!empty($params)) {
+    $stmt->bind_param($types, ...$params);
+}
+
+// 執行查詢
+$stmt->execute();
+
+// 獲取查詢結果
+$result = $stmt->get_result();
+$articlesCount = $result->num_rows;
 
 ?>
 
@@ -32,7 +50,7 @@ $articleCount = $result->num_rows;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Articles</title>
+    <title>文章管理頁</title>
     <link rel="stylesheet" href="../css/style_Joe.css">
     <?php include("../css/css_Joe.php"); ?>
 </head>
@@ -54,27 +72,30 @@ $articleCount = $result->num_rows;
             </div>
 
             <div class="row d-flex">
+                <form action="">
                 <div class="input-group mb-3">
-                    <input type="search" class="form-control" name="search" value="<?php echo isset($_GET["search"]) ? $_GET["search"] : "" ?>" placeholder="輸入文字以搜尋文章">
+                    <input type="search" class="form-control" name="search" value="<?php echo isset($_GET["search"]) ? $_GET["search"] : "" ?>" placeholder="請輸入文字以搜尋文章、主題">
+
                     <div class="input-group-append">
                         <button class="btn btn-outline-warning m-0 " type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                     </div>
                 </div>
+                </form>
 
-                <?php if ($articleCount > 0): $rows = $result->fetch_all(MYSQLI_ASSOC); ?>
-                    <h3>共有<?= $articleCount ?>篇文章</h3>
+                <?php if ($articlesCount > 0): $rows = $result->fetch_all(MYSQLI_ASSOC); ?>
+                    <h3>共有<?= $articlesCount ?>篇文章</h3>
 
                     <div class="d-flex justify-content-between my-3">
                         <div class="d-flex justify-content-between">
-                            <a href="#" class="btn btn-neumorphic user-btn">排序
+                            <a href="#" class="btn btn-neumorphic articles-btn">排序
                                 <i class="fa-solid fa-arrow-up-a-z"></i>
                             </a>
-                            <a href="#" class="btn btn-neumorphic user-btn">排序
+                            <a href="#" class="btn btn-neumorphic articles-btn">排序
                                 <i class="fa-solid fa-arrow-down-a-z"></i>
                             </a>    
                         </div>
                         <div>
-                            <a href="#" class="btn btn-neumorphic user-btn">
+                            <a href="#" class="btn btn-neumorphic articles-btn">
                                 <i class="fa-solid fa-plus"></i>新增文章
                             </a>
                         </div>
@@ -105,17 +126,18 @@ $articleCount = $result->num_rows;
                                     <td><?= $articles["user_id"] ?></td>
                                     <td><?= $articles["created_at"] ?></td>
                                     <td>
-                                        <a href="lesson-details.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-eye"></i></a>
+                                        <a href="article-details.phpid=<?= $articles["article_id"] ?>" id="" class="btn btn-custom"><i class="fa-solid fa-eye"></i></a>
 
-                                        <a href="lesson-details.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-pen"></i></a>
+                                        <a href="edit-article.php?id=<?= $articles["article_id"] ?>" class="btn btn-custom"><i class="fa-solid fa-pen"></i></a>
 
 
-                                        <a href="../function/doDeleteArticle.php?id=<?= $id ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+                                        <a href="../function/doDeleteArticle.php?id=<?= $articles["article_id"] ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
 
                                     </td>
                                 </tr>
+                                <?php endforeach; ?>
                         </tbody>
-                    <?php endforeach; ?>
+                    
                     </table>
                 <?php else: ?>
                     目前沒有文章
