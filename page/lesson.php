@@ -2,15 +2,73 @@
 
 require_once("../db_connect.php");
 
-$status = isset($_GET["status"]) ? $_GET["status"] : "all";
 
-if ($status === "on") {
-    $sql = "SELECT * FROM lesson WHERE activation = 1";
-} elseif ($status === "off") {
-    $sql = "SELECT * FROM lesson WHERE activation = 0";
+//篩選
+$status = isset($_GET["status"]) ? $_GET["status"] : "all";
+$search = isset($_GET["search"]) ? $_GET["search"] : "";
+$sort = isset($_GET["sort"]) ? $_GET["sort"] : "";
+$class = isset($_GET["class"]) ? $_GET["class"] : "";
+
+//預設sql
+$sql = "SELECT * FROM lesson WHERE 1=1";
+
+//狀態
+if ($status == "on") {
+    $sql .= " AND activation = 1";
+} elseif ($status == "off") {
+    $sql .= " AND activation = 0";
 } else {
-    $sql = "SELECT * FROM lesson";
+    $sql;
 }
+
+
+//課程分類
+switch ($class) {
+    case 1:
+        $sql .= " AND product_class_id =1";
+        break;
+    case 2:
+        $sql .= " AND product_class_id =2";
+        break;
+    case 3:
+        $sql .= " AND product_class_id =3";
+        break;
+    case 4:
+        $sql .= " AND product_class_id =4";
+        break;
+    case 5:
+        $sql .= " AND product_class_id =5";
+        break;
+    case 6:
+        $sql .= " AND product_class_id =6";
+        break;
+    case "all":
+        $sql;
+        break;
+}
+
+//搜尋課程
+if ($search != "" && $class != "all") {
+    $sql .= " AND name LIKE '%$search%'";
+} elseif ($search != "" && $class == "all") {
+    $sql .= " AND name LIKE '%$search%'";
+}
+
+//排序
+switch ($sort) {
+    case "id":
+        $sql .= " ORDER BY lesson_id ASC";
+        break;
+    case "count":
+        $sql .= " ORDER BY $count ASC";
+        break;
+    case "date":
+        $sql .= " ORDER BY start_date ASC";
+        break;
+    case "":
+        $sql;
+}
+
 
 $result = $conn->query($sql);
 $rows = $result->fetch_all(MYSQLI_ASSOC);
@@ -54,7 +112,30 @@ foreach ($rowsPro as $productClass) {
     <?php include("../modules/dashboard-header_Joe.php"); ?>
     <div class="container-fluid d-flex flex-row px-4">
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
-        <div class="main col neumorphic p-5">
+        <div class="main col neumorphic p-5 pt-3">
+            <div class="py-3">
+                <form action="">
+                    <div class="input-group">
+                        <input type="search" class="form-control" placeholder="搜尋課程" name="search">
+                        <select class="form-select" aria-label="Default select example" name="class">
+                            <option value="all">分類</option>
+                            <option value="1">蛋糕</option>
+                            <option value="2">餅乾</option>
+                            <option value="3">塔 / 派</option>
+                            <option value="4">泡芙</option>
+                            <option value="5">冰淇淋</option>
+                            <option value="6">其他</option>
+                        </select>
+                        <select class="form-select" aria-label="Default select example" name="sort">
+                            <option value="id">依課程編號排序(預設)</option>
+                            <!-- <option value="count">依報名人數排序</option> -->
+                            <option value="date">依時間排序</option>
+                        </select>
+
+                        <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </div>
+                </form>
+            </div>
             <ul class="nav nav-tabs-custom">
                 <li class="nav-item">
                     <a class="main-nav nav-link <?= $status === 'all' ? 'active' : '' ?>" href="?status=all">全部</a>
