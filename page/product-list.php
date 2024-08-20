@@ -43,6 +43,7 @@ $productCount = $result->num_rows;
         .dontNextLine {
             white-space: nowrap;
         }
+
     </style>
 </head>
 
@@ -89,7 +90,7 @@ $productCount = $result->num_rows;
                                     <th class="text-center"><?= number_format($row["price"]) ?></th>
                                     <th><?= getLeftChar($row["description"], 100) . "..." ?></th>
                                     <th class="text-center"><?= $row["stocks"] ?></th>
-                                    <th><a href="product.php?productId=<?= $row["product_id"] ?>" class="btn btn-warning">
+                                    <th class="text-center"><a href="product.php?productId=<?= $row["product_id"] ?>" class="btn btn-custom">
                                             <i class="fa-solid fa-list"></i>
                                         </a></th>
                                 </tr>

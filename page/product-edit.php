@@ -101,6 +101,7 @@ if(!isset($_GET["productId"])){
                 <div class="container">
                     <div class="row d-flex justify-content-center">
                         <div class="col-12">
+                            <form action="">
                             <div class="row d-flex align-items-center flex-column flex-xl-row">
                                 
                                 <div class="col px-2">
@@ -118,13 +119,13 @@ if(!isset($_GET["productId"])){
                                         <tr>
                                             <td class="dontNextLine fw-bold">價格</td>
                                             <td>
-                                                <input class="form-control form-control-custom" type="text" value="<?=$row["price"]?>">
+                                                <input class="form-control form-control-custom" type="number" value="<?=$row["price"]?>">
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="dontNextLine fw-bold">庫存</td>
                                             <td>
-                                                <input class="form-control form-control-custom" type="text" value="<?= $row["stocks"] ?>">
+                                                <input class="form-control form-control-custom" type="number" value="<?= $row["stocks"]?>">
                                             </td>
                                         </tr>
                                         <tr>
@@ -141,23 +142,37 @@ if(!isset($_GET["productId"])){
                                         </tr>
                                         <tr>
                                             <td class="dontNextLine fw-bold">描述</td>
-                                            <td><?=$row["description"]?></td>
+                                            <td>
+                                                <textarea class="form-control textarea-custom" id="message" rows="3" placeholder="請輸入描述" value="<?=$row["description"]?>"></textarea>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td class="dontNextLine fw-bold">關鍵字</td>
-                                            <td><?=$row["keywords"]?></td>
+                                            <td>
+                                                <input class="form-control form-control-custom" type="text" value="<?= $row["keywords"] ?>" placeholder="請用「,」逗號隔開字串">
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td class="dontNextLine fw-bold">折扣</td>
-                                            <td><?=$row["discount"]?></td>
+                                            <td>
+                                                <input class="form-control form-control-custom" type="number" value="<?=$row["discount"]?>">
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td class="dontNextLine fw-bold">上架</td>
-                                            <td><?= $row["available"]=1?"上架中":'<span class="text-attention">下架中</span>?>'?></td>
+                                            <td>
+                                                <select class="form-select form-select-custom" id="country" require>
+                                                    <option disabled >請選擇上架狀態</option>
+                                                    <option <?=$row["description"]==0?:"selected";""?> value="0">已下架</option>
+                                                    <option <?=$row["description"]==1?:"selected";""?> value="1">上架中</option>
+                                                </select>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td class="dontNextLine fw-bold">標籤</td>
-                                            <td><?=$row["label"]?></td>
+                                            <td>
+                                                <input class="form-control form-control-custom" type="text" value="<?=$row["label"]?>">
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td class="dontNextLine fw-bold">建立時間</td>
@@ -170,6 +185,8 @@ if(!isset($_GET["productId"])){
                                     <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="#">儲存</a>
                                 </div>
                             </div>
+                            </form>
+                            
                         </div>
                     </div>
                 </div>
