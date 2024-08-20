@@ -2,15 +2,25 @@
 
 require_once("../db_connect.php");
 
+$per_page = 10;
+$page = isset($_GET["p"]) ? (int)$_GET["p"] : 1;
+$page = max(1, $page);
+$start_item = ($page - 1) * $per_page;
+
+
 if (isset($_GET["search"])) {
     $search = $_GET["search"];
     $sql = "SELECT * FROM users WHERE name LIKE '%$search%' AND activation=1";
 } else {
-    $sql = "SELECT * FROM users";
+    $sql = "SELECT * FROM users WHERE activation=1";
 }
 
 $result = $conn->query($sql);
 $userCount = $result->num_rows;
+$totalPage = ceil($userCount / $per_page);
+
+$sql .= " LIMIT $start_item,$per_page";
+$result = $conn->query($sql);
 
 ?>
 <!doctype html>
@@ -78,7 +88,7 @@ $userCount = $result->num_rows;
                         </div>
                         <div class="main col neumorphic p-2">
                             <?php if ($userCount > 0): $rows = $result->fetch_all(MYSQLI_ASSOC); ?>
-                                <?php if (isset($_GET["search"])): ?>                                
+                                <?php if (isset($_GET["search"])): ?>
                                     <h3><?= $search ?> 的搜尋結果: 共有<?= $userCount ?>個使用者</h3>
                                 <?php endif; ?>
                                 <ul class="nav nav-tabs">
@@ -117,11 +127,27 @@ $userCount = $result->num_rows;
                                         <?php endforeach; ?>
                                     </tbody>
                                 </table>
+                                <nav aria-label="page navigation">
+                                    <ul class="pagination pagination-lg">
+                                        <?php if ($page > 1): ?>
+                                            <li class="page-item"><a class="page-link" href="?p=<?= $page - 1 ?><?= isset($_GET["search"]) ? '&search=' . urlencode($search) : '' ?>">Previous</a></li>
+                                        <?php endif; ?>
+
+                                        <?php for ($i = 1; $i <= $totalPage; $i++): ?>
+                                            <li class="page-item <?= ($page == $i) ? 'active' : '' ?>">
+                                                <a class="page-link" href="?p=<?= $i ?><?= isset($_GET["search"]) ? '&search=' . urlencode($search) : '' ?>"><?= $i ?></a>
+                                            </li>
+                                        <?php endfor; ?>
+
+                                        <?php if ($page < $totalPage): ?>
+                                            <li class="page-item"><a class="page-link" href="?p=<?= $page + 1 ?><?= isset($_GET["search"]) ? '&search=' . urlencode($search) : '' ?>">Next</a></li>
+                                        <?php endif; ?>
+                                    </ul>
+                                </nav>
                             <?php else: ?>
                                 目前沒有使用者
                             <?php endif; ?>
                         </div>
-
                 </div>
             </div>
         </div>
@@ -132,3 +158,4 @@ $userCount = $result->num_rows;
 </body>
 
 </html>
+
