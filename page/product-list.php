@@ -1,5 +1,6 @@
 <?php
 
+session_start();
 require_once("../db_connect.php");
 include("../function/function.php");
 
@@ -8,9 +9,9 @@ include("../function/function.php");
 if (!empty($_SESSION["shop"])) {
     $shopId = $_SESSION["shop"]["shop_id"];
     // echo $shopId;
-    $sql = "SELECT * FROM product WHERE shop_id=$shopId AND available = 1 ORDER BY product_id";
+    $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 ORDER BY product_id";
 } else {
-    $sql = "SELECT * FROM product WHERE available = 1 ORDER BY product_id";
+    $sql = "SELECT * FROM product WHERE deleted = 0 ORDER BY product_id";
 }
 
 $result = $conn->query($sql);
