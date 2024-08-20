@@ -2,6 +2,17 @@
 
 require_once("../db_connect.php");
 
+$status = isset($_GET["status"]) ? $_GET["status"] : "all";
+
+if ($status === "on") {
+    $sql = "SELECT * FROM articles WHERE activation = 1";
+} elseif ($status === "off") {
+    $sql = "SELECT * FROM articles WHERE activation = 0";
+} else {
+    $sql = "SELECT * FROM articles";
+}
+
+
 if (isset($_GET["search"])) {
     $search = $_GET["search"];
     $sql = "SELECT * FROM articles WHERE title, content LIKE '%$search%' AND activation=1";
@@ -12,6 +23,10 @@ if (isset($_GET["search"])) {
 
 $result = $conn->query($sql);
 $articleCount = $result->num_rows;
+$rows = $result->fetch_all(MYSQLI_ASSOC);
+
+
+
 
 ?>
 <!DOCTYPE html>
@@ -40,9 +55,7 @@ $articleCount = $result->num_rows;
                 <?php endif; ?>
 
             </div>
-            <?php if ($articleCount > 0): $rows = $result->fetch_all(MYSQLI_ASSOC); ?>
-                <h3>共有<?= $articleCount ?>篇文章</h3>
-
+           
                 <div class="row d-flex">
                     <div class="input-group mb-3">
                         <input type="search" class="form-control" name="search" value="<?php echo isset($_GET["search"]) ? $_GET["search"] : "" ?>" placeholder="輸入文字以搜尋文章">
@@ -51,15 +64,18 @@ $articleCount = $result->num_rows;
                         </div>
                     </div>
 
+                    <?php if ($articleCount > 0): $rows = $result->fetch_all(MYSQLI_ASSOC); ?>
+                    <h3>共有<?= $articleCount ?>篇文章</h3>
+
                     <ul class="nav nav-tabs-custom">
                         <li class="nav-item">
-                            <a class="main-nav nav-link active" href="">全部</a>
+                            <a class="main-nav nav-link <?= $status === 'all' ? 'active' : '' ?>" href="status=all">全部</a>
                         </li>
                         <li class="nav-item">
-                            <a class="main-nav nav-link" href="">上架中</a>
+                            <a class="main-nav nav-link <?= $status === 'on' ? 'active' : '' ?>" href="status=on">上架中</a>
                         </li>
                         <li class="nav-item">
-                            <a class="main-nav nav-link" href="">已下架</a>
+                            <a class="main-nav nav-link <?= $status === 'off' ? 'active' : '' ?>" href="status=off">已下架</a>
                         </li>
                     </ul>
 
