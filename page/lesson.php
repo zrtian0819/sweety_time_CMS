@@ -2,8 +2,16 @@
 
 require_once("../db_connect.php");
 
+$status = isset($_GET["status"]) ? $_GET["status"] : "all";
 
-$sql = "SELECT * FROM lesson";
+if ($status === "on") {
+    $sql = "SELECT * FROM lesson WHERE activation = 1";
+} elseif ($status === "off") {
+    $sql = "SELECT * FROM lesson WHERE activation = 0";
+} else {
+    $sql = "SELECT * FROM lesson";
+}
+
 $result = $conn->query($sql);
 $rows = $result->fetch_all(MYSQLI_ASSOC);
 
@@ -47,15 +55,15 @@ foreach ($rowsPro as $productClass) {
     <div class="container-fluid d-flex flex-row px-4">
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
         <div class="main col neumorphic p-5">
-            <ul class="nav nav-tabs">
+            <ul class="nav nav-tabs-custom">
                 <li class="nav-item">
-                    <a class="main-nav nav-link active" aria-current="page" href="lesson.php">全部</a>
+                    <a class="main-nav nav-link <?= $status === 'all' ? 'active' : '' ?>" href="?status=all">全部</a>
                 </li>
                 <li class="nav-item">
-                    <a class="main-nav nav-link" href="lesson-online.php">上架中</a>
+                    <a class="main-nav nav-link <?= $status === 'on' ? 'active' : '' ?>" href="?status=on">上架中</a>
                 </li>
                 <li class="nav-item">
-                    <a class="main-nav nav-link" href="lesson-delete.php">已下架</a>
+                    <a class="main-nav nav-link <?= $status === 'off' ? 'active' : '' ?>" href="?status=off">已下架</a>
                 </li>
             </ul>
             <!-- Content -->
@@ -66,12 +74,16 @@ foreach ($rowsPro as $productClass) {
                     <th>課程名稱</th>
                     <th>課程分類</th>
                     <th>授課老師</th>
+                    <th>課程時間</th>
                     <th>課程人數</th>
                     <th>報名人數</th>
                     <th>詳細資訊</th>
                 </thead>
                 <?php foreach ($rows as $row):
-                    $id = $row["lesson_id"]; ?>
+                    $id = $row["lesson_id"];
+                    $date = $row["start_date"];
+                    $dateStr = new DateTime($date);
+                    $formartDate = $dateStr->format("Y-m-d H:i") ?>
                     <tbody>
                         <tr class="text-center m-auto">
                             <td><?= $id ?></td>
@@ -79,6 +91,7 @@ foreach ($rowsPro as $productClass) {
                             <td><?= $row["name"] ?></td>
                             <td><?= $productClassArr[$row["product_class_id"]] ?></td>
                             <td><?= $teacherArr[$row["teacher_id"]] ?></td>
+                            <td><?= $formartDate ?></td>
                             <td><?= $row["quota"] ?></td>
                             <td>
                                 <?php
@@ -88,9 +101,17 @@ foreach ($rowsPro as $productClass) {
                                 $rowStu = $resultStu->fetch_assoc();
                                 ?>
                                 <?= $count ?></td>
-                            <td><a href="lesson-details.php?id=<?= $id ?>" class="btn"><i class="fa-regular fa-eye"></i></a>
-                                <a href="lesson-details.php?id=<?= $id ?>" class="btn"><i class="fa-solid fa-pen"></i></a>
-                                <a href="doDeleteLesson.php?id=<?= $id ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+                            <td><a href="lesson-details.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-eye"></i></i></a>
+                                <a href="lesson-details.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-pen"></i></a>
+                                <?php if ($status === "off"): ?>
+                                    <a href="../function/doReloadLesson.php?id=<?= $id ?>" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
+                                <?php else: ?>
+                                    <?php if ($row["activation"] == 1): ?>
+                                        <a href="../function/doDeleteLesson.php?id=<?= $id ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+                                    <?php else: ?>
+                                        <a href="../function/doReloadLesson.php?id=<?= $id ?>" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
+                                    <?php endif; ?>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     </tbody>
