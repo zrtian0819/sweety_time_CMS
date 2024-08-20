@@ -8,9 +8,23 @@ $status = isset($_GET["status"]) ? $_GET["status"] : "all";
 $search = isset($_GET["search"]) ? $_GET["search"] : "";
 $sort = isset($_GET["sort"]) ? $_GET["sort"] : "";
 $class = isset($_GET["class"]) ? $_GET["class"] : "";
+$page = isset($_GET["p"]) ? $_GET["p"] : "1";
+
+//分頁
+$sqlAll = "SELECT * FROM lesson";
+$resultAll = $conn->query($sqlAll);
+$allCount = $resultAll->num_rows;
+
+$page = 1;
+$startItem = 0;
+$per_page = 5;
+
+$total_page = ceil($allCount / $per_page);
 
 //預設sql
 $sql = "SELECT * FROM lesson WHERE 1=1";
+$limit = " LIMIT $startItem, $per_page";
+
 
 //狀態
 if ($status == "on") {
@@ -59,42 +73,80 @@ switch ($sort) {
     case "id":
         $sql .= " ORDER BY lesson_id ASC";
         break;
-    case "count":
-        $sql .= " ORDER BY $count ASC";
-        break;
+
+        //待修正
+        // case "count":
+        //     $sql = "SELECT lesson.*, 
+        //            IFNULL(COUNT(student.lesson_id), 0) AS student_count 
+        //     FROM lesson
+        //     LEFT JOIN student ON lesson.lesson_id = student.lesson_id 
+        //     WHERE 1=1 GROUP BY lesson.lesson_id ORDER BY student_count DESC";
+        //     break;
     case "date":
         $sql .= " ORDER BY start_date ASC";
         break;
     case "":
         $sql;
 }
+$sql .= $limit;
 
-
+echo $sql;
 $result = $conn->query($sql);
 $rows = $result->fetch_all(MYSQLI_ASSOC);
-
+// print_r($rows);
 
 //teacher
 $sqlTeacher = "SELECT * FROM teacher ORDER BY teacher_id";
 $resultTea = $conn->query($sqlTeacher);
 $rowsTea = $resultTea->fetch_all(MYSQLI_ASSOC);
+// print_r($rowsTea);
 
-//關聯式陣列
+//老師關聯式陣列
 $teacherArr = [];
 foreach ($rowsTea as $teacher) {
     $teacherArr[$teacher["teacher_id"]] = $teacher["name"];
+    // print_r($teacherArr);
 }
+
+//student
+$sqlStudent = "SELECT student.lesson_id , COUNT(lesson.lesson_id) AS student_count 
+FROM lesson 
+JOIN student ON lesson.lesson_id = student.lesson_id 
+GROUP BY lesson.lesson_id";
+$resultStu = $conn->query($sqlStudent);
+$rowStu = $resultStu->fetch_all(MYSQLI_ASSOC);
+// print_r($rowStu);
+
+// 學生關聯式陣列
+// 用所有的 lesson_id 初始化 $studentArr
+$sqlAllLessons = "SELECT lesson_id FROM lesson";
+$resultAllLessons = $conn->query($sqlAllLessons);
+$allLessons = $resultAllLessons->fetch_all(MYSQLI_ASSOC);
+
+$studentArr = [];
+foreach ($allLessons as $lesson) {
+    $studentArr[$lesson['lesson_id']] = 0;
+}
+
+
+// 填入實際的學生數
+foreach ($rowStu as $student) {
+    $studentArr[$student["lesson_id"]] = $student["student_count"];
+}
+
 
 //分類
 $sqlProductClass = "SELECT * FROM product_class ORDER BY product_class_id";
 $resultPro = $conn->query($sqlProductClass);
 $rowsPro = $resultPro->fetch_all(MYSQLI_ASSOC);
 
-//關聯式陣列
+//分類關聯式陣列
 $productClassArr = [];
 foreach ($rowsPro as $productClass) {
     $productClassArr[$productClass["product_class_id"]] = $productClass["class_name"];
 };
+
+
 
 ?>
 
@@ -128,10 +180,9 @@ foreach ($rowsPro as $productClass) {
                         </select>
                         <select class="form-select" aria-label="Default select example" name="sort">
                             <option value="id">依課程編號排序(預設)</option>
-                            <!-- <option value="count">依報名人數排序</option> -->
+                            <option value="count">依報名人數排序</option>
                             <option value="date">依時間排序</option>
                         </select>
-
                         <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                     </div>
                 </form>
@@ -161,6 +212,7 @@ foreach ($rowsPro as $productClass) {
                     <th>詳細資訊</th>
                 </thead>
                 <?php foreach ($rows as $row):
+                    // print_r($row);
                     $id = $row["lesson_id"];
                     $date = $row["start_date"];
                     $dateStr = new DateTime($date);
@@ -174,14 +226,7 @@ foreach ($rowsPro as $productClass) {
                             <td><?= $teacherArr[$row["teacher_id"]] ?></td>
                             <td><?= $formartDate ?></td>
                             <td><?= $row["quota"] ?></td>
-                            <td>
-                                <?php
-                                $sqlStudent = "SELECT * FROM student WHERE lesson_id = $id";
-                                $resultStu = $conn->query($sqlStudent);
-                                $count = $resultStu->num_rows;
-                                $rowStu = $resultStu->fetch_assoc();
-                                ?>
-                                <?= $count ?></td>
+                            <td><?= $studentArr[$row["lesson_id"]] ?></td>
                             <td><a href="lesson-details.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-eye"></i></i></a>
                                 <a href="lesson-details.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-pen"></i></a>
                                 <?php if ($status === "off"): ?>
@@ -198,6 +243,15 @@ foreach ($rowsPro as $productClass) {
                     </tbody>
                 <?php endforeach; ?>
             </table>
+            <?php if (isset($_GET["p"])) : ?>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <?php for ($i = 1; $i <= $total_page; $i++) : ?>
+                            <li class="page-item <?php if ($i == $page) echo "active" ?>"><a class="page-link" href="lesson.php?status=<?= $status ?>&p=<?= $i ?>"></a></li>
+                        <?php endfor; ?>
+                    </ul>
+                </nav>
+            <?php endif; ?>
         </div>
     </div>
     <?php include("../js.php") ?>
