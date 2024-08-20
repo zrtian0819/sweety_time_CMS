@@ -8,22 +8,15 @@ $status = isset($_GET["status"]) ? $_GET["status"] : "all";
 $search = isset($_GET["search"]) ? $_GET["search"] : "";
 $sort = isset($_GET["sort"]) ? $_GET["sort"] : "";
 $class = isset($_GET["class"]) ? $_GET["class"] : "";
-$page = isset($_GET["p"]) ? $_GET["p"] : "1";
+$page = isset($_GET["p"]) ? $_GET["p"] : 1;
 
-//分頁
-$sqlAll = "SELECT * FROM lesson";
-$resultAll = $conn->query($sqlAll);
-$allCount = $resultAll->num_rows;
-
-$page = 1;
-$startItem = 0;
-$per_page = 5;
-
-$total_page = ceil($allCount / $per_page);
+//分頁顯示
+$per_page = 10;
+$startItem = ($page - 1) * $per_page;
 
 //預設sql
 $sql = "SELECT * FROM lesson WHERE 1=1";
-$limit = " LIMIT $startItem, $per_page";
+
 
 
 //狀態
@@ -88,12 +81,22 @@ switch ($sort) {
     case "":
         $sql;
 }
-$sql .= $limit;
 
-echo $sql;
+//符合上述條件的總數
+$count_sql = $sql;
+$resultCount = $conn->query($count_sql);
+$allCount = $resultCount->num_rows;
+
+//分頁
+$limit = " LIMIT $startItem, $per_page";
+$sql .= $limit;
+$total_page = ceil($allCount / $per_page);
+
+// echo $sql;
 $result = $conn->query($sql);
 $rows = $result->fetch_all(MYSQLI_ASSOC);
-// print_r($rows);
+
+
 
 //teacher
 $sqlTeacher = "SELECT * FROM teacher ORDER BY teacher_id";
@@ -243,11 +246,11 @@ foreach ($rowsPro as $productClass) {
                     </tbody>
                 <?php endforeach; ?>
             </table>
-            <?php if (isset($_GET["p"])) : ?>
+            <?php if (isset($page)) : ?>
                 <nav aria-label="Page navigation example">
                     <ul class="pagination">
                         <?php for ($i = 1; $i <= $total_page; $i++) : ?>
-                            <li class="page-item <?php if ($i == $page) echo "active" ?>"><a class="page-link" href="lesson.php?status=<?= $status ?>&p=<?= $i ?>"></a></li>
+                            <li class="page-item <?php if ($i == $page) echo "active" ?>"><a class="page-link btn-custom" href="lesson.php?status=<?= $status ?>&search=<?= $search ?>&class=<?= $class ?>&sort=<?= $sort ?>&p=<?= $i ?>"><?= $i ?></a></li>
                         <?php endfor; ?>
                     </ul>
                 </nav>
