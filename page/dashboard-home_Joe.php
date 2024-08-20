@@ -28,8 +28,8 @@ $name = $_SESSION["user"]["name"];
 
         <div class="main col neumorphic p-5">
 
-            <h2><?= $name?>, 您好！</h2>
-            <p>請使用側邊導覽列以管理您的商家。</p>
+            <h2 class="fw-bolder"><?= $name?>, 您好！</h2>
+            <p>請使用側邊導覽列以管理您的資料。</p>
             
 
     </div>

@@ -36,7 +36,7 @@
          </button>
          <ul id="adminList" class="nav flex-column align-items-center">
              <li class="nav-item">
-                 <a class="nav-link" href="#">會員管理</a>
+                 <a class="nav-link" href="users.php">會員管理</a>
              </li>
              <li class="nav-item">
                  <a class="nav-link" href="#">文章管理</a>
