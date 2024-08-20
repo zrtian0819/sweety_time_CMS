@@ -27,7 +27,7 @@ $discount = $_POST["discount"];
 $label = $_POST["label"];
 $class = $_POST["class"];
 
-$sql = "UPDATE product SET 
+$sql = "UPDATE product SET
 name = '$name',
 price = $price,
 description = '$description',
