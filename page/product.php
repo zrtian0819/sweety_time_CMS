@@ -193,7 +193,7 @@ if (!isset($_GET["productId"])) {
 
                                 <div class="option-area d-flex justify-content-center mt-4 ">
                                     <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="product-edit.php?productId=<?= $id ?>">編輯</a>
-                                    <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="../function/doProductValidSwitch.php?productId=<?= $id ?>">下架</a>
+                                    <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="../function/doProductValidSwitch.php?productId=<?= $id ?>"><?= $row["available"] == 1 ? "下架" : "上架" ?></a>
                                     <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="">刪除</a>
                                 </div>
                             </div>

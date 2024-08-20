@@ -124,13 +124,11 @@ foreach ($storeRows as $storeRow) {
                                     <td class="text-center"><?= number_format($row["price"]) ?></td>
                                     <td><?= getLeftChar($row["description"], 100) . "..." ?></td>
                                     <td class="text-center">
-                                        <?php
-                                        if ($row["available"] == 1) {
-                                            echo '<span class="text-success dontNextLine">上架中</span>';
-                                        } else {
-                                            echo '<span class="text-danger dontNextLine">已下架</span>';
-                                        }
-                                        ?>
+                                        <?php if ($row["available"] == 1): ?>
+                                            <a class="btn btn-success dontNextLine" href="../function/doProductValidSwitch.php?productId=<?= $row["product_id"] ?>">上架中</a>
+                                        <?php else: ?>
+                                            <a class="btn btn-danger dontNextLine" href="../function/doProductValidSwitch.php?productId=<?= $row["product_id"] ?>">已下架</a>
+                                        <?php endif; ?>
                                     </td>
                                     <td class="text-center"><?= $row["stocks"] ?></td>
                                     <?php if ($SessRole == "admin"): ?>
