@@ -47,7 +47,7 @@ if(!isset($_GET["productId"])){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>dashboard-home_Joe</title>
+    <title><?=$row["name"]?></title>
     <?php include("../css/css_Joe.php"); ?>
 
     <style>
@@ -166,9 +166,9 @@ if(!isset($_GET["productId"])){
                                 </div>
                                 
                                 <div class="option-area d-flex justify-content-center mt-4 ">
-                                    <a class="btn btn-success px-4 mx-3 fw-bolder" href="product-edit.php?=productId<?=$id?>">編輯</a>
-                                    <a class="btn btn-warning px-4 mx-3 fw-bolder" href="">下架</a>
-                                    <a class="btn btn-danger px-4 mx-3 fw-bolder" href="">刪除</a>
+                                    <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="product-edit.php?productId=<?=$id?>">編輯</a>
+                                    <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="">下架</a>
+                                    <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="">刪除</a>
                                 </div>
                             </div>
                         </div>
