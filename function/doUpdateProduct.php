@@ -2,8 +2,12 @@
 
 require_once("../db_connect.php");
 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 //避免誤點擊到此頁執行程式
-if(!isset($_POST["name"])){
+if (!isset($_POST["name"])) {
     echo "非正常管道無法進入此頁";
     sleep(1);
     header("location: dashboard-home_Joe.php");
@@ -27,6 +31,8 @@ $available = $_POST["available"];
 $discount = $_POST["discount"];
 $label = $_POST["label"];
 $class = $_POST["class"];
+$editor = $_SESSION["user"]["user_id"];
+$editTime = date('Y/m/d H:i:s');
 
 $sql = "UPDATE product SET
 name = '$name',
@@ -37,10 +43,12 @@ stocks = '$stocks',
 available = '$available',
 discount = '$discount',
 label = '$label',
-product_class_id = '$class'
+product_class_id = '$class',
+edit_user_id = '$editor',
+last_edited_at = '$editTime'
 WHERE product_id = '$product_id'";
 
-if($conn->query($sql) === TRUE){
+if ($conn->query($sql) === TRUE) {
     echo "更新成功";
 } else {
     // echo "更新資料錯誤: " . $conn->error;

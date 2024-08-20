@@ -1,34 +1,33 @@
 <?php
 require_once("../db_connect.php");
 
-if(!isset($_GET["productId"])){
+if (!isset($_GET["productId"])) {
     $message = "請依照正常管道進入此頁";
-
-}else{
+} else {
     // 有取得商品id時的情況
     $id = $_GET["productId"];
     $sql = "SELECT * from product WHERE product_id = $id";
 
     $result = $conn->query($sql);
     $count = $result->num_rows;
-    $row = $result -> fetch_assoc();
+    $row = $result->fetch_assoc();
 
     // echo $row["available"];
 
-    if(isset($row["shop_id"])){
+    if (isset($row["shop_id"])) {
         $shopId = $row["shop_id"];
         $shopsql = "SELECT * from shop WHERE shop_id = $shopId";
         $shopResult = $conn->query($shopsql);
-        $shopRow = $shopResult -> fetch_assoc();
+        $shopRow = $shopResult->fetch_assoc();
 
         $shopName = $shopRow["name"];
     }
 
-    if(isset($row["product_class_id"])){
+    if (isset($row["product_class_id"])) {
         $classId = $row["product_class_id"];
         $classsql = "SELECT * from product_class WHERE product_class_id = $classId";
         $classResult = $conn->query($classsql);
-        $classRow = $classResult -> fetch_assoc();
+        $classRow = $classResult->fetch_assoc();
 
         $className = $classRow["class_name"];
         // $shopsql = "SELECT "
@@ -48,7 +47,7 @@ if(!isset($_GET["productId"])){
     // $photosql = "SELECT * FROM product_photo 
     // WHERE is_valid = 1 AND product_id = $id
     // ORDER BY product_id";
-    
+
     // $photorResult = $conn->query($photosql);
     // $photoRows= $photorResult->fetch_all(MYSQLI_ASSOC);
 }
@@ -65,18 +64,18 @@ if(!isset($_GET["productId"])){
     <?php include("../css/css_Joe.php"); ?>
 
     <style>
-        main *{
+        main * {
             /* border: 1px solid red; */
         }
 
-        .dontNextLine{
+        .dontNextLine {
             white-space: nowrap;
             text-align: end;
             padding-right: 30px !important;
             /* background-color: var(--primary-color); */
         }
 
-        .img-box{
+        .img-box {
             aspect-ratio: 1;
             border-radius: 20px;
             margin: 20px;
@@ -84,16 +83,16 @@ if(!isset($_GET["productId"])){
             overflow: hidden;
             transition: 0.5s;
 
-            &:hover{
+            &:hover {
                 /* box-shadow: 0 0 40px #F4A293; */
             }
         }
 
-        .img-small{
+        .img-small {
             aspect-ratio: 1;
         }
 
-        .text-attention{
+        .text-attention {
             color: red !important;
         }
     </style>
@@ -110,38 +109,38 @@ if(!isset($_GET["productId"])){
 
             <h2 class="mb-5 text-center">商品編輯</h2>
 
-            <?php if(isset($_GET["productId"])): ?>
+            <?php if (isset($_GET["productId"])): ?>
                 <div class="container">
                     <div class="row d-flex justify-content-center">
                         <div class="col-12">
                             <form action="../function/doUpdateProduct.php" method="post">
                                 <div class="row d-flex align-items-center flex-column flex-xl-row">
-                                    
+
                                     <div class="col px-2">
                                         <table class="table table-hover">
                                             <tr>
                                                 <td class="dontNextLine fw-bold">id</td>
                                                 <td>
-                                                    <?=$id?>
+                                                    <?= $id ?>
                                                     <input type="hidden" name="id" value="<?= $row["product_id"] ?>">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="dontNextLine fw-bold">品名</td>
                                                 <td>
-                                                    <input name="name" class="form-control form-control-custom" type="text" value="<?=$row["name"]?>">
+                                                    <input name="name" class="form-control form-control-custom" type="text" value="<?= $row["name"] ?>">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="dontNextLine fw-bold">價格</td>
                                                 <td>
-                                                    <input name="price" class="form-control form-control-custom" type="number" value="<?=$row["price"]?>">
+                                                    <input name="price" class="form-control form-control-custom" type="number" value="<?= $row["price"] ?>">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="dontNextLine fw-bold">庫存</td>
                                                 <td>
-                                                    <input name="stocks" class="form-control form-control-custom" type="number" value="<?= $row["stocks"]?>">
+                                                    <input name="stocks" class="form-control form-control-custom" type="number" value="<?= $row["stocks"] ?>">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -149,9 +148,9 @@ if(!isset($_GET["productId"])){
                                                 <td>
                                                     <select class="form-select form-select-custom" id="country" name="class">
                                                         <option selected disabled>類別</option>
-                                                        <?php foreach($classRows as $classRow): ?>
-                                                        <option  <?=$row["product_class_id"]==$classRow["product_class_id"]?"selected":"";?>  value="<?=$classRow["product_class_id"]?>"><?=$classRow["class_name"]?></option>
-                                                        <?php endforeach; ?>      
+                                                        <?php foreach ($classRows as $classRow): ?>
+                                                            <option <?= $row["product_class_id"] == $classRow["product_class_id"] ? "selected" : ""; ?> value="<?= $classRow["product_class_id"] ?>"><?= $classRow["class_name"] ?></option>
+                                                        <?php endforeach; ?>
                                                     </select>
                                                 </td>
 
@@ -159,8 +158,8 @@ if(!isset($_GET["productId"])){
                                             <tr>
                                                 <td class="dontNextLine fw-bold">描述</td>
                                                 <td>
-                                                    <textarea name="description" class="form-control textarea-custom" id="message" rows="5" placeholder="請輸入描述" >
-                                                        <?=$row["description"]?>
+                                                    <textarea name="description" class="form-control textarea-custom" id="message" rows="5" placeholder="請輸入描述">
+                                                        <?= $row["description"] ?>
                                                     </textarea>
                                                 </td>
                                             </tr>
@@ -173,45 +172,41 @@ if(!isset($_GET["productId"])){
                                             <tr>
                                                 <td class="dontNextLine fw-bold">折扣</td>
                                                 <td>
-                                                    <input name="discount" class="form-control form-control-custom" placeholder="輸入小數點  例如:0.8" step="0.01" type="number" value="<?=$row["discount"]?>">
+                                                    <input name="discount" class="form-control form-control-custom" placeholder="輸入小數點  例如:0.8" step="0.01" type="number" value="<?= $row["discount"] ?>">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="dontNextLine fw-bold">上架</td>
                                                 <td>
                                                     <select name="available" class="form-select form-select-custom" id="country" require>
-                                                        <option disabled >請選擇上架狀態</option>
-                                                        <option <?=$row["available"]==0?"selected":"";?> value="0">下架</option>
-                                                        <option <?=$row["available"]==1?"selected":"";?> value="1">上架</option>
+                                                        <option disabled>請選擇上架狀態</option>
+                                                        <option <?= $row["available"] == 0 ? "selected" : ""; ?> value="0">下架</option>
+                                                        <option <?= $row["available"] == 1 ? "selected" : ""; ?> value="1">上架</option>
                                                     </select>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="dontNextLine fw-bold">標籤</td>
                                                 <td>
-                                                    <input name="label" class="form-control form-control-custom" type="text" value="<?=$row["label"]?>">
+                                                    <input name="label" class="form-control form-control-custom" type="text" value="<?= $row["label"] ?>">
                                                 </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="dontNextLine fw-bold">建立時間</td>
-                                                <td><?=$row["created_at"]?></td>
                                             </tr>
                                         </table>
                                     </div>
-                                    
+
                                     <div class="option-area d-flex justify-content-center mt-4 ">
                                         <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="product.php?productId=<?= $row["product_id"] ?>">取消</a>
                                         <button class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="#" type="submit">儲存</button>
                                     </div>
                                 </div>
                             </form>
-                            
+
                         </div>
                     </div>
                 </div>
 
             <?php else: ?>
-                <p><?=$message?></p>
+                <p><?= $message ?></p>
             <?php endif; ?>
 
         </main>

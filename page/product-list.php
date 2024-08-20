@@ -98,7 +98,7 @@ foreach ($storeRows as $storeRow) {
                 </form>
 
                 <?php if ($productCount > 0): ?>
-                    <table class="table table-bordered table-hover bdrs table-responsive">
+                    <table class="table table-bordered table-hover bdrs table-responsive align-middle">
                         <thead class="text-center table-dark">
                             <tr>
                                 <th class="dontNextLine">商品編號</th>
@@ -117,13 +117,13 @@ foreach ($storeRows as $storeRow) {
                         <tbody>
                             <?php foreach ($rows as $row): ?>
                                 <tr>
-                                    <th class="text-center"><?= $row["product_id"] ?></th>
-                                    <th><?= $row["name"] ?></th>
-                                    <th class="text-center"><?= $storeArr[$row["shop_id"]] ?></th>
-                                    <th class="dontNextLine text-center"><?= $classArr[$row["product_class_id"]] ?></th>
-                                    <th class="text-center"><?= number_format($row["price"]) ?></th>
-                                    <th><?= getLeftChar($row["description"], 100) . "..." ?></th>
-                                    <th class="text-center">
+                                    <td class="text-center"><?= $row["product_id"] ?></td>
+                                    <td><?= $row["name"] ?></td>
+                                    <td class="text-center"><?= $storeArr[$row["shop_id"]] ?></td>
+                                    <td class="dontNextLine text-center"><?= $classArr[$row["product_class_id"]] ?></td>
+                                    <td class="text-center"><?= number_format($row["price"]) ?></td>
+                                    <td><?= getLeftChar($row["description"], 100) . "..." ?></td>
+                                    <td class="text-center">
                                         <?php
                                         if ($row["available"] == 1) {
                                             echo '<span class="text-success dontNextLine">上架中</span>';
@@ -131,16 +131,16 @@ foreach ($storeRows as $storeRow) {
                                             echo '<span class="text-danger dontNextLine">已下架</span>';
                                         }
                                         ?>
-                                    </th>
-                                    <th class="text-center"><?= $row["stocks"] ?></th>
+                                    </td>
+                                    <td class="text-center"><?= $row["stocks"] ?></td>
                                     <?php if ($SessRole == "admin"): ?>
-                                        <th class="text-center"><?= $row["deleted"] == 0 ? "<span class='text-success'></span>" : "<span class='text-danger'>被刪除</span>"; ?></th>
+                                        <td class="text-center"><?= $row["deleted"] == 0 ? "<span class='text-success'></span>" : "<span class='text-danger'>被刪除</span>"; ?></td>
                                     <?php endif;  ?>
-                                    <th class="text-center">
+                                    <td class="text-center">
                                         <a href="product.php?productId=<?= $row["product_id"] ?>" class="btn btn-custom">
                                             <i class="fa-solid fa-list"></i>
                                         </a>
-                                    </th>
+                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
