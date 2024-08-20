@@ -63,8 +63,8 @@ if(!isset($_GET["productId"])){
 
         .img-box{
             aspect-ratio: 1;
-            border-radius: 20px;
-            margin: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
             /* box-shadow: 0 0 15px #F4A293; */
             overflow: hidden;
             transition: 0.5s;
@@ -76,6 +76,8 @@ if(!isset($_GET["productId"])){
 
         .img-small{
             aspect-ratio: 1;
+            border-radius: 10px;
+            overflow:hidden;
         }
 
         .text-attention{
