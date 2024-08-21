@@ -8,6 +8,15 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+//避免使用者亂改網址
+// if(isset($_GET["shopId"])){
+
+//     if( $_GET["shopId"]!=$_SESSION["shop"]["shop_id"] ){
+//         header("location: product-list.php?shopId=".$_SESSION["shop"]["shop_id"]);
+//     }
+
+// }
+
 $SessRole = $_SESSION["user"]["role"];
 $nav_page_name = "product-list.php?";    //導頁名
 
@@ -30,55 +39,8 @@ $start_item = 0;
 //頁碼的處理
 $total_page = ceil($allProductCount / $per_page);   //計算總頁數(無條件進位)
 
-$whereArr = [];
-
-//篩選狀態判定
-$where_status = "";
-if (isset($_GET["status"])) {
-    $status = $_GET["status"];
-    switch ($status) {
-        case "on":
-            $where_status = "available = 1";
-            break;
-        case "off":
-            $where_status = "available = 0";
-            break;
-        default:
-            $status = "all";
-    }
-    $nav_page_name .= "&status=" . $status;
-} else {
-    $status = "all";
-}
-array_push($whereArr, $where_status);
-
-
-$where_search = "";
-if (isset($_GET["search"]) && !empty($_GET["search"])) {
-    $search = $_GET["search"];
-    $where_search = "name LIKE '%$search%'";
-
-    $nav_page_name .= "&search=" . $search;
-}
-array_push($whereArr, $where_search);
-
-
-$where_class = "";
-if (isset($_GET["class"])) {
-    $class = $_GET["class"];
-    if ($class == "all") {
-        $where_class = "";
-    } else {
-        $where_class = "product_class_id=$class";
-        $nav_page_name .= "&class=" . $class;
-    }
-} else {
-    $class = "all";
-}
-array_push($whereArr, $where_class);
 
 //排序的處理
-$sql_order = "";
 if (isset($_GET["order"])) {
     $order = $_GET["order"];
 
@@ -107,32 +69,96 @@ if (isset($_GET["order"])) {
 
     $nav_page_name .= "&order=" . $order;
 } else {
-    $order = "all";
     $sql_order = "ORDER BY product_id ASC";
 }
 
 if ($SessRole == "shop") {
-    $where_shop = "shop_id = $shopId";
-    $where_delete = "deleted = 0";
-
-    array_push($whereArr, $where_shop);
-    array_push($whereArr, $where_delete);
-}
-
-//檢查where陣列是否為空
-// print_r($whereArr);
-$whereArr = array_filter($whereArr);    //除掉空值
-// print_r(empty($whereArr));
-
-if (!empty($whereArr)) {
-    $whereClause = join(" AND ", $whereArr);
-    // echo "<br>" . $whereClause;
-    $sql = "SELECT * FROM product WHERE $whereClause $sql_order";
-} else {
+    $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 $sql_order";
+} elseif ($SessRole == "admin") {
     $sql = "SELECT * FROM product $sql_order";
 }
 
-// echo $sql;
+//篩選狀態判定
+if (isset($_GET["status"])) {
+    $status = $_GET["status"];
+    switch ($status) {
+        case "on":
+            $sql_status = "available = 1";
+            break;
+        case "off":
+            $sql_status = "available = 0";
+            break;
+        default:
+            $status = "all";
+            $sql_status = "";
+    }
+
+    $nav_page_name .= "&status=" . $status;
+} else {
+    $status = "all";
+    $sql_status = "";
+}
+
+if ($SessRole == "shop") {
+
+    if ($sql_status != "") {
+        $sql_status = "AND " . $sql_status;
+    }
+    $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 $sql_status $sql_order";
+} elseif ($SessRole == "admin") {
+
+    if ($sql_status != "") {
+        $sql_status = "WHERE " . $sql_status;
+    }
+    $sql = "SELECT * FROM product $sql_status $sql_order";
+}
+
+
+if (isset($_GET["search"]) && !empty($_GET["search"])) {
+    $search = $_GET["search"];
+    $sql_search = "name LIKE '%$search%'";
+
+    if ($SessRole == "shop") {
+        $sql = "SELECT * FROM product WHERE shop_id=$shopId AND $sql_search AND deleted = 0 $sql_status $sql_order";
+    } elseif ($SessRole == "admin") {
+
+        $sql_status = str_replace("WHERE", "AND", "$sql_status");
+        $sql = "SELECT * FROM product WHERE $sql_search $sql_status $sql_order";
+    }
+
+    $nav_page_name .= "&search=" . $search;
+} else {
+    $sql_search = "";
+}
+
+if (isset($_GET["class"])) {
+    $class = $_GET["class"];
+
+    if ($class == "all") {
+        $sql_class = "";
+    } else {
+        $sql_class = "product_class_id=$class";
+        $nav_page_name .= "&class=" . $class;
+    }
+
+    if ($SessRole == "shop") {
+        $sql = "SELECT * FROM product WHERE shop_id=$shopId AND $sql_search AND $sql_class AND deleted = 0 $sql_status $sql_order";
+    } elseif ($SessRole == "admin") {
+
+        if ($sql_search != "") {
+            $sql_search = "AND $sql_search";
+        }
+
+        if (!empty($sql_class . $sql_search . $sql_status)) {
+            $filter_s = "WHERE $sql_class $sql_search $sql_status";
+        } else {
+            $filter_s = "$sql_class $sql_search $sql_status";
+        }
+        $sql = "SELECT * FROM product $filter_s $sql_order";
+    }
+}
+
+echo $sql;
 
 $filter_result = $conn->query($sql);
 $filter_rows = $filter_result->fetch_all(MYSQLI_ASSOC);
@@ -241,12 +267,12 @@ foreach ($storeRows as $storeRow) {
                                 <?php endforeach; ?>
                             </select>
                             <select class="form-select" aria-label="Default select example" name="order">
-                                <option value="ida" <?= $order == "ida" ? "selected" : "" ?>>依商品編號排序(小>大)</option>
-                                <option value="idd" <?= $order == "idd" ? "selected" : "" ?>>依商品編號排序(大>小)</option>
-                                <option value="pria" <?= $order == "pria" ? "selected" : "" ?>>依價格排序(小>大)</option>
-                                <option value="prid" <?= $order == "prid" ? "selected" : "" ?>>依價格排序(大>小)</option>
-                                <option value="stoa" <?= $order == "stoa" ? "selected" : "" ?>>依庫存量排序(小>大)</option>
-                                <option value="stod" <?= $order == "stod" ? "selected" : "" ?>>依庫存量排序(大>小)</option>
+                                <option value="ida">依商品編號排序(小>大)</option>
+                                <option value="idd">依商品編號排序(大>小)</option>
+                                <option value="pria">依價格排序(小>大)</option>
+                                <option value="prid">依價格排序(大>小)</option>
+                                <option value="stoa">依庫存量排序(小>大)</option>
+                                <option value="stod">依庫存量排序(大>小)</option>
                             </select>
                             <a class="btn neumorphic" href="product-list.php"><i class="fa-solid fa-xmark"></i></a>
                             <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
