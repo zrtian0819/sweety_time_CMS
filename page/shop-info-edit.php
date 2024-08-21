@@ -2,11 +2,40 @@
 require_once("../db_connect.php");      //避免sidebar先載入錯誤,人天先加的
 
 // 獲取網址中的 shopId 參數
-$shop_id = isset($_GET['shopId']) ? intval($_GET['shopId']) : 0;
+// $shop_id = isset($_GET['shopId']) ? intval($_GET['shopId']) : 0;
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+$shop_id = $_SESSION["shop"]["shop_id"];
+
+
+if(isset($_SESSION["shop"]["shop_id"])){
+    
+    if($shop_id=="admin"){
+        header("location: dashboard-home_Joe.php");
+    }
+
+    if(isset($_GET["shopId"])){
+        if( $_GET["shopId"]!=$_SESSION["shop"]["shop_id"] ){
+            header("location: shop-info.php?shopId=".$_SESSION["shop"]["shop_id"]);
+        }
+    }
+
+}else{
+    header("location: dashboard-home_Joe.php");
+}
+
 
 if ($shop_id > 0) {
     // 根據 shop_id 查詢店家資訊
-    $sql_shop_info = "SELECT * FROM shop WHERE shop_id = $shop_id";
+    $sql_shop_info = "  SELECT * 
+                        FROM shop
+                        JOIN shop_photo ON shop.shop_id = shop_photo.shop_id
+                        WHERE shop.shop_id = $shop_id";
+
+
     $result_shop_info = $conn->query($sql_shop_info);
 
     if ($result_shop_info->num_rows > 0) {
@@ -18,23 +47,9 @@ if ($shop_id > 0) {
         $sign_up_time = $shop_info["sign_up_time"];
         $latitude = $shop_info["latitude"];
         $longitude = $shop_info["longitude"];
+        $file_name = $shop_info["file_name"];
     } else {
         echo "找不到指定的店家";
-        exit;
-    }
-
-    // 根據 shop_id 查詢店家照片
-    $sql_shop_photo = "SELECT * FROM shop_photo WHERE shop_id = ?";
-    $stmt_shop_photo = $conn->prepare($sql_shop_photo);
-    $stmt_shop_photo->bind_param("i", $shop_id);
-    $stmt_shop_photo->execute();
-    $result_shop_photo = $stmt_shop_photo->get_result();
-
-    if ($result_shop_photo->num_rows > 0) {
-        $shop_photo = $result_shop_photo->fetch_assoc();
-        $file_name = $shop_photo["file_name"];
-    } else {
-        echo "找不到指定的店家照片";
         exit;
     }
 } else {
@@ -65,36 +80,40 @@ if ($shop_id > 0) {
             <h2 class="mb-3">基本資料</h2>
             <div class="container">
                 <div class="row">
-                    <div class="col-12 col-md-6 col-lg-5 position-relative d-flex justify-content-center align-items-center mb-3 mb-md-0">
+                    <div class="col-12 col-md-6 col-lg-6 position-relative d-flex justify-content-center align-items-center mb-3 mb-md-0">
                         <a href="">
-                            <img class="shop-info-logo" src="../images/shop_logo/<?=$file_name;?>" alt="店家Logo">
+                            <img class="shop-info-logo shop-info-logo-edit" src="../images/shop_logo/<?=$file_name;?>" alt="店家Logo">
                             <button class="btn btn-secondary change-image-btn">更換圖片</button>
                         </a>
                     </div>
-                    <div class="col-12 col-md-6 col-lg-5 px-4 shop-info-detail">
-                        <h3 class="mb-3">店家資訊</h3>
-                        <ul class="list-unstyled">
-                            <li class="my-2">店名：<input type="text" class="form-control" name="name" value="<?= $name;?>"></li>
-                            <li class="my-2">電話：<input type="text" class="form-control" name="phone" value="<?= $phone;?>"></li>
-                            <li class="my-2">地址：<input type="text" class="form-control" name="address" value="<?= $address;?>"></li>
-                            <li class="my-2">註冊時間：<?= $sign_up_time;?></li>
-                            <li class="my-2">經緯度：<?= $longitude;?>,<?= $latitude;?></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="mt-3">
-                <h2 class="mb-3">店家簡介</h2>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-12 position-relative d-flex justify-content-center mb-3 mb-md-0">
-                            <ul class="list-unstyled">
-                                <li class="my-2"><?= $description;?></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div>
-                        <a href="shop-edit.php?id=<?=$row["shop_id"]?>" class="btn btn-primary"><i class="fa-solid fa-user-pen"></i></a>
+                    <div class="col-12 col-md-6 col-lg-6 px-4 shop-info-detail">
+                    <form action="../function/doUpdateUser.php" method="POST">
+                                <!-- 隱藏字段，用於傳遞shop_id -->
+                                <input type="hidden" name="shop_id" value="<?= $shop_id ?>">
+
+                                <!-- 其他表單字段 -->
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">店名</label>
+                                    <input type="text" class="form-control" id="name" name="name" value="<?= $name ?>" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label">電話</label>
+                                    <input type="text" class="form-control" id="phone" name="phone" value="<?= $phone ?>" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="address" class="form-label">地址</label>
+                                    <input type="text" class="form-control" id="address" name="address" value="<?= $address ?>" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">店家簡介</label>
+                                    <textarea class="form-control" id="description" name="description" rows="5" required><?= $description ?></textarea>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">儲存變更</button>
+                            </form>
                     </div>
                 </div>
             </div>

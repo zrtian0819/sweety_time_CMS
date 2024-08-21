@@ -51,7 +51,7 @@
                  <a class="nav-link" href="coupon-list.php">優惠券管理</a>
              </li>
              <li class="nav-item">
-                 <a class="nav-link" href="#">總商家管理</a>
+                 <a class="nav-link" href="shop-info-admin.php">總商家管理</a>
              </li>
          </ul>
      <?php endif; ?>
