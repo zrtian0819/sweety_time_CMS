@@ -17,7 +17,7 @@ if (session_status() == PHP_SESSION_NONE) {
 // }
 
 $SessRole = $_SESSION["user"]["role"];
-$nav_page_name = "product-list.php";    //導頁名
+$nav_page_name = "product-list.php?";    //導頁名
 
 //判定角色以決定呈現的資料結果
 if ($SessRole == "shop") {
@@ -129,7 +129,7 @@ if ($SessRole == "shop") {
 }
 
 
-if(isset($_GET["search"])){
+if(isset($_GET["search"]) && !empty($_GET["search"])){
     $search = $_GET["search"];
 
     if ($SessRole == "shop"){
@@ -141,15 +141,17 @@ if(isset($_GET["search"])){
     $nav_page_name .= "&search=".$search;
 }
 
-// echo $sql;
+echo $sql;
 echo $nav_page_name;
 
-$result = $conn->query($sql);
-$rows = $result->fetch_all(MYSQLI_ASSOC);
-$productCount = $result->num_rows;
+$filter_result = $conn->query($sql);
+$filter_rows = $filter_result->fetch_all(MYSQLI_ASSOC);
+$productCount = $filter_result->num_rows;
 
 $filter_total_page = ceil($productCount / $per_page);   //計算總頁數(無條件進位)
 
+echo $filter_total_page . '<BR>';
+echo $productCount;
 
 //↓做成陣列的資料
 
@@ -303,7 +305,7 @@ foreach ($storeRows as $storeRow) {
                                         <li class="page-item px-1 <?= $i==$page?"active":""; ?>">
                                             <a class="page-link btn-custom" href="
                                                 <?php if(isset($_GET["p"])){
-                                                    echo "$nav_page_name" . "?p=" . $i ;
+                                                    echo "$nav_page_name" . "&p=" . $i ;
                                                 }?>
                                             "><?=$i?>
                                             </a>
