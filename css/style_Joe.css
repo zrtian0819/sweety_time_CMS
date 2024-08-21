@@ -22,6 +22,7 @@ body {
   font-optical-sizing: auto;
 }
 
+
 h1,
 h2,
 h3,
@@ -129,19 +130,6 @@ h6 {
   box-shadow: -7px -7px 10px #ffffff, 5px 5px 10px rgba(0, 0, 0, 0.585);
 }
 
-button {
-  display: inline-block;
-  width: 11rem;
-  height: 3.2rem;
-  font-weight: bold;
-  letter-spacing: 0.05rem;
-  text-transform: uppercase;
-  font-size: 1rem;
-  border-radius: 25px;
-  box-shadow: -5px -5px 10px white, 5px 5px 10px rgba(0, 0, 0, 0.485);
-  background-color: rgb(245, 245, 245);
-  border: none;
-}
 
 .neumorphic {
   border-radius: 10px;
@@ -180,6 +168,10 @@ button {
   overflow-y: auto;
   overflow-x: hidden;
   ul{
+    height: auto;
+    transition:0.6s
+  }
+  ul{
     transition:0.6s;
   }
 }
@@ -187,6 +179,19 @@ button {
 .sideBarToggle {
   width: 0px !important;
   padding: 20px 15px !important;
+  border-radius: 10px 0 0 10px;
+}
+
+.adminToggle{
+  height: 0 !important;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.storeToggle{
+  height: 0 !important;
+  overflow: hidden;
+  opacity: 0;
   border-radius: 10px 0 0 10px;
 }
 
@@ -251,12 +256,6 @@ button {
 
 /* 樣式表 */
 
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  font-family: "Noto Serif TC", "Noto Sans TC", "Noto Serif HK", serif;
-}
-
 .form-control-custom {
   border-color: var(--primary-color);
   color: var(--text-color);
@@ -290,6 +289,14 @@ body {
   border-radius: 5px;
 }
 
+.btn-custom:hover {
+  box-shadow: 5px 5px 10px #efbeb6, -5px -5px 10px #ffffff;
+}
+
+.btn-custom:active {
+  box-shadow: inset 8px 8px 16px #efbeb6, inset -8px -8px 16px #ffffff;
+}
+
 .btn-enter {
   width: 5rem;
   background-color: var(--primary-color);
@@ -316,10 +323,12 @@ body {
 }
 
 .nav-tabs-custom .nav-link {
+  text-align: center;
+  width: 120px;
   color: var(--text-color);
   box-shadow: none;
   border-radius: 20px 20px 0px 0px;
-  border-color: #e87c6b;
+  border:.3px solid #e9aba1;
 }
 
 .nav-tabs-custom .nav-link.active {
