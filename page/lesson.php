@@ -2,7 +2,6 @@
 
 require_once("../db_connect.php");
 
-
 //篩選
 $status = isset($_GET["status"]) ? $_GET["status"] : "all";
 $search = isset($_GET["search"]) ? $_GET["search"] : "";
@@ -195,10 +194,10 @@ foreach ($rowsPro as $productClass) {
                     <a class="main-nav nav-link <?= $status === 'all' ? 'active' : '' ?>" href="?status=all">全部</a>
                 </li>
                 <li class="nav-item">
-                    <a class="main-nav nav-link <?= $status === 'on' ? 'active' : '' ?>" href="?status=on">上架中</a>
+                    <a class="main-nav nav-link <?= $status === 'on' ? 'active' : '' ?>" href="?status=on&search=<?= $search ?>&class=<?= $class ?>&sort=<?= $sort ?>&p=<?= $page ?>">上架中</a>
                 </li>
                 <li class="nav-item">
-                    <a class="main-nav nav-link <?= $status === 'off' ? 'active' : '' ?>" href="?status=off">已下架</a>
+                    <a class="main-nav nav-link <?= $status === 'off' ? 'active' : '' ?>" href="?status=off&search=<?= $search ?>&class=<?= $class ?>&sort=<?= $sort ?>&p=<?= $page ?>">已下架</a>
                 </li>
             </ul>
             <!-- Content -->
