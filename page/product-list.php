@@ -116,16 +116,42 @@ if ($SessRole == "shop") {
 
 if (isset($_GET["search"]) && !empty($_GET["search"])) {
     $search = $_GET["search"];
+    $sql_search = "name LIKE '%$search%'";
 
     if ($SessRole == "shop") {
-        $sql = "SELECT * FROM product WHERE shop_id=$shopId AND name LIKE '%$search%' AND deleted = 0 $sql_status $sql_order";
+        $sql = "SELECT * FROM product WHERE shop_id=$shopId AND $sql_search AND deleted = 0 $sql_status $sql_order";
     } elseif ($SessRole == "admin") {
 
         $sql_status = str_replace("WHERE", "AND", "$sql_status");
-        $sql = "SELECT * FROM product WHERE name LIKE '%$search%' $sql_status $sql_order";
+        $sql = "SELECT * FROM product WHERE $sql_search $sql_status $sql_order";
     }
 
     $nav_page_name .= "&search=" . $search;
+} else {
+    $sql_search = "";
+}
+
+if (isset($_GET["class"])) {
+    $class = $_GET["class"];
+
+    if ($class == "all") {
+        $sql_class = "";
+    } else {
+        $sql_class = "product_class_id=$class";
+        $nav_page_name .= "&class=" . $class;
+    }
+
+    if ($SessRole == "shop") {
+        $sql = "SELECT * FROM product WHERE shop_id=$shopId AND $sql_search AND $sql_class AND deleted = 0 $sql_status $sql_order";
+    } elseif ($SessRole == "admin") {
+
+        if ($sql_search != "") {
+            $sql_search = "AND $sql_search";
+        }
+        $sql = "SELECT * FROM product WHERE $sql_class $sql_search $sql_status $sql_order";
+    }
+} else {
+    $class = "all";
 }
 
 // echo $sql;
@@ -166,6 +192,7 @@ $classArr = [];
 foreach ($classRows as $classRow) {
     $classArr[$classRow["product_class_id"]] = $classRow["class_name"];
 }
+// print_r($classArr);
 
 //店家
 $sqlStore = "SELECT shop_id,name from shop";
@@ -209,12 +236,11 @@ foreach ($storeRows as $storeRow) {
         <div class="main col neumorphic p-4">
 
             <h2>商品列表</h2>
-
             <p><?= $productCount ?>/<?= $allProductCount ?>筆 </p>
+
             <div class="container-fluid">
                 <ul class="nav nav-tabs-custom">
                     <li class="nav-item">
-
                         <a class="main-nav nav-link <?= $status === 'all' ? 'active' : '' ?>" href="<?= statusStrRemoveJoe($nav_page_name) ?>&status=all">全部</a>
                     </li>
                     <li class="nav-item">
@@ -230,20 +256,18 @@ foreach ($storeRows as $storeRow) {
                     <form action="product-list.php" method="get">
                         <div class="input-group">
                             <input type="search" class="form-control" placeholder="品名關鍵字" name="search" value="<?= isset($_GET["search"]) ? $_GET["search"] : ""; ?>">
-                            <!-- <select class="form-select" aria-label="Default select example" name="class">
+                            <select class="form-select" aria-label="Default select example" name="class">
                                 <option value="all">分類</option>
-                                <option value="1">蛋糕</option>
-                                <option value="2">餅乾</option>
-                                <option value="3">塔 / 派</option>
-                                <option value="4">泡芙</option>
-                                <option value="5">冰淇淋</option>
-                                <option value="6">其他</option>
-                            </select> -->
+                                <?php foreach ($classArr as $key => $value): ?>
+                                    <option value="<?= $key ?>" <?= $key == $class ? "selected" : "" ?>><?= $value ?></option>
+                                <?php endforeach; ?>
+                            </select>
                             <!-- <select class="form-select" aria-label="Default select example" name="sort">
                                 <option value="id">依課程編號排序(預設)</option>
                                 <option value="count">依報名人數排序</option>
                                 <option value="date">依時間排序</option>
                             </select> -->
+                            <a class="btn neumorphic" href="product-list.php"><i class="fa-solid fa-xmark"></i></a>
                             <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                         </div>
                     </form>

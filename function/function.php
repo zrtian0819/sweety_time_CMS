@@ -17,7 +17,7 @@ function getLeftChar($text, $num)
 */
 function statusStrRemoveJoe($text)
 {
-    $search = ["status=all", "status=on", "status=off"];
+    $search = ["&status=all", "&status=on", "&status=off"];
     $replace = ["", "", ""];
     $newText = str_replace($search, $replace, $text);
     return $newText;
