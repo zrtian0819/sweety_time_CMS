@@ -46,94 +46,54 @@ $row = $result->fetch_assoc();
                 </div>
                 <div class="container">
                     <div class="row">
-                        <?php if ($userCount > 0): ?>
-                            <table class="table table-bordered">
-                                <tr>
-                                    <th>Name</th>
-                                    <td>
-                                        <input type="text" value="<?= $row["name"] ?>" class="form-control" name="name">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Account</th>
-                                    <td>
-                                        <input type="text" value="<?= $row["account"] ?>" class="form-control" name="account">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Password</th>
-                                    <td>
-                                        <input type="text" value="<?= $row["password"] ?>" class="form-control" name="password">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Email</th>
-                                    <td>
-                                        <input type="text" value="<?= $row["email"] ?>" class="form-control" name="email">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Phone</th>
-                                    <td>
-                                        <input type="text" value="<?= $row["phone"] ?>" class="form-control" name="phone">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Birthday</th>
-                                    <td>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
-                                                年
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start" style="max-height: 200px; overflow-y: auto;">
-                                            <?php
-                                                $currentYear = date("Y");
-                                                $startYear = $currentYear - 100;
-                                                for ($year = $currentYear; $year >= $startYear; $year--) {
-                                                    echo "<li><a class='dropdown-item' href='#'>$year</a></li>";
-                                                }
-                                            ?>
-                                            </ul>
-                                        </div>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
-                                                月
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start" style="max-height: 200px; overflow-y: auto;">
-                                            <?php
-                                               for($month =1; $month <=12 ; $month++){
-                                                echo "<li><a class='dropdown-item' href='#'>$month</a></li>";
-                                            }
-                                            ?>
-                                            </ul>
-                                        </div>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
-                                                日
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start" style="max-height: 200px; overflow-y: auto;">
-                                            <?php
-                                               for($date =1; $date <=31 ; $date++){
-                                                echo "<li><a class='dropdown-item' href='#'>$date</a></li>";
-                                            }
-                                            ?>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Sign up time</th>
-                                    <td><?= $row["now"] ?></td>
-                                </tr>
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Name</th>
+                                <td>
+                                    <input type="text" value="<?= $row["name"] ?>" class="form-control" name="name">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Account</th>
+                                <td>
+                                    <input type="text" value="<?= $row["account"] ?>" class="form-control" name="account">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Password</th>
+                                <td>
+                                    <input type="text" value="<?= $row["password"] ?>" class="form-control" name="password">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td>
+                                    <input type="text" value="<?= $row["email"] ?>" class="form-control" name="email">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Phone</th>
+                                <td>
+                                    <input type="text" value="<?= $row["phone"] ?>" class="form-control" name="phone">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Birthday</th>
+                                <td>
+                                    <div class="birthday-group">
+                                        <input type="date">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Sign up time</th>
+                                <td><?= $row["now"] ?></td>
+                            </tr>
 
-                            </table>
-                            <div class="d-flex justify-content-end">
-                                <button type="submit" class="btn btn-neumorphic user-btn">儲存</button>
-                            </div>
-                        <?php else: ?>
-                            使用者不存在
-                        <?php endif; ?>
-
+                        </table>
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-neumorphic user-btn">儲存</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -141,7 +101,7 @@ $row = $result->fetch_assoc();
     </div>
     <?php include("../js.php"); ?>
     <script>
-        
+
     </script>
     <?php $conn->close() ?>
 </body>
