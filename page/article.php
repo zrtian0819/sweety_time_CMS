@@ -39,7 +39,7 @@ require_once("../db_connect.php");
             <div class="row">
                 <div class="d-flex justify-content-end">
                     <div>
-                    <a class="btn btn-neumorphic article-btn mt-0" href="articles.php" title="回文章列表"><i class="fa-solid fa-left-long"></i>回到文章列表</a>
+                        <a class="btn btn-neumorphic article-btn mt-0" href="articles.php" title="回文章列表"><i class="fa-solid fa-left-long"></i>回到文章列表</a>
                     </div>
                 </div>
                 <h1 class="d-flex justify-content-center">title</h1>
