@@ -17,6 +17,7 @@ if (session_status() == PHP_SESSION_NONE) {
 // }
 
 $SessRole = $_SESSION["user"]["role"];
+$nav_page_name = "product-list.php?";    //導頁名
 
 //判定角色以決定呈現的資料結果
 if ($SessRole == "shop") {
@@ -42,6 +43,8 @@ $total_page = ceil($allProductCount / $per_page);   //計算總頁數(無條件�
 if(isset($_GET["p"])){
     $page = $_GET["p"];
     $start_item = ($page-1)*$per_page;
+
+    // $nav_page_name .= "&p=".$page ;
 }
 $sql_page = "LIMIT $start_item, $per_page";
 
@@ -78,6 +81,8 @@ if(isset($_GET["order"])){
             $sql_order = "ORDER BY product_id ASC";
     }
 
+    $nav_page_name .= "&order=".$order;
+
 }else{
     $sql_order = "ORDER BY product_id ASC";
 }
@@ -91,7 +96,6 @@ if ($SessRole == "shop") {
 //篩選狀態判定
 if (isset($_GET["status"])) {
     $status = $_GET["status"];
-
     switch($status){
         case "on":
             $sql_status = "available = 1";
@@ -100,30 +104,32 @@ if (isset($_GET["status"])) {
             $sql_status = "available = 0";
             break;
         default:
+            $status ="all";
             $sql_status = "";
     }
-
-    if ($SessRole == "shop") {
-
-        if($sql_status != ""){
-            $sql_status = "AND " . $sql_status;
-        }
-        $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 $sql_status $sql_order $sql_page";
-
-    } elseif ($SessRole == "admin") {
-
-        if($sql_status != ""){
-            $sql_status = "WHERE " . $sql_status;
-        }
-        $sql = "SELECT * FROM product $sql_status $sql_order $sql_page";
-
-    }
 }else{
-    $status = "all";
+    $status ="all";
+    $sql_status = "";
+}
+
+if ($SessRole == "shop") {
+
+    if($sql_status != ""){
+        $sql_status = "AND " . $sql_status;
+    }
+    $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 $sql_status $sql_order $sql_page";
+
+} elseif ($SessRole == "admin") {
+
+    if($sql_status != ""){
+        $sql_status = "WHERE " . $sql_status;
+    }
+    $sql = "SELECT * FROM product $sql_status $sql_order $sql_page";
+
 }
 
 
-if(isset($_GET["search"])){
+if(isset($_GET["search"]) && !empty($_GET["search"])){
     $search = $_GET["search"];
 
     if ($SessRole == "shop"){
@@ -131,13 +137,21 @@ if(isset($_GET["search"])){
     }elseif($SessRole == "admin"){
         $sql = "SELECT * FROM product WHERE name LIKE '%$search%' $sql_status $sql_order $sql_page";
     }
+
+    $nav_page_name .= "&search=".$search;
 }
 
-// echo $sql;
+echo $sql;
+echo $nav_page_name;
 
-$result = $conn->query($sql);
-$rows = $result->fetch_all(MYSQLI_ASSOC);
-$productCount = $result->num_rows;
+$filter_result = $conn->query($sql);
+$filter_rows = $filter_result->fetch_all(MYSQLI_ASSOC);
+$productCount = $filter_result->num_rows;
+
+$filter_total_page = ceil($productCount / $per_page);   //計算總頁數(無條件進位)
+
+echo $filter_total_page . '<BR>';
+echo $productCount;
 
 //↓做成陣列的資料
 
@@ -197,22 +211,43 @@ foreach ($storeRows as $storeRow) {
 
             <p><?= $productCount ?>/<?= $allProductCount ?>筆 </p>
             <div class="container-fluid">
-                <form action="" class="mb-4">
-                    <ul class="nav nav-tabs-custom">
-                        <li class="nav-item">
-                            <a class="main-nav nav-link <?= $status === 'all' ? 'active' : '' ?>" href="?status=all">全部</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="main-nav nav-link <?= $status === 'on' ? 'active' : '' ?>" href="?status=on">上架中</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="main-nav nav-link <?= $status === 'off' ? 'active' : '' ?>" href="?status=off">已下架</a>
-                        </li>
-                    </ul>
+                <ul class="nav nav-tabs-custom">
+                    <li class="nav-item">
+                        <a class="main-nav nav-link <?= $status === 'all' ? 'active' : '' ?>" href="?status=all">全部</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="main-nav nav-link <?= $status === 'on' ? 'active' : '' ?>" href="?status=on">上架中</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="main-nav nav-link <?= $status === 'off' ? 'active' : '' ?>" href="?status=off">已下架</a>
+                    </li>
+                </ul>
 
-                    
-                    
-                </form>
+                <!-- 篩選表單 -->
+                <div class="">
+                    <form action="product-list.php" method="get">
+                        <div class="input-group">
+                            <input type="search" class="form-control" placeholder="品名關鍵字" name="search" value="<?=isset($_GET["search"])?$_GET["search"]:"";?>">
+                            <!-- <select class="form-select" aria-label="Default select example" name="class">
+                                <option value="all">分類</option>
+                                <option value="1">蛋糕</option>
+                                <option value="2">餅乾</option>
+                                <option value="3">塔 / 派</option>
+                                <option value="4">泡芙</option>
+                                <option value="5">冰淇淋</option>
+                                <option value="6">其他</option>
+                            </select> -->
+                            <!-- <select class="form-select" aria-label="Default select example" name="sort">
+                                <option value="id">依課程編號排序(預設)</option>
+                                <option value="count">依報名人數排序</option>
+                                <option value="date">依時間排序</option>
+                            </select> -->
+                            <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        </div>
+                    </form>
+                </div>
+
+                <hr>
 
                 <?php if ($productCount > 0): ?>
                     <table class="table table-bordered table-hover bdrs table-responsive align-middle">
@@ -260,6 +295,27 @@ foreach ($storeRows as $storeRow) {
                             <?php endforeach; ?>
                         </tbody>
                     </table>
+
+                    <?php if (isset($page)) : ?>
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination d-flex justify-content-center">
+                                <?php for ($i = 1; $i <= $filter_total_page; $i++): ?>
+
+                                    <?php if($i >= $page-5 && $i<= $page+5): ?>
+                                        <li class="page-item px-1 <?= $i==$page?"active":""; ?>">
+                                            <a class="page-link btn-custom" href="
+                                                <?php if(isset($_GET["p"])){
+                                                    echo "$nav_page_name" . "&p=" . $i ;
+                                                }?>
+                                            "><?=$i?>
+                                            </a>
+                                        </li>
+                                    <?php endif; ?>
+
+                                <?php endfor; ?>
+                            </ul>
+                        </nav>
+                    <?php endif; ?>
                 <?php else: ?>
                     暫無符合條件的商品
                 <?php endif; ?>

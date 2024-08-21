@@ -116,18 +116,23 @@ $articlesCount = $result->num_rows;
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
 
         <div class="main col neumorphic p-5">
-            <h2 class="mb-3 text-center">文章管理</h2>
-            <div class="py-2">
-                <?php if (isset($_GET["search"])): ?>
-                    <a class="btn btn-neumorphic" href="articles.php" title="回文章列表"><i class="fa-solid fa-left-long"></i></a>
-                <?php endif; ?>
 
+            <h2 class="mb-3 d-flex justify-content-center">文章管理</h2>
+
+            <div class="p-0 d-flex justify-content-end">
+                <?php if (isset($_GET["search"])): ?>
+                    <div class="d-flex ">
+                        <a class="btn btn-neumorphic article-btn mt-0" href="articles.php" title="回文章列表"><i class="fa-solid fa-left-long"></i>回到文章列表</a>
+                    </div>
+                <?php endif; ?>
             </div>
 
             <div class="row d-flex">
                 <form action="">
-                    <div class="input-group mb-3">
-                        <input type="search" class="form-control" name="search" value="<?php echo isset($_GET["search"]) ? $_GET["search"] : "" ?>" placeholder="請輸入文字以搜尋文章、主題">
+                    <div class=" input-group mb-3 d-flex justify-content-end">
+                        <div>
+                            <input type="search" class="form-control" name="search" value="<?php echo isset($_GET["search"]) ? $_GET["search"] : "" ?>" placeholder="請輸入文字以搜尋文章、主題">
+                        </div>
 
                         <div class="input-group-append">
                             <button class="btn btn-outline-warning m-0 " type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
@@ -136,7 +141,7 @@ $articlesCount = $result->num_rows;
                 </form>
 
                 <?php if ($articlesCount > 0): $rows = $result->fetch_all(MYSQLI_ASSOC); ?>
-                    <h3>共有<?= $articlesCount ?>篇文章</h3>
+                    <h3 class="d-flex justify-content-center">共有<?= $articlesCount ?>篇文章</h3>
 
                     <!-- 排序 -->
                     <div class="d-flex justify-content-between my-3">
@@ -182,7 +187,7 @@ $articlesCount = $result->num_rows;
                                     <td>
                                         <div class="d-flex justify-content-center ">
                                             <div class="me-1">
-                                                <a href="article-details.php?id=<?= $articles["article_id"] ?>" id="" class="btn btn-custom"><i class="fa-solid fa-eye"></i></a>
+                                                <a href="article.php?id=<?= $articles["article_id"] ?>" id="" class="btn btn-custom"><i class="fa-solid fa-eye"></i></a>
                                             </div>
 
                                             <div class="me-1">

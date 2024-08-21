@@ -2,7 +2,6 @@
 
 require_once("../db_connect.php");
 
-
 //篩選
 $status = isset($_GET["status"]) ? $_GET["status"] : "all";
 $search = isset($_GET["search"]) ? $_GET["search"] : "";
@@ -161,6 +160,11 @@ foreach ($rowsPro as $productClass) {
     <meta name="viewport" content="width=, initial-scale=1.0">
     <title>Lesson</title>
     <?php include("../css/css_Joe.php"); ?>
+    <style>
+        .addClass{
+            margin-left: auto;
+        }
+    </style>
 </head>
 
 <body>
@@ -195,12 +199,14 @@ foreach ($rowsPro as $productClass) {
                     <a class="main-nav nav-link <?= $status === 'all' ? 'active' : '' ?>" href="?status=all">全部</a>
                 </li>
                 <li class="nav-item">
-                    <a class="main-nav nav-link <?= $status === 'on' ? 'active' : '' ?>" href="?status=on">上架中</a>
+                    <a class="main-nav nav-link <?= $status === 'on' ? 'active' : '' ?>" href="?status=on&search=<?= $search ?>&class=<?= $class ?>&sort=<?= $sort ?>&p=<?= $page ?>">上架中</a>
                 </li>
                 <li class="nav-item">
-                    <a class="main-nav nav-link <?= $status === 'off' ? 'active' : '' ?>" href="?status=off">已下架</a>
+                    <a class="main-nav nav-link <?= $status === 'off' ? 'active' : '' ?>" href="?status=off&search=<?= $search ?>&class=<?= $class ?>&sort=<?= $sort ?>&p=<?= $page ?>">已下架</a>
                 </li>
+                <a href="addLesson.php" class="btn btn-custom addClass">新增課程</a>
             </ul>
+            
             <!-- Content -->
             <table class="table table-hover">
                 <thead class="text-center">
@@ -230,8 +236,8 @@ foreach ($rowsPro as $productClass) {
                             <td><?= $formartDate ?></td>
                             <td><?= $row["quota"] ?></td>
                             <td><?= $studentArr[$row["lesson_id"]] ?></td>
-                            <td><a href="lesson-details.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-eye"></i></i></a>
-                                <a href="lesson-details.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-pen"></i></a>
+                            <td><a href="lesson-details.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-eye"></i></a>
+                                <a href="editLesson.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-pen"></i></a>
                                 <?php if ($status === "off"): ?>
                                     <a href="../function/doReloadLesson.php?id=<?= $id ?>" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
                                 <?php else: ?>

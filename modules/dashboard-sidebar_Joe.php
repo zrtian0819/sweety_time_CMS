@@ -48,7 +48,7 @@
                  <a class="nav-link" href="lesson.php">課程管理</a>
              </li>
              <li class="nav-item">
-                 <a class="nav-link" href="coupon-list.php">優惠券管理</a>
+                 <a class="nav-link" href="coupon-home.php">優惠券管理</a>
              </li>
              <li class="nav-item">
                  <a class="nav-link" href="shop-info-admin.php">總商家管理</a>
