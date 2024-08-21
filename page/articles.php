@@ -99,6 +99,19 @@ $articlesCount = $result->num_rows;
     <title>文章管理頁</title>
     <link rel="stylesheet" href="../css/style_Joe.css">
     <?php include("../css/css_Joe.php"); ?>
+    <style>
+        .bot-ul .page-item .page-link {
+            background-color: #efbeb6;
+            color: #fff;
+            border: none;
+        }
+
+        .bot-ul .page-item.active .page-link {
+            background-color: #efbeb6;
+            color: #fff;
+            border: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -190,18 +203,21 @@ $articlesCount = $result->num_rows;
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
-                        <?php if (isset($_GET["p"])): ?>
-                            <nav aria-label="Page navigation example">
-                                <ul class="pagination">
-                                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                                        <li class="page-item <?php if ($page == $i) echo "active"; ?>">
-                                            <a class="page-link" href="articles.php?p=<?= $i ?>&sortArt=<?= $sortArt ?>&sortDir=<?= $sortDir ?>&search=<?= isset($_GET["search"]) ? $_GET["search"] : '' ?>"><?= $i ?></a>
-                                        </li>
-                                    <?php endfor; ?>
-                                </ul>
-                            </nav>
-                        <?php endif; ?>
+
                     </table>
+                    <?php if (isset($page)): ?>
+                        <nav aria-label="Page navigation">
+                            <ul class="bot-ul pagination pagination-lg ">
+                                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                    <li class="me-1 page-item <?php if ($page == $i) echo "active"; ?>">
+
+                                        <a class="page-link btn-custom" href="articles.php?p=<?= $i ?>&sortArt=<?= $sortArt ?>&sortDir=<?= $sortDir ?>&search=<?= isset($_GET["search"]) ? $_GET["search"] : '' ?>"><?= $i ?></a>
+
+                                    </li>
+                                <?php endfor; ?>
+                            </ul>
+                        </nav>
+                    <?php endif; ?>
                 <?php else: ?>
                     目前沒有文章
                 <?php endif; ?>
