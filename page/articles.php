@@ -24,7 +24,7 @@ if (isset($_GET["search"]) && !empty($_GET["search"])) {
     $search = "%" . $_GET["search"] . "%";
     $sql .= " AND (title LIKE ? OR content LIKE ?)";
     array_push($params, $search, $search);
-    $types .="ss";
+    $types .= "ss";
 }
 
 // 準備 SQL 語句
@@ -73,13 +73,13 @@ $articlesCount = $result->num_rows;
 
             <div class="row d-flex">
                 <form action="">
-                <div class="input-group mb-3">
-                    <input type="search" class="form-control" name="search" value="<?php echo isset($_GET["search"]) ? $_GET["search"] : "" ?>" placeholder="請輸入文字以搜尋文章、主題">
+                    <div class="input-group mb-3">
+                        <input type="search" class="form-control" name="search" value="<?php echo isset($_GET["search"]) ? $_GET["search"] : "" ?>" placeholder="請輸入文字以搜尋文章、主題">
 
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-warning m-0 " type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-warning m-0 " type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        </div>
                     </div>
-                </div>
                 </form>
 
                 <?php if ($articlesCount > 0): $rows = $result->fetch_all(MYSQLI_ASSOC); ?>
@@ -92,7 +92,7 @@ $articlesCount = $result->num_rows;
                             </a>
                             <a href="#" class="btn btn-neumorphic articles-btn">排序
                                 <i class="fa-solid fa-arrow-down-a-z"></i>
-                            </a>    
+                            </a>
                         </div>
                         <div>
                             <a href="#" class="btn btn-neumorphic articles-btn">
@@ -126,18 +126,24 @@ $articlesCount = $result->num_rows;
                                     <td><?= $articles["user_id"] ?></td>
                                     <td><?= $articles["created_at"] ?></td>
                                     <td>
-                                        <a href="article-details.phpid=<?= $articles["article_id"] ?>" id="" class="btn btn-custom"><i class="fa-solid fa-eye"></i></a>
+                                        <div class="d-flex justify-content-center ">
+                                            <div class="me-1">
+                                                <a href="article-details.phpid=<?= $articles["article_id"] ?>" id="" class="btn btn-custom"><i class="fa-solid fa-eye"></i></a>
+                                            </div>
 
-                                        <a href="edit-article.php?id=<?= $articles["article_id"] ?>" class="btn btn-custom"><i class="fa-solid fa-pen"></i></a>
+                                            <div class="me-1">
+                                                <a href="edit-article.php?id=<?= $articles["article_id"] ?>" class="btn btn-custom"><i class="fa-solid fa-pen"></i></a>
+                                            </div>
 
-
-                                        <a href="../function/doDeleteArticle.php?id=<?= $articles["article_id"] ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
-
+                                            <div class="me-1">
+                                                <a href="../function/doDeleteArticle.php?id=<?= $articles["article_id"] ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
-                                <?php endforeach; ?>
+                            <?php endforeach; ?>
                         </tbody>
-                    
+
                     </table>
                 <?php else: ?>
                     目前沒有文章
