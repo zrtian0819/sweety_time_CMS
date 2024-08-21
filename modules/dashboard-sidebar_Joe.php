@@ -14,12 +14,12 @@
 
             $shopId = "admin";
         } elseif ($role == "shop") {
-            $storeSql = "SELECT * from shop WHERE user_id = $userId";
-            $storeResult = $conn->query($storeSql);
-            $storeCount = $storeResult->num_rows;
-            $storeRow = $storeResult->fetch_assoc();
+            // $storeSql = "SELECT * from shop WHERE user_id = $userId";
+            // $storeResult = $conn->query($storeSql);
+            // $storeCount = $storeResult->num_rows;
+            // $storeRow = $storeResult->fetch_assoc();
 
-            $shopId = $storeRow["shop_id"];
+            $shopId = $_SESSION["shop"]["shop_id"];
         }
     } else {
         $role = "";
@@ -51,7 +51,7 @@
                  <a class="nav-link" href="coupon-home.php">優惠券管理</a>
              </li>
              <li class="nav-item">
-                 <a class="nav-link" href="#">總商家管理</a>
+                 <a class="nav-link" href="shop-info-admin.php">總商家管理</a>
              </li>
          </ul>
      <?php endif; ?>

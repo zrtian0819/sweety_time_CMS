@@ -86,21 +86,15 @@ $totalPage = ceil($userCount['count'] / $per_page);
                                 <button class="btn btn-outline-warning m-0 " type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                             </div>
                         </div>
-
-                        <div class="d-flex justify-content-between my-3">
-                            <div>
-                                <a class="btn btn-neumorphic user-btn" <?php if($order==1)echo"active"?>href="users.php?p=<?= $page?>&order=1">排序
-                                    <i class="fa-solid fa-arrow-up-a-z"></i>
-                                </a>
-                                <a class="btn btn-neumorphic user-btn" <?php if($order==2)echo"active"?>href="users.php?p=<?= $page?>&order=2">排序
-                                    <i class="fa-solid fa-arrow-down-a-z"></i>
-                                </a>
-                            </div>
-                            <div>
-                                <a href="user-add.php" class="btn btn-neumorphic user-btn">新增
-                                    <i class="fa-solid fa-plus"></i>
-                                </a>
-                            </div>
+                    
+                    <div class="d-flex justify-content-between my-3">
+                        <div>
+                            <a href="#" class="btn btn-neumorphic user-btn">排序
+                                <i class="fa-solid fa-arrow-up-a-z"></i>
+                            </a>
+                            <a href="#" class="btn btn-neumorphic user-btn">排序
+                                <i class="fa-solid fa-arrow-down-a-z"></i>
+                            </a>
                         </div>
                         <div class="main col neumorphic p-2">
                             <?php if ($userCount > 0): $rows = $result->fetch_all(MYSQLI_ASSOC); ?>

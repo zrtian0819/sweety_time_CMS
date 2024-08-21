@@ -1,50 +1,165 @@
 <?php
 
+require_once("../db_connect.php");
+include("../function/function.php");
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-require_once("../db_connect.php");
-include("../function/function.php");
+//避免使用者亂改網址
+// if(isset($_GET["shopId"])){
+
+//     if( $_GET["shopId"]!=$_SESSION["shop"]["shop_id"] ){
+//         header("location: product-list.php?shopId=".$_SESSION["shop"]["shop_id"]);
+//     }
+
+// }
 
 $SessRole = $_SESSION["user"]["role"];
 
 //判定角色以決定呈現的資料結果
 if ($SessRole == "shop") {
     $shopId = $_SESSION["shop"]["shop_id"];
-    $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 ORDER BY product_id";
+    $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 ORDER BY product_id ASC";
+
 } elseif ($SessRole == "admin") {
-    $sql = "SELECT * FROM product ORDER BY product_id";
+    $sql = "SELECT * FROM product ORDER BY product_id ASC";
 }
+
+$result = $conn->query($sql);
+$rows = $result->fetch_all(MYSQLI_ASSOC);
+$allProductCount = $result->num_rows;
+
+//預設值
+$page = 1;
+$per_page = 15;
+$start_item = 0;
+//頁碼的處理
+$total_page = ceil($allProductCount / $per_page);   //計算總頁數(無條件進位)
+
+//分頁的處理
+if(isset($_GET["p"])){
+    $page = $_GET["p"];
+    $start_item = ($page-1)*$per_page;
+}
+$sql_page = "LIMIT $start_item, $per_page";
+
+if ($SessRole == "shop") {
+    $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 ORDER BY product_id ASC $sql_page";
+} elseif ($SessRole == "admin") {
+    $sql = "SELECT * FROM product ORDER BY product_id ASC $sql_page";
+}
+
+//排序的處理
+if(isset($_GET["order"])){
+    $order = $_GET["order"];
+
+    switch($order){
+        case "ida":
+            $sql_order = "ORDER BY product_id ASC";
+            break;
+        case "idd":
+            $sql_order = "ORDER BY product_id DESC";
+            break;
+        case "pria":
+            $sql_order = "ORDER BY price ASC";
+            break;
+        case "prid":
+            $sql_order = "ORDER BY price DESC";
+            break;
+        case "stoa":
+            $sql_order = "ORDER BY stocks ASC";
+            break;
+        case "stod":
+            $sql_order = "ORDER BY stocks DESC";
+            break;
+        default:
+            $sql_order = "ORDER BY product_id ASC";
+    }
+
+}else{
+    $sql_order = "ORDER BY product_id ASC";
+}
+
+if ($SessRole == "shop") {
+    $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 $sql_order $sql_page";
+} elseif ($SessRole == "admin") {
+    $sql = "SELECT * FROM product $sql_order $sql_page";
+}
+
+//篩選狀態判定
+if (isset($_GET["status"])) {
+    $status = $_GET["status"];
+
+    switch($status){
+        case "on":
+            $sql_status = "available = 1";
+            break;
+        case "off":
+            $sql_status = "available = 0";
+            break;
+        default:
+            $sql_status = "";
+    }
+
+    if ($SessRole == "shop") {
+
+        if($sql_status != ""){
+            $sql_status = "AND " . $sql_status;
+        }
+        $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 $sql_status $sql_order $sql_page";
+
+    } elseif ($SessRole == "admin") {
+
+        if($sql_status != ""){
+            $sql_status = "WHERE " . $sql_status;
+        }
+        $sql = "SELECT * FROM product $sql_status $sql_order $sql_page";
+
+    }
+}else{
+    $status = "all";
+}
+
+
+if(isset($_GET["search"])){
+    $search = $_GET["search"];
+
+    if ($SessRole == "shop"){
+        $sql = "SELECT * FROM product WHERE shop_id=$shopId AND name LIKE '%$search%' AND deleted = 0 $sql_status $sql_order $sql_page";
+    }elseif($SessRole == "admin"){
+        $sql = "SELECT * FROM product WHERE name LIKE '%$search%' $sql_status $sql_order $sql_page";
+    }
+}
+
+// echo $sql;
 
 $result = $conn->query($sql);
 $rows = $result->fetch_all(MYSQLI_ASSOC);
 $productCount = $result->num_rows;
 
+//↓做成陣列的資料
 
 //商品類別
 $sqlClass = "SELECT * from product_class";
 $ClassResult = $conn->query($sqlClass);
 $classRows = $ClassResult->fetch_all(MYSQLI_ASSOC);
-
 //商品類別陣列
 $classArr = [];
 foreach ($classRows as $classRow) {
     $classArr[$classRow["product_class_id"]] = $classRow["class_name"];
 }
 
-
 //店家
 $sqlStore = "SELECT shop_id,name from shop";
 $storeResult = $conn->query($sqlStore);
 $storeRows = $storeResult->fetch_all(MYSQLI_ASSOC);
-
 //店家名陣列
 $storeArr = [];
 foreach ($storeRows as $storeRow) {
     $storeArr[$storeRow["shop_id"]] = $storeRow["name"];
 }
-
 // print_r($storeArr);
 ?>
 
@@ -80,12 +195,12 @@ foreach ($storeRows as $storeRow) {
             <h2>商品列表</h2>
 
 
-            <p>共<?= $productCount ?>筆</p>
+            <p><?= $productCount ?>/<?= $allProductCount ?>筆 </p>
             <div class="container-fluid">
                 <form action="" class="mb-4">
                     <ul class="nav nav-tabs-custom">
                         <li class="nav-item">
-                            <a class="main-nav nav-link active <?= $status === 'all' ? 'active' : '' ?>" href="?status=all">全部</a>
+                            <a class="main-nav nav-link <?= $status === 'all' ? 'active' : '' ?>" href="?status=all">全部</a>
                         </li>
                         <li class="nav-item">
                             <a class="main-nav nav-link <?= $status === 'on' ? 'active' : '' ?>" href="?status=on">上架中</a>
@@ -94,7 +209,9 @@ foreach ($storeRows as $storeRow) {
                             <a class="main-nav nav-link <?= $status === 'off' ? 'active' : '' ?>" href="?status=off">已下架</a>
                         </li>
                     </ul>
-                    <hr>
+
+                    
+                    
                 </form>
 
                 <?php if ($productCount > 0): ?>
@@ -132,7 +249,7 @@ foreach ($storeRows as $storeRow) {
                                     </td>
                                     <td class="text-center"><?= $row["stocks"] ?></td>
                                     <?php if ($SessRole == "admin"): ?>
-                                        <td class="text-center"><?= $row["deleted"] == 0 ? "<span class='text-success'></span>" : "<span class='text-danger'>被刪除</span>"; ?></td>
+                                        <td class="text-center"><?= $row["deleted"] == 0 ? "" : "<span class='btn btn-danger'>已刪除</span>"; ?></td>
                                     <?php endif;  ?>
                                     <td class="text-center">
                                         <a href="product.php?productId=<?= $row["product_id"] ?>" class="btn btn-custom">

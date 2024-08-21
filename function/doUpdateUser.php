@@ -1,17 +1,23 @@
 <?php
 require_once("../db_connect.php");
 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+$shop_id = $_SESSION["shop"]["shop_id"];
+
 if(!isset($_POST["name"])){
     echo "請從正常管道進入此頁";
     exit;
 }
 
-$id = $_POST["id"];
 $name = $_POST["name"];
-$password = $_POST["password"];
-$email = $_POST["email"];
+$phone = $_POST["phone"];
+$address = $_POST["address"];
+$description = $_POST["description"];
 
-$sql="UPDATE users SET name='$name',password='$password',email='$email' WHERE id='$id'";
+
+$sql="UPDATE shop SET name='$name',phone='$phone',address='$address',description='$description' WHERE shop_id='$shop_id'";
 
 if($conn->query($sql)===TRUE){
     echo "更新成功";
@@ -19,7 +25,7 @@ if($conn->query($sql)===TRUE){
     echo "更新資料錯誤：".$conn->error;
 }
 
-header("location:user-edit.php?id=$id");
+header("location:../page/shop-info.php?shopId=$shop_id");
 
 $conn->close(); 
 ?>
