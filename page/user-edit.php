@@ -97,9 +97,7 @@ if ($userCount > 0) {
     $title = $row["name"];
     // 如果有就顯示圖片，沒有就顯示預設圖
     $defaultImage = 'https://images.unsplash.com/photo-1472396961693-142e6e269027?q=80&w=2152&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
-    $imagePath = !empty($row['portrait_path']) ? 'images/users/' . $row['portrait_path'] : $defaultImage;
-    // /Applications/XAMPP/xamppfiles/htdocs/project/images/users/
-    echo $imagePath;
+    $imagePath = !empty($row['portrait_path']) ? '../images/users/' . $row['portrait_path'] : $defaultImage;
 } else {
     $title = "使用者不存在";
     $imagePath = $defaultImage;
@@ -145,8 +143,8 @@ $conn->close();
                             <form action="user-edit.php?user_id=<?= htmlspecialchars($user_id) ?>" method="post" enctype="multipart/form-data">
                                 <div class="col d-flex justify-content-center align-items-center">
                                     <div class="mb-3">
-                                        <label for="profile_image">選擇圖片:</label><br>
-                                        <img src="<?= htmlspecialchars($imagePath) ?>" alt="Profile Image" style="width:300px; height:300px;">
+                                        <label for="profile_image">上傳或更改圖片:</label><br>
+                                        <img src="<?= htmlspecialchars($imagePath) ?>" alt="Profile Image" style="width:300px;height:300px;" class="object-fit-fill">
                                         <input type="file" name="profile_image" id="profile_image">
                                     </div>
                                 </div>
