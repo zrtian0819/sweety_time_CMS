@@ -17,7 +17,7 @@
         <div class="container">
             <div class="login-card">
                 <h1>Log In</h1>
-                <form id="loginForm" action="doLogin.php" method="POST">
+                <form id="loginForm" action="doLogin.php" method="POST" class="d-flex flex-column">
                     <input class="form-control form-control-custom" type="text" placeholder="Account" id="account" name="account" required>
                     <input class="form-control form-control-custom mt-3" type="password" placeholder="password" id="password" name="password" required>
                     <button class="log-in-button" type="submit" id="signIn">Log In</button>
