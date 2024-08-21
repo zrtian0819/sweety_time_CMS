@@ -44,7 +44,7 @@ if(isset($_GET["p"])){
     $page = $_GET["p"];
     $start_item = ($page-1)*$per_page;
 
-    $nav_page_name .= "&p=".$page ;
+    // $nav_page_name .= "&p=".$page ;
 }
 $sql_page = "LIMIT $start_item, $per_page";
 
@@ -147,6 +147,9 @@ echo $nav_page_name;
 $result = $conn->query($sql);
 $rows = $result->fetch_all(MYSQLI_ASSOC);
 $productCount = $result->num_rows;
+
+$filter_total_page = ceil($productCount / $per_page);   //計算總頁數(無條件進位)
+
 
 //↓做成陣列的資料
 
@@ -294,11 +297,16 @@ foreach ($storeRows as $storeRow) {
                     <?php if (isset($page)) : ?>
                         <nav aria-label="Page navigation example">
                             <ul class="pagination d-flex justify-content-center">
-                                <?php for ($i = 1; $i <= $total_page; $i++): ?>
+                                <?php for ($i = 1; $i <= $filter_total_page; $i++): ?>
 
                                     <?php if($i >= $page-5 && $i<= $page+5): ?>
                                         <li class="page-item px-1 <?= $i==$page?"active":""; ?>">
-                                            <a class="page-link btn-custom" href="product-list.php?status=<?=$status?>"><?=$i?></a>
+                                            <a class="page-link btn-custom" href="
+                                                <?php if(isset($_GET["p"])){
+                                                    echo "$nav_page_name" . "?p=" . $i ;
+                                                }?>
+                                            "><?=$i?>
+                                            </a>
                                         </li>
                                     <?php endif; ?>
 
