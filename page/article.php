@@ -2,6 +2,26 @@
 require_once("../db_connect.php");
 
 
+// 文章不存在的時候回到列表頁
+if (!isset($_GET["id"])){
+    header("location: articles.php");
+}
+
+
+// 取得資料
+$sql = "SELECT * FROM articles ";
+$result = $conn->query($sql);
+$count = $result->num_rows;
+$row = $result->fetch_assoc();
+
+
+// 檢查文章是否存在
+if($count > 0){
+    $title = $row["title"];
+}else{
+    $title = "文章不存在";
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -9,7 +29,7 @@ require_once("../db_connect.php");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>文章</title>
+    <title><?=$article["title"]?></title>
     <link rel="stylesheet" href="../css/style_Joe.css">
     <?php include("../css/css_Joe.php"); ?>
     <style>
@@ -42,16 +62,20 @@ require_once("../db_connect.php");
                         <a class="btn btn-neumorphic article-btn mt-0" href="articles.php" title="回文章列表"><i class="fa-solid fa-left-long"></i>回到文章列表</a>
                     </div>
                 </div>
-                <h1 class="d-flex justify-content-center">title</h1>
+
+                <h1 class="d-flex justify-content-center">
+                    標題
+                </h1>
+
                 <div class="row-col-3 d-flex justify-content-center">
-                    建立時間
+                    建立時間/作者/產品分類
                 </div>
                 <div class="row-col-3 d-flex justify-content-center ">
                     圖片
                 </div>
 
                 <div class="row-col-3 d-flex justify-content-center">
-                    內文
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam natus corrupti, error, eaque ipsum molestias illum sit quis magnam sequi exercitationem, dignissimos excepturi. Aut iste ut, soluta voluptatibus labore quia?
                 </div>
             </div>
         </div>
