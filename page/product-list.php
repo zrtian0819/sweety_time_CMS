@@ -148,13 +148,17 @@ if (isset($_GET["class"])) {
         if ($sql_search != "") {
             $sql_search = "AND $sql_search";
         }
-        $sql = "SELECT * FROM product WHERE $sql_class $sql_search $sql_status $sql_order";
+
+        if (!empty($sql_class . $sql_search . $sql_status)) {
+            $filter_s = "WHERE $sql_class $sql_search $sql_status";
+        } else {
+            $filter_s = "$sql_class $sql_search $sql_status";
+        }
+        $sql = "SELECT * FROM product $filter_s $sql_order";
     }
-} else {
-    $class = "all";
 }
 
-// echo $sql;
+echo $sql;
 
 $filter_result = $conn->query($sql);
 $filter_rows = $filter_result->fetch_all(MYSQLI_ASSOC);
@@ -262,11 +266,14 @@ foreach ($storeRows as $storeRow) {
                                     <option value="<?= $key ?>" <?= $key == $class ? "selected" : "" ?>><?= $value ?></option>
                                 <?php endforeach; ?>
                             </select>
-                            <!-- <select class="form-select" aria-label="Default select example" name="sort">
-                                <option value="id">依課程編號排序(預設)</option>
-                                <option value="count">依報名人數排序</option>
-                                <option value="date">依時間排序</option>
-                            </select> -->
+                            <select class="form-select" aria-label="Default select example" name="order">
+                                <option value="ida">依商品編號排序(小>大)</option>
+                                <option value="idd">依商品編號排序(大>小)</option>
+                                <option value="pria">依價格排序(小>大)</option>
+                                <option value="prid">依價格排序(大>小)</option>
+                                <option value="stoa">依庫存量排序(小>大)</option>
+                                <option value="stod">依庫存量排序(大>小)</option>
+                            </select>
                             <a class="btn neumorphic" href="product-list.php"><i class="fa-solid fa-xmark"></i></a>
                             <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                         </div>
