@@ -13,6 +13,7 @@
 <!-- 瀏覽器重置暫存的方法 可以加一個 time() 變數讓瀏覽器重新讀取一次；開發階段可以使用 -->
 <link rel="stylesheet" href="../css/style_Joe.css?t=<?= time() ?>">
 <link rel="stylesheet" href="../css/shop-info.css?t=<?= time() ?>">
+<link rel="stylesheet" href="../css/teacher.css?t=<?= time() ?>">
 
 
 <!-- google fonts -->
