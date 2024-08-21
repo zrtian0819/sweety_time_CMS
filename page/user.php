@@ -29,7 +29,15 @@ if ($userCount > 0) {
         content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
     <?php include("../css/css_Joe.php"); ?>
-    
+    <style>
+        .user-btn {
+            width: 100px;
+        }
+
+        .user-search {
+            width: 200px;
+        }
+    </style>
 </head>
 
 <body>
@@ -42,7 +50,7 @@ if ($userCount > 0) {
         <div class="container-fluid d-flex flex-row px-4">
             <div class="main col neumorphic p-5">
                 <div class="py-2">
-                    <a class="btn btn-neumorphic" href="users.php" title="回使用者列表"><i class="fa-solid fa-left-long"></i></a>
+                    <a class="btn btn-neumorphic user-btn" href="users.php" title="回使用者列表"><i class="fa-solid fa-left-long"></i></a>
                 </div>
                 <h2 class="mb-3"><?= $title ?> 基本資料</h2>
                 <div class="container">
@@ -70,8 +78,8 @@ if ($userCount > 0) {
                                     <td><?= $row["sign_up_time"] ?></td>
                                 </tr>
                             </table>
-                            <div class="">
-                                <a href="user-edit.php?user_id=<?=$row["user_id"]?>" class="btn btn-neumorphic"><i class="fa-solid fa-user-pen"></i></a>
+                            <div class="d-flex justify-content-end">
+                                <a href="user-edit.php?user_id=<?=$row["user_id"]?>" class="btn btn-neumorphic user-btn"><i class="fa-solid fa-user-pen"></i></a>
                             </div>
                         <?php else: ?>
                             使用者不存在
