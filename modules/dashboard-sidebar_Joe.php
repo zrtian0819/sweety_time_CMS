@@ -14,12 +14,12 @@
 
             $shopId = "admin";
         } elseif ($role == "shop") {
-            $storeSql = "SELECT * from shop WHERE user_id = $userId";
-            $storeResult = $conn->query($storeSql);
-            $storeCount = $storeResult->num_rows;
-            $storeRow = $storeResult->fetch_assoc();
+            // $storeSql = "SELECT * from shop WHERE user_id = $userId";
+            // $storeResult = $conn->query($storeSql);
+            // $storeCount = $storeResult->num_rows;
+            // $storeRow = $storeResult->fetch_assoc();
 
-            $shopId = $storeRow["shop_id"];
+            $shopId = $_SESSION["shop"]["shop_id"];
         }
     } else {
         $role = "";
