@@ -73,7 +73,7 @@ $shopCount = $result->num_rows;
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
         <div class="main col neumorphic p-5">
         <form action="">
-                    <div class="input-group d-flex justify-content-end align-items-center">
+                    <div class="input-group d-flex justify-content-end align-items-center mb-2">
                         <a class="btn neumorphic" href="shop-info-admin.php"><i class="fa-solid fa-circle-left"></i></i></a>
                         <input type="search" class="form-control" placeholder="搜尋店家" name="search" style="max-width:200px">
                         <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
@@ -84,8 +84,8 @@ $shopCount = $result->num_rows;
                     <div class="col-12 position-relative d-flex justify-content-center mb-3 mb-md-0">
                         <div class="table-responsive">
                         <?php if ($shopCount > 0): ?>
-                        <table class="table table-striped table-hover" style="min-width: 1000px;">
-                                <thead>
+                        <table class="table table-bordered table-hover bdrs table-responsive align-middle" style="min-width: 1000px;">
+                                <thead class="text-center table-dark">
                                     <tr>
                                     <th class="dontNextLine text-center">Shop ID</th>
                                     <th class="dontNextLine text-center">店家名稱</th>
@@ -124,20 +124,20 @@ $shopCount = $result->num_rows;
                             <nav aria-label="Page navigation">
                                 <ul class="pagination justify-content-center">
                                     <?php if($page > 1): ?>
-                                        <li class="page-item">
-                                            <a class="page-link" href="?p=<?= $page - 1 ?>&search=<?= $search ?>" aria-label="Previous">
+                                        <li class="page-item px-1">
+                                            <a class="page-link btn-custom"  href="?p=<?= $page - 1 ?>&search=<?= $search ?>" aria-label="Previous">
                                                 <span aria-hidden="true">&laquo;</span>
                                             </a>
                                         </li>
                                     <?php endif; ?>
                                     <?php for($i = 1; $i <= $total_page; $i++): ?>
-                                        <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
-                                            <a class="page-link" href="?p=<?= $i ?>&search=<?= $search ?>"><?= $i ?></a>
+                                        <li class="page-item px-1 <?= ($i == $page) ? 'active' : '' ?>">
+                                            <a class="page-link btn-custom" href="?p=<?= $i ?>&search=<?= $search ?>"><?= $i ?></a>
                                         </li>
                                     <?php endfor; ?>
                                     <?php if($page < $total_page): ?>
-                                        <li class="page-item">
-                                            <a class="page-link" href="?p=<?= $page + 1 ?>&search=<?= $search ?>" aria-label="Next">
+                                        <li class="page-item px-1">
+                                            <a class="page-link btn-custom" href="?p=<?= $page + 1 ?>&search=<?= $search ?>" aria-label="Next">
                                                 <span aria-hidden="true">&raquo;</span>
                                             </a>
                                         </li>
