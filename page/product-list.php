@@ -39,6 +39,14 @@ $start_item = 0;
 $total_page = ceil($allProductCount / $per_page);   //計算總頁數(無條件進位)
 
 
+if(isset($_GET["p"])){
+    $page = $_GET["p"];
+    $start_item = ($page-1)*$per_page;
+}
+
+$sql_page = "LIMIT $start_item, $per_page";
+
+
 //篩選狀態判定
 if (isset($_GET["status"])) {
     $status = $_GET["status"];
@@ -59,61 +67,32 @@ if (isset($_GET["status"])) {
         if($sql_status != ""){
             $sql_status = "AND " . $sql_status;
         }
-        $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 $sql_status ORDER BY product_id ASC";
+        $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 $sql_status ORDER BY product_id ASC $sql_page";
 
     } elseif ($SessRole == "admin") {
 
         if($sql_status != ""){
             $sql_status = "WHERE " . $sql_status;
         }
-        $sql = "SELECT * FROM product $sql_status ORDER BY product_id ASC";
+        $sql = "SELECT * FROM product $sql_status ORDER BY product_id ASC $sql_page";
 
     }
 }else{
     $status = "all";
 }
 
-// echo $sql;
+echo $sql;
 
 
 if(isset($_GET["search"])){
     $search = $_GET["search"];
 
     if ($SessRole == "shop"){
-        $sql = "SELECT * FROM product WHERE shop_id=$shopId AND name LIKE '%$search%' AND deleted = 0 $sql_status ORDER BY product_id ASC";
+        $sql = "SELECT * FROM product WHERE shop_id=$shopId AND name LIKE '%$search%' AND deleted = 0 $sql_status ORDER BY product_id ASC $sql_page";
     }elseif($SessRole == "admin"){
-        $sql = "SELECT * FROM product WHERE name LIKE '%$search%' $sql_status ORDER BY product_id ASC";
+        $sql = "SELECT * FROM product WHERE name LIKE '%$search%' $sql_status ORDER BY product_id ASC $sql_page";
     }
 }
-
-
-// if(isset($_GET["p"])){
-
-//     $page = $_GET["p"];
-//     $start_item = ($page-1)*$per_page;
-// }
-
-// if ($SessRole == "shop") {
-//     if(isset($_GET["search"])){
-//         //search有傳值則將$sql進行篩選
-//         $search = $_GET["search"];
-//         $sql = "SELECT * FROM product WHERE shop_id=$shopId AND name LIKE '%$search%' AND deleted = 0 $sql_status ORDER BY product_id";
-    
-//     }elseif(isset($_GET["p"]) || isset($_GET["order"])){
-    
-//     }
-// } elseif ($SessRole == "admin") {
-//     $sql = "SELECT * FROM product ORDER BY product_id";
-
-//     if(isset($_GET["search"])){
-//         //search有傳值則將$sql進行篩選
-//         $search = $_GET["search"];
-//         $sql = "SELECT * FROM product WHERE shop_id=$shopId AND name LIKE '%$search%' ORDER BY product_id";
-    
-//     }elseif(isset($_GET["p"]) || isset($_GET["order"])){
-    
-//     }
-// }
 
 
 $result = $conn->query($sql);
