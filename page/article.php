@@ -9,7 +9,7 @@ require_once("../db_connect.php");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>文章管理頁</title>
+    <title>文章</title>
     <link rel="stylesheet" href="../css/style_Joe.css">
     <?php include("../css/css_Joe.php"); ?>
     <style>
@@ -35,18 +35,24 @@ require_once("../db_connect.php");
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
 
         <div class="main col neumorphic p-5">
-            <h2 class="mb-3 text-center">文章</h2>
-            <div class="py-2">
-                <?php if (isset($_GET["search"])): ?>
-                    <a class="btn btn-neumorphic" href="articles.php" title="回文章列表"><i class="fa-solid fa-left-long"></i></a>
-                <?php endif; ?>
-
+            <div class=" p-0">
+                <a class="btn btn-neumorphic article-btn mt-0" href="articles.php" title="回文章列表"><i class="fa-solid fa-left-long"></i>回到文章列表</a>
             </div>
+            <div class="row d-flex ">
+                <h1 class="d-flex justify-content-center">title</h1>
+                <div class="row-col-3 d-flex justify-content-center">
+                    建立時間
+                </div>
+                <div class="row-col-3 d-flex justify-content-center ">
+                    圖片
+                </div>
 
-            <div class="row d-flex">
-                
+                <div class="row-col-3 d-flex justify-content-center">
+                    內文
+                </div>
             </div>
         </div>
+
     </div>
 
 
