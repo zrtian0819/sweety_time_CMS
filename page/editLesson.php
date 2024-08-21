@@ -56,6 +56,13 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
     <meta name="viewport" content="width=, initial-scale=1.0">
     <title><?= $row["name"] ?></title>
     <?php include("../css/css_Joe.php"); ?>
+    <script src="https://cdn.tiny.cloud/1/cfug9ervjy63v3sj0voqw9d94ojiglomezxkdd4s5jr9owvu/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <style>
+        textarea {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
 </head>
 
 <body>
@@ -99,7 +106,7 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                                     <th>
                                         <h5>價錢</h5>
                                     </th>
-                                    <td class="text-danger"><input type="textarea" class="textarea-custom" value=<?= number_format($row["price"]) ?> name="price"></td>
+                                    <td class="text-danger"><input type="text" class="textarea-custom" value=<?= ($row["price"]) ?> name="price"></td>
                                 </tr>
                                 <tr>
                                     <th>
@@ -111,7 +118,7 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                                     <th>
                                         <h5>課程人數</h5>
                                     </th>
-                                    <td><input type="textarea" class="textarea-custom" value=<?= $row["quota"] ?> name="quota"></td>
+                                    <td><input type="text" class="textarea-custom" value=<?= $row["quota"] ?> name="quota"></td>
                                 </tr>
                                 <tr>
                                     <th>
@@ -123,13 +130,13 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                                     <th>
                                         <h5>地點</h5>
                                     </th>
-                                    <td><input type="textarea" class="textarea-custom" value="<?= $row["classroom_name"] ?>" name="classroom_name"></td>
+                                    <td><input type="text" class="textarea-custom" value="<?= $row["classroom_name"] ?>" name="classroom_name"></td>
                                 </tr>
                                 <tr>
                                     <th>
                                         <h5>地址</h5>
                                     </th>
-                                    <td><input type="textarea" class="textarea-custom" value=<?= $row["location"] ?> name="location"></td>
+                                    <td><input type="text" class="textarea-custom" value=<?= $row["location"] ?> name="location"></td>
                                 </tr>
                                 <tr>
                                     <th>
@@ -143,7 +150,11 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                     </div>
                     <div class="col-lg-8 ms-2">
                         <h3 class="p-2">課程介紹</h3>
-                        <p class="p-2 lh-lg"><input type="textarea" class="textarea-custom" value="<?= $row["description"] ?>" name="description"></p>
+                        <p class="p-2 lh-lg">
+                        <div>
+                            <textarea id="tiny" name="description" value=""><?= $row["description"] ?></textarea>
+                        </div>
+                        </p>
                     </div>
                 </div>
 
@@ -153,6 +164,16 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
     </div>
     <?php include("../js.php") ?>
     <?php $conn->close() ?>
+    <script>
+        tinymce.init({
+            selector: 'textarea#tiny'
+        });
+        document.addEventListener('focusin', (e) => {
+            if (e.target.closest(".tox-tinymce, .tox-tinymce-aux, .moxman-window, .tam-assetmanager-root") !== null) {
+                e.stopImmediatePropagation();
+            }
+        });
+    </script>
 </body>
 
 </html>
