@@ -8,21 +8,23 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 //避免使用者亂改網址
-if(isset($_GET["shopId"])){
-    if( $_GET["shopId"]!=$_SESSION["shop"]["shop_id"] ){
-        header("location: product-list.php?shopId=".$_SESSION["shop"]["shop_id"]);
-    }
-}
+// if(isset($_GET["shopId"])){
+
+//     if( $_GET["shopId"]!=$_SESSION["shop"]["shop_id"] ){
+//         header("location: product-list.php?shopId=".$_SESSION["shop"]["shop_id"]);
+//     }
+
+// }
 
 $SessRole = $_SESSION["user"]["role"];
 
 //判定角色以決定呈現的資料結果
 if ($SessRole == "shop") {
     $shopId = $_SESSION["shop"]["shop_id"];
-    $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 ORDER BY product_id";
+    $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 ORDER BY product_id ASC";
 
 } elseif ($SessRole == "admin") {
-    $sql = "SELECT * FROM product ORDER BY product_id";
+    $sql = "SELECT * FROM product ORDER BY product_id ASC";
 }
 
 $result = $conn->query($sql);
@@ -43,50 +45,75 @@ if (isset($_GET["status"])) {
 
     switch($status){
         case "on":
-            $sql_status = "AND available = 1";
+            $sql_status = "available = 1";
             break;
         case "off":
-            $sql_status = "AND available = 0";
+            $sql_status = "available = 0";
             break;
         default:
             $sql_status = "";
     }
 
     if ($SessRole == "shop") {
-        $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 $sql_status ORDER BY product_id";
+
+        if($sql_status != ""){
+            $sql_status = "AND " . $sql_status;
+        }
+        $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 $sql_status ORDER BY product_id ASC";
+
     } elseif ($SessRole == "admin") {
-        $sql = "SELECT * FROM product $sql_status ORDER BY product_id";
+
+        if($sql_status != ""){
+            $sql_status = "WHERE " . $sql_status;
+        }
+        $sql = "SELECT * FROM product $sql_status ORDER BY product_id ASC";
+
     }
 }else{
     $status = "all";
-
 }
 
+// echo $sql;
 
 
-if ($SessRole == "shop") {
-    if(isset($_GET["search"])){
-        //search有傳值則將$sql進行篩選
-        $search = $_GET["search"];
-        $sql = "SELECT * FROM product WHERE shop_id=$shopId AND name LIKE '%$search%' AND deleted = 0 $sql_status ORDER BY product_id";
-    
-    }elseif(isset($_GET["p"]) || isset($_GET["order"])){
-    
-    }
-} elseif ($SessRole == "admin") {
-    $sql = "SELECT * FROM product ORDER BY product_id";
+if(isset($_GET["search"])){
+    $search = $_GET["search"];
 
-    if(isset($_GET["search"])){
-        //search有傳值則將$sql進行篩選
-        $search = $_GET["search"];
-        $sql = "SELECT * FROM product WHERE shop_id=$shopId AND name LIKE '%$search%' ORDER BY product_id";
-    
-    }elseif(isset($_GET["p"]) || isset($_GET["order"])){
-    
+    if ($SessRole == "shop"){
+        $sql = "SELECT * FROM product WHERE shop_id=$shopId AND name LIKE '%$search%' AND deleted = 0 $sql_status ORDER BY product_id ASC";
+    }elseif($SessRole == "admin"){
+        $sql = "SELECT * FROM product WHERE name LIKE '%$search%' $sql_status ORDER BY product_id ASC";
     }
 }
 
 
+// if(isset($_GET["p"])){
+
+//     $page = $_GET["p"];
+//     $start_item = ($page-1)*$per_page;
+// }
+
+// if ($SessRole == "shop") {
+//     if(isset($_GET["search"])){
+//         //search有傳值則將$sql進行篩選
+//         $search = $_GET["search"];
+//         $sql = "SELECT * FROM product WHERE shop_id=$shopId AND name LIKE '%$search%' AND deleted = 0 $sql_status ORDER BY product_id";
+    
+//     }elseif(isset($_GET["p"]) || isset($_GET["order"])){
+    
+//     }
+// } elseif ($SessRole == "admin") {
+//     $sql = "SELECT * FROM product ORDER BY product_id";
+
+//     if(isset($_GET["search"])){
+//         //search有傳值則將$sql進行篩選
+//         $search = $_GET["search"];
+//         $sql = "SELECT * FROM product WHERE shop_id=$shopId AND name LIKE '%$search%' ORDER BY product_id";
+    
+//     }elseif(isset($_GET["p"]) || isset($_GET["order"])){
+    
+//     }
+// }
 
 
 $result = $conn->query($sql);
@@ -207,7 +234,7 @@ foreach ($storeRows as $storeRow) {
                                     </td>
                                     <td class="text-center"><?= $row["stocks"] ?></td>
                                     <?php if ($SessRole == "admin"): ?>
-                                        <td class="text-center"><?= $row["deleted"] == 0 ? "<span class='text-success'></span>" : "<span class='text-danger'>被刪除</span>"; ?></td>
+                                        <td class="text-center"><?= $row["deleted"] == 0 ? "" : "<span class='btn btn-danger'>已刪除</span>"; ?></td>
                                     <?php endif;  ?>
                                     <td class="text-center">
                                         <a href="product.php?productId=<?= $row["product_id"] ?>" class="btn btn-custom">
