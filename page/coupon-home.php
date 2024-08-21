@@ -27,6 +27,7 @@ require_once("../db_connect.php");
             </div>
             <hr>
             <a href="./coupon-list.php" class="btn-neumorphic text-decoration-none">優惠券種類一覽</a>
+            <a href="./coupon-create.php" class="btn-neumorphic text-decoration-none">新增優惠券</a>
         </div>
 
     </div>

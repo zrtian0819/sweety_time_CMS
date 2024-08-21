@@ -2,8 +2,8 @@
 
 require_once("../db_connect.php");
 
-// 抓取現在時間以做判斷和篩選
-$now = date("Y-m-d H:i:s");
+// 抓取現在日期以做判斷和篩選
+$now = date("Y-m-d");
 
 // 設定SQL查詢語句樣板 
 $sql = "SELECT * FROM coupon WHERE 1=1"; // 利用永遠為真的 `1=1` 以利加後續條件
@@ -42,12 +42,12 @@ if(!isset($_GET["expr_status"])) {
             $types .= "s";
             break;
         case "expr_canUse":
-            $sql .= " AND start_time <= ? AND end_date >= ?";
+            $sql .= " AND start_time <= ? AND (end_date >= ? OR permanent = 1)";
             $params = array_merge($params, [$now, $now]);
             $types .= str_repeat("s", 2);
             break;
-        case "expr_notStart":
-            $sql .= " AND end_date < ?";
+        case "expr_exprd":
+            $sql .= " AND end_date < ? AND permanent = 0";
             array_push($params, $now);
             $types .= "s";
             break;
@@ -133,6 +133,8 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                 <a href="./coupon-list.php">優惠券種類一覽</a>
             </div>
             <hr>
+
+            <!-- 篩選器 -->
             <div class="py-2">
                 <form action="">
                     <div class="input-group">
@@ -166,6 +168,8 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
             <hr>
             <div class="">
             </div>
+
+            <!-- 顯示資料的表格 -->
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -185,7 +189,13 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                             <td><?= $row['name'];?></td>
                             <td><?= $row['discount_rate'];?></td>
                             <td><?= $row['start_time'];?></td>
-                            <td><?= $row['end_date'];?></td>
+                            <td>
+                                <?php if(is_null($row['end_date'])) : ?>
+                                    <p>永久有效</p>    
+                                <?php else :?>
+                                    <?= $row['end_date'];?>
+                                <?php endif;?>
+                            </td>
                             <td class="d-flex">
                                 <p class="activ_status-text <?= $row['activation'] == 1 ? 'text-success' : 'text-danger'; ?>" data-id="<?= $row['coupon_id']; ?>">
                                     <?= $row['activation'] == 1 ? '啟用中' : '停用中'; ?>
@@ -195,13 +205,16 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                                 </div>
                                 <?php if ($row['start_time'] > $now) : ?>
                                     <p class="text-secondary">尚未開始</p>
-                                <?php elseif ($row['start_time'] <= $now && $now <= $row['end_date']) : ?>
+                                <?php elseif ((is_null($row['end_date']) && $row['permanent'] == 1 ) || ($row['start_time'] <= $now && $now <= $row['end_date'])) : ?>
                                     <p class="text-success">效期內</p>
-                                <?php elseif ($row['end_date'] < $now) : ?>
+                                <?php elseif (!is_null($row['end_date']) && $row['end_date'] < $now) : ?>
                                     <p class="text-danger">已過期</p>
                                 <?php endif; ?>
                             </td>
-                            <td><?= $row['created_at'];?></td>
+                            <td>
+                                <?= $row['created_at'];?>
+                                <a href="./coupon-edit.php?coupon_id=<?= $row['coupon_id'] ?>">編輯</a>
+                            </td>
                         </tr>
                     <?php endforeach;?>
                 </tbody>
@@ -209,9 +222,22 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
         </div>
 
     </div>
+    
+
+    <!-- 顯示新增和編輯的成功or失敗訊息 -->
+    <!-- 有時間可以用中介頁面來避免使用GET -->
+    <!-- 有時間可以用別的設計取代alert -->
+    <?php
+        if (isset($_GET['message'])) {
+            $message = htmlspecialchars($_GET['message']);
+            echo "<script type='text/javascript'>alert('$message');</script>";
+        }
+    ?>
+
 
     <!-- Javascript 寫這裡 -->
     <?php include("../js.php"); ?>
+    
     <script>
         const activ_switches = document.querySelectorAll('.activ_switch');
 
@@ -231,7 +257,7 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                 })
                 .done(function(response) {
                     if (response.success) {
-                        console.log("狀態已切換，Coupon ID: " + couponId);
+                        console.log("優惠券啟用狀態更改成功，Coupon ID: " + couponId);
 
                         let statusTextElement = document.querySelector(`.activ_status-text[data-id='${couponId}']`);
                         if (statusTextElement) {
