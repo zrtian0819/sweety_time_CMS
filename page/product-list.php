@@ -38,14 +38,55 @@ $start_item = 0;
 //頁碼的處理
 $total_page = ceil($allProductCount / $per_page);   //計算總頁數(無條件進位)
 
-
+//分頁的處理
 if(isset($_GET["p"])){
     $page = $_GET["p"];
     $start_item = ($page-1)*$per_page;
 }
-
 $sql_page = "LIMIT $start_item, $per_page";
 
+if ($SessRole == "shop") {
+    $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 ORDER BY product_id ASC $sql_page";
+} elseif ($SessRole == "admin") {
+    $sql = "SELECT * FROM product ORDER BY product_id ASC $sql_page";
+}
+
+//排序的處理
+if(isset($_GET["order"])){
+    $order = $_GET["order"];
+
+    switch($order){
+        case "ida":
+            $sql_order = "ORDER BY product_id ASC";
+            break;
+        case "idd":
+            $sql_order = "ORDER BY product_id DESC";
+            break;
+        case "pria":
+            $sql_order = "ORDER BY price ASC";
+            break;
+        case "prid":
+            $sql_order = "ORDER BY price DESC";
+            break;
+        case "stoa":
+            $sql_order = "ORDER BY stocks ASC";
+            break;
+        case "stod":
+            $sql_order = "ORDER BY stocks DESC";
+            break;
+        default:
+            $sql_order = "ORDER BY product_id ASC";
+    }
+
+}else{
+    $sql_order = "ORDER BY product_id ASC";
+}
+
+if ($SessRole == "shop") {
+    $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 $sql_order $sql_page";
+} elseif ($SessRole == "admin") {
+    $sql = "SELECT * FROM product $sql_order $sql_page";
+}
 
 //篩選狀態判定
 if (isset($_GET["status"])) {
@@ -67,41 +108,36 @@ if (isset($_GET["status"])) {
         if($sql_status != ""){
             $sql_status = "AND " . $sql_status;
         }
-        $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 $sql_status ORDER BY product_id ASC $sql_page";
+        $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 $sql_status $sql_order $sql_page";
 
     } elseif ($SessRole == "admin") {
 
         if($sql_status != ""){
             $sql_status = "WHERE " . $sql_status;
         }
-        $sql = "SELECT * FROM product $sql_status ORDER BY product_id ASC $sql_page";
+        $sql = "SELECT * FROM product $sql_status $sql_order $sql_page";
 
     }
 }else{
     $status = "all";
 }
 
-echo $sql;
-
 
 if(isset($_GET["search"])){
     $search = $_GET["search"];
 
     if ($SessRole == "shop"){
-        $sql = "SELECT * FROM product WHERE shop_id=$shopId AND name LIKE '%$search%' AND deleted = 0 $sql_status ORDER BY product_id ASC $sql_page";
+        $sql = "SELECT * FROM product WHERE shop_id=$shopId AND name LIKE '%$search%' AND deleted = 0 $sql_status $sql_order $sql_page";
     }elseif($SessRole == "admin"){
-        $sql = "SELECT * FROM product WHERE name LIKE '%$search%' $sql_status ORDER BY product_id ASC $sql_page";
+        $sql = "SELECT * FROM product WHERE name LIKE '%$search%' $sql_status $sql_order $sql_page";
     }
 }
 
+// echo $sql;
 
 $result = $conn->query($sql);
 $rows = $result->fetch_all(MYSQLI_ASSOC);
 $productCount = $result->num_rows;
-
-
-
-
 
 //↓做成陣列的資料
 
