@@ -2,7 +2,31 @@
 require_once("../db_connect.php");      //避免sidebar先載入錯誤,人天先加的
 
 // 獲取網址中的 shopId 參數
-$shop_id = isset($_GET['shopId']) ? intval($_GET['shopId']) : 0;
+// $shop_id = isset($_GET['shopId']) ? intval($_GET['shopId']) : 0;
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+$shop_id = $_SESSION["shop"]["shop_id"];
+
+
+if(isset($_SESSION["shop"]["shop_id"])){
+    
+    if($shop_id=="admin"){
+        header("location: dashboard-home_Joe.php");
+    }
+
+    if(isset($_GET["shopId"])){
+        if( $_GET["shopId"]!=$_SESSION["shop"]["shop_id"] ){
+            header("location: shop-info.php?shopId=".$_SESSION["shop"]["shop_id"]);
+        }
+    }
+
+}else{
+    header("location: dashboard-home_Joe.php");
+}
+
 
 if ($shop_id > 0) {
     // 根據 shop_id 查詢店家資訊
