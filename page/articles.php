@@ -117,14 +117,11 @@ $articlesCount = $result->num_rows;
 
         <div class="main col neumorphic p-5">
             <h2 class="mb-3">文章管理</h2>
-            <div class="d-flex">
-                <div class="d-flex p-0">
+                <div class=" p-0">
                     <?php if (isset($_GET["search"])): ?>
                         <a class="btn btn-neumorphic article-btn mt-0" href="articles.php" title="回文章列表"><i class="fa-solid fa-left-long"></i></a>
                     <?php endif; ?>
-                </div>
-
-            </div>
+                </div> 
 
             <div class="row d-flex">
                 <form action="">
