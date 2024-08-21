@@ -27,6 +27,46 @@ if (isset($_GET["search"]) && !empty($_GET["search"])) {
     $types .= "ss";
 }
 
+//檢查排序條件
+// $sortArt = "article_id";
+// $sortDir = "ASC";
+
+$sortArt = isset($_GET["sortArt"]) ? $_GET["sortArt"] : "article_id";
+$sortDir = isset($_GET["sortDir"]) && $_GET["sortDir"] == "DESC" ? "DESC" : "ASC";
+// if(isset($_GET["$sortArt"]) && isset($_GET["sortDir"])) {
+//     $sortArt = $_GET["sortArt"];
+//     $sortDir = $_GET["sortDir"] == "DESC" ? "DESC" : "ASC";
+// }
+
+//分頁設定
+$page = isset($_GET["p"]) ? intval($_GET["p"]) : 1;
+$per_page = 5;
+$start_item = ($page - 1) * $per_page;
+
+$sqlCount = "SELECT COUNT(*) FROM articles WHERE 1 = 1";
+
+if (!empty($params)) {
+    $sqlCount .= " AND (title LIKE ? OR content LIKE ?)";
+}
+
+$stmt_count = $conn->prepare($sqlCount);
+if (!empty($params)) {
+    $stmt_count->bind_param($types, ...$params);
+}
+
+$stmt_count->execute();
+$stmt_count->bind_result($total_items);
+$stmt_count->fetch();
+$stmt_count->close();
+
+$total_pages = $total_items > 0 ? ceil($total_items / $per_page) : 1;
+
+//添加排序和分頁
+$sql .= " ORDER BY $sortArt $sortDir LIMIT ?, ?";
+array_push($params, $start_item, $per_page);
+$types .= "ii";
+
+
 // 準備 SQL 語句
 $stmt = $conn->prepare($sql);
 
@@ -41,6 +81,12 @@ $stmt->execute();
 // 獲取查詢結果
 $result = $stmt->get_result();
 $articlesCount = $result->num_rows;
+
+// if (isset($_GET["search"])){
+//     $articlesCount = $result -> num_rows;
+// } else {
+//     $articlesCount =  $articlesCountAll;
+// }
 
 ?>
 
@@ -85,13 +131,14 @@ $articlesCount = $result->num_rows;
                 <?php if ($articlesCount > 0): $rows = $result->fetch_all(MYSQLI_ASSOC); ?>
                     <h3>共有<?= $articlesCount ?>篇文章</h3>
 
+                    <!-- 排序 -->
                     <div class="d-flex justify-content-between my-3">
                         <div class="d-flex justify-content-between">
-                            <a href="#" class="btn btn-neumorphic articles-btn">排序
-                                <i class="fa-solid fa-arrow-up-a-z"></i>
-                            </a>
-                            <a href="#" class="btn btn-neumorphic articles-btn">排序
+                            <a href="?sortArt=<?= $sortArt ?>&sortDir=ASC&search=<?= isset($_GET['search']) ? $_GET['search'] : '' ?>" class="btn btn-neumorphic articles-btn">排序
                                 <i class="fa-solid fa-arrow-down-a-z"></i>
+                            </a>
+                            <a href="?sortArt=<?= $sortArt ?>&sortDir=DESC&search=<?= isset($_GET['search']) ? $_GET['search'] : '' ?>" class="btn btn-neumorphic articles-btn">排序
+                                <i class="fa-solid fa-arrow-up-a-z"></i>
                             </a>
                         </div>
                         <div>
@@ -128,7 +175,7 @@ $articlesCount = $result->num_rows;
                                     <td>
                                         <div class="d-flex justify-content-center ">
                                             <div class="me-1">
-                                                <a href="article-details.phpid=<?= $articles["article_id"] ?>" id="" class="btn btn-custom"><i class="fa-solid fa-eye"></i></a>
+                                                <a href="article-details.php?id=<?= $articles["article_id"] ?>" id="" class="btn btn-custom"><i class="fa-solid fa-eye"></i></a>
                                             </div>
 
                                             <div class="me-1">
@@ -143,7 +190,17 @@ $articlesCount = $result->num_rows;
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
-
+                        <?php if (isset($_GET["p"])): ?>
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination">
+                                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                        <li class="page-item <?php if ($page == $i) echo "active"; ?>">
+                                            <a class="page-link" href="articles.php?p=<?= $i ?>&sortArt=<?= $sortArt ?>&sortDir=<?= $sortDir ?>&search=<?= isset($_GET["search"]) ? $_GET["search"] : '' ?>"><?= $i ?></a>
+                                        </li>
+                                    <?php endfor; ?>
+                                </ul>
+                            </nav>
+                        <?php endif; ?>
                     </table>
                 <?php else: ?>
                     目前沒有文章
