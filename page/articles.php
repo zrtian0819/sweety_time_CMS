@@ -116,11 +116,13 @@ $articlesCount = $result->num_rows;
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
 
         <div class="main col neumorphic p-5">
-            <h2 class="mb-3 text-center">文章管理</h2>
-            <div class="py-2">
-                <?php if (isset($_GET["search"])): ?>
-                    <a class="btn btn-neumorphic" href="articles.php" title="回文章列表"><i class="fa-solid fa-left-long"></i></a>
-                <?php endif; ?>
+            <h2 class="mb-3">文章管理</h2>
+            <div class="d-flex">
+                <div class="d-flex p-0">
+                    <?php if (isset($_GET["search"])): ?>
+                        <a class="btn btn-neumorphic article-btn mt-0" href="articles.php" title="回文章列表"><i class="fa-solid fa-left-long"></i></a>
+                    <?php endif; ?>
+                </div>
 
             </div>
 
