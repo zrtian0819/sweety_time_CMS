@@ -36,6 +36,9 @@ $start_item = ($page - 1) * $per_page;
 // 搜索條件
 $search = isset($_GET["search"]) ? $_GET["search"] : '';
 
+// 使用 mysqli_real_escape_string 來處理搜索字串中的特殊字符
+$search = $conn->real_escape_string($search);
+
 // 計算總記錄數
 $sql_total = "SELECT COUNT(*) AS total FROM shop WHERE name LIKE '%$search%'";
 $result_total = $conn->query($sql_total);
@@ -69,13 +72,19 @@ $shopCount = $result->num_rows;
     <div class="container-fluid d-flex flex-row px-4">
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
         <div class="main col neumorphic p-5">
-            <h2 class="mb-3">店家管理清單</h2>
+        <form action="">
+                    <div class="input-group d-flex justify-content-end align-items-center">
+                        <a class="btn neumorphic" href="shop-info-admin.php"><i class="fa-solid fa-circle-left"></i></i></a>
+                        <input type="search" class="form-control" placeholder="搜尋店家" name="search" style="max-width:200px">
+                        <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </div>
+                </form>
             <div class="container">
                 <div class="row">
                     <div class="col-12 position-relative d-flex justify-content-center mb-3 mb-md-0">
                         <div class="table-responsive">
                         <?php if ($shopCount > 0): ?>
-                        <table class="table table-striped table-hover" style="min-width: 1200px;">
+                        <table class="table table-striped table-hover" style="min-width: 1000px;">
                                 <thead>
                                     <tr>
                                     <th class="dontNextLine text-center">Shop ID</th>
@@ -94,8 +103,8 @@ $shopCount = $result->num_rows;
                                             <td class="text-center align-middle"><?= $row["shop_id"] ?></td>
                                             <td class="text-center align-middle"><?= $row["name"] ?></td>
                                             <td class="text-center dontNextLine align-middle"><?= $row["phone"] ?></td>
-                                            <td class="text-center dontNextLine align-middle"><?= $row["address"] ?></td>
-                                            <td class="text-center">
+                                            <td class="dontNextLine align-middle"><?= $row["address"] ?></td>
+                                            <td class="text-center align-middle">
                                                 <?php
                                                 $description = $row["description"];
                                                 $short_description = strlen($description) > 100 ? substr($description, 0, 100) . '...' : $description;
@@ -104,8 +113,8 @@ $shopCount = $result->num_rows;
                                             </td>
                                             <td class="text-center align-middle"><?= $row["sign_up_time"] ?></td>
                                             <td class="text-center align-middle">
-                                                <a href="shop-info-admin.php?shopId=<?= $row["shop_id"] ?>" class="btn btn-primary dontNextLine btn-sm m-2">詳細資訊</a>
-                                                <a href="shop-delete-admin.php?shopId=<?= $row["shop_id"] ?>" class="btn btn-danger dontNextLine btn-sm">刪除</a>
+                                                <a href="shop-info-admin.php?shopId=<?= $row["shop_id"] ?>" class="btn btn-custom dontNextLine btn-sm m-2"><i class="fa-solid fa-list"></i></a>
+                                                <a href="shop-delete-admin.php?shopId=<?= $row["shop_id"] ?>" class="btn btn-danger dontNextLine btn-sm m-2"><i class="fa-solid fa-trash"></i></a>
                                             </td>
                                         </tr>
                                      <?php endforeach; ?>
@@ -145,5 +154,7 @@ $shopCount = $result->num_rows;
             </div>
         </div>
     </div>
+    <?php include("../js.php"); ?>
+
 </body>
 </html>
