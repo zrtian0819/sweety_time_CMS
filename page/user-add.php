@@ -81,7 +81,7 @@ $row = $result->fetch_assoc();
                                 <th>Birthday</th>
                                 <td>
                                     <div class="birthday-group">
-                                        <input type="date">
+                                        <input type="date" style="width:150px">
                                     </div>
                                 </td>
                             </tr>

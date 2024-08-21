@@ -122,6 +122,11 @@ $conn->close();
         .user-search {
             width: 200px;
         }
+
+        .user-img {
+            width: 300px;
+            height: 300px;
+        }
     </style>
 </head>
 
@@ -141,12 +146,10 @@ $conn->close();
                     <div class="row">
                         <?php if ($userCount > 0): ?>
                             <form action="user-edit.php?user_id=<?= htmlspecialchars($user_id) ?>" method="post" enctype="multipart/form-data">
-                                <div class="col d-flex justify-content-center align-items-center">
-                                    <div class="mb-3">
-                                        <label for="profile_image">上傳或更改圖片:</label><br>
-                                        <img src="<?= htmlspecialchars($imagePath) ?>" alt="Profile Image" style="width:300px;height:300px;" class="object-fit-fill">
-                                        <input type="file" name="profile_image" id="profile_image">
-                                    </div>
+                                <div class="mb-3 d-flex justify-content-center align-items-center flex-column">
+                                    <label for="profile_image" class="my-3 h4">上傳或更改圖片</label>
+                                    <img src="<?= htmlspecialchars($imagePath) ?>" alt="Profile Image" class="object-fit-fill user-img">
+                                    <input type="file" name="profile_image" id="profile_image" class="my-3 ms-5 ps-5">
                                 </div>
                                 <input type="hidden" name="user_id" value="<?= htmlspecialchars($user_id) ?>">
                                 <table class="table table-bordered">
