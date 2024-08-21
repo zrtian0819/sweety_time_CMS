@@ -10,3 +10,15 @@ function getLeftChar($text, $num)
 {
     return substr($text, 0, $num);
 }
+
+
+/*
+將上架狀態的原始狀態字串移除
+*/
+function statusStrRemoveJoe($text)
+{
+    $search = ["status=all", "status=on", "status=off"];
+    $replace = ["", "", ""];
+    $newText = str_replace($search, $replace, $text);
+    return $newText;
+}
