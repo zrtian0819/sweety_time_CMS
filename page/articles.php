@@ -28,19 +28,13 @@ if (isset($_GET["search"]) && !empty($_GET["search"])) {
 }
 
 //檢查排序條件
-// $sortArt = "article_id";
-// $sortDir = "ASC";
-
 $sortArt = isset($_GET["sortArt"]) ? $_GET["sortArt"] : "article_id";
 $sortDir = isset($_GET["sortDir"]) && $_GET["sortDir"] == "DESC" ? "DESC" : "ASC";
-// if(isset($_GET["$sortArt"]) && isset($_GET["sortDir"])) {
-//     $sortArt = $_GET["sortArt"];
-//     $sortDir = $_GET["sortDir"] == "DESC" ? "DESC" : "ASC";
-// }
 
-//分頁設定
+
+//分頁設定 每頁顯示12筆資料
 $page = isset($_GET["p"]) ? intval($_GET["p"]) : 1;
-$per_page = 5;
+$per_page = 12;
 $start_item = ($page - 1) * $per_page;
 
 $sqlCount = "SELECT COUNT(*) FROM articles WHERE 1 = 1";
@@ -210,9 +204,7 @@ $articlesCount = $result->num_rows;
                             <ul class="bot-ul pagination pagination-lg ">
                                 <?php for ($i = 1; $i <= $total_pages; $i++): ?>
                                     <li class="me-1 page-item <?php if ($page == $i) echo "active"; ?>">
-
                                         <a class="page-link btn-custom" href="articles.php?p=<?= $i ?>&sortArt=<?= $sortArt ?>&sortDir=<?= $sortDir ?>&search=<?= isset($_GET["search"]) ? $_GET["search"] : '' ?>"><?= $i ?></a>
-
                                     </li>
                                 <?php endfor; ?>
                             </ul>
@@ -221,7 +213,6 @@ $articlesCount = $result->num_rows;
                 <?php else: ?>
                     目前沒有文章
                 <?php endif; ?>
-
 
             </div>
         </div>
