@@ -5,13 +5,25 @@ if (session_status() == PHP_SESSION_NONE) {  //啟動session
     session_start();
 }
 
-if (!isset($_SESSION["shop"]["shop_id"])) {    //用 isset() 檢查$_SESSION為空的錯誤
-    header("location: dashboard-home_Joe.php");
+// 检查用户是否已登录以及是否有角色信息
+if (!isset($_SESSION["user"])) {
+    header("Location: login.php");
     exit;
 }
 
-$shop_id = $_SESSION["shop"]["shop_id"];
+$role = $_SESSION["user"]["role"];
+ //假設session之中沒有shop_id則為NULL
+$shop_id = $_SESSION["shop"]["shop_id"] ?? null; 
 
+// 根据角色重定向到不同頁面
+if ($role == "admin") {
+    header("Location: shop-info-admin.php");
+    exit;
+} elseif ($role != "shop" || !$shop_id) {
+    // 如果不是admin也不是shop，或者没有shop_id
+    header("location: dashboard-home_Joe.php");
+    exit;
+}
 
 if(isset($_SESSION["shop"]["shop_id"])){
     
