@@ -1,20 +1,22 @@
 <?php
 
+require_once("../db_connect.php");
+include("../function/function.php");
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+//避免使用者亂改網址
 if(isset($_GET["shopId"])){
     if( $_GET["shopId"]!=$_SESSION["shop"]["shop_id"] ){
-        header("location: product-list.php?shopId =".$_SESSION["shop"]["shop_id"]);
+        header("location: product-list.php?shopId=".$_SESSION["shop"]["shop_id"]);
     }
 }
 
-require_once("../db_connect.php");
-include("../function/function.php");
-
 $SessRole = $_SESSION["user"]["role"];
 
+//判定角色以決定呈現的資料結果
 if ($SessRole == "shop") {
     $shopId = $_SESSION["shop"]["shop_id"];
     $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 ORDER BY product_id";
@@ -23,16 +25,66 @@ if ($SessRole == "shop") {
     $sql = "SELECT * FROM product ORDER BY product_id";
 }
 
+$result = $conn->query($sql);
+$rows = $result->fetch_all(MYSQLI_ASSOC);
+$allProductCount = $result->num_rows;
 
 //預設值
 $page = 1;
 $per_page = 15;
 $start_item = 0;
 //頁碼的處理
-$total_page = ceil($userCountAll / $per_page);   //計算總頁數(無條件進位)
+$total_page = ceil($allProductCount / $per_page);   //計算總頁數(無條件進位)
 
-//判定角色以決定呈現的資料結果
 
+//篩選狀態判定
+if (isset($_GET["status"])) {
+    $status = $_GET["status"];
+
+    switch($status){
+        case "on":
+            $sql_status = "AND available = 1";
+            break;
+        case "off":
+            $sql_status = "AND available = 0";
+            break;
+        default:
+            $sql_status = "";
+    }
+
+    if ($SessRole == "shop") {
+        $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 $sql_status ORDER BY product_id";
+    } elseif ($SessRole == "admin") {
+        $sql = "SELECT * FROM product $sql_status ORDER BY product_id";
+    }
+}else{
+    $status = "all";
+
+}
+
+
+
+if ($SessRole == "shop") {
+    if(isset($_GET["search"])){
+        //search有傳值則將$sql進行篩選
+        $search = $_GET["search"];
+        $sql = "SELECT * FROM product WHERE shop_id=$shopId AND name LIKE '%$search%' AND deleted = 0 $sql_status ORDER BY product_id";
+    
+    }elseif(isset($_GET["p"]) || isset($_GET["order"])){
+    
+    }
+} elseif ($SessRole == "admin") {
+    $sql = "SELECT * FROM product ORDER BY product_id";
+
+    if(isset($_GET["search"])){
+        //search有傳值則將$sql進行篩選
+        $search = $_GET["search"];
+        $sql = "SELECT * FROM product WHERE shop_id=$shopId AND name LIKE '%$search%' ORDER BY product_id";
+    
+    }elseif(isset($_GET["p"]) || isset($_GET["order"])){
+    
+    }
+}
 
 
 
@@ -101,12 +153,12 @@ foreach ($storeRows as $storeRow) {
             <h2>商品列表</h2>
 
 
-            <p>共<?= $productCount ?>筆</p>
+            <p><?= $productCount ?>/<?= $allProductCount ?>筆 </p>
             <div class="container-fluid">
                 <form action="" class="mb-4">
                     <ul class="nav nav-tabs-custom">
                         <li class="nav-item">
-                            <a class="main-nav nav-link active <?= $status === 'all' ? 'active' : '' ?>" href="?status=all">全部</a>
+                            <a class="main-nav nav-link <?= $status === 'all' ? 'active' : '' ?>" href="?status=all">全部</a>
                         </li>
                         <li class="nav-item">
                             <a class="main-nav nav-link <?= $status === 'on' ? 'active' : '' ?>" href="?status=on">上架中</a>
@@ -115,7 +167,9 @@ foreach ($storeRows as $storeRow) {
                             <a class="main-nav nav-link <?= $status === 'off' ? 'active' : '' ?>" href="?status=off">已下架</a>
                         </li>
                     </ul>
-                    <hr>
+
+                    
+                    
                 </form>
 
                 <?php if ($productCount > 0): ?>
