@@ -90,7 +90,7 @@ foreach ($storeRows as $storeRow) {
                 <div class="container">
                     <div class="row d-flex justify-content-center">
                         <div class="col-12">
-                            <form action="../function/doAddProduct.php" method="post">
+                            <form action="../function/doAddProduct.php" method="post" enctype="multipart/form-data">
                                 <div class="row d-flex align-items-center flex-column flex-xl-row">
                                     
                                     <div class="col px-2">
@@ -101,8 +101,8 @@ foreach ($storeRows as $storeRow) {
                                                 <td class="dontNextLine fw-bold">商家</td>
                                                 <td>
                                                     <?php if($SessRole=="admin"):?>
-                                                    <select name="shop" id="" class="form-control form-control-custom" require>
-                                                        <option value="" disabled selected>選擇您的商家</option>
+                                                    <select name="shop_id" id="" class="form-control form-control-custom" require>
+                                                            <option value="" disabled selected>選擇您的商家</option>
                                                         <?php foreach($storeArr as $shopKey => $shopValue ): ?>
                                                             <option value="<?=$shopKey?>"><?=$shopValue?></option>
                                                         <?php endforeach; ?>
@@ -190,7 +190,7 @@ foreach ($storeRows as $storeRow) {
                                                 <label for="fileUpload" class="custom-file-upload mb-2">
                                                     選擇圖片
                                                 </label>
-                                                <input type="file" id="fileUpload" class="file-input" accept=".jpg, .png" multiple>
+                                                <input type="file" name="file[]" id="fileUpload" class="file-input" accept=".jpg, .png" multiple>
                                                 <div class="row row-cols-6 d-flex" id="preview-imgbox">
                                                     <!-- 圖片預覽區 -->
                                                 </div>

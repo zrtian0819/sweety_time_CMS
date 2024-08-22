@@ -9,11 +9,12 @@ if (session_status() == PHP_SESSION_NONE) {
 //避免誤點擊到此頁執行程式
 if (!isset($_POST["shop_id"])) {
     echo "非正常管道無法進入此頁";
-    header("location: ../page/product-list.php");
+    // header("location: ../page/product-list.php");
     exit;
 }
 
 print_r($_POST);
+print_r($_FILES);
 exit;
 
 $shop_id = $_POST["shop_id"];
