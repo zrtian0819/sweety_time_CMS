@@ -96,10 +96,10 @@ if ($result) {
 
                         <div class="d-flex justify-content-between my-3">
                             <div>
-                                <a class="btn btn-neumorphic user-btn <?=($order==1)?"active":""?>" href="users.php?p=<?= $page?>&order=1">排序
+                                <a class="btn btn-neumorphic user-btn" <?php if($order==1)echo"active"?>href="users.php?p=<?= $page?>&order=1">排序
                                     <i class="fa-solid fa-arrow-up-a-z"></i>
                                 </a>
-                                <a class="btn btn-neumorphic user-btn <?=($order==2)?"active":""?>" href="users.php?p=<?= $page?>&order=2">排序
+                                <a class="btn btn-neumorphic user-btn" <?php if($order==2)echo"active"?>href="users.php?p=<?= $page?>&order=2">排序
                                     <i class="fa-solid fa-arrow-down-a-z"></i>
                                 </a>
                             </div>

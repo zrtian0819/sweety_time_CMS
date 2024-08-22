@@ -167,12 +167,14 @@ h6 {
   text-wrap: nowrap;
   overflow-y: auto;
   overflow-x: hidden;
-  ul{
+
+  ul {
     height: auto;
-    transition:0.6s
+    transition: 0.6s
   }
-  ul{
-    transition:0.6s;
+
+  ul {
+    transition: 0.6s;
   }
 }
 
@@ -182,26 +184,26 @@ h6 {
   border-radius: 10px 0 0 10px;
 }
 
-.adminToggle{
+.adminToggle {
   height: 0 !important;
   overflow: hidden;
   opacity: 0;
 }
 
-.storeToggle{
+.storeToggle {
   height: 0 !important;
   overflow: hidden;
   opacity: 0;
   border-radius: 10px 0 0 10px;
 }
 
-.adminToggle{
+.adminToggle {
   height: 0 !important;
   overflow: hidden;
   opacity: 0;
 }
 
-.storeToggle{
+.storeToggle {
   height: 0 !important;
   overflow: hidden;
   opacity: 0;
@@ -226,6 +228,30 @@ h6 {
 
 .btn-neumorphic:active {
   box-shadow: inset 8px 8px 16px #efbeb6, inset -8px -8px 16px #ffffff;
+}
+
+
+/* Joe的文字按鈕動態效果 */
+.btn-animation {
+
+  /* 顯示層*/
+  .btn-animation-innerSpan {
+    /* 包覆層*/
+    width: 0;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    height: auto;
+    text-wrap: nowrap;
+    transition: 0.3s;
+  }
+
+  &:hover {
+    .btn-animation-innerSpan {
+      width: auto;
+      margin-left: 5px;
+    }
+  }
 }
 
 .form-control-neumorphic {
@@ -328,7 +354,7 @@ h6 {
   color: var(--text-color);
   box-shadow: none;
   border-radius: 20px 20px 0px 0px;
-  border:.3px solid #e9aba1;
+  border: .3px solid #e9aba1;
 }
 
 .nav-tabs-custom .nav-link.active {

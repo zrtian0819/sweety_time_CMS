@@ -10,7 +10,7 @@ $user_id = $_GET["user_id"];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == 0) {
-        $targetDir = '/Applications/XAMPP/xamppfiles/htdocs/project/images/users/';
+        $targetDir = '../images/users/';
         $fileType = pathinfo($_FILES['profile_image']['name'], PATHINFO_EXTENSION);
         $allowTypes = array('jpg', 'png', 'jpeg', 'gif');
 
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 // 更新資料庫中的圖片名稱
                 $sql = "UPDATE users SET portrait_path='$newFileName' WHERE user_id = $user_id";
                 if ($conn->query($sql)) {
-                    echo "圖片更新成功";
+                    // echo "圖片更新成功";
                     header("Location: user-edit.php?user_id=$user_id");
                     exit;
                 } else {
@@ -49,21 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     case UPLOAD_ERR_FORM_SIZE:
                         echo "檔案大小超過限制";
                         break;
-                    case UPLOAD_ERR_PARTIAL:
-                        echo "檔案只上傳了部分";
-                        break;
-                    case UPLOAD_ERR_NO_FILE:
-                        echo "沒有檔案被上傳";
-                        break;
-                    case UPLOAD_ERR_NO_TMP_DIR:
-                        echo "缺少臨時檔案夾";
-                        break;
-                    case UPLOAD_ERR_CANT_WRITE:
-                        echo "檔案寫入失敗";
-                        break;
-                    case UPLOAD_ERR_EXTENSION:
-                        echo "檔案上傳被擴展阻止";
-                        break;
                     default:
                         echo "未知錯誤代碼: " . $error;
                         break;
@@ -72,8 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             echo "不支援的檔案格式";
         }
-    } else {
-        echo "沒有檔案上傳或上傳錯誤";
     }
 
     $name = $_POST['name'];
@@ -82,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $sql = "UPDATE users SET name = '$name', password = '$password', email = '$email' WHERE user_id = $user_id";
     if ($conn->query($sql)) {
-        echo "資料更新成功";
+        // echo "資料更新成功";
     } else {
         echo "資料更新失敗: " . $conn->error;
     }
@@ -110,7 +93,7 @@ $conn->close();
 <html lang="en">
 
 <head>
-    <title><?= htmlspecialchars($title) ?></title>
+    <title><?= ($title) ?></title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <?php include("../css/css_Joe.php"); ?>
@@ -121,6 +104,11 @@ $conn->close();
 
         .user-search {
             width: 200px;
+        }
+
+        .user-img {
+            width: 300px;
+            height: 300px;
         }
     </style>
 </head>
@@ -134,47 +122,48 @@ $conn->close();
         <div class="container-fluid d-flex flex-row px-4">
             <div class="main col neumorphic p-5">
                 <div class="py-2">
-                    <a class="btn btn-neumorphic user-btn" href="user.php?user_id=<?= htmlspecialchars($row["user_id"]) ?>" title="回使用者"><i class="fa-solid fa-left-long"></i></a>
+                    <a class="btn btn-neumorphic user-btn" href="user.php?user_id=<?= ($row["user_id"]) ?>" title="回使用者"><i class="fa-solid fa-left-long"></i></a>
                 </div>
                 <h2 class="mb-3">修改資料</h2>
                 <div class="container">
                     <div class="row">
                         <?php if ($userCount > 0): ?>
-                            <form action="user-edit.php?user_id=<?= htmlspecialchars($user_id) ?>" method="post" enctype="multipart/form-data">
-                                <div class="col d-flex justify-content-center align-items-center">
-                                    <div class="mb-3">
-                                        <label for="profile_image">上傳或更改圖片:</label><br>
-                                        <img src="<?= htmlspecialchars($imagePath) ?>" alt="Profile Image" style="width:300px;height:300px;" class="object-fit-fill">
-                                        <input type="file" name="profile_image" id="profile_image">
+                            <form action="user-edit.php?user_id=<?= ($user_id) ?>" method="post" enctype="multipart/form-data">
+                                <div class="mb-3 d-flex justify-content-center align-items-center flex-column">
+                                    <label for="profile_image">
+                                        <input type="file" name="profile_image" class="my-3 ms-5 ps-5" data-target="preview_img">
+                                    </label>
+                                    <div>
+                                        <img src="<?= ($imagePath) ?>" alt="Profile Image" class="object-fit-fill user-img" id="preview_img">
                                     </div>
                                 </div>
-                                <input type="hidden" name="user_id" value="<?= htmlspecialchars($user_id) ?>">
+                                <input type="hidden" name="user_id" value="<?= ($user_id) ?>">
                                 <table class="table table-bordered">
                                     <tr>
                                         <th>Name</th>
                                         <td>
-                                            <input type="text" value="<?= htmlspecialchars($row["name"]) ?>" class="form-control" name="name">
+                                            <input type="text" value="<?= ($row["name"]) ?>" class="form-control" name="name">
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>Password</th>
                                         <td>
-                                            <input type="password" value="<?= htmlspecialchars($row["password"]) ?>" class="form-control" name="password">
+                                            <input type="password" value="<?= ($row["password"]) ?>" class="form-control" name="password">
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>Email</th>
                                         <td>
-                                            <input type="text" value="<?= htmlspecialchars($row["email"]) ?>" class="form-control" name="email">
+                                            <input type="text" value="<?= ($row["email"]) ?>" class="form-control" name="email">
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>Birthday</th>
-                                        <td><?= htmlspecialchars($row["birthday"]) ?></td>
+                                        <td><?= ($row["birthday"]) ?></td>
                                     </tr>
                                     <tr>
                                         <th>Sign up time</th>
-                                        <td><?= htmlspecialchars($row["sign_up_time"]) ?></td>
+                                        <td><?= ($row["sign_up_time"]) ?></td>
                                     </tr>
                                 </table>
                                 <div class="d-flex justify-content-end">
@@ -190,6 +179,24 @@ $conn->close();
         </div>
     </div>
     <?php include("../js.php"); ?>
+    <script>
+        let input =document.querySelector('input[name=profile_image]')
+        input.addEventListener('change',function(e){
+            readURL(e.target);
+        })
+        function readURL(input){
+            if(input.files && input.files[0]){
+                let reader = new FileReader();
+                reader.onload = function(e){
+                    let imgId = input.getAttribute('data-target')
+                    let img =document.querySelector('#'+imgId)
+                    img.setAttribute('src',e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        
+    </script>
 </body>
 
 </html>
