@@ -84,8 +84,6 @@ $rowProduct = $resultProduct->fetch_assoc();
             color: #fff;
             border: none;
         }
-
-       
     </style>
 </head>
 
@@ -111,13 +109,17 @@ $rowProduct = $resultProduct->fetch_assoc();
                 <!-- 建立時間/作者/分類 -->
                 <div class="row-col-3 d-flex justify-content-start">
                     建立時間：<?= $row["created_at"] ?>／作者：<?= $row["created_at"] ?>／分類：<?= $rowProduct["class_name"] ?>
+
                 </div>
 
                 <!-- 圖片 -->
                 <div class="row-col-3 d-flex justify-content-center ">
-                    <img style="height: 200px; object-fit: cover;" class="rounded " src="../images/article/<?= $row["img_path"] ?>" alt="<?= $row["title"] ?>">
+                    <div class="m-3">
+                        <img style="height: auto; object-fit: cover; max-width: 100%;" class="rounded m" src="../images/article/<?= $row["img_path"] ?>" alt="<?= $row["title"] ?>">
+                    </div>
                 </div>
 
+                <!-- 內文 -->
                 <div class="row-col-3 d-flex justify-content-center">
                     <br>
                     <?= $row["content"] ?>
@@ -127,7 +129,7 @@ $rowProduct = $resultProduct->fetch_assoc();
             <div class="container changePage text-end">
                 <div class="row">
                     <?php if ($id > 1) : ?>
-                        <div class="py-4" >
+                        <div class="py-4">
                             <a href="article.php?id=<?= $id - 1 ?>" class="btn-custom m-2 p-2 text-decoration-none">上一篇文章</a>
                         </div>
                     <?php endif ?>
