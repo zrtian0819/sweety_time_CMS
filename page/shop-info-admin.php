@@ -85,6 +85,7 @@ $shopCount = $result->num_rows;
                                     <th class="dontNextLine text-center">地址</th>
                                     <th class="dontNextLine text-center">簡介</th>
                                     <th class="dontNextLine text-center">註冊時間</th>
+                                    <th class="dontNextLine text-center">啟用</th>
                                     <th class="dontNextLine text-center">操作</th>
                                     </tr>
                                 </thead>
@@ -105,10 +106,19 @@ $shopCount = $result->num_rows;
                                             </td>
                                             <td class="text-center align-middle"><?= $row["sign_up_time"] ?></td>
                                             <td class="text-center align-middle">
-                                                <a href="javascript:void(0);" class="btn btn-custom dontNextLine btn-sm m-2" data-shop-id="<?= $row['shop_id'] ?>" onclick="saveShopIdAndRedirect(this)">
+                                                <?php
+                                                $activation = $row["activation"];
+                                                if ($activation == 1) {
+                                                    echo '<i class="fa-solid fa-check text-success"></i>';
+                                                } else {
+                                                    echo '<i class="fa-solid fa-xmark text-danger"></i>';
+                                                }
+                                                ?>
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                <a href="javascript:void(0);" class="btn btn-custom dontNextLine btn-sm m-2" data-shop-id="<?= $row['shop_id'] ?>" onclick="saveShopId(this)">
                                                         <i class="fa-solid fa-list"></i>
                                                 </a>
-                                                <a href="shop-delete-admin.php?shopId=<?= $row["shop_id"] ?>" class="btn btn-danger dontNextLine btn-sm m-2"><i class="fa-solid fa-trash"></i></a>
                                             </td>
                                         </tr>
                                      <?php endforeach; ?>
@@ -148,9 +158,12 @@ $shopCount = $result->num_rows;
             </div>
         </div>
     </div>
+    
     <?php include("../js.php"); ?>
+
+    <!-- 使用Ajax將shop_id存入session -->
     <script>
-        function saveShopIdAndRedirect(element) {
+        function saveShopId(element) {
             // 取得 shop_id
             const shopId = element.getAttribute('data-shop-id');
             
