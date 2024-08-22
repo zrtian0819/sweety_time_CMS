@@ -111,6 +111,7 @@ if (isset($_GET["order"])) {
     $sql_order = "ORDER BY product_id ASC";
 }
 
+//判斷登入角色以決定篩選條件
 if ($SessRole == "shop") {
     $where_shop = "shop_id = $shopId";
     $where_delete = "deleted = 0";

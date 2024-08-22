@@ -6,6 +6,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 $name = $_SESSION["user"]["name"];
+$SessRole = $_SESSION["user"]["role"];
 
 ?>
 
@@ -29,7 +30,16 @@ $name = $_SESSION["user"]["name"];
         <div class="main col neumorphic p-5">
 
             <h2 class="fw-bolder"><?= $name?>, 您好！</h2>
-            <p>請使用側邊導覽列以管理您的資料。</p>
+            <p>
+                <?php if($SessRole=="admin"):?>
+                    請使用側邊導覽列以管理您的平台資料。
+                <?php elseif($SessRole=="shop"): ?>
+                    請使用側邊導覽列以管理您的商店資料。
+                <?php else:?>
+                    您沒有任何後台權限。
+                <?php endif;?>
+
+            </p>
             
 
     </div>
