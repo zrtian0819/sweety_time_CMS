@@ -1,15 +1,7 @@
 <?php
 require_once("../db_connect.php");      //避免sidebar先載入錯誤,人天先加的
 
-if (session_status() == PHP_SESSION_NONE) {  //啟動session
-    session_start();
-}
-
-// 检查用户是否已登录以及是否有角色信息
-if (!isset($_SESSION["user"])) {
-    header("Location: login.php");
-    exit;
-}
+include("../function/login_status_inspect.php");
 
 $role = $_SESSION["user"]["role"];
 
@@ -18,7 +10,7 @@ $shop_id = $_SESSION["shop"]["shop_id"] ?? null;
 
 // 根据角色重定向到不同頁面
 if ($role != "admin") {
-    header("Location: dashboard-home_Joe.php");
+    header("Location: shop-info.php");
     exit;
 }
 
@@ -113,7 +105,9 @@ $shopCount = $result->num_rows;
                                             </td>
                                             <td class="text-center align-middle"><?= $row["sign_up_time"] ?></td>
                                             <td class="text-center align-middle">
-                                                <a href="shop-info-admin.php?shopId=<?= $row["shop_id"] ?>" class="btn btn-custom dontNextLine btn-sm m-2"><i class="fa-solid fa-list"></i></a>
+                                                <a href="javascript:void(0);" class="btn btn-custom dontNextLine btn-sm m-2" data-shop-id="<?= $row['shop_id'] ?>" onclick="saveShopIdAndRedirect(this)">
+                                                        <i class="fa-solid fa-list"></i>
+                                                </a>
                                                 <a href="shop-delete-admin.php?shopId=<?= $row["shop_id"] ?>" class="btn btn-danger dontNextLine btn-sm m-2"><i class="fa-solid fa-trash"></i></a>
                                             </td>
                                         </tr>
@@ -155,6 +149,25 @@ $shopCount = $result->num_rows;
         </div>
     </div>
     <?php include("../js.php"); ?>
-
+    <script>
+        function saveShopIdAndRedirect(element) {
+            // 取得 shop_id
+            const shopId = element.getAttribute('data-shop-id');
+            
+            // 使用Ajax將shop_id存入session
+            $.ajax({
+                url: '../api/doSaveShopId.php', // 你需要建立的PHP檔案來處理session儲存
+                method: 'POST',
+                data: { shop_id: shopId },
+                success: function(response) {
+                    // 如果成功，重定向到 shop-info-edit.php
+                    window.location.href = '../page/shop-info-edit.php?shopId=' + shopId;
+                },
+                error: function() {
+                    alert('Failed to save shop ID.');
+                }
+            });
+        }
+    </script>
 </body>
 </html>
