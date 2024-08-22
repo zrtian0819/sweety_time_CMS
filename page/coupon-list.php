@@ -2,19 +2,20 @@
 
 require_once("../db_connect.php");
 include("../function/login_status_inspect.php");
+include("../function/rebuildURL.php");
 
 // 抓取現在日期以做判斷和篩選
 $now = date("Y-m-d");
 
 // 設定SQL查詢語句樣板 
-$sql = "SELECT * FROM coupon WHERE 1=1"; // 利用永遠為真的 `1=1` 以利加後續條件
+$sql_all = "SELECT * FROM coupon WHERE 1=1"; // 利用永遠為真的 `1=1` 以利加後續條件
 $params = []; // 用來裝條件
 $types = ""; // 用來紀錄條件型別
 
 // 搜尋條件
 if (isset($_GET["search"]) && !empty($_GET["search"])) {
     $search = "%" . $_GET["search"] . "%";
-    $sql .= " AND name LIKE ?";
+    $sql_all .= " AND name LIKE ?";
     array_push($params, $search);
     $types .= "s";
 }
@@ -22,7 +23,7 @@ if (isset($_GET["search"]) && !empty($_GET["search"])) {
 // 啟用狀態條件
 if (isset($_GET["act_status"]) && $_GET["act_status"] !== "") {
     $act_status = $_GET["act_status"];
-    $sql .= " AND activation = ?";
+    $sql_all .= " AND activation = ?";
     array_push($params, $act_status);
     $types .= "i";
 }else{
@@ -38,17 +39,17 @@ if(!isset($_GET["expr_status"])) {
         case "expr_all":
             break;
         case "expr_notStart":
-            $sql .= " AND start_time > ?";
+            $sql_all .= " AND start_time > ?";
             array_push($params, $now);
             $types .= "s";
             break;
         case "expr_canUse":
-            $sql .= " AND start_time <= ? AND (end_date >= ? OR permanent = 1)";
+            $sql_all .= " AND start_time <= ? AND (end_date >= ? OR permanent = 1)";
             $params = array_merge($params, [$now, $now]);
             $types .= str_repeat("s", 2);
             break;
         case "expr_exprd":
-            $sql .= " AND end_date < ? AND permanent = 0";
+            $sql_all .= " AND end_date < ? AND permanent = 0";
             array_push($params, $now);
             $types .= "s";
             break;
@@ -62,50 +63,70 @@ if (!isset($_GET["sort"])){
     $sort = $_GET["sort"];
     switch ($sort) {
         case "id_asc":
-            $sql .= " ORDER BY coupon_id ASC";
+            $sql_all .= " ORDER BY coupon_id ASC";
             break;
         case "discount_asc":
-            $sql .= " ORDER BY discount_rate ASC";
+            $sql_all .= " ORDER BY discount_rate ASC";
             break;
         case "discount_desc":
-            $sql .= " ORDER BY discount_rate DESC";
+            $sql_all .= " ORDER BY discount_rate DESC";
             break;
         case "start_asc":
-            $sql .= " ORDER BY start_time ASC";
+            $sql_all .= " ORDER BY start_time ASC";
             break;
         case "start_desc":
-            $sql .= " ORDER BY start_time DESC";
+            $sql_all .= " ORDER BY start_time DESC";
             break;
         case "end_asc":
-            $sql .= " ORDER BY end_date ASC";
+            $sql_all .= " ORDER BY end_date ASC";
             break;
         case "end_desc":
-            $sql .= " ORDER BY end_date DESC";
+            $sql_all .= " ORDER BY end_date DESC";
             break;
         case "created_asc":
-            $sql .= " ORDER BY created_at ASC";
+            $sql_all .= " ORDER BY created_at ASC";
             break;
         case "created_desc":
-            $sql .= " ORDER BY created_at DESC";
+            $sql_all .= " ORDER BY created_at DESC";
             break;
     }
 }
 
 // 準備撈資料
-$stmt = $conn->prepare($sql);
+$stmt_all = $conn -> prepare($sql_all);
 
-// 將參數化的搜尋條件取代佔位符
+// 將參數化的搜尋&篩選條件取代佔位符
 if (!empty($params)) {
-    $stmt->bind_param($types, ...$params);
+    $stmt_all -> bind_param($types, ...$params);
 }
 
 // 執行撈資料 & 取得結果
-$stmt->execute();
-$result = $stmt->get_result();
-$rows = $result->fetch_all(MYSQLI_ASSOC);
+$stmt_all->execute();
+$result_all = $stmt_all -> get_result();
+$rows_all = $result_all->fetch_all(MYSQLI_ASSOC);
 
-// $stmt->close();
-// $conn->close();
+// 計算頁數
+$per_page = isset($_GET["per_page"])? $_GET["per_page"] : 10;
+$total_rows = count($rows_all);
+$total_pages = ceil($total_rows / $per_page);
+
+// 依據目前頁碼來撈第二次資料
+$current_page = isset($_GET["page"])? $_GET["page"] : 1;
+$sql_page = $sql_all . " LIMIT ?, ?";
+
+// 將分頁參數加入到參數陣列中
+$start_item = ($current_page - 1) * $per_page;
+array_push($params, $start_item, $per_page);
+$types .= "ii";
+
+$stmt_page = $conn->prepare($sql_page);
+
+// 綁定所有參數
+$stmt_page->bind_param($types, ...$params);
+
+$stmt_page->execute();
+$result_page = $stmt_page->get_result();
+$rows_page = $result_page->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -117,7 +138,9 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
     <title>優惠券種類列表</title>
     <?php include("../css/css_Joe.php"); ?>
     <style>
-
+        .coupon-input-bar{
+            width: 50px;
+        }
     </style>
 </head>
 
@@ -170,6 +193,15 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
             <div class="">
             </div>
 
+            <div class="my-2">
+                <form action="" class="d-flex align-items-center">
+                    <span>每頁</span>
+                    <input type="text" class="form-control coupon-input-bar" name="per_page" value="<?= $per_page ?>" placeholder="">
+                    <span>筆</span>
+                    <button button type = "submit" class="btn neumorphic mx-2">GO</button>
+                </form>
+            </div>
+
             <!-- 顯示資料的表格 -->
             <table class="table table-bordered">
                 <thead>
@@ -184,7 +216,7 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($rows as $row) : ?>
+                    <?php foreach ($rows_page as $row) : ?>
                         <tr>
                             <td><?= $row['coupon_id'];?></td>
                             <td><?= $row['name'];?></td>
@@ -220,6 +252,20 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                     <?php endforeach;?>
                 </tbody>
             </table>
+            <!-- 換頁按鈕 -->
+
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
+                            <li class="page-item <?php if ($current_page == $i) echo "active"; ?>">
+                                <a class="page-link" href="<?= rebuild_url(['page' => $i]) ?>">
+                                    <?= $i ?>
+                                </a>
+                            </li>
+                        <?php endfor; ?>
+                    </ul>
+                </nav>
+
         </div>
 
     </div>
