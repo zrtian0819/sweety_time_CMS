@@ -14,9 +14,10 @@ $per_page = 10;
 $startItem = ($page - 1) * $per_page;
 
 //預設sql
-$sql = "SELECT * FROM lesson WHERE 1=1";
-
-
+$sql = "SELECT lesson.*, IFNULL(COUNT(student.lesson_id), 0) AS student_count 
+        FROM lesson 
+        LEFT JOIN student ON lesson.lesson_id = student.lesson_id 
+        WHERE 1=1";
 
 //狀態
 if ($status == "on") {
@@ -63,22 +64,16 @@ if ($search != "" && $class != "all") {
 //排序
 switch ($sort) {
     case "id":
-        $sql .= " ORDER BY lesson_id ASC";
+        $sql .= " GROUP BY lesson.lesson_id ORDER BY lesson.lesson_id ASC";
         break;
-
-        //待修正
-        // case "count":
-        //     $sql = "SELECT lesson.*, 
-        //            IFNULL(COUNT(student.lesson_id), 0) AS student_count 
-        //     FROM lesson
-        //     LEFT JOIN student ON lesson.lesson_id = student.lesson_id 
-        //     WHERE 1=1 GROUP BY lesson.lesson_id ORDER BY student_count DESC";
-        //     break;
+    case "people":
+        $sql .= " GROUP BY lesson.lesson_id ORDER BY student_count DESC";
+        break;
     case "date":
-        $sql .= " ORDER BY start_date ASC";
+        $sql .= " GROUP BY lesson.lesson_id ORDER BY lesson.start_date ASC";
         break;
-    case "":
-        $sql;
+    default:
+        $sql .= " GROUP BY lesson.lesson_id";
 }
 
 //符合上述條件的總數
@@ -95,8 +90,6 @@ $total_page = ceil($allCount / $per_page);
 $result = $conn->query($sql);
 $rows = $result->fetch_all(MYSQLI_ASSOC);
 
-
-
 //teacher
 $sqlTeacher = "SELECT * FROM teacher ORDER BY teacher_id";
 $resultTea = $conn->query($sqlTeacher);
@@ -110,33 +103,6 @@ foreach ($rowsTea as $teacher) {
     // print_r($teacherArr);
 }
 
-//student
-$sqlStudent = "SELECT student.lesson_id , COUNT(lesson.lesson_id) AS student_count 
-FROM lesson 
-JOIN student ON lesson.lesson_id = student.lesson_id 
-GROUP BY lesson.lesson_id";
-$resultStu = $conn->query($sqlStudent);
-$rowStu = $resultStu->fetch_all(MYSQLI_ASSOC);
-// print_r($rowStu);
-
-// 學生關聯式陣列
-// 用所有的 lesson_id 初始化 $studentArr
-$sqlAllLessons = "SELECT lesson_id FROM lesson";
-$resultAllLessons = $conn->query($sqlAllLessons);
-$allLessons = $resultAllLessons->fetch_all(MYSQLI_ASSOC);
-
-$studentArr = [];
-foreach ($allLessons as $lesson) {
-    $studentArr[$lesson['lesson_id']] = 0;
-}
-
-
-// 填入實際的學生數
-foreach ($rowStu as $student) {
-    $studentArr[$student["lesson_id"]] = $student["student_count"];
-}
-
-
 //分類
 $sqlProductClass = "SELECT * FROM product_class ORDER BY product_class_id";
 $resultPro = $conn->query($sqlProductClass);
@@ -147,8 +113,6 @@ $productClassArr = [];
 foreach ($rowsPro as $productClass) {
     $productClassArr[$productClass["product_class_id"]] = $productClass["class_name"];
 };
-
-
 
 ?>
 
@@ -161,7 +125,7 @@ foreach ($rowsPro as $productClass) {
     <title>Lesson</title>
     <?php include("../css/css_Joe.php"); ?>
     <style>
-        .addClass{
+        .addClass {
             margin-left: auto;
         }
     </style>
@@ -172,6 +136,8 @@ foreach ($rowsPro as $productClass) {
     <div class="container-fluid d-flex flex-row px-4">
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
         <div class="main col neumorphic p-5 pt-3">
+            <h1>課程列表</h1>
+
             <div class="py-3">
                 <form action="">
                     <div class="input-group">
@@ -187,7 +153,7 @@ foreach ($rowsPro as $productClass) {
                         </select>
                         <select class="form-select" aria-label="Default select example" name="sort">
                             <option value="id">依課程編號排序(預設)</option>
-                            <option value="count">依報名人數排序</option>
+                            <option value="people">依報名人數排序</option>
                             <option value="date">依時間排序</option>
                         </select>
                         <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
@@ -204,9 +170,10 @@ foreach ($rowsPro as $productClass) {
                 <li class="nav-item">
                     <a class="main-nav nav-link <?= $status === 'off' ? 'active' : '' ?>" href="?status=off&search=<?= $search ?>&class=<?= $class ?>&sort=<?= $sort ?>&p=<?= $page ?>">已下架</a>
                 </li>
+
                 <a href="addLesson.php" class="btn btn-custom addClass">新增課程</a>
             </ul>
-            
+
             <!-- Content -->
             <table class="table table-hover">
                 <thead class="text-center">
@@ -235,7 +202,14 @@ foreach ($rowsPro as $productClass) {
                             <td><?= $teacherArr[$row["teacher_id"]] ?></td>
                             <td><?= $formartDate ?></td>
                             <td><?= $row["quota"] ?></td>
-                            <td><?= $studentArr[$row["lesson_id"]] ?></td>
+                            <td><?php
+                                $sqlStudent = "SELECT * FROM student WHERE lesson_id = $id";
+                                $resultStu = $conn->query($sqlStudent);
+                                $count = $resultStu->num_rows;
+                                $rowStu = $resultStu->fetch_assoc();
+                                ?>
+                                <?= $count ?></td>
+                            </td>
                             <td><a href="lesson-details.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-eye"></i></a>
                                 <a href="editLesson.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-pen"></i></a>
                                 <?php if ($status === "off"): ?>
@@ -254,13 +228,15 @@ foreach ($rowsPro as $productClass) {
             </table>
             <?php if (isset($page)) : ?>
                 <nav aria-label="Page navigation example">
-                    <ul class="pagination">
+                    <ul class="pagination justify-content-center">
                         <?php for ($i = 1; $i <= $total_page; $i++) : ?>
-                            <li class="page-item <?php if ($i == $page) echo "active" ?>"><a class="page-link btn-custom" href="lesson.php?status=<?= $status ?>&search=<?= $search ?>&class=<?= $class ?>&sort=<?= $sort ?>&p=<?= $i ?>"><?= $i ?></a></li>
+                            <li class="page-item m-2 <?php if ($i == $page) echo "active" ?>"><a class="page-link btn-custom" href="lesson.php?status=<?= $status ?>&search=<?= $search ?>&class=<?= $class ?>&sort=<?= $sort ?>&p=<?= $i ?>"><?= $i ?></a></li>
                         <?php endfor; ?>
                     </ul>
+
                 </nav>
             <?php endif; ?>
+
         </div>
     </div>
     <?php include("../js.php") ?>
