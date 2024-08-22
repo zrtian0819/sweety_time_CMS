@@ -7,18 +7,12 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 //避免誤點擊到此頁執行程式
-if (!isset($_POST["name"])) {
+if (!isset($_POST["shop_id"])) {
     echo "非正常管道無法進入此頁";
     sleep(1);
     header("location: dashboard-home_Joe.php");
     exit;
 }
-
-?>
-<pre>
-    <?php echo json_encode($_POST); ?>
-</pre>
-<?php
 
 $shop_id = $_POST["shop_id"];
 $name = $_POST["name"];
@@ -31,16 +25,16 @@ $discount = $_POST["discount"];
 $available = $_POST["available"];
 $label = $_POST["label"];
 $editor = $_SESSION["user"]["user_id"];
-$editTime = date('Y/m/d H:i:s');
+$createdTime = date('Y/m/d H:i:s');
 
 $sql = "INSERT INTO product 
-(shop_id,name, price, stocks ,product_class_id,description,keywords,discount,available,label,edit_user_id,last_edited_at)
+(shop_id,name, price, stocks ,product_class_id,description,keywords,discount,available,label,edit_user_id,created_at,deleted)
 VALUES 
-('$shop_id','$name', '$price', '$stocks','$class','$description', '$keywords','$discount','$available','$label','$editor','$editTime')";
+('$shop_id','$name', '$price', '$stocks','$class','$description', '$keywords','$discount','$available','$label','$editor','$createdTime','0')";
 
-echo $sql;
+// echo $sql;
 
-exit;
+// exit;
 
 if ($conn->query($sql) === TRUE) {
     echo "更新成功";
@@ -50,7 +44,7 @@ if ($conn->query($sql) === TRUE) {
 
 //導頁
 sleep(1);
-header("location: ../page/product.php?productId=$product_id");
+header("location: ../page/product-list.php");
 
 // 關閉資料庫連結
 $conn->close();
