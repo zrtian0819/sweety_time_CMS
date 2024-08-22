@@ -58,10 +58,7 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
     <?php include("../css/css_Joe.php"); ?>
     <script src="https://cdn.tiny.cloud/1/cfug9ervjy63v3sj0voqw9d94ojiglomezxkdd4s5jr9owvu/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
     <style>
-        textarea {
-            width: 100%;
-            height: 100%;
-        }
+
     </style>
 </head>
 
@@ -73,11 +70,17 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
         <div class="main col neumorphic p-5 pt-4">
             <!-- Content -->
             <a href="lesson.php" class="btn btn-custom"><i class="fa-solid fa-arrow-left"></i></a>
-            <form action="../function/doUpdateLesson.php?id=<?= $id ?>" method="post">
+            <form action="../function/doUpdateLesson.php?id=<?= $id ?>" method="POST" enctype="multipart/form-data">
                 <h1><input type="textarea" class="textarea-custom" value="<?= $row["name"] ?>" name="name"></h1>
                 <div class="row justify-content-center">
                     <div class="col-lg-3 m-2">
                         <img src="../images/lesson/<?= $row["img_path"] ?>" alt="<?= $row["name"] ?>" class="ratio ratio-4x3">
+                        <div class="mb-2 upload text-center">
+                            <div class="uploadArea">
+                                <h4>更新照片</h4>
+                            </div>
+                            <input type="file" class="form-control" name="pic" required>
+                        </div>
                         <table class="table mt-2 table-hover">
                             <tbody>
                                 <tr>
