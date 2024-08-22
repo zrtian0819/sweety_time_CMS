@@ -20,32 +20,27 @@ if (!isset($_POST["name"])) {
 </pre>
 <?php
 
-$product_id = $_POST["id"];
+$shop_id = $_POST["shop_id"];
 $name = $_POST["name"];
 $price = $_POST["price"];
+$stocks = $_POST["stocks"];
+$class = $_POST["class"];
 $description = $_POST["description"];
 $keywords = $_POST["keywords"];
-$stocks = $_POST["stocks"];
-$available = $_POST["available"];
 $discount = $_POST["discount"];
+$available = $_POST["available"];
 $label = $_POST["label"];
-$class = $_POST["class"];
 $editor = $_SESSION["user"]["user_id"];
 $editTime = date('Y/m/d H:i:s');
 
-$sql = "UPDATE product SET
-name = '$name',
-price = $price,
-description = '$description',
-keywords = '$keywords',
-stocks = '$stocks',
-available = '$available',
-discount = '$discount',
-label = '$label',
-product_class_id = '$class',
-edit_user_id = '$editor',
-last_edited_at = '$editTime'
-WHERE product_id = '$product_id'";
+$sql = "INSERT INTO product 
+(shop_id,name, price, stocks ,product_class_id,description,keywords,discount,available,label,edit_user_id,last_edited_at)
+VALUES 
+('$shop_id','$name', '$price', '$stocks','$class','$description', '$keywords','$discount','$available','$label','$editor','$editTime')";
+
+echo $sql;
+
+exit;
 
 if ($conn->query($sql) === TRUE) {
     echo "更新成功";
