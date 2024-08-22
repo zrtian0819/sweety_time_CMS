@@ -61,6 +61,23 @@ if (!isset($_GET["expr_status"])) {
     }
 }
 
+// 是否已用條件
+if (!isset($_GET["used_status"])) {
+    $used_status = "used_all";
+} else {
+    $used_status = $_GET["used_status"];
+    switch ($used_status) {
+        case "used_all":
+            break;
+        case "used_notUsed":
+            $sql_userCoupon .= ' AND uc.used_status = "FALSE"';
+            break;
+        case "used_used":
+            $sql_userCoupon .= ' AND uc.used_status = "TRUE"';
+            break;
+    }
+}
+
 // 單張優惠券可用狀態條件
 if (isset($_GET["enabled_status"]) && $_GET["enabled_status"] !== "") {
     $enabled_status = $_GET["enabled_status"];
@@ -107,8 +124,14 @@ if (!isset($_GET["sort"])) {
     }
 }
 
-// 計算頁數
-$per_page = isset($_GET["per_page"]) ? $_GET["per_page"] : 10;
+// 處理per_page參數
+if(!isset($_GET["per_page"]) || $_GET["per_page"] == NULL || $_GET["per_page"] == 0){
+    $per_page = 10;
+}else{
+    $per_page = $_GET["per_page"];
+}
+
+// 第一次撈資料，計算頁數
 $total_stmt = $conn->prepare($sql_userCoupon);
 if (!empty($params)) {
     $total_stmt->bind_param($types, ...$params);
@@ -125,7 +148,7 @@ $sql_userCoupon .= " LIMIT ?, ?";
 array_push($params, $start_item, $per_page);
 $types .= "ii";
 
-// 準備查詢資料
+// 執行第二次查詢資料
 $userCoupon_stmt = $conn->prepare($sql_userCoupon);
 if (!empty($params)) {
     $userCoupon_stmt->bind_param($types, ...$params);
@@ -134,7 +157,7 @@ $userCoupon_stmt->execute();
 $userCoupon_result = $userCoupon_stmt->get_result();
 $userCoupon_rows = $userCoupon_result->fetch_all(MYSQLI_ASSOC);
 
-// 取得users資料表中的資料
+// 額外查詢users資料表中的資料
 $user_sql = "SELECT * FROM users WHERE user_id = ?";
 $user_stmt = $conn->prepare($user_sql);
 $user_stmt->bind_param("i", $user_id);
@@ -150,7 +173,7 @@ $user_row = $user_result->fetch_assoc();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php  ?></title>
+    <title><?php echo $user_row['name'] ?>的優惠券</title>
     <?php include("../css/css_Joe.php"); ?>
     <style>
         .coupon-input-bar{
@@ -208,6 +231,11 @@ $user_row = $user_result->fetch_assoc();
                             <option <?php echo $expr_status == "expr_canUse" ? "selected" : ""; ?> value="expr_canUse"><span class="text-success">效期內</span></option>
                             <option <?php echo $expr_status == "expr_exprd" ? "selected" : ""; ?> value="expr_exprd"><span class="text-danger">已過期</span></option>
                         </select>
+                        <select class="form-select" aria-label="Default select example" name="used_status">
+                            <option <?php echo $used_status == "used_all" ? "selected" : ""; ?> value="used_all"><span class="text-secondary">不限使用狀態</span></option>
+                            <option <?php echo $used_status == "used_notUsed" ? "selected" : ""; ?> value="used_notUsed"><span class="text-success">未使用</span></option>
+                            <option <?php echo $used_status == "used_used" ? "selected" : ""; ?> value="used_used"><span class="text-danger">已使用</span></option>
+                        </select>
                         <select class="form-select" aria-label="Default select example" name="enabled_status">
                             <option <?php echo is_null($enabled_status) ? "selected" : ""; ?> value=""><span class="text-secondary">不限可用狀態</span></option>
                             <option <?php echo $enabled_status == "1" ? "selected" : ""; ?> value="1"><span class="text-success">可使用</span></option>
@@ -219,12 +247,14 @@ $user_row = $user_result->fetch_assoc();
             </div>
             <hr>
 
+            <!-- 設定一頁幾筆資料 -->
             <div class="my-2">
                 <form class="d-flex align-items-center">
                     <span>每頁</span>
                     <input type="text" class="form-control coupon-input-bar" name="per_page" id="perPageInput" value="<?= $per_page ?>" placeholder="">
                     <span>筆</span>
                     <a class="btn neumorphic mx-2" id="perPageBtn">GO</a>
+                    <span>，共有<?= $total_rows ?>筆資料</span>
                 </form>
             </div>
 
@@ -290,9 +320,16 @@ $user_row = $user_result->fetch_assoc();
                             <td>
                                 <?php
                                 if($userCoupon_row['used_status'] == "TRUE"){
-                                    echo "已使用, 使用時間為: ". "<br>". $userCoupon_row['used_time'];
+                                    echo 
+                                    "<span class='text-danger'>已使用</span>, 使用時間為: ".
+                                    "<br>".
+                                    $userCoupon_row['used_time'].
+                                    "<br>".
+                                    "<a href='./order-details.php?order_id=".
+                                    $userCoupon_row['order_id'].
+                                    "'>查看訂單資訊</a>";
                                 }else{
-                                    echo "未使用";
+                                    echo "<span class='text-success'>未使用</span>";
                                 }
                                 ?>
                             </td>
@@ -325,9 +362,21 @@ $user_row = $user_result->fetch_assoc();
 
     </div>
 
+    <!-- 錯誤失敗訊息 -->
+    <!-- 有時間可以用中介頁面來避免使用GET -->
+    <!-- 有時間可以用別的設計取代alert -->
+    <?php
+        if (isset($_GET['message'])) {
+            $message = htmlspecialchars($_GET['message']);
+            echo "<script type='text/javascript'>alert('$message');</script>";
+        }
+    ?>
+
     <!-- Javascript 寫這裡 -->
     <?php include("../js.php"); ?>
     <script>
+        
+        // 用AJAX動態更改單張優惠券的可用狀態
         const enabled_switches = document.querySelectorAll('.enabled_switch');
 
         enabled_switches.forEach(function(enabled_switch) {
@@ -385,16 +434,18 @@ $user_row = $user_result->fetch_assoc();
                 });
             });
         })
+
+        // 設定一頁幾筆資料
         document.querySelector('#perPageBtn').addEventListener('click', function() {
             let perPageValue = document.querySelector('#perPageInput').value;
 
-            // PHP 生成的基础 URL，包含当前所有参数（除了 per_page）
+            // 抓取原來的網址並將 per_page 參數清空
             let baseUrl = '<?= rebuild_url(["per_page" => null]) ?>';
 
-            // 拼接新的 per_page 参数
+            // 再把 per_page 加到網址中
             let newUrl = baseUrl + '&per_page=' + perPageValue;
 
-            // 进行页面跳转
+            // 跳轉到新網址
             window.location.href = newUrl;
         });
     </script>
