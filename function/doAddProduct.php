@@ -13,9 +13,6 @@ if (!isset($_POST["shop_id"])) {
     exit;
 }
 
-print_r($_POST);
-print_r($_FILES);
-exit;
 
 $shop_id = $_POST["shop_id"];
 $name = $_POST["name"];
@@ -35,15 +32,42 @@ $sql = "INSERT INTO product
 VALUES 
 ('$shop_id','$name', '$price', '$stocks','$class','$description', '$keywords','$discount','$available','$label','$editor','$createdTime','0')";
 
-// echo $sql;
-
-// exit;
-
 if ($conn->query($sql) === TRUE) {
-    echo "更新成功";
+    // echo "資料更新成功";
+    $last_id = $conn->insert_id;
 } else {
     // echo "更新資料錯誤: " . $conn->error;
 }
+
+$file_count = count($_FILES["pic"]["name"]);
+
+if ($file_count > 0) {
+    for ($i = 0; $i < $file_count; $i++) {
+
+        if (isset($_FILES["pic"]["name"][$i]) && $_FILES["pic"]["error"][$i] == 0) {
+            //判定推入的檔案沒有錯誤的話
+            $targetDir = '../images/products';
+            $originalFileName = pathinfo($_FILES['pic']['name'][$i], PATHINFO_FILENAME);
+            $fileType = pathinfo($_FILES['pic']['name'][$i], PATHINFO_EXTENSION);
+            $allowTypes = array('jpg', 'png', 'jpeg', 'gif');
+
+            if (in_array(strtolower($fileType), $allowTypes)) {
+                //檢查副檔名是否許可
+                $newFileName = $originalFileName . "_" . time() . "_" . $i . "." . $fileType;
+                $targetFilePath = $targetDir . "/" . $newFileName;
+
+                if (move_uploaded_file($_FILES['pic']['tmp_name'][$i], $targetFilePath)) {
+                    //如果有成功放置檔案則執行sql語法
+                    $insert_pic_sql = "INSERT INTO product_photo (product_id,file_name,is_valid) VALUES ('$last_id','$newFileName','1')";
+                    $conn->query($insert_pic_sql);
+                }
+            }
+        }
+    }
+} else {
+    echo "沒有傳入檔案";
+}
+
 
 //導頁
 sleep(1);
