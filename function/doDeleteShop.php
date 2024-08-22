@@ -4,8 +4,8 @@ include("../function/login_status_inspect.php");
 
 $role = $_SESSION["user"]["role"];
 
-if ($role != "admin") {
-    header("location: dashboard-home_Joe.php");
+if ($role != "admin" && $role != "shop") {
+    header("location: ../page/dashboard-home_Joe.php");
     exit;
 }
 
@@ -31,6 +31,10 @@ if ($get_user_id_result->num_rows > 0) {
             $sql2 = "UPDATE users SET role = 'user' WHERE user_id = $user_id";
             if (!$conn->query($sql2)) {
                 throw new Exception("更新 user 資料錯誤: " . $conn->error);
+            }
+            // 如果是當前使用者，更新 session 中的 role
+            if ($user_id == $_SESSION["user"]["user_id"]) {
+                $_SESSION["user"]["role"] = 'user';
             }
         }
 

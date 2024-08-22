@@ -14,9 +14,8 @@
     </head>
 
     <body>
-    <?php include("../modules/dashboard-header.php");?>
-    <div class="container-fluid d-flex flex-row px-4">
-        <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
+    <?php include("../modules/login-header.php");?>
+    <div class="container d-flex flex-row px-4">
         <div class="main col neumorphic p-5">
             <div class=" neumorphic ">
                 <h2>註冊為店家</h2>
