@@ -171,8 +171,7 @@ foreach ($rowsPro as $productClass) {
                 <li class="nav-item">
                     <a class="main-nav nav-link <?= $status === 'off' ? 'active' : '' ?>" href="?status=off&search=<?= $search ?>&class=<?= $class ?>&sort=<?= $sort ?>&p=<?= $page ?>">已下架</a>
                 </li>
-
-                <a href="addLesson.php" class="btn btn-custom addClass">新增課程</a>
+                <a href="addLesson.php" class="btn btn-custom addClass"><i class="fa-solid fa-plus"></i> 新增課程</a>
             </ul>
 
             <!-- Content -->
@@ -195,7 +194,7 @@ foreach ($rowsPro as $productClass) {
                     $dateStr = new DateTime($date);
                     $formartDate = $dateStr->format("Y-m-d H:i") ?>
                     <tbody>
-                        <tr class="text-center m-auto">
+                        <tr class="text-center m-auto align-middle">
                             <td><?= $id ?></td>
                             <?php echo ($row["activation"] == 1) ? "<td>" . "上架中" : "<td class='text-danger'>" . "已下架"; ?></td>
                             <td><?= $row["name"] ?></td>
@@ -212,7 +211,7 @@ foreach ($rowsPro as $productClass) {
                                 <?= $count ?></td>
                             </td>
                             <td><a href="lesson-details.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-eye"></i></a>
-                                <a href="editLesson.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-pen"></i></a>
+                                <a href="editLesson.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-pen-to-square"></i></a>
                                 <?php if ($status === "off"): ?>
                                     <a href="../function/doReloadLesson.php?id=<?= $id ?>" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
                                 <?php else: ?>
