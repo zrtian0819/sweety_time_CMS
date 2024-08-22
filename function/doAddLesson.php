@@ -7,9 +7,6 @@ if (!isset($_POST["name"])) {
 
 require_once("../db_connect.php");
 
-print_r($_FILES);
-exit;
-
 $name = $_POST["name"];
 $pic = $_FILES["pic"];
 $class = $_POST["class"];
