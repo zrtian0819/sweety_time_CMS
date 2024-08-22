@@ -1,5 +1,18 @@
 <?php
+
 require_once("../db_connect.php");
+include("../function/function.php");
+include("../function/login_status_inspect.php");
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+$SessRole = $_SESSION["user"]["role"];
+if ($SessRole == "shop") {
+    $shopId = $_SESSION["shop"]["shop_id"];
+}
+
 goto a;
 
 if (!isset($_GET["productId"])) {
@@ -34,15 +47,16 @@ if (!isset($_GET["productId"])) {
         // $shopsql = "SELECT "
     }
 
-    //商品類別
+    a:
+    // 商品類別
     $sqlClass = "SELECT * from product_class";
     $ClassResult = $conn->query($sqlClass);
     $classRows = $ClassResult->fetch_all(MYSQLI_ASSOC);
-
-    //查看類別用
-    // foreach ($classRows as $classRow){
-    //     echo print_r($classRow)."<br>";
-    // }
+    $shopClassArr = [];
+    foreach ($classRows as $classRow) {
+        $shopClassArr[$classRow["product_class_id"]] = $classRow["class_name"];
+    }
+    print_r($shopClassArr);
 
     //撈出照片檔
     // $photosql = "SELECT * FROM product_photo 
@@ -51,8 +65,21 @@ if (!isset($_GET["productId"])) {
 
     // $photorResult = $conn->query($photosql);
     // $photoRows= $photorResult->fetch_all(MYSQLI_ASSOC);
+
+
+    //店家
+    $sqlStore = "SELECT shop_id,name from shop";
+    $storeResult = $conn->query($sqlStore);
+    $storeRows = $storeResult->fetch_all(MYSQLI_ASSOC);
+    //店家名陣列
+    $storeArr = [];
+    foreach ($storeRows as $storeRow) {
+        $storeArr[$storeRow["shop_id"]] = $storeRow["name"];
+    }
+    // print_r($storeArr);
+
 }
-a:
+
 ?>
 
 <!DOCTYPE html>
@@ -110,37 +137,47 @@ a:
 
                                     <div class="col px-2">
                                         <table class="table table-hover">
+                                            <?php if($SessRole="admin"):?>
                                             <tr>
                                                 <td class="dontNextLine fw-bold">商家</td>
                                                 <td>
-                                                    <input name="shop" class="form-control form-control-custom" type="text" value="<?= $row["name"] ?>">
+                                                    
+                                                    <select name="shop" id="" class="form-control form-control-custom" require>
+                                                        <option value="" disabled selected>選擇您的商家</option>
+                                                        <?php foreach($storeArr as $shopKey => $shopValue ): ?>
+                                                            <option value="<?=$shopKey?>"><?=$shopValue?></option>
+                                                        <?php endforeach; ?>
+                                                    
+                                                    </select>
+                                                    
                                                 </td>
                                             </tr>
+                                            <?php endif; ?>
                                             <tr>
                                                 <td class="dontNextLine fw-bold">品名</td>
                                                 <td>
-                                                    <input name="name" class="form-control form-control-custom" type="text" value="<?= $row["name"] ?>">
+                                                    <input name="name" class="form-control form-control-custom" type="text">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="dontNextLine fw-bold">價格</td>
                                                 <td>
-                                                    <input name="price" class="form-control form-control-custom" type="number" value="<?= $row["price"] ?>">
+                                                    <input name="price" class="form-control form-control-custom" type="number" placeholder="請輸入整數">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="dontNextLine fw-bold">庫存</td>
                                                 <td>
-                                                    <input name="stocks" class="form-control form-control-custom" type="number" value="<?= $row["stocks"] ?>">
+                                                    <input name="stocks" class="form-control form-control-custom" type="number" value="" placeholder="請輸入整數">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="dontNextLine fw-bold">商品分類</td>
                                                 <td>
-                                                    <select class="form-select form-select-custom" id="country" name="class">
-                                                        <option selected disabled>類別</option>
-                                                        <?php foreach ($classRows as $classRow): ?>
-                                                            <option <?= $row["product_class_id"] == $classRow["product_class_id"] ? "selected" : ""; ?> value="<?= $classRow["product_class_id"] ?>"><?= $classRow["class_name"] ?></option>
+                                                    <select class="form-select form-select-custom" id="" name="shops" require>
+                                                        <option value="">選擇商品類別</option>
+                                                        <?php foreach ($shopClassArr as $shopClassKey => $shopClassValue ): ?>
+                                                            <option value="<?=$shopClassKey?>"><?= $shopClassValue ?></option>
                                                         <?php endforeach; ?>
                                                     </select>
                                                 </td>
@@ -149,15 +186,13 @@ a:
                                             <tr>
                                                 <td class="dontNextLine fw-bold">描述</td>
                                                 <td>
-                                                    <textarea name="description" class="form-control textarea-custom" id="message" rows="5" placeholder="請輸入描述">
-                                                        <?= $row["description"] ?>
-                                                    </textarea>
+                                                    <textarea name="description" class="form-control textarea-custom" id="message" rows="5" placeholder="請輸入描述"></textarea>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="dontNextLine fw-bold">關鍵字</td>
                                                 <td>
-                                                    <input name="keywords" class="form-control form-control-custom" type="text" value="<?= $row["keywords"] ?>" placeholder="請用「,」逗號隔開字串">
+                                                    <input name="keywords" class="form-control form-control-custom" type="text" value="" placeholder="請用「,」逗號隔開字串">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -170,16 +205,15 @@ a:
                                                 <td class="dontNextLine fw-bold">上架</td>
                                                 <td>
                                                     <select name="available" class="form-select form-select-custom" id="country" require>
-                                                        <option disabled>請選擇上架狀態</option>
-                                                        <option <?= $row["available"] == 0 ? "selected" : ""; ?> value="0">下架</option>
-                                                        <option <?= $row["available"] == 1 ? "selected" : ""; ?> value="1">上架</option>
+                                                        <option value="0">下架</option>
+                                                        <option value="1" selected>上架</option>
                                                     </select>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="dontNextLine fw-bold">標籤</td>
                                                 <td>
-                                                    <input name="label" class="form-control form-control-custom" type="text" value="<?= $row["label"] ?>">
+                                                    <input name="label" class="form-control form-control-custom" type="text" value="">
                                                 </td>
                                             </tr>
                                         </table>
