@@ -84,6 +84,8 @@ $rowProduct = $resultProduct->fetch_assoc();
             color: #fff;
             border: none;
         }
+
+       
     </style>
 </head>
 
@@ -103,24 +105,41 @@ $rowProduct = $resultProduct->fetch_assoc();
                 </div>
                 <!-- 文章 -->
                 <h1 class="d-flex justify-content-center">
-                    <?= $row["title"]?>
+                    <?= $row["title"] ?>
                 </h1>
 
                 <!-- 建立時間/作者/分類 -->
-                <div class="row-col-3 d-flex justify-content-center">
-                    建立時間：<?=$row["created_at"]?>／作者：<?=$row["created_at"]?>／分類：<?=$rowProduct["class_name"]?>
+                <div class="row-col-3 d-flex justify-content-start">
+                    建立時間：<?= $row["created_at"] ?>／作者：<?= $row["created_at"] ?>／分類：<?= $rowProduct["class_name"] ?>
                 </div>
 
                 <!-- 圖片 -->
                 <div class="row-col-3 d-flex justify-content-center ">
-                    <img src="../images/article/<?= $row["img_path"] ?>" alt="<?=$row["title"]?>">
+                    <img style="height: 200px; object-fit: cover;" class="rounded " src="../images/article/<?= $row["img_path"] ?>" alt="<?= $row["title"] ?>">
                 </div>
 
                 <div class="row-col-3 d-flex justify-content-center">
-                    <?=$row["content"]?>
+                    <br>
+                    <?= $row["content"] ?>
+                </div>
+
+            </div>
+            <div class="container changePage text-end">
+                <div class="row">
+                    <?php if ($id > 1) : ?>
+                        <div class="py-4" >
+                            <a href="article.php?id=<?= $id - 1 ?>" class="btn-custom m-2 p-2 text-decoration-none">上一篇文章</a>
+                        </div>
+                    <?php endif ?>
+                    <?php if ($id < $rows) : ?>
+                        <div class="">
+                            <a href="article.php?id=<?= $id + 1 ?>" class="btn-custom m-2 p-2 text-decoration-none">下一篇文章</a>
+                        </div>
+                    <?php endif ?>
                 </div>
             </div>
         </div>
+
 
     </div>
 
