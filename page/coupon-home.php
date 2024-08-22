@@ -1,6 +1,7 @@
 <?php
 
 require_once("../db_connect.php");
+include("../function/login_status_inspect.php");
 
 ?>
 

@@ -1,6 +1,7 @@
 <?php
 
 require_once("../db_connect.php");
+include("../function/login_status_inspect.php");
 
 if(!isset($_GET['coupon_id'])) {
     header("location:./coupon-list.php?message=請選擇要編輯哪張優惠券！");
@@ -55,7 +56,7 @@ if(!isset($_GET['coupon_id'])) {
             </div>
             <hr>
             <div class="container">
-                <form action="../api/doEditCoupon.php" method="post">
+                <form action="../function/doEditCoupon.php" method="post">
                     <div class="mb-2 row">
                         <div class="col-xl-6 col-lg-12">
                             <p class="coupon-id-text">現正編輯的優惠券id：<?= $coupon_id ?></p>
