@@ -202,29 +202,6 @@ foreach ($storeRows as $storeRow) {
         .dontNextLine {
             white-space: nowrap;
         }
-
-        /* Joe的文字按鈕動態效果 */
-        .btn-animation {
-
-            /* 顯示層*/
-            .btn-animation-innerSpan {
-                /* 包覆層*/
-                width: 0;
-                overflow: hidden;
-                margin: 0;
-                padding: 0;
-                height: auto;
-                text-wrap: nowrap;
-                transition: 0.3s;
-            }
-
-            &:hover {
-                .btn-animation-innerSpan {
-                    width: auto;
-                    margin-left: 5px;
-                }
-            }
-        }
     </style>
 </head>
 
