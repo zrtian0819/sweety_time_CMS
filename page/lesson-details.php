@@ -11,11 +11,11 @@ require_once("../db_connect.php");
 
 $id = $_GET["id"];
 
-$sql = "SELECT lesson.* FROM lesson WHERE lesson_id = $id";
+$sql = "SELECT * FROM lesson WHERE lesson_id = $id";
 $result = $conn->query($sql);
 $row = $result->fetch_assoc();
 
-$sqlAll = "SELECT * FROM lesson";
+$sqlAll = "SELECT lesson.* FROM lesson";
 $allResult = $conn->query($sqlAll);
 $rows = $allResult->num_rows;
 

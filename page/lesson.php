@@ -211,7 +211,7 @@ foreach ($rowsPro as $productClass) {
                                 <?= $count ?></td>
                             </td>
                             <td><a href="lesson-details.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-eye"></i></a>
-                                <a href="editLesson.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-pen"></i></a>
+                                <a href="editLesson.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-pen-to-square"></i></a>
                                 <?php if ($status === "off"): ?>
                                     <a href="../function/doReloadLesson.php?id=<?= $id ?>" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
                                 <?php else: ?>
