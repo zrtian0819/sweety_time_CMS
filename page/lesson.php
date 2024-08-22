@@ -140,22 +140,22 @@ foreach ($rowsPro as $productClass) {
             <h1>課程列表</h1>
 
             <div class="py-3">
-                <form action="">
+                <form action="" method="GET">
                     <div class="input-group">
-                        <input type="search" class="form-control" placeholder="搜尋課程" name="search">
+                        <input type="search" class="form-control" placeholder="搜尋課程" name="search" value="<?= $search ?>">
                         <select class="form-select" aria-label="Default select example" name="class">
-                            <option value="all">分類</option>
-                            <option value="1">蛋糕</option>
-                            <option value="2">餅乾</option>
-                            <option value="3">塔 / 派</option>
-                            <option value="4">泡芙</option>
-                            <option value="5">冰淇淋</option>
-                            <option value="6">其他</option>
+                            <option value="all" <?= $class == "all" ? "selected" : "" ?>>分類</option>
+                            <option value="1" <?= $class == "1" ? "selected" : "" ?>>蛋糕</option>
+                            <option value="2" <?= $class == "2" ? "selected" : "" ?>>餅乾</option>
+                            <option value="3" <?= $class == "3" ? "selected" : "" ?>>塔 / 派</option>
+                            <option value="4" <?= $class == "4" ? "selected" : "" ?>>泡芙</option>
+                            <option value="5" <?= $class == "5" ? "selected" : "" ?>>冰淇淋</option>
+                            <option value="6" <?= $class == "6" ? "selected" : "" ?>>其他</option>
                         </select>
                         <select class="form-select" aria-label="Default select example" name="sort">
-                            <option value="id">依課程編號排序(預設)</option>
-                            <option value="people">依報名人數排序</option>
-                            <option value="date">依時間排序</option>
+                            <option value="id" <?= $sort == "id" ? "selected" : "" ?>>依課程編號排序(預設)</option>
+                            <option value="people" <?= $sort == "people" ? "selected" : "" ?>>依報名人數排序</option>
+                            <option value="date" <?= $sort == "date" ? "selected" : "" ?>>依時間排序</option>
                         </select>
                         <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                     </div>

@@ -73,7 +73,7 @@ $rowPro = $resultProduct->fetch_assoc();
             <div class="row justify-content-center">
                 <div class="col-lg-3 m-2">
                     <img src="../images/lesson/<?= $row["img_path"] ?>" alt="<?= $row["name"] ?>" class="ratio ratio-4x3">
-                    <table class="table mt-2 table-hover">
+                    <table class="table mt-2 table-hover align-middle">
                         <tbody>
                             <tr>
                                 <th>
@@ -131,6 +131,7 @@ $rowPro = $resultProduct->fetch_assoc();
                             </tr>
                         </tbody>
                     </table>
+                    <a href="editLesson.php?id=<?= $id ?>"><button class="btn-custom w-100">編輯資料</button></a>
                 </div>
                 <div class="col-lg-8 ms-2">
                     <h3 class="p-2">課程介紹</h3>
@@ -144,6 +145,7 @@ $rowPro = $resultProduct->fetch_assoc();
                         <?php endif ?>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

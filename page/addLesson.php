@@ -60,7 +60,7 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
             <a href="lesson.php" class="btn btn-custom"><i class="fa-solid fa-arrow-left"></i></a>
             <form action="../function/doAddLesson.php" method="POST" enctype="multipart/form-data">
                 <h1>
-                    <input type="text" class="textarea-custom m-2" value="課程名稱" name="name">
+                    <input type="text" class="textarea-custom m-2" placeholder="課程名稱" name="name">
                 </h1>
                 <div class="row justify-content-center">
                     <div class="col-lg-3 m-2">
@@ -70,7 +70,7 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                             </div>
                             <input type="file" class="form-control" name="pic" required>
                         </div>
-                        <table class="table mt-2 table-hover">
+                        <table class="table mt-2 table-hover align-middle">
                             <tbody>
                                 <tr>
                                     <th>
@@ -126,7 +126,7 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                                 </tr>
                             </tbody>
                         </table>
-                        <button type="submit" class="btn-custom">確認新增</button>
+                        <button type="submit" class="btn-custom w-100">確認新增</button>
                     </div>
                     <div class="col-lg-8 ms-2">
                         <h3 class="p-2">課程介紹</h3>
