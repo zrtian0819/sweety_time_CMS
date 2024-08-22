@@ -267,6 +267,8 @@ foreach ($rowsUsers as $users) {
                             <td><?= $productClassArr[$articles["product_class_id"]] ?></td>
                             <td><?= $usersArr[$users["user_id"]] ?></td>
                             <td><?= $formartDate ?></td>
+
+                            <!-- 右側按鈕 -->
                             <td>
                                 <div class="d-flex justify-content-center ">
                                     <div class="me-1">

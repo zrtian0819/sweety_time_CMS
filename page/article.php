@@ -43,22 +43,28 @@ $sqlArticles = "SELECT * FROM articles ORDER BY article_id";
 $resultArticles = $conn->query($sqlArticles);
 $rowsArticles = $resultArticles->fetch_all(MYSQLI_ASSOC);
 
-//把資料轉成陣列
+//把文章資料轉成陣列
 $arrAticles = [];
 foreach ($rowsArticles as $articles) {
     $arrAticles[$articles["article_id"]] = $articles["title"];
 }
-
-//取得與文章相關聯的使用者資料
-$sqlAuthor = "SELECT * FROM articles WHERE user_id = $id";
-$resultAuthor = $conn->query($sqlAuthor);
-$rowAuthor = $resultAuthor->fetch_assoc();
 
 //分類
 $productClass = $row["product_class_id"];
 $sqlProductClass = "SELECT * FROM product_class WHERE product_class_id = $productClass";
 $resultProduct = $conn->query($sqlProductClass);
 $rowProduct = $resultProduct->fetch_assoc();
+
+// 使用者
+$sqlUsers = "SELECT * FROM users ORDER BY user_id";
+$resultUsers = $conn->query($sqlUsers);
+$rowsUsers = $resultUsers->fetch_all(MYSQLI_ASSOC);
+
+//使用者關聯式陣列
+$usersArr = [];
+foreach ($rowsUsers as $users) {
+    $usersArr[$users["user_id"]] = $users["name"];
+};
 
 
 ?>
@@ -107,8 +113,8 @@ $rowProduct = $resultProduct->fetch_assoc();
                 </h1>
 
                 <!-- 建立時間/作者/分類 -->
-                <div class="row-col-3 d-flex justify-content-start">
-                    建立時間：<?= $row["created_at"] ?>／作者：<?= $row["created_at"] ?>／分類：<?= $rowProduct["class_name"] ?>
+                <div class="row-col-3 d-flex justify-content-center">
+                    建立時間：<?= $row["created_at"] ?>／作者：<?= $usersArr[$users["user_id"]] ?>／分類：<?= $rowProduct["class_name"] ?>
 
                 </div>
 
@@ -127,14 +133,14 @@ $rowProduct = $resultProduct->fetch_assoc();
 
             </div>
             <div class="container changePage text-end">
-                <div class="row">
+                <div class="d-flex justify-content-end ">
                     <?php if ($id > 1) : ?>
-                        <div class="py-4">
+                        <div class="mt-4 py-2">
                             <a href="article.php?id=<?= $id - 1 ?>" class="btn-custom m-2 p-2 text-decoration-none">上一篇文章</a>
                         </div>
                     <?php endif ?>
                     <?php if ($id < $rows) : ?>
-                        <div class="">
+                        <div class="mt-4 py-2">
                             <a href="article.php?id=<?= $id + 1 ?>" class="btn-custom m-2 p-2 text-decoration-none">下一篇文章</a>
                         </div>
                     <?php endif ?>
