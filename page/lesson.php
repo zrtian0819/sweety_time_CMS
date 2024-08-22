@@ -171,8 +171,7 @@ foreach ($rowsPro as $productClass) {
                 <li class="nav-item">
                     <a class="main-nav nav-link <?= $status === 'off' ? 'active' : '' ?>" href="?status=off&search=<?= $search ?>&class=<?= $class ?>&sort=<?= $sort ?>&p=<?= $page ?>">已下架</a>
                 </li>
-
-                <a href="addLesson.php" class="btn btn-custom addClass">新增課程</a>
+                <a href="addLesson.php" class="btn btn-custom addClass"><i class="fa-solid fa-plus"></i> 新增課程</a>
             </ul>
 
             <!-- Content -->
