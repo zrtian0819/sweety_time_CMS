@@ -130,9 +130,12 @@ $conn->close();
                         <?php if ($userCount > 0): ?>
                             <form action="user-edit.php?user_id=<?= ($user_id) ?>" method="post" enctype="multipart/form-data">
                                 <div class="mb-3 d-flex justify-content-center align-items-center flex-column">
-                                    <label for="profile_image" class="my-3 h4">上傳或更改Logo圖片</label>
-                                    <img src="<?= ($imagePath) ?>" alt="Profile Image" class="object-fit-fill user-img">
-                                    <input type="file" name="profile_image" class="my-3 ms-5 ps-5">
+                                    <label for="profile_image">
+                                        <input type="file" name="profile_image" class="my-3 ms-5 ps-5" data-target="preview_img">
+                                    </label>
+                                    <div>
+                                        <img src="<?= ($imagePath) ?>" alt="Profile Image" class="object-fit-fill user-img" id="preview_img">
+                                    </div>
                                 </div>
                                 <input type="hidden" name="user_id" value="<?= ($user_id) ?>">
                                 <table class="table table-bordered">
@@ -176,6 +179,24 @@ $conn->close();
         </div>
     </div>
     <?php include("../js.php"); ?>
+    <script>
+        let input =document.querySelector('input[name=profile_image]')
+        input.addEventListener('change',function(e){
+            readURL(e.target);
+        })
+        function readURL(input){
+            if(input.files && input.files[0]){
+                let reader = new FileReader();
+                reader.onload = function(e){
+                    let imgId = input.getAttribute('data-target')
+                    let img =document.querySelector('#'+imgId)
+                    img.setAttribute('src',e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        
+    </script>
 </body>
 
 </html>

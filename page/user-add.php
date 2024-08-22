@@ -42,10 +42,9 @@ VALUES ('user','$name', '$account', '$password', '$email', '$phone', '$birthday'
     } else {
         echo "資料儲存成功，但未上傳圖片。";
     }
+    header("location:users.php");
 }
 
-$defaultImage = 'https://images.unsplash.com/photo-1472396961693-142e6e269027?q=80&w=2152&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
-$imagePath = !empty($row['portrait_path']) ? '../images/users/' . $row['portrait_path'] : $defaultImage;
 $conn->close();
 
 ?>
@@ -95,9 +94,12 @@ $conn->close();
                     <div class="row">
                         <form action="user-add.php" method="post" enctype="multipart/form-data">
                             <div class="mb-3 d-flex justify-content-center align-items-center flex-column">
-                                <label for="profile_image" class="my-3 h4">上傳Logo圖片</label>
-                                <img src="<?= ($imagePath) ?>" alt="Profile Image" class="object-fit-fill user-img">
-                                <input type="file" name="profile_image" class="my-3 ms-5 ps-5">
+                                <label for="profile_image">
+                                    <input type="file" name="profile_image" class="my-3 ms-5 ps-5" data-target="preview_img">
+                                </label>
+                                <div>
+                                    <img src="<?= ($imagePath) ?>" alt="Profile Image" class="object-fit-fill user-img" id="preview_img">
+                                </div>
                             </div>
                             <div class="mb-2">
                                 <label class="form-label"><span class="text-danger">* </span>Name</label>
@@ -134,9 +136,23 @@ $conn->close();
     </div>
     <?php include("../js.php"); ?>
     <script>
-
+        let input =document.querySelector('input[name=profile_image]')
+        input.addEventListener('change',function(e){
+            readURL(e.target);
+        })
+        function readURL(input){
+            if(input.files && input.files[0]){
+                let reader = new FileReader();
+                reader.onload = function(e){
+                    let imgId = input.getAttribute('data-target')
+                    let img =document.querySelector('#'+imgId)
+                    img.setAttribute('src',e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        
     </script>
-    <?php $conn->close() ?>
 </body>
 
 </html>
