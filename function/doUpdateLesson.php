@@ -33,7 +33,6 @@ if ($_FILES["pic"]["error"] == 0) {
     if (move_uploaded_file($_FILES["pic"]["tmp_name"], "../images/lesson/" . $newFileName)) {
         $sql = "UPDATE lesson SET name = '$name',product_class_id='$class', img_path = '$newFileName',teacher_id='$teacher',price='$price',start_date='$formattedDateTime',quota='$quota',classroom_name='$classroom_name',location='$location',description='$description' WHERE lesson_id ='$id'";
         if ($conn->query($sql) === TRUE) {
-            echo "更新成功";
             header("location:../page/lesson-details.php?id=$id");
         } else {
             echo "更新資料錯誤: " . $conn->error;
@@ -42,7 +41,6 @@ if ($_FILES["pic"]["error"] == 0) {
 } else {
     $sql = "UPDATE lesson SET name = '$name',product_class_id='$class',teacher_id='$teacher',price='$price',start_date='$formattedDateTime',quota='$quota',classroom_name='$classroom_name',location='$location',description='$description' WHERE lesson_id ='$id'";
     if ($conn->query($sql) === TRUE) {
-        echo "更新成功";
         header("location:../page/lesson-details.php?id=$id");
     } else {
         echo "更新資料錯誤: " . $conn->error;
