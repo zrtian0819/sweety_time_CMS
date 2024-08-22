@@ -203,27 +203,28 @@ foreach ($storeRows as $storeRow) {
             white-space: nowrap;
         }
 
-        /* 新增商品的按鈕效果 */
-        .add-btn{
+        /* Joe的文字按鈕動態效果 */
+        .btn-animation {
 
-            .addProducttoggle{
+            /* 顯示層*/
+            .btn-animation-innerSpan {
+                /* 包覆層*/
                 width: 0;
                 overflow: hidden;
                 margin: 0;
                 padding: 0;
                 height: auto;
                 text-wrap: nowrap;
-                transition:0.3s;
+                transition: 0.3s;
             }
 
-            &:hover{
-                .addProducttoggle{
+            &:hover {
+                .btn-animation-innerSpan {
                     width: auto;
-                    margin-left: 3px;
-                }   
+                    margin-left: 5px;
+                }
             }
         }
-
     </style>
 </head>
 
@@ -238,11 +239,11 @@ foreach ($storeRows as $storeRow) {
 
             <div class="d-flex justify-content-between align-items-center">
                 <h2>商品列表</h2>
-                <a class="add-btn btn btn-custom d-flex flex-row align-items-center" href="product-add.php">
-                    <i class="fa-solid fa-plus align-middle"></i><span class="addProducttoggle d-inline-block"> 新增商品</span>
+                <a class="btn-animation btn btn-custom d-flex flex-row align-items-center" href="product-add.php">
+                    <i class="fa-solid fa-plus align-middle"></i><span class="btn-animation-innerSpan d-inline-block"> 新增商品</span>
                 </a>
             </div>
-            
+
 
             <p><?= $productCount ?>/<?= $allProductCount ?>筆 </p>
 
@@ -287,7 +288,7 @@ foreach ($storeRows as $storeRow) {
                 <hr>
 
                 <?php if ($productCount > 0): ?>
-                    <table class="table table-hover bdrs table-responsive align-middle">    <!--移除的樣式 table-bordered -->
+                    <table class="table table-hover bdrs table-responsive align-middle"> <!--移除的樣式 table-bordered -->
                         <thead class="text-center table-dark">
                             <tr>
                                 <th class="dontNextLine">商品編號</th>
@@ -315,13 +316,13 @@ foreach ($storeRows as $storeRow) {
                                     <td class="text-center">
                                         <?php if ($row["deleted"] == 1): ?>
                                             <a class='btn btn-secondary' href="../function/doProductDeletedSwitch.php?productId=<?= $row["product_id"] ?>">已刪除</a>
-                                        <?php elseif($row["available"] == 1): ?>
+                                        <?php elseif ($row["available"] == 1): ?>
                                             <a class="btn btn-success dontNextLine" href="../function/doProductValidSwitch.php?productId=<?= $row["product_id"] ?>">上架中</a>
-                                        <?php elseif($row["available"] == 0): ?>
+                                        <?php elseif ($row["available"] == 0): ?>
                                             <a class="btn btn-danger dontNextLine" href="../function/doProductValidSwitch.php?productId=<?= $row["product_id"] ?>">已下架</a>
                                         <?php endif; ?>
                                     </td>
-                                    
+
                                     <td class="text-center">
                                         <a href="product.php?productId=<?= $row["product_id"] ?>" class="btn btn-custom">
                                             <i class="fa-solid fa-list"></i>
