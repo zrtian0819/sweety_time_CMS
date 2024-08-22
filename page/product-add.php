@@ -102,7 +102,6 @@ a:
 
             <h2 class="mb-5 text-center">新增商品</h2>
 
-            <?php if (isset($_GET["productId"])): ?>
                 <div class="container">
                     <div class="row d-flex justify-content-center">
                         <div class="col-12">
@@ -112,10 +111,9 @@ a:
                                     <div class="col px-2">
                                         <table class="table table-hover">
                                             <tr>
-                                                <td class="dontNextLine fw-bold">id</td>
+                                                <td class="dontNextLine fw-bold">商家</td>
                                                 <td>
-                                                    <?= $id ?>
-                                                    <input type="hidden" name="id" value="<?= $row["product_id"] ?>">
+                                                    <input name="shop" class="form-control form-control-custom" type="text" value="<?= $row["name"] ?>">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -188,8 +186,8 @@ a:
                                     </div>
 
                                     <div class="option-area d-flex justify-content-center mt-4 ">
-                                        <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="product.php?productId=<?= $row["product_id"] ?>">取消</a>
-                                        <button class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="#" type="submit">儲存</button>
+                                        <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="product-list.php">取消</a>
+                                        <button class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="#" type="submit">新增商品</button>
                                     </div>
                                 </div>
                             </form>
@@ -198,9 +196,9 @@ a:
                     </div>
                 </div>
 
-            <?php else: ?>
+
                 <p><?= $message ?></p>
-            <?php endif; ?>
+
 
         </main>
 
