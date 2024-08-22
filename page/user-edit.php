@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 // 更新資料庫中的圖片名稱
                 $sql = "UPDATE users SET portrait_path='$newFileName' WHERE user_id = $user_id";
                 if ($conn->query($sql)) {
-                    echo "圖片更新成功";
+                    // echo "圖片更新成功";
                     header("Location: user-edit.php?user_id=$user_id");
                     exit;
                 } else {
@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $sql = "UPDATE users SET name = '$name', password = '$password', email = '$email' WHERE user_id = $user_id";
     if ($conn->query($sql)) {
-        echo "資料更新成功";
+        // echo "資料更新成功";
     } else {
         echo "資料更新失敗: " . $conn->error;
     }
@@ -147,7 +147,7 @@ $conn->close();
                         <?php if ($userCount > 0): ?>
                             <form action="user-edit.php?user_id=<?= htmlspecialchars($user_id) ?>" method="post" enctype="multipart/form-data">
                                 <div class="mb-3 d-flex justify-content-center align-items-center flex-column">
-                                    <label for="profile_image" class="my-3 h4">上傳或更改圖片</label>
+                                    <label for="profile_image" class="my-3 h4">上傳或更改Logo圖片</label>
                                     <img src="<?= htmlspecialchars($imagePath) ?>" alt="Profile Image" class="object-fit-fill user-img">
                                     <input type="file" name="profile_image" id="profile_image" class="my-3 ms-5 ps-5">
                                 </div>

@@ -2,19 +2,11 @@
 
 require_once("../db_connect.php");
 include("../function/function.php");
+include("../function/login_status_inspect.php");
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-
-//避免使用者亂改網址
-// if(isset($_GET["shopId"])){
-
-//     if( $_GET["shopId"]!=$_SESSION["shop"]["shop_id"] ){
-//         header("location: product-list.php?shopId=".$_SESSION["shop"]["shop_id"]);
-//     }
-
-// }
 
 $SessRole = $_SESSION["user"]["role"];
 $nav_page_name = "product-list.php?";    //導頁名
@@ -23,7 +15,6 @@ $nav_page_name = "product-list.php?";    //導頁名
 if ($SessRole == "shop") {
     $shopId = $_SESSION["shop"]["shop_id"];
     $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 ORDER BY product_id ASC";
-
 } elseif ($SessRole == "admin") {
     $sql = "SELECT * FROM product ORDER BY product_id ASC";
 }
@@ -39,26 +30,59 @@ $start_item = 0;
 //頁碼的處理
 $total_page = ceil($allProductCount / $per_page);   //計算總頁數(無條件進位)
 
-//分頁的處理
-if(isset($_GET["p"])){
-    $page = $_GET["p"];
-    $start_item = ($page-1)*$per_page;
+$whereArr = [];
 
-    // $nav_page_name .= "&p=".$page ;
+//篩選狀態判定
+$where_status = "";
+if (isset($_GET["status"])) {
+    $status = $_GET["status"];
+    switch ($status) {
+        case "on":
+            $where_status = "available = 1";
+            break;
+        case "off":
+            $where_status = "available = 0";
+            break;
+        default:
+            $status = "all";
+    }
+    $nav_page_name .= "&status=" . $status;
+} else {
+    $status = "all";
 }
-$sql_page = "LIMIT $start_item, $per_page";
+array_push($whereArr, $where_status);
 
-if ($SessRole == "shop") {
-    $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 ORDER BY product_id ASC $sql_page";
-} elseif ($SessRole == "admin") {
-    $sql = "SELECT * FROM product ORDER BY product_id ASC $sql_page";
+
+$where_search = "";
+if (isset($_GET["search"]) && !empty($_GET["search"])) {
+    $search = $_GET["search"];
+    $where_search = "name LIKE '%$search%'";
+
+    $nav_page_name .= "&search=" . $search;
 }
+array_push($whereArr, $where_search);
+
+
+$where_class = "";
+if (isset($_GET["class"])) {
+    $class = $_GET["class"];
+    if ($class == "all") {
+        $where_class = "";
+    } else {
+        $where_class = "product_class_id=$class";
+        $nav_page_name .= "&class=" . $class;
+    }
+} else {
+    $class = "all";
+}
+array_push($whereArr, $where_class);
 
 //排序的處理
-if(isset($_GET["order"])){
+$sql_order = "";
+if (isset($_GET["order"])) {
     $order = $_GET["order"];
 
-    switch($order){
+    switch ($order) {
         case "ida":
             $sql_order = "ORDER BY product_id ASC";
             break;
@@ -81,68 +105,34 @@ if(isset($_GET["order"])){
             $sql_order = "ORDER BY product_id ASC";
     }
 
-    $nav_page_name .= "&order=".$order;
-
-}else{
+    $nav_page_name .= "&order=" . $order;
+} else {
+    $order = "all";
     $sql_order = "ORDER BY product_id ASC";
 }
 
 if ($SessRole == "shop") {
-    $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 $sql_order $sql_page";
-} elseif ($SessRole == "admin") {
-    $sql = "SELECT * FROM product $sql_order $sql_page";
+    $where_shop = "shop_id = $shopId";
+    $where_delete = "deleted = 0";
+
+    array_push($whereArr, $where_shop);
+    array_push($whereArr, $where_delete);
 }
 
-//篩選狀態判定
-if (isset($_GET["status"])) {
-    $status = $_GET["status"];
-    switch($status){
-        case "on":
-            $sql_status = "available = 1";
-            break;
-        case "off":
-            $sql_status = "available = 0";
-            break;
-        default:
-            $status ="all";
-            $sql_status = "";
-    }
-}else{
-    $status ="all";
-    $sql_status = "";
+//檢查where陣列是否為空
+// print_r($whereArr);
+$whereArr = array_filter($whereArr);    //除掉空值
+// print_r(empty($whereArr));
+
+if (!empty($whereArr)) {
+    $whereClause = join(" AND ", $whereArr);
+    // echo "<br>" . $whereClause;
+    $sql = "SELECT * FROM product WHERE $whereClause $sql_order";
+} else {
+    $sql = "SELECT * FROM product $sql_order";
 }
 
-if ($SessRole == "shop") {
-
-    if($sql_status != ""){
-        $sql_status = "AND " . $sql_status;
-    }
-    $sql = "SELECT * FROM product WHERE shop_id=$shopId AND deleted = 0 $sql_status $sql_order $sql_page";
-
-} elseif ($SessRole == "admin") {
-
-    if($sql_status != ""){
-        $sql_status = "WHERE " . $sql_status;
-    }
-    $sql = "SELECT * FROM product $sql_status $sql_order $sql_page";
-
-}
-
-
-if(isset($_GET["search"]) && !empty($_GET["search"])){
-    $search = $_GET["search"];
-
-    if ($SessRole == "shop"){
-        $sql = "SELECT * FROM product WHERE shop_id=$shopId AND name LIKE '%$search%' AND deleted = 0 $sql_status $sql_order $sql_page";
-    }elseif($SessRole == "admin"){
-        $sql = "SELECT * FROM product WHERE name LIKE '%$search%' $sql_status $sql_order $sql_page";
-    }
-
-    $nav_page_name .= "&search=".$search;
-}
-
-echo $sql;
-echo $nav_page_name;
+// echo $sql;
 
 $filter_result = $conn->query($sql);
 $filter_rows = $filter_result->fetch_all(MYSQLI_ASSOC);
@@ -150,8 +140,24 @@ $productCount = $filter_result->num_rows;
 
 $filter_total_page = ceil($productCount / $per_page);   //計算總頁數(無條件進位)
 
-echo $filter_total_page . '<BR>';
-echo $productCount;
+// echo $filter_total_page . '<BR>';
+// echo $productCount;
+
+//分頁的處理
+if (isset($_GET["p"])) {
+    $page = $_GET["p"];
+    $start_item = ($page - 1) * $per_page;
+    // $nav_page_name .= "&p=".$page ;
+}
+$sql_page = "LIMIT $start_item, $per_page";
+
+$sql .= " $sql_page";
+
+// echo $sql;
+// echo $nav_page_name;
+
+$current_filter_result = $conn->query($sql);
+$current_filter_rows = $current_filter_result->fetch_all(MYSQLI_ASSOC);
 
 //↓做成陣列的資料
 
@@ -164,6 +170,7 @@ $classArr = [];
 foreach ($classRows as $classRow) {
     $classArr[$classRow["product_class_id"]] = $classRow["class_name"];
 }
+// print_r($classArr);
 
 //店家
 $sqlStore = "SELECT shop_id,name from shop";
@@ -207,19 +214,18 @@ foreach ($storeRows as $storeRow) {
         <div class="main col neumorphic p-4">
 
             <h2>商品列表</h2>
-
-
             <p><?= $productCount ?>/<?= $allProductCount ?>筆 </p>
+
             <div class="container-fluid">
                 <ul class="nav nav-tabs-custom">
                     <li class="nav-item">
-                        <a class="main-nav nav-link <?= $status === 'all' ? 'active' : '' ?>" href="?status=all">全部</a>
+                        <a class="main-nav nav-link <?= $status === 'all' ? 'active' : '' ?>" href="<?= statusStrRemoveJoe($nav_page_name) ?>&status=all">全部</a>
                     </li>
                     <li class="nav-item">
-                        <a class="main-nav nav-link <?= $status === 'on' ? 'active' : '' ?>" href="?status=on">上架中</a>
+                        <a class="main-nav nav-link <?= $status === 'on' ? 'active' : '' ?>" href="<?= statusStrRemoveJoe($nav_page_name) ?>&status=on">上架中</a>
                     </li>
                     <li class="nav-item">
-                        <a class="main-nav nav-link <?= $status === 'off' ? 'active' : '' ?>" href="?status=off">已下架</a>
+                        <a class="main-nav nav-link <?= $status === 'off' ? 'active' : '' ?>" href="<?= statusStrRemoveJoe($nav_page_name) ?>&status=off">已下架</a>
                     </li>
                 </ul>
 
@@ -227,21 +233,22 @@ foreach ($storeRows as $storeRow) {
                 <div class="">
                     <form action="product-list.php" method="get">
                         <div class="input-group">
-                            <input type="search" class="form-control" placeholder="品名關鍵字" name="search" value="<?=isset($_GET["search"])?$_GET["search"]:"";?>">
-                            <!-- <select class="form-select" aria-label="Default select example" name="class">
+                            <input type="search" class="form-control" placeholder="品名關鍵字" name="search" value="<?= isset($_GET["search"]) ? $_GET["search"] : ""; ?>">
+                            <select class="form-select" aria-label="Default select example" name="class">
                                 <option value="all">分類</option>
-                                <option value="1">蛋糕</option>
-                                <option value="2">餅乾</option>
-                                <option value="3">塔 / 派</option>
-                                <option value="4">泡芙</option>
-                                <option value="5">冰淇淋</option>
-                                <option value="6">其他</option>
-                            </select> -->
-                            <!-- <select class="form-select" aria-label="Default select example" name="sort">
-                                <option value="id">依課程編號排序(預設)</option>
-                                <option value="count">依報名人數排序</option>
-                                <option value="date">依時間排序</option>
-                            </select> -->
+                                <?php foreach ($classArr as $key => $value): ?>
+                                    <option value="<?= $key ?>" <?= $key == $class ? "selected" : "" ?>><?= $value ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <select class="form-select" aria-label="Default select example" name="order">
+                                <option value="ida" <?= $order == "ida" ? "selected" : "" ?>>依商品編號排序(小>大)</option>
+                                <option value="idd" <?= $order == "idd" ? "selected" : "" ?>>依商品編號排序(大>小)</option>
+                                <option value="pria" <?= $order == "pria" ? "selected" : "" ?>>依價格排序(小>大)</option>
+                                <option value="prid" <?= $order == "prid" ? "selected" : "" ?>>依價格排序(大>小)</option>
+                                <option value="stoa" <?= $order == "stoa" ? "selected" : "" ?>>依庫存量排序(小>大)</option>
+                                <option value="stod" <?= $order == "stod" ? "selected" : "" ?>>依庫存量排序(大>小)</option>
+                            </select>
+                            <a class="btn neumorphic" href="product-list.php"><i class="fa-solid fa-xmark"></i></a>
                             <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                         </div>
                     </form>
@@ -267,7 +274,7 @@ foreach ($storeRows as $storeRow) {
                         </thead>
 
                         <tbody>
-                            <?php foreach ($rows as $row): ?>
+                            <?php foreach ($current_filter_rows as $row): ?>
                                 <tr>
                                     <td class="text-center"><?= $row["product_id"] ?></td>
                                     <td><?= $row["name"] ?></td>
@@ -299,15 +306,12 @@ foreach ($storeRows as $storeRow) {
                     <?php if (isset($page)) : ?>
                         <nav aria-label="Page navigation example">
                             <ul class="pagination d-flex justify-content-center">
+
                                 <?php for ($i = 1; $i <= $filter_total_page; $i++): ?>
 
-                                    <?php if($i >= $page-5 && $i<= $page+5): ?>
-                                        <li class="page-item px-1 <?= $i==$page?"active":""; ?>">
-                                            <a class="page-link btn-custom" href="
-                                                <?php if(isset($_GET["p"])){
-                                                    echo "$nav_page_name" . "&p=" . $i ;
-                                                }?>
-                                            "><?=$i?>
+                                    <?php if ($i >= $page - 4 && $i <= $page + 4): ?>
+                                        <li class="page-item px-1 <?= $i == $page ? "active" : ""; ?>">
+                                            <a class="page-link btn-custom" href="<?= $nav_page_name . "&p=" . $i ?>"><?= $i ?>
                                             </a>
                                         </li>
                                     <?php endif; ?>

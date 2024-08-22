@@ -1,7 +1,7 @@
  <!-- Sidebar -->
  <?php
     // $require_once("../db_connect.php");
-    
+
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
@@ -39,10 +39,10 @@
                  <a class="nav-link" href="users.php">會員管理</a>
              </li>
              <li class="nav-item">
-                 <a class="nav-link" href="#">文章管理</a>
+                 <a class="nav-link" href="article.php">文章管理</a>
              </li>
              <li class="nav-item">
-                 <a class="nav-link" href="#">師資管理</a>
+                 <a class="nav-link" href="teacher.php">師資管理</a>
              </li>
              <li class="nav-item">
                  <a class="nav-link" href="lesson.php">課程管理</a>

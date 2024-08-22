@@ -64,10 +64,6 @@ if (!isset($_GET["productId"])) {
     <?php include("../css/css_Joe.php"); ?>
 
     <style>
-        main * {
-            /* border: 1px solid red; */
-        }
-
         .dontNextLine {
             white-space: nowrap;
             text-align: end;
@@ -82,10 +78,6 @@ if (!isset($_GET["productId"])) {
             /* box-shadow: 0 0 15px #F4A293; */
             overflow: hidden;
             transition: 0.5s;
-
-            &:hover {
-                /* box-shadow: 0 0 40px #F4A293; */
-            }
         }
 
         .img-small {

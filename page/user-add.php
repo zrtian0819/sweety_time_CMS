@@ -1,5 +1,11 @@
 <?php
 require_once("../db_connect.php");
+// require_once("../function/save_delivery_info.php");
+
+// if(!isset($_SESSION["role"])|| $_SESSION["role"]!=='admin'){
+//     header("location: users.php");
+//     exit;
+// }
 
 $user_id = $_GET["user_id"];
 
@@ -16,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $targetFilePath)) {
                 $sql = "UPDATE users SET portrait_path='$newFileName' WHERE user_id = $user_id";
                 if ($conn->query($sql)) {
-                    echo "圖片更新成功";
+                    // echo "圖片更新成功";
                     header("Location: users.php?user_id=$user_id");
                     exit;
                 } else {
@@ -57,19 +63,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
+$name = $_POST['name'];
+$password = $_POST['password'];
+$email = $_POST['email'];
 
+$sql = "UPDATE users SET name = '$name', account = '$account' ,password = '$password', email = '$email' , phone = '$phone'WHERE user_id = $user_id";
+if ($conn->query($sql)) {
+    // echo "資料更新成功";
+} else {
+    echo "資料更新失敗: " . $conn->error;
+}
 
 $sql = "SELECT * FROM users WHERE activation=1";
 $result = $conn->query($sql);
-$userCount = $result->num_rows;
+// $userCount = $result->num_rows;
 $row = $result->fetch_assoc();
 
-if ($userCount > 0) {
-    $title = $row["name"];
+if (isset($_GET["user_id"])) {
     $defaultImage = 'https://images.unsplash.com/photo-1472396961693-142e6e269027?q=80&w=2152&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
     $imagePath = !empty($row['portrait_path']) ? '../images/users/' . $row['portrait_path'] : $defaultImage;
 } else {
-    $title = "錯誤頁面，請重新登入";
+    $title = "錯誤頁面，請重新進入";
     $imagePath = $defaultImage;
 }
 
@@ -93,6 +107,11 @@ if ($userCount > 0) {
         .user-search {
             width: 200px;
         }
+
+        .user-img {
+            width: 300px;
+            height: 300px;
+        }
     </style>
 </head>
 
@@ -113,6 +132,11 @@ if ($userCount > 0) {
                 </div>
                 <div class="container">
                     <div class="row">
+                        <div class="mb-3 d-flex justify-content-center align-items-center flex-column">
+                            <label for="profile_image" class="my-3 h4">上傳Logo圖片</label>
+                            <img src="<?= htmlspecialchars($imagePath) ?>" alt="Profile Image" class="object-fit-fill user-img">
+                            <input type="file" name="profile_image" id="profile_image" class="my-3 ms-5 ps-5">
+                        </div>
                         <table class="table table-bordered">
                             <tr>
                                 <th>Name</th>
