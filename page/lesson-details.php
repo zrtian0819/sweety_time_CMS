@@ -11,9 +11,13 @@ require_once("../db_connect.php");
 
 $id = $_GET["id"];
 
-$sql = "SELECT * FROM lesson WHERE lesson_id = $id";
+$sql = "SELECT lesson.* FROM lesson WHERE lesson_id = $id";
 $result = $conn->query($sql);
 $row = $result->fetch_assoc();
+
+$sqlAll = "SELECT * FROM lesson";
+$allResult = $conn->query($sqlAll);
+$rows = $allResult->num_rows;
 
 
 //teacher
@@ -50,6 +54,11 @@ $rowPro = $resultProduct->fetch_assoc();
     <meta name="viewport" content="width=, initial-scale=1.0">
     <title><?= $row["name"] ?></title>
     <?php include("../css/css_Joe.php"); ?>
+    <style>
+        a {
+            text-decoration: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -126,6 +135,14 @@ $rowPro = $resultProduct->fetch_assoc();
                 <div class="col-lg-8 ms-2">
                     <h3 class="p-2">課程介紹</h3>
                     <div class="p-2"><?= $row["description"] ?></div>
+                    <div class="changePage text-end">
+                        <?php if ($id > 1) : ?>
+                            <a href="lesson-details.php?id=<?= $id - 1 ?>" class="btn-custom m-2 p-2">上一個課程</a>
+                        <?php endif ?>
+                        <?php if ($id < $rows) : ?>
+                            <a href="lesson-details.php?id=<?= $id + 1 ?>" class="btn-custom m-2 p-2">下一個課程</a>
+                        <?php endif ?>
+                    </div>
                 </div>
             </div>
         </div>

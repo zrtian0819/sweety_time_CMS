@@ -194,7 +194,7 @@ foreach ($rowsPro as $productClass) {
                     $dateStr = new DateTime($date);
                     $formartDate = $dateStr->format("Y-m-d H:i") ?>
                     <tbody>
-                        <tr class="text-center m-auto">
+                        <tr class="text-center m-auto align-middle">
                             <td><?= $id ?></td>
                             <?php echo ($row["activation"] == 1) ? "<td>" . "上架中" : "<td class='text-danger'>" . "已下架"; ?></td>
                             <td><?= $row["name"] ?></td>

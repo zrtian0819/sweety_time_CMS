@@ -60,7 +60,7 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
             <a href="lesson.php" class="btn btn-custom"><i class="fa-solid fa-arrow-left"></i></a>
             <form action="../function/doAddLesson.php" method="POST" enctype="multipart/form-data">
                 <h1>
-                    <input type="text" class="textarea-custom" value="課程名稱" name="name">
+                    <input type="text" class="textarea-custom m-2" value="課程名稱" name="name">
                 </h1>
                 <div class="row justify-content-center">
                     <div class="col-lg-3 m-2">
