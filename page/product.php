@@ -146,12 +146,12 @@ if (!isset($_GET["productId"])) {
                                         <img id="mainPhoto" class="w-100 h-100 object-fit-cover" src="../images/products/<?= $photoRows[0]["file_name"] ?>" alt="">
                                     </div>
                                     <div class="d-flex justify-content-center">
-                                        <div class="row w-100 gap-2">
+                                        <div class="row w-100 row-cols-5 gap-2">
                                             <?php
                                             $photoData = 1;
                                             foreach ($photoRows as $photoItem):
                                             ?>
-                                                <div class="subPhoto col-3">
+                                                <div class="subPhoto">
                                                     <img class="smallImg w-100 h-100 object-fit-cover" data-pic="<?= $photoData ?>" src="../images/products/<?= $photoItem["file_name"] ?>" alt="">
                                                 </div>
                                             <?php
@@ -162,7 +162,7 @@ if (!isset($_GET["productId"])) {
                                     </div>
 
                                 </div>
-                                <div class="col col-xl-8 px-2">
+                                <div class="col col-xl-8 ps-xl-4">
 
                                     <h3 class="mt-4 text-center text-xl-start"><?= $row["name"] ?></h3>
                                     <table class="table table-hover">
