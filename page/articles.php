@@ -3,18 +3,6 @@
 require_once("../db_connect.php");
 include("../function/login_status_inspect.php");
 
-// if (session_status() == PHP_SESSION_NONE) {
-//     session_start();
-// }
-
-
-// 文字縮排
-function getLeftChar($text, $num)
-{
-    return substr($text, 0, $num);
-}
-
-// 狀態
 $status = isset($_GET["status"]) ? $_GET["status"] : "all";
 
 // 初始化SQL語句
@@ -22,7 +10,13 @@ $sql = "SELECT * FROM articles WHERE 1 = 1";
 $params = [];
 $types = "";
 
-// 搜尋是否有搜尋條件
+// 文字縮排
+function getLeftChar($text, $num)
+{
+    return substr($text, 0, $num);
+}
+
+// 搜尋條件
 if (isset($_GET["search"]) && !empty($_GET["search"])) {
     $search = "%" . $_GET["search"] . "%";
     $sql .= " AND (title LIKE ? OR content LIKE ?)";
@@ -67,7 +61,6 @@ $total_pages = $total_items > 0 ? ceil($total_items / $per_page) : 1;
 $sql .= " ORDER BY $sortArt $sortDir LIMIT ?, ?";
 array_push($params, $start_item, $per_page);
 $types .= "ii";
-
 
 // 準備 SQL 語句
 $stmt = $conn->prepare($sql);
@@ -161,9 +154,9 @@ foreach ($rowsUsers as $users) {
                     <form action="">
                         <div class=" input-group m-2 d-flex justify-content-end">
                             <div>
-                                <input type="search" class="form-control" name="search" value="<?php echo isset($_GET["search"]) ? $_GET["search"] : "" ?>" placeholder="請輸入文字以搜尋文章、主題">
+                                <input type="search" class="form-control" name="search" value="<?php echo isset($_GET["search"]) ? $_GET["search"] : "" ?>" placeholder="輸入文章、主題關鍵字">
                             </div>
-                           
+
                             <div class="input-group-append">
                                 <button class="btn btn-outline-warning m-0 " type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                             </div>
@@ -188,17 +181,31 @@ foreach ($rowsUsers as $users) {
                     </div>
             </div>
 
+            <ul class="nav nav-tabs-custom">
+                <li class="nav-item">
+                    <a class="main-nav nav-link <?= $status === 'all' ? 'active' : '' ?>" href="?status=all">全部</a>
+                </li>
+                <li class="nav-item">
+                    <a class="main-nav nav-link <?= $status === 'on' ? 'active' : '' ?>" href="?status=on&search=<?= isset($_GET['search']) ? urlencode($_GET['search']) : '' ?>&sortArt=<?= $sortArt ?>&sortDir=<?= $sortDir ?>&p=<?= $page ?>">上架中</a>
+                </li>
+                <li class="nav-item">
+                    <a class="main-nav nav-link <?= $status === 'off' ? 'active' : '' ?>" href="?status=off&search=<?= isset($_GET['search']) ? urlencode($_GET['search']) : '' ?>&sortArt=<?= $sortArt ?>&sortDir=<?= $sortDir ?>&p=<?= $page ?>">已下架</a>
+                </li>
+            </ul>
+
             <!-- 欄位 -->
-             .
             <table class="table table-hover">
                 <thead class="text-content">
                     <tr>
                         <th>文章編號</th>
+                        <th>上架狀態</th>
                         <th>主題</th>
                         <th>內容</th>
                         <th>文章分類</th>
                         <th>作者</th>
-                        <th>建立時間</th>
+                        <th>建立<br>時間</th>
+                        <th>一鍵<br>修改</th>
+                        <th>詳細<br>資訊</th>
                     </tr>
                 </thead>
 
@@ -212,12 +219,25 @@ foreach ($rowsUsers as $users) {
                     ?>
                         <tr class="text-center m-auto">
                             <td><?= $articles["article_id"] ?></td>
+                            <?php echo ($articles["activation"] == 1) ? "<td>" . "上架中" : "<td class='text-danger'>" . "已下架"; ?></td>
+                            </td>
                             <td><?= $articles["title"] ?></td>
                             <td><?= getLeftChar($articles["content"], 200) . "..." ?></td>
                             <td><?= $productClassArr[$articles["product_class_id"]] ?></td>
-                            <td><?= $usersArr[$users["user_id"]] ?></td>
+                            <td><?= $usersArr[$id] ?></td>
                             <td><?= $formartDate ?></td>
+                            <td>
+                                <?php if ($status === "off"): ?>
+                                    <a href="../function/doReload4Articles.php?id=<?= $id ?>" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
+                                <?php else: ?>
+                                    <?php if ($articles["activation"] == 1): ?>
+                                        <a href="../function/doDelete4Articles.php?id=<?= $id ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+                                    <?php else: ?>
 
+                                        <a href="../function/doReload4Articles.php?id=<?= $id ?>" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                            </td>
                             <!-- 右側按鈕 -->
                             <td>
                                 <div class="d-flex justify-content-center ">
@@ -227,10 +247,6 @@ foreach ($rowsUsers as $users) {
 
                                     <div class="me-1">
                                         <a href="edit-article.php?id=<?= $articles["article_id"] ?>" class="btn btn-custom"><i class="fa-solid fa-pen"></i></a>
-                                    </div>
-
-                                    <div class="me-1">
-                                        <a href="../function/doDeleteArticle.php?id=<?= $articles["article_id"] ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
                                     </div>
                                 </div>
                             </td>
