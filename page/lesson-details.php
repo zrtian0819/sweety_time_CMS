@@ -60,7 +60,7 @@ $rowPro = $resultProduct->fetch_assoc();
         <div class="main col neumorphic p-5 pt-4">
             <!-- Content -->
             <a href="lesson.php" class="btn btn-custom"><i class="fa-solid fa-arrow-left"></i></a>
-            <h1><?= $row["name"] ?></h1>
+            <h1 class="m-2"><?= $row["name"] ?></h1>
             <div class="row justify-content-center">
                 <div class="col-lg-3 m-2">
                     <img src="../images/lesson/<?= $row["img_path"] ?>" alt="<?= $row["name"] ?>" class="ratio ratio-4x3">
@@ -125,7 +125,7 @@ $rowPro = $resultProduct->fetch_assoc();
                 </div>
                 <div class="col-lg-8 ms-2">
                     <h3 class="p-2">課程介紹</h3>
-                    <p class="p-2 lh-lg"><?= $row["description"] ?></p>
+                    <div class="p-2"><?= $row["description"] ?></div>
                 </div>
             </div>
         </div>

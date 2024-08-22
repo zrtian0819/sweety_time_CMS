@@ -58,7 +58,33 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
     <?php include("../css/css_Joe.php"); ?>
     <script src="https://cdn.tiny.cloud/1/cfug9ervjy63v3sj0voqw9d94ojiglomezxkdd4s5jr9owvu/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
     <style>
+        input[type="file"] {
+            display: none;
+        }
 
+        .photo {
+            position: relative;
+            overflow: hidden;
+
+        }
+
+        .uploadStyle {
+            cursor: pointer;
+            font-size: 1.5rem;
+            padding: 5px;
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            translate: -50% -50%;
+        }
+
+        .cover {
+            background: gray;
+            opacity: .5;
+            top: 0;
+            left: 0;
+        }
     </style>
 </head>
 
@@ -70,16 +96,18 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
         <div class="main col neumorphic p-5 pt-4">
             <!-- Content -->
             <a href="lesson.php" class="btn btn-custom"><i class="fa-solid fa-arrow-left"></i></a>
-            <form action="../function/doUpdateLesson.php?id=<?= $id ?>" method="POST" enctype="multipart/form-data">
-                <h1><input type="textarea" class="textarea-custom" value="<?= $row["name"] ?>" name="name"></h1>
+            <form action="../function/doUpdateLesson.php?id=<?= $id ?>" method="post" enctype="multipart/form-data">
+                <h1 class="m-2"><input type="text" class="textarea-custom" value="<?= $row["name"] ?>" name="name"></h1>
                 <div class="row justify-content-center">
                     <div class="col-lg-3 m-2">
-                        <img src="../images/lesson/<?= $row["img_path"] ?>" alt="<?= $row["name"] ?>" class="ratio ratio-4x3">
-                        <div class="mb-2 upload text-center">
-                            <div class="uploadArea">
-                                <h4>更新照片</h4>
+                        <div class="upload">
+                            <!-- ratio ratio-4x3 -->
+                            <div class="photo ">
+                                <img src="../images/lesson/<?= $row["img_path"] ?>" alt="<?= $row["name"] ?>" class="w-100 h-100 object-fit-cover">
+                                <div class="cover position-absolute w-100 h-100"></div>
+                                <label for="picUpload" class="uploadStyle btn-custom">更新照片</label>
+                                <input type="file" name="pic" id="picUpload">
                             </div>
-                            <input type="file" class="form-control" name="pic" required>
                         </div>
                         <table class="table mt-2 table-hover">
                             <tbody>
@@ -160,7 +188,6 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                         </p>
                     </div>
                 </div>
-
             </form>
         </div>
 
