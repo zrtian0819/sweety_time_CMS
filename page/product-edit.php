@@ -150,9 +150,7 @@ if (!isset($_GET["productId"])) {
                                             <tr>
                                                 <td class="dontNextLine fw-bold">描述</td>
                                                 <td>
-                                                    <textarea name="description" class="form-control textarea-custom" id="message" rows="5" placeholder="請輸入描述">
-                                                        <?= $row["description"] ?>
-                                                    </textarea>
+                                                    <textarea name="description" class="form-control textarea-custom" id="message" rows="5" placeholder="請輸入描述"><?= $row["description"] ?></textarea>
                                                 </td>
                                             </tr>
                                             <tr>

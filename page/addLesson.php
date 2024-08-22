@@ -37,9 +37,15 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
     <?php include("../css/css_Joe.php"); ?>
     <script src="https://cdn.tiny.cloud/1/cfug9ervjy63v3sj0voqw9d94ojiglomezxkdd4s5jr9owvu/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
     <style>
-        textarea {
+        .upload {
             width: 100%;
-            height: 100%;
+        }
+        .uploadArea{
+            border: 5px solid black;
+            width: 100%;
+            height: 40dvh;
+            align-content: center;
+            margin-bottom: 5px;
         }
     </style>
 </head>
@@ -52,11 +58,18 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
         <div class="main col neumorphic p-5 pt-4">
             <!-- Content -->
             <a href="lesson.php" class="btn btn-custom"><i class="fa-solid fa-arrow-left"></i></a>
-            <form action="../function/doAddLesson.php" method="post">
-                <h1><input type="textarea" class="textarea-custom" value="課程名稱" name="name"></h1>
+            <form action="../function/doAddLesson.php" method="POST" enctype="multipart/form-data">
+                <h1>
+                    <input type="text" class="textarea-custom" value="課程名稱" name="name">
+                </h1>
                 <div class="row justify-content-center">
                     <div class="col-lg-3 m-2">
-                        <img src="../images/lesson/01_cake_chestnut.jpg"alt="" class="ratio ratio-4x3">
+                        <div class="mb-2 upload text-center">
+                            <div class="uploadArea">
+                                <h4>上傳照片</h4>
+                            </div>
+                            <input type="file" class="form-control" name="pic" required>
+                        </div>
                         <table class="table mt-2 table-hover">
                             <tbody>
                                 <tr>
