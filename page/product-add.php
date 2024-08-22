@@ -62,6 +62,7 @@ foreach ($storeRows as $storeRow) {
             /* box-shadow: 0 0 15px #F4A293; */
             overflow: hidden;
             transition: 0.5s;
+            background-color: #ccc;
         }
 
         .img-small {
@@ -71,6 +72,7 @@ foreach ($storeRows as $storeRow) {
         .text-attention {
             color: red !important;
         }
+
     </style>
 </head>
 
@@ -92,7 +94,7 @@ foreach ($storeRows as $storeRow) {
                                 <div class="row d-flex align-items-center flex-column flex-xl-row">
                                     
                                     <div class="col px-2">
-                                        <h4>商品資訊</h4>
+                                        <h4 class="text-center">商品資訊</h4>
                                         <table class="table table-hover">
                                             
                                             <tr>
@@ -182,20 +184,22 @@ foreach ($storeRows as $storeRow) {
                                     </div>
                                     
                                     <div class="photo-upload">
-                                        <h4>圖片上傳</h4>
+                                        <h4 class="text-center">圖片上傳</h4>
                                         
-                                        <div class="mb-3">
-                                            <label for="fileUpload" class="custom-file-upload">
-                                                選擇圖片
-                                            </label>
-                                            <input type="file" id="fileUpload" class="file-input" accept="image/*">
-                                        </div>
-
+                                        <div class="container">
+                                                <label for="fileUpload" class="custom-file-upload mb-2">
+                                                    選擇圖片
+                                                </label>
+                                                <input type="file" id="fileUpload" class="file-input" accept=".jpg, .png" multiple>
+                                                <div class="row row-cols-6 d-flex" id="preview-imgbox">
+                                                    <!-- 圖片預覽區 -->
+                                                </div>
+                                        </div>  
+                                        
                                     </div>
 
 
                                     <div class="option-area d-flex justify-content-center mt-4 ">
-                                        
                                         <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="product-list.php">取消</a>
                                         <button class="btn btn-neumorphic px-4 mx-3 fw-bolder" type="submit">新增商品</button>
                                     </div>
@@ -211,6 +215,43 @@ foreach ($storeRows as $storeRow) {
     </div>
 
     <?php include("../js.php"); ?>
+
+    <script>
+        // const previewImgBox = document.querySelector("#preview-imgbox");
+        const fileUpload = document.querySelector("#fileUpload");
+
+        fileUpload.addEventListener('change', function(event) {
+
+            const files = event.target.files; // 取得所有選擇的文件
+            // const preview = document.getElementById('preview');
+            const previewImgBox = document.querySelector("#preview-imgbox");
+            previewImgBox.innerHTML = ''; // 清空預覽區域
+
+            if (files) {
+                // 遍歷所有選擇的文件
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.style.width = '120px';
+                        img.style.height = '120px';
+                        img.style.margin = '10px';
+                        img.style.objectFit = "cover";
+                        img.style.borderRadius = '5px';
+                        
+                        previewImgBox.appendChild(img); // 將圖片添加到預覽區域
+                    }
+
+                    reader.readAsDataURL(file); // 將文件讀取為 Data URL
+                }
+            }
+        });
+
+
+    </script>
 </body>
 
 </html>
