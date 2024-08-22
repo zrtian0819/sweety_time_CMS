@@ -109,7 +109,7 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                                 <input type="file" name="pic" id="picUpload">
                             </div>
                         </div>
-                        <table class="table mt-2 table-hover">
+                        <table class="table mt-2 table-hover align-middle">
                             <tbody>
                                 <tr>
                                     <th>
@@ -143,7 +143,7 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                                     <th>
                                         <h5>時間</h5>
                                     </th>
-                                    <td><input type="datetime-local" class="textarea-custom" name="updateTime"></td>
+                                    <td><input type="datetime-local" class="textarea-custom" name="updateTime" value="<?= $row["start_date"] ?>"></td>
                                 </tr>
                                 <tr>
                                     <th>
@@ -167,7 +167,7 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                                     <th>
                                         <h5>地址</h5>
                                     </th>
-                                    <td><input type="text" class="textarea-custom" value=<?= $row["location"] ?> name="location"></td>
+                                    <td><input type="text" class="textarea-custom" value="<?= $row["location"] ?>" name="location"></td>
                                 </tr>
                                 <tr>
                                     <th>
@@ -177,7 +177,7 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                                 </tr>
                             </tbody>
                         </table>
-                        <button type="submit" class="btn-custom">確認修改</button>
+                        <button type="submit" class="btn-custom w-100">確認修改</button>
                     </div>
                     <div class="col-lg-8 ms-2">
                         <h3 class="p-2">課程介紹</h3>
