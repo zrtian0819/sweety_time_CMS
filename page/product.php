@@ -169,8 +169,20 @@ if (!isset($_GET["productId"])) {
                                             <td><?= $row["discount"] ?></td>
                                         </tr>
                                         <tr>
-                                            <td class="dontNextLine fw-bold">上架</td>
-                                            <td><?= $row["available"] == 1 ? "上架中" : '<span class="text-attention">已下架</span>' ?></td>
+                                            <td class="dontNextLine fw-bold">產品狀態</td>
+                                            <td>
+                                                <?php 
+                                                if($row["deleted"]==1){
+                                                    echo '<div class="btn btn-secondary">已刪除</div>';
+                                                }else{
+                                                    if($row["available"]==1){
+                                                         echo '<div class="btn btn-success">上架中</div>';
+                                                    }else{
+                                                        echo '<div class="btn btn-danger">已下架</div>';
+                                                    }
+                                                }
+                                                 ?>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td class="dontNextLine fw-bold">標籤</td>
@@ -194,7 +206,7 @@ if (!isset($_GET["productId"])) {
                                 <div class="option-area d-flex justify-content-center mt-4 ">
                                     <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="product-edit.php?productId=<?= $id ?>">編輯</a>
                                     <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="../function/doProductValidSwitch.php?productId=<?= $id ?>"><?= $row["available"] == 1 ? "下架" : "上架" ?></a>
-                                    <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="">刪除</a>
+                                    <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="../function/doProductDeletedSwitch.php?productId=<?= $id ?>"><?= $row["deleted"] == 0 ? "刪除" : "復原產品" ?></a>
                                 </div>
                             </div>
                         </div>

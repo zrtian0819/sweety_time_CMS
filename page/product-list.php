@@ -286,7 +286,7 @@ foreach ($storeRows as $storeRow) {
                 <hr>
 
                 <?php if ($productCount > 0): ?>
-                    <table class="table table-bordered table-hover bdrs table-responsive align-middle">
+                    <table class="table table-hover bdrs table-responsive align-middle">    <!--移除的樣式 table-bordered -->
                         <thead class="text-center table-dark">
                             <tr>
                                 <th class="dontNextLine">商品編號</th>
@@ -295,8 +295,8 @@ foreach ($storeRows as $storeRow) {
                                 <th class="dontNextLine">類別</th>
                                 <th class="dontNextLine">價格</th>
                                 <th class="dontNextLine">描述</th>
-                                <th class="dontNextLine">狀態</th>
                                 <th class="dontNextLine">庫存數量</th>
+                                <th class="dontNextLine">狀態</th>
                                 <?= $SessRole == "admin" ? "<th class='dontNextLine'>刪除</th>" : "" ?>
                                 <th class="dontNextLine">詳細資訊</th>
                             </tr>
@@ -311,6 +311,7 @@ foreach ($storeRows as $storeRow) {
                                     <td class="dontNextLine text-center"><?= $classArr[$row["product_class_id"]] ?></td>
                                     <td class="text-center"><?= number_format($row["price"]) ?></td>
                                     <td><?= getLeftChar($row["description"], 100) . "..." ?></td>
+                                    <td class="text-center"><?= $row["stocks"] ?></td>
                                     <td class="text-center">
                                         <?php if ($row["available"] == 1): ?>
                                             <a class="btn btn-success dontNextLine" href="../function/doProductValidSwitch.php?productId=<?= $row["product_id"] ?>">上架中</a>
@@ -318,7 +319,6 @@ foreach ($storeRows as $storeRow) {
                                             <a class="btn btn-danger dontNextLine" href="../function/doProductValidSwitch.php?productId=<?= $row["product_id"] ?>">已下架</a>
                                         <?php endif; ?>
                                     </td>
-                                    <td class="text-center"><?= $row["stocks"] ?></td>
                                     <?php if ($SessRole == "admin"): ?>
                                         <td class="text-center"><?= $row["deleted"] == 0 ? "" : "<span class='btn btn-danger'>已刪除</span>"; ?></td>
                                     <?php endif;  ?>
