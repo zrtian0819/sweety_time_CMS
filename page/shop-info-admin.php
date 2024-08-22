@@ -3,9 +3,9 @@ require_once("../db_connect.php");      //避免sidebar先載入錯誤,人天先
 
 include("../function/login_status_inspect.php");
 
-$role = $_SESSION["user"]["role"];
+$role = $_SESSION["user"]["role"]; //判斷登入角色
 
- //假設session之中沒有shop_id則為NULL
+//假設session之中沒有shop_id則為NULL
 $shop_id = $_SESSION["shop"]["shop_id"] ?? null; 
 
 // 根据角色重定向到不同頁面
@@ -14,15 +14,9 @@ if ($role != "admin") {
     exit;
 }
 
-$sql = "SELECT * FROM shop";
-$result = $conn->query($sql);
-$rows = $result->fetch_all(MYSQLI_ASSOC);
-$allshopCount = $result->num_rows;
-
-
-// 預設值
+// 預設分頁值
 $page = isset($_GET['p']) ? (int)$_GET['p'] : 1;
-$per_page = 5;
+$per_page = 10;
 $start_item = ($page - 1) * $per_page;
 
 // 搜索條件
@@ -31,8 +25,18 @@ $search = isset($_GET["search"]) ? $_GET["search"] : '';
 // 使用 mysqli_real_escape_string 來處理搜索字串中的特殊字符
 $search = $conn->real_escape_string($search);
 
+// 分頁條件
+$filter = isset($_GET['filter']) ? $_GET['filter'] : 'all';
+//是否啟用的分頁
+$whereClause = "WHERE name LIKE '%$search%'";
+if ($filter == 'active') {
+    $whereClause .= " AND activation = 1";
+} elseif ($filter == 'inactive') {
+    $whereClause .= " AND activation = 0";
+}
+
 // 計算總記錄數
-$sql_total = "SELECT COUNT(*) AS total FROM shop WHERE name LIKE '%$search%'";
+$sql_total = "SELECT COUNT(*) AS total FROM shop $whereClause";
 $result_total = $conn->query($sql_total);
 $total_rows = $result_total->fetch_assoc()['total'];
 
@@ -40,10 +44,11 @@ $total_rows = $result_total->fetch_assoc()['total'];
 $total_page = ceil($total_rows / $per_page);
 
 // 查詢當前頁面的記錄
-$sql = "SELECT * FROM shop WHERE name LIKE '%$search%' LIMIT $start_item, $per_page";
+$sql = "SELECT * FROM shop $whereClause ORDER BY shop_id ASC LIMIT $start_item, $per_page";
 $result = $conn->query($sql);
 $rows = $result->fetch_all(MYSQLI_ASSOC);
 $shopCount = $result->num_rows;
+
 ?>
 
 <!DOCTYPE html>
@@ -64,7 +69,7 @@ $shopCount = $result->num_rows;
     <div class="container-fluid d-flex flex-row px-4">
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
         <div class="main col neumorphic p-5">
-        <form action="">
+            <form action="">
                     <div class="input-group d-flex justify-content-end align-items-center mb-2">
                         <a class="btn neumorphic" href="shop-info-admin.php"><i class="fa-solid fa-circle-left"></i></i></a>
                         <input type="search" class="form-control" placeholder="搜尋店家" name="search" style="max-width:200px">
@@ -73,7 +78,18 @@ $shopCount = $result->num_rows;
                 </form>
             <div class="container">
                 <div class="row">
-                    <div class="col-12 position-relative d-flex justify-content-center mb-3 mb-md-0">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link <?php if(!isset($_GET['filter']) || $_GET['filter'] == 'all') echo 'active'; ?>" href="shop-info-admin.php?filter=all">全部商家</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link <?php if(isset($_GET['filter']) && $_GET['filter'] == 'active') echo 'active'; ?>" href="shop-info-admin.php?filter=active">已啟用商家</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link <?php if(isset($_GET['filter']) && $_GET['filter'] == 'inactive') echo 'active'; ?>" href="shop-info-admin.php?filter=inactive">已關閉商家</a>
+                        </li>
+                    </ul>
+                    <div class="col-12 position-relative d-flex justify-content-center mb-3 mb-md-0 mt-3 mt-mb-0">
                         <div class="table-responsive">
                         <?php if ($shopCount > 0): ?>
                         <table class="table table-bordered table-hover bdrs table-responsive align-middle" style="min-width: 1000px;">

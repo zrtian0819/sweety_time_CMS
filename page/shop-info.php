@@ -61,6 +61,8 @@ if ($shop_id > 0) {
         $latitude = $shop_info["latitude"];
         $longitude = $shop_info["longitude"];
         $file_name = $shop_info["file_name"];
+        $activation = $shop_info["activation"];
+
     } else {
         echo "找不到指定的店家";
         exit;
@@ -99,6 +101,7 @@ if ($shop_id > 0) {
                         </a>
                     </div>
                     <div class="col-12 col-md-6 col-lg-5 px-4 shop-info-detail">
+                        <h3 class="mb-3 <?= $activation == 0 ? 'text-danger' : 'text-success'; ?>"><?= $activation == 0 ? '關閉中' : '起用中'; ?></h3>
                         <h3 class="mb-3">店家資訊</h3>
                         <ul class="list-unstyled">
                             <li class="my-2">店名：<?= $shop_name;?></li>
