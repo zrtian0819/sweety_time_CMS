@@ -188,11 +188,11 @@ foreach ($storeRows as $storeRow) {
                                 <div class="photo-upload">
                                     <h4 class="text-center">圖片上傳</h4>
 
-                                    <div class="container">
-                                        <label for="fileUpload" class="custom-file-upload mb-2">
+                                    <div class="container d-flex flex-column">
+                                        <label for="fileUpload" class="custom-file-upload my-2">
                                             選擇圖片
                                         </label>
-                                        <input type="file" name="file[]" id="fileUpload" class="file-input" accept=".jpg, .png" multiple>
+                                        <input type="file" name="pic[]" id="fileUpload" class="file-input" accept=".jpg, .png, .jpeg, .gif" multiple>
                                         <div class="row row-cols-6 d-flex" id="preview-imgbox">
                                             <!-- 圖片預覽區 -->
                                         </div>
