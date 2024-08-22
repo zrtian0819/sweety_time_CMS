@@ -72,6 +72,7 @@ foreach ($storeRows as $storeRow) {
         .text-attention {
             color: red !important;
         }
+
     </style>
 </head>
 
@@ -93,7 +94,7 @@ foreach ($storeRows as $storeRow) {
                                 <div class="row d-flex align-items-center flex-column flex-xl-row">
                                     
                                     <div class="col px-2">
-                                        <h4>商品資訊</h4>
+                                        <h4 class="text-center">商品資訊</h4>
                                         <table class="table table-hover">
                                             
                                             <tr>
@@ -183,17 +184,16 @@ foreach ($storeRows as $storeRow) {
                                     </div>
                                     
                                     <div class="photo-upload">
-                                        <h4>圖片上傳</h4>
+                                        <h4 class="text-center">圖片上傳</h4>
                                         
                                         <div class="container">
-                                                <label for="fileUpload" class="custom-file-upload ">
+                                                <label for="fileUpload" class="custom-file-upload mb-2">
                                                     選擇圖片
                                                 </label>
                                                 <input type="file" id="fileUpload" class="file-input" accept=".jpg, .png" multiple>
-                                            <div class="row row-cols-4" id="preview-imgbox">
-                                                <div class="img-box mb-3 rounded" id="previewImg">
+                                                <div class="row row-cols-6 d-flex" id="preview-imgbox">
+                                                    <!-- 圖片預覽區 -->
                                                 </div>
-                                            </div>
                                         </div>  
                                         
                                     </div>
@@ -236,9 +236,12 @@ foreach ($storeRows as $storeRow) {
                     reader.onload = function(e) {
                         const img = document.createElement('img');
                         img.src = e.target.result;
-                        img.style.maxWidth = '150px';
-                        img.style.maxHeight = '150px';
+                        img.style.width = '120px';
+                        img.style.height = '120px';
                         img.style.margin = '10px';
+                        img.style.objectFit = "cover";
+                        img.style.borderRadius = '5px';
+                        
                         previewImgBox.appendChild(img); // 將圖片添加到預覽區域
                     }
 
