@@ -38,7 +38,7 @@ $sqlAll = "SELECT * FROM articles";
 $allResult = $conn->query($sqlAll);
 $rows = $allResult->num_rows;
 
-//把articles的資料整理成關聯陣列
+// 把文章的資料整理成關聯陣列
 $sqlArticles = "SELECT * FROM articles ORDER BY article_id";
 $resultArticles = $conn->query($sqlArticles);
 $rowsArticles = $resultArticles->fetch_all(MYSQLI_ASSOC);
