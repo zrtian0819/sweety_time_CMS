@@ -109,9 +109,16 @@ if ($shop_id > 0) {
                                     <label for="description" class="form-label">店家簡介</label>
                                     <textarea class="form-control" id="description" name="description" rows="5" required><?= $description ?></textarea>
                                 </div>
-
-                                <button type="submit" class="btn btn-primary">儲存變更</button>
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-secondary m-2">儲存變更</button>
+                                </div>
                             </form>
+                            <div class="d-flex justify-content-end">
+                                <form action="../function/doDeleteShop.php" method="POST">
+                                    <input type="hidden" name="shop_id" value="<?= $shop_Id ?>"> 
+                                    <button type="submit" class="btn btn-danger m-2 p-2"><i class="fa-solid fa-trash"></i> 刪除商家</button>
+                                </form>
+                            </div>
                     </div>
                 </div>
             </div>
