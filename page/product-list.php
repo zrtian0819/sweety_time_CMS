@@ -296,8 +296,7 @@ foreach ($storeRows as $storeRow) {
                                 <th class="dontNextLine">價格</th>
                                 <th class="dontNextLine">描述</th>
                                 <th class="dontNextLine">庫存數量</th>
-                                <th class="dontNextLine">狀態</th>
-                                <?= $SessRole == "admin" ? "<th class='dontNextLine'>刪除</th>" : "" ?>
+                                <th class="dontNextLine">產品狀態</th>
                                 <th class="dontNextLine">詳細資訊</th>
                             </tr>
                         </thead>
@@ -313,15 +312,15 @@ foreach ($storeRows as $storeRow) {
                                     <td><?= getLeftChar($row["description"], 100) . "..." ?></td>
                                     <td class="text-center"><?= $row["stocks"] ?></td>
                                     <td class="text-center">
-                                        <?php if ($row["available"] == 1): ?>
+                                        <?php if ($row["deleted"] == 1): ?>
+                                            <a class='btn btn-secondary' href="../function/doProductDeletedSwitch.php?productId=<?= $row["product_id"] ?>">已刪除</a>
+                                        <?php elseif($row["available"] == 1): ?>
                                             <a class="btn btn-success dontNextLine" href="../function/doProductValidSwitch.php?productId=<?= $row["product_id"] ?>">上架中</a>
-                                        <?php else: ?>
+                                        <?php elseif($row["available"] == 0): ?>
                                             <a class="btn btn-danger dontNextLine" href="../function/doProductValidSwitch.php?productId=<?= $row["product_id"] ?>">已下架</a>
                                         <?php endif; ?>
                                     </td>
-                                    <?php if ($SessRole == "admin"): ?>
-                                        <td class="text-center"><?= $row["deleted"] == 0 ? "" : "<span class='btn btn-danger'>已刪除</span>"; ?></td>
-                                    <?php endif;  ?>
+                                    
                                     <td class="text-center">
                                         <a href="product.php?productId=<?= $row["product_id"] ?>" class="btn btn-custom">
                                             <i class="fa-solid fa-list"></i>
