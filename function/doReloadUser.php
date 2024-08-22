@@ -7,12 +7,12 @@ if (!isset($_GET["id"])) {
 }
 
 $id = $_GET["id"];
-$sql = "UPDATE users SET activation = 0 WHERE user_id = $id";
+$sql = "UPDATE users SET activation = 1 WHERE user_id = $id";
 
 if ($conn->query($sql) === TRUE) {
-    header("location: ../page/users.php?status=on");
+    header("location: ../page/users.php?status=off");
 } else {
-    echo "軟刪除失敗: " . $conn->error;
+    echo "恢復失敗: " . $conn->error;
 }
 
 $conn->close();
