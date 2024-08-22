@@ -93,42 +93,6 @@ if ($result === false) {
 
 $articlesCount = $result->num_rows;
 
-
-//文章分類
-$class = isset($_GET["class"]) ? $_GET["class"] : "";
-
-switch ($class) {
-    case 1:
-        $sql .= " AND product_class_id =1";
-        break;
-    case 2:
-        $sql .= " AND product_class_id =2";
-        break;
-    case 3:
-        $sql .= " AND product_class_id =3";
-        break;
-    case 4:
-        $sql .= " AND product_class_id =4";
-        break;
-    case 5:
-        $sql .= " AND product_class_id =5";
-        break;
-    case 6:
-        $sql .= " AND product_class_id =6";
-        break;
-    case "all":
-        $sql;
-        break;
-}
-
-//搜尋文章
-$search = isset($_GET["search"]) ? $_GET["search"] : "";
-if ($search != "" && $class != "all") {
-    $sql .= " AND name LIKE '%$search%'";
-} elseif ($search != "" && $class == "all") {
-    $sql .= " AND name LIKE '%$search%'";
-}
-
 //分類
 $sqlProductClass = "SELECT * FROM product_class ORDER BY product_class_id";
 $resultProduct = $conn->query($sqlProductClass);
@@ -199,21 +163,7 @@ foreach ($rowsUsers as $users) {
                             <div>
                                 <input type="search" class="form-control" name="search" value="<?php echo isset($_GET["search"]) ? $_GET["search"] : "" ?>" placeholder="請輸入文字以搜尋文章、主題">
                             </div>
-
-                            <select class="form-select-sm" aria-label="Default select example" name="class">
-                                <option value="all">分類</option>
-                                <option value="1">蛋糕</option>
-                                <option value="2">餅乾</option>
-                                <option value="3">塔 / 派</option>
-                                <option value="4">泡芙</option>
-                                <option value="5">冰淇淋</option>
-                                <option value="6">其他</option>
-                            </select>
-                            <select class="form-select-sm" aria-label="Default select example" name="sort">
-                                <option value="id">依文章編號排序(預設)</option>
-                                <option value="date">依建立時間排序</option>
-                            </select>
-
+                           
                             <div class="input-group-append">
                                 <button class="btn btn-outline-warning m-0 " type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                             </div>
