@@ -60,7 +60,7 @@ if ($shop_id > 0) {
         $sign_up_time = $shop_info["sign_up_time"];
         $latitude = $shop_info["latitude"];
         $longitude = $shop_info["longitude"];
-        $file_name = $shop_info["file_name"];
+        $logo_path = $shop_info["logo_path"];
         $activation = $shop_info["activation"];
 
     } else {
@@ -97,11 +97,11 @@ if ($shop_id > 0) {
                 <div class="row">
                     <div class="col-12 col-md-6 col-lg-5 position-relative d-flex justify-content-center align-items-center mb-3 mb-md-0">
                         <a href="">
-                            <img class="shop-info-logo" src="../images/shop_logo/<?=$file_name;?>" alt="店家Logo">
+                            <img class="shop-info-logo" src="../images/shop_logo/<?=$logo_path;?>?t=<?=time();?>" alt="店家Logo">
                         </a>
                     </div>
                     <div class="col-12 col-md-6 col-lg-5 px-4 shop-info-detail">
-                        <h3 class="mb-3 <?= $activation == 0 ? 'text-danger' : 'text-success'; ?>"><?= $activation == 0 ? '關閉中' : '起用中'; ?></h3>
+                        <h3 class="mb-3 <?= $activation == 0 ? 'text-danger' : 'text-success'; ?>"><?= $activation == 0 ? '關閉中' : '啟用中'; ?></h3>
                         <h3 class="mb-3">店家資訊</h3>
                         <ul class="list-unstyled">
                             <li class="my-2">店名：<?= $shop_name;?></li>

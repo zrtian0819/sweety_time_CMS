@@ -37,11 +37,11 @@
   
 .create-shop-card{
   min-width: 20rem;
-  max-width: 40rem;
+  max-width: 60rem;
   height: auto;
-  width: 50%;
-  margin: 5em auto 0 auto;
-  padding: 0 3em 0 3em;
+  width: 100%;
+  margin: 1em auto 0 auto;
+  padding: 3em 2em;
   border-radius: 10px;
   display: flex;
   flex-direction: column;

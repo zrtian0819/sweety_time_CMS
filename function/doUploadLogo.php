@@ -1,56 +1,73 @@
 <?php
 require_once("../db_connect.php");
 
-// 檢查是否有上傳檔案
-if (isset($_POST["submit"])) {
-    $currentImage = $_POST["currentImage"];
-    $target_dir = "../images/";
-    $target_file = $target_dir . basename($_FILES["newImage"]["name"]);
-    $uploadOk = 1;
-    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $shop_id = $_POST['shop_id'];
+    $shop_name = $_POST['name'];
+    $phone = $_POST['phone'];
+    $address = $_POST['address'];
+    $description = $_POST['description'];
+    
+    // 先從資料庫中獲取當前的 logo 檔案名稱
+    $sql = "SELECT logo_path FROM shop WHERE shop_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $shop_id);
+    $stmt->execute();
+    $stmt->bind_result($currentLogoName);
+    $stmt->fetch();
+    $stmt->close();
 
-    // 檢查是否為圖片文件
-    $check = getimagesize($_FILES["newImage"]["tmp_name"]);
-    if ($check !== false) {
-        echo "File is an image - " . $check["mime"] . ".";
-        $uploadOk = 1;
-    } else {
-        echo "File is not an image.";
-        $uploadOk = 0;
-    }
+    // 檢查是否有上傳新檔案
+    if (isset($_FILES['shop_logo']) && $_FILES['shop_logo']['error'] === UPLOAD_ERR_OK) {
+        $fileTmpPath = $_FILES['shop_logo']['tmp_name'];
+        $fileName = $_FILES['shop_logo']['name'];
+        $fileSize = $_FILES['shop_logo']['size'];
+        $fileType = $_FILES['shop_logo']['type'];
+        $fileNameCmps = explode(".", $fileName);
+        $fileExtension = strtolower(end($fileNameCmps));
+        
+        // 設定允許的檔案類型
+        $allowedfileExtensions = array('jpg', 'gif', 'png', 'jpeg');
+        if (in_array($fileExtension, $allowedfileExtensions)) {
+            // 使用資料庫中的檔案名稱保存新檔案
+            $uploadFileDir = '../images/shop_logo/';
+            $dest_path = $uploadFileDir . $currentLogoName;
 
-    // 檢查文件大小
-    if ($_FILES["newImage"]["size"] > 500000) { // 限制為500KB
-        echo "Sorry, your file is too large.";
-        $uploadOk = 0;
-    }
+            if (move_uploaded_file($fileTmpPath, $dest_path)) {
+                // 成功上傳後，更新其他資料（不改變 logo 檔案名稱）
+                $sql = "UPDATE shop 
+                        SET name=?, phone=?, address=?, description=? 
+                        WHERE shop_id=?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("ssssi", $shop_name, $phone, $address, $description, $shop_id);
+                $stmt->execute();
 
-    // 允許的文件格式
-    if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
-        echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-        $uploadOk = 0;
-    }
-
-    // 檢查是否上傳成功
-    if ($uploadOk == 0) {
-        echo "Sorry, your file was not uploaded.";
-    } else {
-        // 如果上傳成功，覆蓋現有文件
-        if (move_uploaded_file($_FILES["newImage"]["tmp_name"], $target_file)) {
-            // 刪除舊圖片
-            if (file_exists($target_dir . $currentImage)) {
-                unlink($target_dir . $currentImage);
+                echo "檔案已成功上傳和資料更新";
+            } else {
+                echo "上傳檔案時出錯";
             }
-
-            // 更新資料庫中的圖片名稱（可選）
-            // 例如：
-            // $sql = "UPDATE shops SET image = '".basename($_FILES["newImage"]["name"])."' WHERE ShopID = $shopID";
-            // $conn->query($sql);
-
-            echo "The file " . htmlspecialchars(basename($_FILES["newImage"]["name"])) . " has been uploaded and replaced.";
         } else {
-            echo "Sorry, there was an error uploading your file.";
+            echo "上傳的檔案類型不被允許";
         }
+    } else {
+        // 若未上傳新檔案，僅更新其他資料
+        $sql = "UPDATE shop 
+                SET name=?, phone=?, address=?, description=? 
+                WHERE shop_id=?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssssi", $shop_name, $phone, $address, $description, $shop_id);
+        $stmt->execute();
+
+        echo "資料已成功更新";
     }
+
+    $conn->close();
+
+    // 重定向
+    header("Location: ../page/shop-info.php?shopId=" . $shop_id);
+    exit;
+
+} else {
+    echo "請使用POST方法提交表單";
 }
 ?>

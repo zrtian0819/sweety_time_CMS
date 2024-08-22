@@ -10,7 +10,7 @@ if(isset($_SESSION["shop"]["shop_id"])){
     
     // if($shop_id=="admin"){
     //     header("location: dashboard-home_Joe.php");
-    // }
+    //}
 
     if(isset($_GET["shopId"])){
         if( $_GET["shopId"]!=$_SESSION["shop"]["shop_id"] ){
@@ -42,9 +42,8 @@ if ($shop_id > 0) {
         $sign_up_time = $shop_info["sign_up_time"];
         $latitude = $shop_info["latitude"];
         $longitude = $shop_info["longitude"];
-        $file_name = $shop_info["file_name"];
+        $logo_path = $shop_info["logo_path"];
         $activation = $shop_info["activation"];
-
     } else {
         echo "找不到指定的店家";
         exit;
@@ -80,21 +79,22 @@ if ($shop_id > 0) {
             </div>
             <div class="container">
                 <div class="row">
-                    <div class="col-12 col-md-6 col-lg-6 position-relative d-flex flex-column justify-content-center align-items-center mb-3 mb-md-0">
-                        <!-- 當前圖片展示 -->
-                        <img src="../images/<?= $file_name ?>" alt="目前的圖片">
-                        <form action="doUploadLogo.php" method="post" enctype="multipart/form-data" class="d-flex flex-column justify-content-center align-items-center">
-                            <label for="imageUpload">更換圖片：</label>
-                            <input type="file" name="newImage" id="imageUpload">
-                            <input type="hidden" name="currentImage" value="<?= $file_name ?>">
-                            <button type="submit" name="submit">上傳並更換</button>
-                        </form>
+                    <div class="col-12 col-md-6 col-lg-5 position-relative d-flex flex-column justify-content-center align-items-center mb-3 mb-md-0">
+                        <a href="">
+                            <img class="shop-info-logo" src="../images/shop_logo/<?=$logo_path;?>?t=<?=time();?>" alt="店家Logo">
+                        </a>
                     </div>
                     <div class="col-12 col-md-6 col-lg-6 px-4 shop-info-detail">
-                        <h3 class="mb-3 <?= $activation == 0 ? 'text-danger' : 'text-success'; ?>"><?= $activation == 0 ? '關閉中' : '起用中'; ?></h3>
-                    <form action="../function/doUpdateUser.php" method="POST">
+                        <h3 class="mb-3 <?= $activation == 0 ? 'text-danger' : 'text-success'; ?>"><?= $activation == 0 ? '關閉中' : '啟用中'; ?></h3>
+                    <form action="../function/doUploadLogo.php" method="POST" enctype="multipart/form-data">
                                 <!-- 隱藏字段，用於傳遞shop_id -->
                                 <input type="hidden" name="shop_id" value="<?= $shop_id ?>">
+
+                                <!-- 檔案上傳字段 -->
+                                <div class="mb-3">
+                                    <label for="shop_logo" class="form-label">店家Logo</label>
+                                    <input type="file" class="form-control" id="shop_logo" name="shop_logo">
+                                </div>
 
                                 <!-- 其他表單字段 -->
                                 <div class="mb-3">
@@ -114,7 +114,7 @@ if ($shop_id > 0) {
 
                                 <div class="mb-3">
                                     <label for="description" class="form-label">店家簡介</label>
-                                    <textarea class="form-control" id="description" name="description" rows="5" required><?= $description ?></textarea>
+                                    <textarea class="form-control"  name="description" rows="5" required><?= $description ?></textarea>
                                 </div>
                                 <div class="d-flex justify-content-end">
                                     <button type="submit" class="btn btn-secondary m-2">儲存變更</button>
@@ -142,6 +142,6 @@ if ($shop_id > 0) {
         </div>
     </div>
     <?php include("../js.php"); ?>
+    
 </body>
-
 </html>
