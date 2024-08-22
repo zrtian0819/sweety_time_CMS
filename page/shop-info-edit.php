@@ -43,6 +43,8 @@ if ($shop_id > 0) {
         $latitude = $shop_info["latitude"];
         $longitude = $shop_info["longitude"];
         $file_name = $shop_info["file_name"];
+        $activation = $shop_info["activation"];
+
     } else {
         echo "找不到指定的店家";
         exit;
@@ -85,6 +87,7 @@ if ($shop_id > 0) {
                         </a>
                     </div>
                     <div class="col-12 col-md-6 col-lg-6 px-4 shop-info-detail">
+                        <h3 class="mb-3 <?= $activation == 0 ? 'text-danger' : 'text-success'; ?>"><?= $activation == 0 ? '關閉中' : '起用中'; ?></h3>
                     <form action="../function/doUpdateUser.php" method="POST">
                                 <!-- 隱藏字段，用於傳遞shop_id -->
                                 <input type="hidden" name="shop_id" value="<?= $shop_id ?>">
@@ -113,12 +116,22 @@ if ($shop_id > 0) {
                                     <button type="submit" class="btn btn-secondary m-2">儲存變更</button>
                                 </div>
                             </form>
+                            <?php if ($activation == 0): ?>
+                            <div class="d-flex justify-content-end">
+                                <form action="../function/doReUseShop.php" method="POST">
+                                    <input type="hidden" name="shop_id" value="<?= $shop_id ?>"> 
+                                    <button type="submit" class="btn btn-success m-2 p-2"><i class="fa-solid fa-check"></i> 啟用商家</button>
+                                </form>
+                            </div>
+                            <?php endif; ?>
+                            <?php if ($activation == 1): ?>
                             <div class="d-flex justify-content-end">
                                 <form action="../function/doDeleteShop.php" method="POST">
-                                    <input type="hidden" name="shop_id" value="<?= $shop_Id ?>"> 
+                                    <input type="hidden" name="shop_id" value="<?= $shop_id ?>"> 
                                     <button type="submit" class="btn btn-danger m-2 p-2"><i class="fa-solid fa-trash"></i> 刪除商家</button>
                                 </form>
                             </div>
+                            <?php endif; ?>
                     </div>
                 </div>
             </div>
