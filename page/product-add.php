@@ -90,7 +90,7 @@ foreach ($storeRows as $storeRow) {
                 <div class="container">
                     <div class="row d-flex justify-content-center">
                         <div class="col-12">
-                            <form action="../function/doAddProduct .php" method="post">
+                            <form action="../function/doAddProduct.php" method="post">
                                 <div class="row d-flex align-items-center flex-column flex-xl-row">
                                     
                                     <div class="col px-2">
