@@ -201,6 +201,28 @@ foreach ($storeRows as $storeRow) {
         .dontNextLine {
             white-space: nowrap;
         }
+
+        /* 新增商品的按鈕效果 */
+        .add-btn{
+
+            .addProducttoggle{
+                width: 0;
+                overflow: hidden;
+                margin: 0;
+                padding: 0;
+                height: auto;
+                text-wrap: nowrap;
+                transition:0.3s;
+            }
+
+            &:hover{
+                .addProducttoggle{
+                    width: auto;
+                    margin-left: 3px;
+                }   
+            }
+        }
+
     </style>
 </head>
 
@@ -213,7 +235,14 @@ foreach ($storeRows as $storeRow) {
 
         <div class="main col neumorphic p-4">
 
-            <h2>商品列表</h2>
+            <div class="d-flex justify-content-between align-items-center">
+                <h2>商品列表</h2>
+                <a class="add-btn btn btn-custom d-flex flex-row align-items-center" href="product-add.php">
+                    <i class="fa-solid fa-plus align-middle"></i><span class="addProducttoggle d-inline-block"> 新增商品</span>
+                </a>
+            </div>
+            
+
             <p><?= $productCount ?>/<?= $allProductCount ?>筆 </p>
 
             <div class="container-fluid">
