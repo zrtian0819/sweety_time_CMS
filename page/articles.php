@@ -1,10 +1,22 @@
 <?php
 
 require_once("../db_connect.php");
+include("../function/login_status_inspect.php");
 
 // if (session_status() == PHP_SESSION_NONE) {
 //     session_start();
 // }
+
+//狀態
+$status = isset($_GET["status"]) ? $_GET["status"] : "all";
+
+if ($status == "on") {
+    $sql .= " AND activation = 1";
+} elseif ($status == "off") {
+    $sql .= " AND activation = 0";
+} else {
+    $sql;
+}
 
 
 //文字縮排
