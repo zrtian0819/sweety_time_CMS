@@ -29,7 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $sql = "INSERT INTO users (role,name, account, password, email, phone, birthday, sign_up_time,activation,portrait_path) 
 VALUES ('user','$name', '$account', '$password', '$email', '$phone', '$birthday','$now',1,'$newFileName')";
                 if ($conn->query($sql) === TRUE) {
-                    echo "資料和圖片儲存成功";
+                    // echo "資料和圖片儲存成功";
+                    header("location:users.php");
+                    exit;
                 } else {
                     echo "圖片路徑儲存失敗: " . $conn->error;
                 }
@@ -42,7 +44,6 @@ VALUES ('user','$name', '$account', '$password', '$email', '$phone', '$birthday'
     } else {
         echo "資料儲存成功，但未上傳圖片。";
     }
-    header("location:users.php");
 }
 
 $conn->close();
