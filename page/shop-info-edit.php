@@ -1,21 +1,16 @@
 <?php
 require_once("../db_connect.php");      //避免sidebar先載入錯誤,人天先加的
 
-// 獲取網址中的 shopId 參數
-// $shop_id = isset($_GET['shopId']) ? intval($_GET['shopId']) : 0;
-
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+include("../function/login_status_inspect.php");
 
 $shop_id = $_SESSION["shop"]["shop_id"];
 
 
 if(isset($_SESSION["shop"]["shop_id"])){
     
-    if($shop_id=="admin"){
-        header("location: dashboard-home_Joe.php");
-    }
+    // if($shop_id=="admin"){
+    //     header("location: dashboard-home_Joe.php");
+    // }
 
     if(isset($_GET["shopId"])){
         if( $_GET["shopId"]!=$_SESSION["shop"]["shop_id"] ){
@@ -40,7 +35,7 @@ if ($shop_id > 0) {
 
     if ($result_shop_info->num_rows > 0) {
         $shop_info = $result_shop_info->fetch_assoc();
-        $name = $shop_info["name"];
+        $shop_name = $shop_info["name"];
         $phone = $shop_info["phone"];
         $address = $shop_info["address"];
         $description = $shop_info["description"];
@@ -77,7 +72,10 @@ if ($shop_id > 0) {
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
 
         <div class="main col neumorphic p-5">
-            <h2 class="mb-3">基本資料</h2>
+            <div class="d-flex justify-content-between">
+                <h2 class="mb-3">基本資料</h2>
+                <a class="btn neumorphic d-flex align-items-center px-3 py-0" href="shop-info-admin.php"><i class="fa-solid fa-circle-left"></i></i></a>
+            </div>
             <div class="container">
                 <div class="row">
                     <div class="col-12 col-md-6 col-lg-6 position-relative d-flex justify-content-center align-items-center mb-3 mb-md-0">
@@ -94,7 +92,7 @@ if ($shop_id > 0) {
                                 <!-- 其他表單字段 -->
                                 <div class="mb-3">
                                     <label for="name" class="form-label">店名</label>
-                                    <input type="text" class="form-control" id="name" name="name" value="<?= $name ?>" required>
+                                    <input type="text" class="form-control" id="name" name="name" value="<?= $shop_name ?>" required>
                                 </div>
 
                                 <div class="mb-3">
