@@ -95,7 +95,7 @@ if (!isset($_GET["productId"])) {
             aspect-ratio: 1;
             border-radius: 10px;
             overflow: hidden;
-            transition: 0.3s;
+            transition: 0.2s;
             cursor: pointer;
 
             &:hover {
@@ -107,6 +107,11 @@ if (!isset($_GET["productId"])) {
                 transition: 0s;
                 scale: 0.96;
             }
+        }
+
+        .shiningJump {
+            scale: 1.05;
+            filter: brightness(1.2) blur(5px);
         }
 
 
@@ -258,17 +263,17 @@ if (!isset($_GET["productId"])) {
             picListItem[i].addEventListener("click", function() {
                 let img = this.children[0]; //this等同於 picListItem[i] 本身
                 mainPic.src = img.src;
-                jump(mainPic);
+                jump(mainPic, "shiningJump");
             });
         }
 
-        function jump(obj) {
+        function jump(obj, className) {
             setTimeout(() => {
-                obj.style.scale = 1.05;
+                obj.classList.add(className);
             }, 300);
 
             setTimeout(() => {
-                obj.style.scale = 1;
+                obj.classList.remove(className);
             }, 500);
         }
     </script>
