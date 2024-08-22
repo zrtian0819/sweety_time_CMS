@@ -108,9 +108,10 @@ if (!isset($_GET["productId"])) {
         <main class="product main col neumorphic p-5">
 
             <h2 class="mb-5 text-center">商品管理</h2>
-            <a class="btn btn-custom px-4 fw-bolder mb-4" href="product-list.php">
-                <i class="fa-solid fa-arrow-left-long"></i>
+            <a class="btn-animation btn btn-custom d-inline-flex flex-row align-items-center mb-3" href="product-list.php">
+                <i class="fa-solid fa-arrow-left-long"></i><span class="btn-animation-innerSpan d-inline-block">返回</span>
             </a>
+
             <?php if (isset($_GET["productId"])): ?>
                 <div class="container">
 
@@ -171,17 +172,17 @@ if (!isset($_GET["productId"])) {
                                         <tr>
                                             <td class="dontNextLine fw-bold">產品狀態</td>
                                             <td>
-                                                <?php 
-                                                if($row["deleted"]==1){
+                                                <?php
+                                                if ($row["deleted"] == 1) {
                                                     echo '<div class="btn btn-secondary">已刪除</div>';
-                                                }else{
-                                                    if($row["available"]==1){
-                                                         echo '<div class="btn btn-success">上架中</div>';
-                                                    }else{
+                                                } else {
+                                                    if ($row["available"] == 1) {
+                                                        echo '<div class="btn btn-success">上架中</div>';
+                                                    } else {
                                                         echo '<div class="btn btn-danger">已下架</div>';
                                                     }
                                                 }
-                                                 ?>
+                                                ?>
                                             </td>
                                         </tr>
                                         <tr>
