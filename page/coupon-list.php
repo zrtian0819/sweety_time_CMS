@@ -92,30 +92,28 @@ if (!isset($_GET["sort"])){
     }
 }
 
-// 準備撈資料
-$stmt_all = $conn -> prepare($sql_all);
 
-// 將參數化的搜尋&篩選條件取代佔位符
-if (!empty($params)) {
-    $stmt_all -> bind_param($types, ...$params);
+// 處理per_page參數
+if(!isset($_GET["per_page"]) || $_GET["per_page"] == NULL || $_GET["per_page"] == 0){
+    $per_page = 10;
+}else{
+    $per_page = $_GET["per_page"];
 }
 
-// 執行撈資料 & 取得結果
-$stmt_all->execute();
-$result_all = $stmt_all -> get_result();
-$rows_all = $result_all->fetch_all(MYSQLI_ASSOC);
-
-// 計算頁數
-$per_page = isset($_GET["per_page"])? $_GET["per_page"] : 10;
-$total_rows = count($rows_all);
+// 第一次撈資料，計算頁數
+$total_stmt = $conn->prepare($sql_all);
+if (!empty($params)) {
+    $total_stmt->bind_param($types, ...$params);
+}
+$total_stmt->execute();
+$total_result = $total_stmt->get_result();
+$total_rows = $total_result->num_rows;
 $total_pages = ceil($total_rows / $per_page);
 
-// 依據目前頁碼來撈第二次資料
-$current_page = isset($_GET["page"])? $_GET["page"] : 1;
-$sql_page = $sql_all . " LIMIT ?, ?";
-
-// 將分頁參數加入到參數陣列中
+// 分頁處理
+$current_page = isset($_GET["page"]) ? $_GET["page"] : 1;
 $start_item = ($current_page - 1) * $per_page;
+$sql_page = $sql_all . " LIMIT ?, ?";
 array_push($params, $start_item, $per_page);
 $types .= "ii";
 
@@ -124,6 +122,7 @@ $stmt_page = $conn->prepare($sql_page);
 // 綁定所有參數
 $stmt_page->bind_param($types, ...$params);
 
+// 執行第二次撈資料
 $stmt_page->execute();
 $result_page = $stmt_page->get_result();
 $rows_page = $result_page->fetch_all(MYSQLI_ASSOC);
@@ -193,12 +192,14 @@ $rows_page = $result_page->fetch_all(MYSQLI_ASSOC);
             <div class="">
             </div>
 
+            <!-- 設定一頁幾筆資料 -->
             <div class="my-2">
-                <form action="" class="d-flex align-items-center">
+                <form class="d-flex align-items-center">
                     <span>每頁</span>
-                    <input type="text" class="form-control coupon-input-bar" name="per_page" value="<?= $per_page ?>" placeholder="">
+                    <input type="text" class="form-control coupon-input-bar" name="per_page" id="perPageInput" value="<?= $per_page ?>" placeholder="">
                     <span>筆</span>
-                    <button button type = "submit" class="btn neumorphic mx-2">GO</button>
+                    <a class="btn neumorphic mx-2" id="perPageBtn">GO</a>
+                    <span>，共有<?= $total_rows ?>筆資料</span>
                 </form>
             </div>
 
@@ -284,8 +285,9 @@ $rows_page = $result_page->fetch_all(MYSQLI_ASSOC);
 
     <!-- Javascript 寫這裡 -->
     <?php include("../js.php"); ?>
-    
     <script>
+
+        // 用AJAX動態更改優惠券的啟用狀態
         const activ_switches = document.querySelectorAll('.activ_switch');
 
         activ_switches.forEach(function(activ_switch) {
@@ -329,6 +331,20 @@ $rows_page = $result_page->fetch_all(MYSQLI_ASSOC);
                 });
             });
         })
+
+        // 設定一頁幾筆資料
+        document.querySelector('#perPageBtn').addEventListener('click', function() {
+            let perPageValue = document.querySelector('#perPageInput').value;
+
+            // 抓取原來的網址並將 per_page 參數清空
+            let baseUrl = '<?= rebuild_url(["per_page" => null]) ?>';
+
+            // 再把 per_page 加到網址中
+            let newUrl = baseUrl + '&per_page=' + perPageValue;
+
+            // 跳轉到新網址
+            window.location.href = newUrl;
+        });
     </script>
 </body>
 
