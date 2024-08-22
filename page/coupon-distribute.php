@@ -1,6 +1,7 @@
 <?php
 
 require_once("../db_connect.php");
+include("../function/login_status_inspect.php");
 
 $per_page = 10;
 $page = isset($_GET["p"]) ? (int)$_GET["p"] : 1;

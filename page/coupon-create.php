@@ -1,6 +1,7 @@
 <?php
 
 require_once("../db_connect.php");
+include("../function/login_status_inspect.php");
 
 ?>
 
@@ -36,7 +37,7 @@ require_once("../db_connect.php");
             </div>
             <hr>
             <div class="container">
-                <form action="../api/doCreateCoupon.php" method="post">
+                <form action="../function/doCreateCoupon.php" method="post">
                     <div class="mb-2 row">
                         <div class="col-xl-6 col-lg-12">
                             <label class="form-label" for="name">優惠券名稱</label>

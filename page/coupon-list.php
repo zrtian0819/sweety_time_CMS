@@ -1,6 +1,7 @@
 <?php
 
 require_once("../db_connect.php");
+include("../function/login_status_inspect.php");
 
 // 抓取現在日期以做判斷和篩選
 $now = date("Y-m-d");
