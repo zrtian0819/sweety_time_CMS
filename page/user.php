@@ -12,10 +12,19 @@ $result = $conn->query($sql);
 $userCount = $result->num_rows;
 $row = $result->fetch_assoc();
 
+$sql_img = "SELECT portrait_path FROM users WHERE user_id = $user_id";
+$result_img = $conn->query($sql_img);
+$row_img = $result_img->$num_rows;
+$user_img = $result_img->fetch_assoc();
+
+
 if ($userCount > 0) {
     $title = $row["name"];
+    $defaultImage = 'https://images.unsplash.com/photo-1472396961693-142e6e269027?q=80&w=2152&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
+    $imagePath = !empty($row['portrait_path']) ? '../images/users/' . $row['portrait_path'] : $defaultImage;
 } else {
     $title = "使用者不存在";
+    $imagePath = $defaultImage;
 }
 ?>
 <!doctype html>
@@ -37,6 +46,10 @@ if ($userCount > 0) {
         .user-search {
             width: 200px;
         }
+        .user-img {
+            width: 300px;
+            height: 300px;
+        }
     </style>
 </head>
 
@@ -56,6 +69,10 @@ if ($userCount > 0) {
                 <div class="container">
                     <div class="row">
                         <?php if ($userCount > 0): ?>
+                            
+                            <div class="mb-3 d-flex justify-content-center align-items-center flex-column">
+                                <img src="<?= htmlspecialchars($imagePath) ?>" alt="Profile Image" class="object-fit-fill user-img">
+                            </div>
                             <table class="table table-bordered">
                                 <tr>
                                     <th>User ID</th>
