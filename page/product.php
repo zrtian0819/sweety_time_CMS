@@ -86,11 +86,34 @@ if (!isset($_GET["productId"])) {
             }
         }
 
-        .img-small {
+
+        #mainPhoto {
+            transition: 0.2s;
+        }
+
+        .subPhoto {
             aspect-ratio: 1;
             border-radius: 10px;
             overflow: hidden;
+            transition: 0.2s;
+            cursor: pointer;
+
+            &:hover {
+                scale: 1.05;
+                filter: brightness(1.3);
+            }
+
+            &:active {
+                transition: 0s;
+                scale: 0.96;
+            }
         }
+
+        .shiningJump {
+            scale: 1.05;
+            filter: brightness(1.2) blur(5px);
+        }
+
 
         .text-attention {
             color: red !important;
@@ -120,20 +143,26 @@ if (!isset($_GET["productId"])) {
                             <div class="row d-flex align-items-center flex-column flex-xl-row">
                                 <div class="col col-xl-4 px-2 ">
                                     <div class="img-box">
-                                        <img id="majorPhoto" class="w-100 h-100 object-fit-cover" src="../images/products/<?= $photoRows[0]["file_name"] ?>" alt="">
+                                        <img id="mainPhoto" class="w-100 h-100 object-fit-cover" src="../images/products/<?= $photoRows[0]["file_name"] ?>" alt="">
                                     </div>
                                     <div class="d-flex justify-content-center">
-                                        <div class="row w-100">
-                                            <?php foreach ($photoRows as $photoItem): ?>
-                                                <div class="img-small col-3">
-                                                    <img class="smallImg w-100 h-100 object-fit-cover" src="../images/products/<?= $photoItem["file_name"] ?>" alt="">
+                                        <div class="row w-100 row-cols-5 gap-2">
+                                            <?php
+                                            $photoData = 1;
+                                            foreach ($photoRows as $photoItem):
+                                            ?>
+                                                <div class="subPhoto">
+                                                    <img class="smallImg w-100 h-100 object-fit-cover" data-pic="<?= $photoData ?>" src="../images/products/<?= $photoItem["file_name"] ?>" alt="">
                                                 </div>
-                                            <?php endforeach; ?>
+                                            <?php
+                                                $photoData++;
+                                            endforeach;
+                                            ?>
                                         </div>
                                     </div>
 
                                 </div>
-                                <div class="col col-xl-8 px-2">
+                                <div class="col col-xl-8 ps-xl-4">
 
                                     <h3 class="mt-4 text-center text-xl-start"><?= $row["name"] ?></h3>
                                     <table class="table table-hover">
@@ -223,6 +252,31 @@ if (!isset($_GET["productId"])) {
     </div>
 
     <?php include("../js.php"); ?>
+    <script>
+        //讓圖片能藉由點選切換的功能
+        const mainPic = document.querySelector("#mainPhoto");
+        const picListItem = document.querySelectorAll(".subPhoto");
+
+        console.log(picListItem);
+
+        for (let i = 0; i < picListItem.length; i++) {
+            picListItem[i].addEventListener("click", function() {
+                let img = this.children[0]; //this等同於 picListItem[i] 本身
+                mainPic.src = img.src;
+                jump(mainPic, "shiningJump");
+            });
+        }
+
+        function jump(obj, className) {
+            setTimeout(() => {
+                obj.classList.add(className);
+            }, 300);
+
+            setTimeout(() => {
+                obj.classList.remove(className);
+            }, 500);
+        }
+    </script>
 </body>
 
 </html>
