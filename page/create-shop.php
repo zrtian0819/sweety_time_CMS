@@ -10,39 +10,51 @@
         />
         <?php include("../css/login-style.php");?>
         <?php include("../css/css_Joe.php");?>
+        <style>
+            form label {
+                font-weight: bold;
+            }
 
+        </style>
     </head>
 
     <body>
     <?php include("../modules/login-header.php");?>
-    <div class="container d-flex flex-row px-4">
-        <div class="main col neumorphic p-5">
-            <div class=" neumorphic ">
-                <h2>註冊為店家</h2>
-                <input class="login-input" type="text" placeholder="店家名稱">
-                <input class="login-input" type="text" placeholder="聯絡電話">
-                <input class="login-input" type="text" placeholder="店家地址">
-                <input class="login-input" type="text" placeholder="營業時間">
-                <input class="login-input" type="text" placeholder="官方網站">
-                <input class="login-input" type="text" placeholder="電子信箱">
-                <hr class="logo-hr">
-                <div class="d-flex justify-content-center align-items-center">
-                    <h4>上傳店家Logo</h4>
-                    <label for="file-upload" class="custom-file-upload ms-3">
-                        上傳檔案
-                    </label>
-                    <input id="file-upload" type="file"/>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mx-auto">
+                    <div class="card mx-auto  mb-5">
+                        <div class="card-body">
+                            <h3>成為店家</h3>
+                            <form action="../api/doCreateShop.php" method="POST">
+                                <div class="mb-3">
+                                    <label for="shopName" class="form-label">店名</label>
+                                    <input class="form-control form-control-custom" type="text" class="form-control" id="shopName" name="shopName" required/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="shopAddress" class="form-label">店家地址</label>
+                                    <input class="form-control form-control-custom" type="text" class="form-control" id="shopAddress" name="shopAddress" required/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="shopPhone" class="form-label">店家電話</label>
+                                    <input class="form-control form-control-custom" type="text" class="form-control" id="shopPhone" name="shopPhone" required/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="shopDescription" class="form-label">店家描述</label>
+                                    <textarea class="form-control form-control-custom" id="shopDescription" name="shopDescription" rows="3" required></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="shopImage" class="form-label">店家圖片</label>
+                                    <input type="file" class="form-control" id="shopImage" name="shopImage" required/>
+                                </div>
+                                <button type="submit" class="btn btn-secondary">送出</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <div class="d-flex w-100">
-                    <button class="log-in-button">確認</button>
-                </div>
-                
             </div>
         </div>
-    </div>
 
-
-        
         <!-- Bootstrap JavaScript Libraries -->
         <script
             src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"

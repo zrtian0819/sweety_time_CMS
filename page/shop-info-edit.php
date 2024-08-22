@@ -80,11 +80,15 @@ if ($shop_id > 0) {
             </div>
             <div class="container">
                 <div class="row">
-                    <div class="col-12 col-md-6 col-lg-6 position-relative d-flex justify-content-center align-items-center mb-3 mb-md-0">
-                        <a href="">
-                            <img class="shop-info-logo shop-info-logo-edit" src="../images/shop_logo/<?=$file_name;?>" alt="店家Logo">
-                            <button class="btn btn-secondary change-image-btn">更換圖片</button>
-                        </a>
+                    <div class="col-12 col-md-6 col-lg-6 position-relative d-flex flex-column justify-content-center align-items-center mb-3 mb-md-0">
+                        <!-- 當前圖片展示 -->
+                        <img src="../images/<?= $file_name ?>" alt="目前的圖片">
+                        <form action="doUploadLogo.php" method="post" enctype="multipart/form-data" class="d-flex flex-column justify-content-center align-items-center">
+                            <label for="imageUpload">更換圖片：</label>
+                            <input type="file" name="newImage" id="imageUpload">
+                            <input type="hidden" name="currentImage" value="<?= $file_name ?>">
+                            <button type="submit" name="submit">上傳並更換</button>
+                        </form>
                     </div>
                     <div class="col-12 col-md-6 col-lg-6 px-4 shop-info-detail">
                         <h3 class="mb-3 <?= $activation == 0 ? 'text-danger' : 'text-success'; ?>"><?= $activation == 0 ? '關閉中' : '起用中'; ?></h3>

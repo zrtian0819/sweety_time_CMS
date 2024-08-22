@@ -20,8 +20,8 @@
   }
   
   .login-card {
-    min-width: 15rem;
-    max-width: 20rem;
+    min-width: 20rem;
+    max-width: 25rem;
     height: 20rem;
     width: 50%;
     margin: 5em auto 0 auto;
