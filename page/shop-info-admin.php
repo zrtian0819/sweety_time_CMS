@@ -95,7 +95,7 @@ $shopCount = $result->num_rows;
                         <table class="table table-bordered table-hover bdrs table-responsive align-middle" style="min-width: 1000px;">
                                 <thead class="text-center table-dark">
                                     <tr>
-                                    <th class="dontNextLine text-center">Shop ID</th>
+                                    <th class="dontNextLine text-center">Shop_Logo</th>
                                     <th class="dontNextLine text-center">店家名稱</th>
                                     <th class="dontNextLine text-center">電話</th>
                                     <th class="dontNextLine text-center">地址</th>
@@ -109,7 +109,11 @@ $shopCount = $result->num_rows;
                                 <tbody>
                                     <?php foreach ($rows as $row): ?>
                                         <tr>
-                                            <td class="text-center align-middle"><?= $row["shop_id"] ?></td>
+                                            <td class="align-middle">
+                                                <a class="teacher-profile d-flex align-items-center" href="">
+                                                    <img src="../images/shop_logo/<?= $row["logo_path"] ?>" alt="<?= htmlspecialchars($teacher["name"]) ?>" class="ratio ratio-4x3">
+                                                </a>
+                                            </td>
                                             <td class="text-center align-middle"><?= $row["name"] ?></td>
                                             <td class="text-center dontNextLine align-middle"><?= $row["phone"] ?></td>
                                             <td class="dontNextLine align-middle"><?= $row["address"] ?></td>
