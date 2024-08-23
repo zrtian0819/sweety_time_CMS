@@ -30,8 +30,6 @@ if ($_FILES["pic"]["error"] == 0) {
     $newFileName = time() . ".$extension";
     if (move_uploaded_file($_FILES["pic"]["tmp_name"], "../images/lesson/" . $newFileName)) {
         $sql = "INSERT INTO lesson (teacher_id, product_class_id, name, img_path, price, start_date,quota, classroom_name, location, description, activation) VALUES ('$teacher', '$class', '$name', '$newFileName', '$price', '$formattedDateTime', '$quota', '$classroom_name', '$location', '$description', 1)";
-
-
         if ($conn->query($sql) === TRUE) {
             echo "新增成功";
             header("location:../page/lesson.php");

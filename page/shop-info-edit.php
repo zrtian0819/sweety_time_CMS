@@ -27,7 +27,6 @@ if ($shop_id > 0) {
     // 根據 shop_id 查詢店家資訊
     $sql_shop_info = "  SELECT * 
                         FROM shop
-                        JOIN shop_photo ON shop.shop_id = shop_photo.shop_id
                         WHERE shop.shop_id = $shop_id";
 
 

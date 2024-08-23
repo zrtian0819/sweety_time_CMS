@@ -1,167 +1,258 @@
 <?php
-include '../db_connect.php';
+if (!isset($_GET["id"]) || empty($_GET["id"])) {
+    echo "請正確帶入 get teacher_id 變數";
+    exit;
+}
 
-// 獲取教師 ID
-if (isset($_GET['id'])) {
-    $teacher_id = $_GET['id'];
-    $sql = "SELECT * FROM teacher WHERE teacher_id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $teacher_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $row = $result->fetch_assoc();
+require_once("../db_connect.php");
 
-    // 處理 POST 請求，更新教師資料
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $name = $_POST['name'];
-        $expertise = $_POST['expertise'];
-        $education = $_POST['education'];
-        $licence = $_POST['licence'];
-        $awards = $_POST['awards'];
-        $experience = $_POST['experience'];
-        $description = $_POST['description'];
-        $valid = isset($_POST['valid']) ? 1 : 0;
+$teacher_id = intval($_GET["id"]); // 確保變數為整數
 
-        // 處理圖片上傳
-        if ($_FILES['img_path']['error'] == UPLOAD_ERR_OK) {
-            $uploadDir = '../images/teachers/';
-            $fileName = basename($_FILES['img_path']['name']);
-            $targetFilePath = $uploadDir . $fileName;
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $name = $_POST['name'];
+    $description = $_POST['description'];
+    $expertise = $_POST['expertise'];
+    $experience = $_POST['experience'];
+    $education = $_POST['education'];
+    $licence = $_POST['licence'];
+    $awards = $_POST['awards'];
+    $valid = isset($_POST['valid']) ? 1 : 0;
 
-            // 確保文件移動成功
-            if (move_uploaded_file($_FILES['img_path']['tmp_name'], $targetFilePath)) {
-                $img_path = $targetFilePath;
+    // 檢查檔案上傳
+    if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == 0) {
+        $targetDir = '../images/teachers/';
+        $fileType = pathinfo($_FILES['profile_image']['name'], PATHINFO_EXTENSION);
+        $allowTypes = array('jpg', 'png', 'jpeg', 'gif');
+
+        // 檢查檔案格式
+        if (in_array(strtolower($fileType), $allowTypes)) {
+            // 使用原檔名加上唯一的時間戳來生成檔名
+            $originalFileName = pathinfo($_FILES['profile_image']['name'], PATHINFO_FILENAME);
+            $newFileName = $originalFileName . '_' . time() . '.' . $fileType;
+            $targetFilePath = $targetDir . $newFileName;
+
+            // 確保上傳的檔案成功
+            if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $targetFilePath)) {
+                // 獲取舊的圖片名稱
+                $sql = "SELECT img_path FROM teacher WHERE teacher_id = $teacher_id";
+                $result = $conn->query($sql);
+                $row = $result->fetch_assoc();
+                $oldImage = $row['img_path'];
+
+                // 刪除舊的圖片
+                if (!empty($oldImage) && file_exists($targetDir . $oldImage)) {
+                    unlink($targetDir . $oldImage);
+                }
+
+                // 更新資料庫中的圖片名稱
+                $sql = "UPDATE teacher SET img_path='$newFileName' WHERE teacher_id = $teacher_id";
+                if ($conn->query($sql)) {
+                    echo "圖片更新成功";
+                } else {
+                    echo "資料更新失敗: " . $conn->error;
+                }
             } else {
-                echo "Error: 無法移動上傳的文件至 " . $targetFilePath;
-                exit();
+                echo "檔案上傳失敗";
+                handleUploadError($_FILES['profile_image']['error']);
             }
-        } elseif ($_FILES['img_path']['error'] != UPLOAD_ERR_NO_FILE) {
-            echo "Error: 上傳文件時出現錯誤，錯誤代碼: " . $_FILES['img_path']['error'];
-            exit();
         } else {
-            // 如果沒有上傳新圖片，保持原有圖片路徑
-            $img_path = $row['img_path'];
-        }
-
-        $updateSql = "UPDATE teacher SET name = ?, expertise = ?, img_path = ?, education = ?, licence = ?, awards = ?, experience = ?, description = ?, valid = ? WHERE teacher_id = ?";
-        $updateStmt = $conn->prepare($updateSql);
-        $updateStmt->bind_param("ssssssssii", $name, $expertise, $img_path, $education, $licence, $awards, $experience, $description, $valid, $teacher_id);
-        if ($updateStmt->execute()) {
-            header("Location: teacher.php");
-            exit();
-        } else {
-            echo "Error: " . $updateStmt->error;
+            echo "不支援的檔案格式";
         }
     }
 
-    // 處理刪除請求
-    if (isset($_GET['action']) && $_GET['action'] === 'delete') {
-        $updateSql = "UPDATE teacher SET valid = 0, activation = 0 WHERE teacher_id = ?";
-        $updateStmt = $conn->prepare($updateSql);
-        $updateStmt->bind_param("i", $teacher_id);
-        if ($updateStmt->execute()) {
-            header("Location: teacher.php?status=off"); // 更新後重定向到已下架頁面
-            exit();
-        } else {
-            echo "Error: " . $updateStmt->error;
-        }
+    // 更新教師其他資料
+    $sql = "UPDATE teacher SET 
+                name = ?, 
+                description = ?,
+                expertise = ?,
+                experience = ?,
+                education = ?,
+                licence = ?,
+                awards = ?,
+                valid = ?
+            WHERE teacher_id = ?";
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sssssssii", $name, $description, $expertise, $experience, $education, $licence, $awards, $valid, $teacher_id);
+    
+    if ($stmt->execute()) {
+        echo "資料更新成功";
+        header("Location: teacher-edit.php?id=$teacher_id");
+        exit;
+    } else {
+        echo "資料更新失敗: " . $stmt->error;
+    }
+}
+
+// 獲取教師資料
+$sql = "SELECT * FROM teacher WHERE teacher_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $teacher_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$teacherCount = $result->num_rows;
+$row = $result->fetch_assoc();
+
+if ($teacherCount > 0) {
+    $title = $row["name"];
+    // 如果有就顯示圖片，沒有就顯示預設圖
+    $defaultImage = '
+'; // 可以替換為你的預設圖片 URL
+    $imagePath = !empty($row['img_path']) ? '../images/teachers/' . $row['img_path'] : $defaultImage;
+} else {
+    $title = "教師不存在";
+    $imagePath = $defaultImage;
+}
+
+$conn->close();
+
+function handleUploadError($error) {
+    switch ($error) {
+        case UPLOAD_ERR_INI_SIZE:
+            echo "檔案大小超過伺服器限制";
+            break;
+        case UPLOAD_ERR_FORM_SIZE:
+            echo "檔案大小超過表單限制";
+            break;
+        case UPLOAD_ERR_PARTIAL:
+            echo "檔案只上傳了部分";
+            break;
+        case UPLOAD_ERR_NO_FILE:
+            echo "沒有檔案被上傳";
+            break;
+        case UPLOAD_ERR_NO_TMP_DIR:
+            echo "缺少臨時檔案夾";
+            break;
+        case UPLOAD_ERR_CANT_WRITE:
+            echo "檔案寫入失敗";
+            break;
+        case UPLOAD_ERR_EXTENSION:
+            echo "檔案上傳被擴展阻止";
+            break;
+        default:
+            echo "未知錯誤代碼: " . $error;
+            break;
     }
 }
 ?>
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>編輯教師</title>
+    <title><?= htmlspecialchars($title) ?></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <?php include("../css/css_Joe.php"); ?>
     <style>
-        .thumbnail {
-            width: 150px;
-            height: auto;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+        .teacher-btn {
+            width: 100px;
+        }
+        .teacher-image {
+            width: 300px;
+            height: 300px;
+            object-fit: cover;
         }
     </style>
 </head>
 
 <body>
-
     <?php include("../modules/dashboard-header_Joe.php"); ?>
+
     <div class="container-fluid d-flex flex-row px-4">
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
-        <div class="main col neumorphic p-5">
-            <h2>編輯教師</h2>
-            <br>
-            <div class="py-2">
-                <a class="btn btn-custom" href="teacher.php" title="回老師清單"><i class="fa-solid fa-circle-left"></i></a>
-            </div>
 
-            <form method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="teacher_id" value="<?php echo htmlspecialchars($row['teacher_id']); ?>">
-
-                <!-- 顯示當前圖片 -->
-                <div class="mb-3">
-                    <label class="form-label">Current Image:</label>
-                    <?php if ($row['img_path']): ?>
-                        <img src="<?php echo htmlspecialchars($row['img_path']); ?>" class="thumbnail" alt="Current Image">
-                    <?php else: ?>
-                        <p>No image available.</p>
-                    <?php endif; ?>
+        <div class="container-fluid d-flex flex-row px-4">
+            <div class="main col neumorphic p-5">
+                <div class="py-2">
+                    <a class="btn btn-neumorphic teacher-btn" href="teacher.php" title="回教師列表"><i class="fa-solid fa-left-long"></i></a>
                 </div>
-
-                <!-- 上傳新圖片 -->
-                <div class="mb-3">
-                    <label class="form-label">Upload New Image:</label>
-                    <input type="file" class="form-control" name="img_path">
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Name:</label>
-                    <input type="text" class="form-control" name="name" value="<?php echo htmlspecialchars($row['name']); ?>">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Expertise:</label>
-                    <input type="text" class="form-control" name="expertise" value="<?php echo htmlspecialchars($row['expertise']); ?>">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Education:</label>
-                    <input type="text" class="form-control" name="education" value="<?php echo htmlspecialchars($row['education']); ?>">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Licence:</label>
-                    <input type="text" class="form-control" name="licence" value="<?php echo htmlspecialchars($row['licence']); ?>">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Awards:</label>
-                    <input type="text" class="form-control" name="awards" value="<?php echo htmlspecialchars($row['awards']); ?>">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Experience:</label>
-                    <input type="text" class="form-control" name="experience" value="<?php echo htmlspecialchars($row['experience']); ?>">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Description:</label>
-                    <textarea class="form-control" name="description" rows="3"><?php echo htmlspecialchars($row['description']); ?></textarea>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Status:</label>
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" name="valid" id="statusSwitch" <?= $row['valid'] == 1 ? 'checked' : '' ?>>
-                        <label class="form-check-label" for="statusSwitch">啟用中</label>
+                <h2 class="mb-3">修改資料</h2>
+                <div class="container">
+                    <div class="row">
+                        <?php if ($teacherCount > 0): ?>
+                            <form action="teacher-edit.php?id=<?= htmlspecialchars($teacher_id) ?>" method="post" enctype="multipart/form-data">
+                                <div class="col d-flex justify-content-center align-items-center">
+                                    <div class="mb-3">
+                                        <label for="profile_image">上傳或更改圖片:</label><br>
+                                        <img src="<?= htmlspecialchars($imagePath) ?>" alt="Profile Image" class="teacher-image" id="profileImagePreview">
+                                        <input type="file" name="profile_image" id="profile_image">
+                                    </div>
+                                </div>
+                                <input type="hidden" name="teacher_id" value="<?= htmlspecialchars($teacher_id) ?>">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <th>Name</th>
+                                        <td>
+                                            <input type="text" value="<?= htmlspecialchars($row["name"]) ?>" class="form-control" name="name">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Description</th>
+                                        <td>
+                                            <textarea class="form-control" name="description"><?= htmlspecialchars($row["description"]) ?></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Expertise</th>
+                                        <td>
+                                            <textarea class="form-control" name="expertise"><?= htmlspecialchars($row["expertise"]) ?></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Experience</th>
+                                        <td>
+                                            <textarea class="form-control" name="experience"><?= htmlspecialchars($row["experience"]) ?></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Education</th>
+                                        <td>
+                                            <textarea class="form-control" name="education"><?= htmlspecialchars($row["education"]) ?></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Licence</th>
+                                        <td>
+                                            <textarea class="form-control" name="licence"><?= htmlspecialchars($row["licence"]) ?></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Awards</th>
+                                        <td>
+                                            <textarea class="form-control" name="awards"><?= htmlspecialchars($row["awards"]) ?></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Status</th>
+                                        <td>
+                                            <input type="checkbox" name="valid" <?= $row["valid"] ? 'checked' : '' ?>>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-neumorphic teacher-btn">儲存</button>
+                                </div>
+                            </form>
+                        <?php else: ?>
+                            教師不存在
+                        <?php endif; ?>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-custom">Save Changes</button>
-                <a class="btn btn-danger" href="teacher-edit.php?id=<?php echo htmlspecialchars($row['teacher_id']); ?>&action=delete" onclick="return confirm('確定要將這位教師刪除嗎？');" title="刪除教師"><i class="fa-solid fa-trash-can"></i></a>
-            </form>
+            </div>
         </div>
     </div>
-
     <?php include("../js.php"); ?>
+    <script>
+    document.getElementById('profile_image').addEventListener('change', function(event) {
+        var file = event.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('profileImagePreview').src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+    });
+    </script>
 </body>
 
 </html>
-
-<?php $conn->close(); ?>

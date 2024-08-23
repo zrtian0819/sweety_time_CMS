@@ -15,9 +15,16 @@ $sql = "SELECT lesson.* FROM lesson WHERE lesson_id = $id";
 $result = $conn->query($sql);
 $row = $result->fetch_assoc();
 
+
+
 $sqlAll = "SELECT lesson.* FROM lesson";
 $allResult = $conn->query($sqlAll);
 $rows = $allResult->num_rows;
+
+if ($id > $rows) {
+    header("location: lesson.php");
+    exit;
+}
 
 
 //teacher
