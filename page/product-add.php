@@ -122,25 +122,25 @@ foreach ($storeRows as $storeRow) {
                                         <tr>
                                             <td class="dontNextLine fw-bold">品名</td>
                                             <td>
-                                                <input name="name" class="form-control form-control-custom" type="text">
+                                                <input name="name" class="form-control form-control-custom" type="text" required>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="dontNextLine fw-bold">價格</td>
                                             <td>
-                                                <input name="price" class="form-control form-control-custom" type="number" placeholder="請輸入整數">
+                                                <input name="price" class="form-control form-control-custom" type="number" placeholder="請輸入整數" required>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="dontNextLine fw-bold">庫存</td>
                                             <td>
-                                                <input name="stocks" class="form-control form-control-custom" type="number" value="" placeholder="請輸入整數">
+                                                <input name="stocks" class="form-control form-control-custom" type="number" value="" placeholder="請輸入整數" required>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="dontNextLine fw-bold">商品分類</td>
                                             <td>
-                                                <select class="form-select form-select-custom" id="" name="class" require>
+                                                <select class="form-select form-select-custom" id="" name="class" required>
                                                     <option value="">選擇商品類別</option>
                                                     <?php foreach ($shopClassArr as $shopClassKey => $shopClassValue): ?>
                                                         <option value="<?= $shopClassKey ?>"><?= $shopClassValue ?></option>
@@ -164,7 +164,7 @@ foreach ($storeRows as $storeRow) {
                                         <tr>
                                             <td class="dontNextLine fw-bold">折扣</td>
                                             <td>
-                                                <input name="discount" class="form-control form-control-custom" placeholder="輸入小數點  例如:0.8" step="0.01" type="number" value="<?= $row["discount"] ?>">
+                                                <input name="discount" class="form-control form-control-custom" placeholder="輸入小數點  例如:0.8,不打折則填1" step="0.01" type="number" value="1" max="1" min="0"> 
                                             </td>
                                         </tr>
                                         <tr>
@@ -190,7 +190,7 @@ foreach ($storeRows as $storeRow) {
 
                                     <div class="container d-flex flex-column">
                                         <label for="fileUpload" class="custom-file-upload my-2">
-                                            選擇圖片
+                                            新增圖片
                                         </label>
                                         <input type="file" name="pic[]" id="fileUpload" class="file-input" accept=".jpg, .png, .jpeg, .gif" multiple>
                                         <div class="row row-cols-6 d-flex" id="preview-imgbox">
@@ -219,13 +219,12 @@ foreach ($storeRows as $storeRow) {
     <?php include("../js.php"); ?>
 
     <script>
-        // const previewImgBox = document.querySelector("#preview-imgbox");
+
         const fileUpload = document.querySelector("#fileUpload");
 
         fileUpload.addEventListener('change', function(event) {
 
             const files = event.target.files; // 取得所有選擇的文件
-            // const preview = document.getElementById('preview');
             const previewImgBox = document.querySelector("#preview-imgbox");
             previewImgBox.innerHTML = ''; // 清空預覽區域
 

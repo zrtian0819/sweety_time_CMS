@@ -49,6 +49,7 @@ if (!isset($_GET["productId"])) {
 
     $photorResult = $conn->query($photosql);
     $photoRows = $photorResult->fetch_all(MYSQLI_ASSOC);
+    $photoCount = $photorResult-> num_rows;
 }
 
 ?>
@@ -118,6 +119,12 @@ if (!isset($_GET["productId"])) {
         .text-attention {
             color: red !important;
         }
+
+        .gray-cover{
+            background: #eee;
+            height: 100%;
+            width: 100%;
+        }
     </style>
 </head>
 
@@ -143,7 +150,11 @@ if (!isset($_GET["productId"])) {
                             <div class="row d-flex align-items-center flex-column flex-xl-row">
                                 <div class="col col-xl-4 px-2 ">
                                     <div class="img-box">
+                                        <?php if($photoCount>0): ?>
                                         <img id="mainPhoto" class="w-100 h-100 object-fit-cover" src="../images/products/<?= $photoRows[0]["file_name"] ?>" alt="">
+                                        <?php else: ?>
+                                            <div class="gray-cover text-center d-flex justify-content-center align-items-center"><h5>沒有圖片</h5></div>
+                                        <?php endif; ?>
                                     </div>
                                     <div class="d-flex justify-content-center">
                                         <div class="row w-100 row-cols-5 gap-2">
