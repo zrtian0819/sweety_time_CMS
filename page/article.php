@@ -100,14 +100,9 @@ foreach ($rowsUsers as $users) {
     <div class="container-fluid d-flex flex-row px-4">
 
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
-        <!-- 回到文章列表按鈕 -->
+        
         <div class="main col neumorphic p-5">
             <div class="row">
-                <div class="d-flex justify-content-end">
-                    <div>
-                        <a class="btn btn-neumorphic article-btn mt-0" href="articles.php" title="回文章列表"><i class="fa-solid fa-left-long"></i>回到文章列表</a>
-                    </div>
-                </div>
                 <!-- 文章 -->
                 <h1 class="d-flex justify-content-center">
                     <?= $row["title"] ?>
@@ -115,14 +110,14 @@ foreach ($rowsUsers as $users) {
 
                 <!-- 建立時間/作者/分類 -->
                 <div class="row-col-3 d-flex justify-content-center">
-                    建立時間：<?= $row["created_at"] ?>／作者：<?= $usersArr[$users["user_id"]] ?>／分類：<?= $rowProduct["class_name"] ?>
+                    建立時間：<?= $row["created_at"] ?>／作者：<?= $users["user_id"] = $users["name"]  ?>／分類：<?= $rowProduct["class_name"] ?>
 
                 </div>
 
                 <!-- 圖片 -->
                 <div class="row-col-3 d-flex justify-content-center ">
                     <div class="m-3">
-                        <img style="height: auto; object-fit: cover; max-width: 100%;" class="rounded m" src="../images/article/<?= $row["img_path"] ?>" alt="<?= $row["title"] ?>">
+                        <img style="height: auto; object-fit: cover; max-width: 100%;" class="rounded m" src="../images/articles/<?= $row["img_path"] ?>" alt="<?= $row["title"] ?>">
                     </div>
                 </div>
 
