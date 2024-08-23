@@ -15,6 +15,14 @@ $sql = "SELECT * FROM lesson WHERE lesson_id = $id";
 $result = $conn->query($sql);
 $row = $result->fetch_assoc();
 
+$sqlAll = "SELECT lesson.* FROM lesson";
+$allResult = $conn->query($sqlAll);
+$rows = $allResult->num_rows;
+
+if ($id > $rows) {
+    echo "尚未有課程";
+    exit;
+}
 
 //teacher
 $sqlTeacher = "SELECT * FROM teacher ORDER BY teacher_id";
