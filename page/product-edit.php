@@ -100,6 +100,9 @@ if (!isset($_GET["productId"])) {
         <main class="product main col neumorphic p-5">
 
             <h2 class="mb-5 text-center">商品編輯</h2>
+            <a class="btn-animation btn btn-custom d-inline-flex flex-row align-items-center mb-3" href="product.php?productId=<?=$id?>">
+                <i class="fa-solid fa-arrow-left-long"></i><span class="btn-animation-innerSpan d-inline-block">返回</span>
+            </a>
 
             <?php if (isset($_GET["productId"])): ?>
                 <div class="container">
@@ -138,7 +141,7 @@ if (!isset($_GET["productId"])) {
                                             <tr>
                                                 <td class="dontNextLine fw-bold">商品分類</td>
                                                 <td>
-                                                    <select class="form-select form-select-custom" id="country" name="class">
+                                                    <select class="form-select form-select-custom" id="country" name="class" required>
                                                         <option selected disabled>類別</option>
                                                         <?php foreach ($classRows as $classRow): ?>
                                                             <option <?= $row["product_class_id"] == $classRow["product_class_id"] ? "selected" : ""; ?> value="<?= $classRow["product_class_id"] ?>"><?= $classRow["class_name"] ?></option>
@@ -168,7 +171,7 @@ if (!isset($_GET["productId"])) {
                                             <tr>
                                                 <td class="dontNextLine fw-bold">上架</td>
                                                 <td>
-                                                    <select name="available" class="form-select form-select-custom" id="country" require>
+                                                    <select name="available" class="form-select form-select-custom" id="country" required>
                                                         <option disabled>請選擇上架狀態</option>
                                                         <option <?= $row["available"] == 0 ? "selected" : ""; ?> value="0">下架</option>
                                                         <option <?= $row["available"] == 1 ? "selected" : ""; ?> value="1">上架</option>
@@ -182,6 +185,21 @@ if (!isset($_GET["productId"])) {
                                                 </td>
                                             </tr>
                                         </table>
+                                    </div>
+
+                                    <div class="photo-upload">
+                                        <h4 class="text-center">圖片上傳</h4>
+
+                                        <div class="container d-flex flex-column">
+                                            <label for="fileUpload" class="custom-file-upload my-2">
+                                                新增圖片
+                                            </label>
+                                            <input type="file" name="pic[]" id="fileUpload" class="file-input" accept=".jpg, .png, .jpeg, .gif" multiple>
+                                            <div class="row row-cols-6 d-flex" id="preview-imgbox">
+                                                <!-- 圖片預覽區 -->
+                                            </div>
+                                        </div>
+
                                     </div>
 
                                     <div class="option-area d-flex justify-content-center mt-4 ">
@@ -204,6 +222,38 @@ if (!isset($_GET["productId"])) {
     </div>
 
     <?php include("../js.php"); ?>
+    <script>
+        const fileUpload = document.querySelector("#fileUpload");
+
+        fileUpload.addEventListener('change', function(event) {
+
+        const files = event.target.files; // 取得所有選擇的文件
+        const previewImgBox = document.querySelector("#preview-imgbox");
+        previewImgBox.innerHTML = ''; // 清空預覽區域
+
+            if (files) {
+                // 遍歷所有選擇的文件
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.style.width = '120px';
+                        img.style.height = '120px';
+                        img.style.margin = '10px';
+                        img.style.objectFit = "cover";
+                        img.style.borderRadius = '5px';
+
+                        previewImgBox.appendChild(img); // 將圖片添加到預覽區域
+                    }
+
+                    reader.readAsDataURL(file); // 將文件讀取為 Data URL
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>

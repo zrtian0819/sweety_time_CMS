@@ -27,6 +27,11 @@ $label = $_POST["label"];
 $editor = $_SESSION["user"]["user_id"];
 $createdTime = date('Y/m/d H:i:s');
 
+//使用者若沒填寫折扣則預設傳入1(不打折)
+if(empty($discount)){
+    $discount = 1;
+}
+
 $sql = "INSERT INTO product 
 (shop_id,name, price, stocks ,product_class_id,description,keywords,discount,available,label,edit_user_id,created_at,deleted)
 VALUES 
@@ -71,7 +76,6 @@ if ($file_count > 0) {
 
 //導頁
 sleep(1);
-header("location: ../page/product-list.php");
-
+header("location: ../page/product.php?productId=".$last_id);
 // 關閉資料庫連結
 $conn->close();
