@@ -16,6 +16,15 @@ function getLeftChar($text, $num)
     return substr($text, 0, $num);
 }
 
+if ($status == "on") {
+    $sql .= " AND activation = 1";
+} elseif ($status == "off") {
+    $sql .= " AND activation = 0";
+} else {
+    $sql;
+}
+
+
 // 搜尋條件
 if (isset($_GET["search"]) && !empty($_GET["search"])) {
     $search = "%" . $_GET["search"] . "%";
@@ -61,6 +70,8 @@ $total_pages = $total_items > 0 ? ceil($total_items / $per_page) : 1;
 $sql .= " ORDER BY $sortArt $sortDir LIMIT ?, ?";
 array_push($params, $start_item, $per_page);
 $types .= "ii";
+
+// echo ($sql);
 
 // 準備 SQL 語句
 $stmt = $conn->prepare($sql);
@@ -215,7 +226,7 @@ foreach ($rowsUsers as $users) {
                         $id = $articles["user_id"];
                         $date = $articles["created_at"];
                         $dateStr = new DateTime($date);
-                        $formartDate = $dateStr->format("Y-m-d H:i")
+                        $formartDate = $dateStr->format("Y-m-d H:i");
                     ?>
                         <tr class="text-center m-auto">
                             <td><?= $articles["article_id"] ?></td>
@@ -235,6 +246,7 @@ foreach ($rowsUsers as $users) {
                                     <?php else: ?>
 
                                         <a href="../function/doReload4Articles.php?id=<?= $id ?>" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
+
                                     <?php endif; ?>
                                 <?php endif; ?>
                             </td>
