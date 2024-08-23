@@ -16,7 +16,7 @@ if ($role != "admin") {
 
 // 預設分頁值
 $page = isset($_GET['p']) ? (int)$_GET['p'] : 1;
-$per_page = 10;
+$per_page = 5;
 $start_item = ($page - 1) * $per_page;
 
 // 搜索條件
@@ -78,15 +78,15 @@ $shopCount = $result->num_rows;
                 </form>
             <div class="container">
                 <div class="row">
-                    <ul class="nav nav-tabs">
+                    <ul class="nav nav-tabs-custom">
                         <li class="nav-item">
-                            <a class="nav-link <?php if(!isset($_GET['filter']) || $_GET['filter'] == 'all') echo 'active'; ?>" href="shop-info-admin.php?filter=all">全部商家</a>
+                            <a class="main-nav nav-link <?php if(!isset($_GET['filter']) || $_GET['filter'] == 'all') echo 'active'; ?>" href="shop-info-admin.php?filter=all">全部商家</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link <?php if(isset($_GET['filter']) && $_GET['filter'] == 'active') echo 'active'; ?>" href="shop-info-admin.php?filter=active">已啟用商家</a>
+                            <a class="main-nav nav-link <?php if(isset($_GET['filter']) && $_GET['filter'] == 'active') echo 'active'; ?>" href="shop-info-admin.php?filter=active">已啟用商家</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link <?php if(isset($_GET['filter']) && $_GET['filter'] == 'inactive') echo 'active'; ?>" href="shop-info-admin.php?filter=inactive">已關閉商家</a>
+                            <a class="main-nav nav-link <?php if(isset($_GET['filter']) && $_GET['filter'] == 'inactive') echo 'active'; ?>" href="shop-info-admin.php?filter=inactive">已關閉商家</a>
                         </li>
                     </ul>
                     <div class="col-12 position-relative d-flex justify-content-center mb-3 mb-md-0 mt-3 mt-mb-0">
@@ -144,25 +144,62 @@ $shopCount = $result->num_rows;
                                      <?php endforeach; ?>
                                 </tbody>
                             </table>
-                            <!-- 分頁導航 -->
+                            <!-- 創建一個導航區域用於分頁 -->
                             <nav aria-label="Page navigation">
+                                <!-- 創建一個無序列表來容納分頁按鈕 -->
                                 <ul class="pagination justify-content-center">
+                                    <!-- 前往第一頁的箭頭按鈕 -->
                                     <?php if($page > 1): ?>
                                         <li class="page-item px-1">
-                                            <a class="page-link btn-custom"  href="?p=<?= $page - 1 ?>&search=<?= $search ?>" aria-label="Previous">
-                                                <span aria-hidden="true">&laquo;</span>
+                                            <a class="page-link btn-custom" href="?p=1&search=<?= $search ?>" aria-label="First">
+                                                <span aria-hidden="true"><i class="fa-solid fa-backward-fast"></i></span>
                                             </a>
                                         </li>
                                     <?php endif; ?>
-                                    <?php for($i = 1; $i <= $total_page; $i++): ?>
+                                    
+                                    <!-- 固定顯示第一頁 -->
+                                    <li class="page-item px-1 <?= ($page == 1) ? 'active' : '' ?>">
+                                        <a class="page-link btn-custom" href="?p=1&search=<?= $search ?>">1</a>
+                                    </li>
+                                    
+                                    <?php
+                                    // 計算應該顯示的頁碼範圍
+                                    $start = max(2, $page - 2);
+                                    $end = min($total_page - 1, $page + 2);
+                                    
+                                    // 如果範圍的起始不是2,顯示省略號
+                                    if ($start > 2): ?>
+                                        <li class="page-item px-1 disabled">
+                                            <span class="page-link">...</span>
+                                        </li>
+                                    <?php endif; ?>
+
+                                    <!-- 循環創建頁碼按鈕 -->
+                                    <?php for($i = $start; $i <= $end; $i++): ?>
                                         <li class="page-item px-1 <?= ($i == $page) ? 'active' : '' ?>">
                                             <a class="page-link btn-custom" href="?p=<?= $i ?>&search=<?= $search ?>"><?= $i ?></a>
                                         </li>
                                     <?php endfor; ?>
+
+                                    <!-- 如果範圍的結束不是倒數第二頁,顯示省略號 -->
+                                    <?php if ($end < $total_page - 1): ?>
+                                        <li class="page-item px-1 disabled">
+                                            <span class="page-link">...</span>
+                                        </li>
+                                    <?php endif; ?>
+                                    
+                                    <!-- 固定顯示最後一頁 -->
+                                    <?php if($total_page > 1): ?>
+                                        <li class="page-item px-1 <?= ($page == $total_page) ? 'active' : '' ?>">
+                                            <a class="page-link btn-custom" href="?p=<?= $total_page ?>&search=<?= $search ?>"><?= $total_page ?></a>
+                                        </li>
+                                    <?php endif; ?>
+                                    
+                                    <!-- 前往最後一頁的箭頭按鈕 -->
                                     <?php if($page < $total_page): ?>
                                         <li class="page-item px-1">
-                                            <a class="page-link btn-custom" href="?p=<?= $page + 1 ?>&search=<?= $search ?>" aria-label="Next">
-                                                <span aria-hidden="true">&raquo;</span>
+                                            <a class="page-link btn-custom" href="?p=<?= $total_page ?>&search=<?= $search ?>" aria-label="Last">
+                                                <span aria-hidden="true"><i class="fa-solid fa-forward-fast"></i></span>
                                             </a>
                                         </li>
                                     <?php endif; ?>
