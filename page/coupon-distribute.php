@@ -2,59 +2,75 @@
 
 require_once("../db_connect.php");
 include("../function/login_status_inspect.php");
+$coupon_id = $_GET["coupon_id"];
 
-$per_page = 10;
-$page = isset($_GET["p"]) ? (int)$_GET["p"] : 1;
-$page = max(1, $page);
-$start_item = ($page - 1) * $per_page;
 
-$search = isset($_GET["search"]) ? trim($_GET["search"]) : '';
+// user資料的name搜尋條件
+// user資料的account搜尋條件
+// user資料的生日條件(年:XX年以前或以後 月:XX月 日:XX日)
+// user資料的註冊時間條件(XX日期 以前或以後)
 
-// 計算總數量
-$count_sql = "SELECT COUNT(*) as count FROM users WHERE activation = 1";
-if ($search !== '') {
-    $count_sql .= " AND name LIKE '%$search%'";
+// 設定SQL查詢語句樣板 
+$sql_users = "SELECT * FROM users WHERE activation = 1 AND role = 'user'";
+
+// 篩選條件
+$params = []; // 用來裝條件
+$types = ""; // 用來紀錄條件型別
+
+// 搜尋會員名稱
+if (isset($_GET["search_n"]) && !empty($_GET["search_n"])) {
+    $search_n = "%" . $_GET["search_n"] . "%";
+    $sql_users .= " AND name LIKE ?";
+    array_push($params, $search_n);
+    $types .= "s";
 }
-$count_result = $conn->query($count_sql);
-if ($count_result) {
-    $userCount = $count_result->fetch_assoc();
-    $totalPage = ceil($userCount['count'] / $per_page);
-} else {
-    die("計數查詢錯誤: " . $conn->error);
+
+// 搜尋會員帳號
+if (isset($_GET["search_a"]) && !empty($_GET["search_a"])) {
+    $search_a = "%" . $_GET["search_a"] . "%";
+    $sql_users .= " AND account LIKE ?";
+    array_push($params, $search_a);
+    $types .= "s";
 }
 
-// 根據搜尋條件查詢使用者
-$sql = "SELECT * FROM users WHERE activation = 1";
-if ($search !== '') {
-    $sql .= " AND name LIKE '%$search%'";
-}
-if (isset($_GET["order"])) {
-    $order = $_GET["order"];
-    switch ($order) {
-        case 1:
-            $sql .= " ORDER BY user_id ASC";
-            break;
-        case 2:
-            $sql .= " ORDER BY user_id DESC";
-            break;
-        default:
-            $sql .= " ORDER BY user_id ASC";
-            break;
+// 篩選會員生日月份
+if (isset($_GET["pick_month"]) && !empty($_GET["pick_month"])) {
+    $selected_months = $_GET["pick_month"]; // 假設這是從多選下拉式選單傳來的值的陣列
+
+    if (is_array($selected_months) && count($selected_months) > 0) {
+        $placeholders = implode(',', array_fill(0, count($selected_months), '?'));
+        $sql_users .= " AND MONTH(birthday) IN ($placeholders)";
+        foreach ($selected_months as $month) {
+            array_push($params, $month);
+            $types .= "i"; // 月份是整數型別
+        }
     }
 }
-$sql .= " LIMIT $start_item, $per_page";
-$result = $conn->query($sql);
-if ($result) {
-    $users = $result->fetch_all(MYSQLI_ASSOC);
-} else {
-    die("查詢錯誤: " . $conn->error);
+
+// 撈users資料
+$stmt_users = $conn->prepare($sql_users);
+if (!empty($params)) {
+    $stmt_users->bind_param($types, ...$params);
 }
+$stmt_users->execute();
+$result_users = $stmt_users->get_result();
+$rows_user = $result_users->fetch_all(MYSQLI_ASSOC);
+
+
+// 撈coupon資料
+$sql_coupons = "SELECT * FROM coupon WHERE coupon_id = ?";
+$stmt_coupons = $conn->prepare($sql_coupons);
+$stmt_coupons->bind_param("i", $coupon_id);
+$stmt_coupons->execute();
+$result_coupons = $stmt_coupons->get_result();
+$row_coupon = $result_coupons->fetch_assoc();
+
 ?>
 <!doctype html>
 <html lang="en">
 
 <head>
-    <title>會員管理頁</title>
+    <title>推送優惠券</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
@@ -67,6 +83,53 @@ if ($result) {
         .user-search {
             width: 200px;
         }
+
+        /* ---------------------------------------------下拉式選單相關的樣式 -----------------------------------------------*/
+
+        /* The container div - needed to position the dropdown content */
+        .dropdown {
+        height: 100%;
+        position: relative;
+        display: inline-block;
+        }
+
+        /* Dropdown Button */
+        .dropbtn{
+            height: 100%; 
+        }
+
+        /* Dropdown Content (Hidden by Default) */
+        .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+        }
+
+        /* Links inside the dropdown */
+        .dropdown-content label {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        }
+
+        /* Change color of dropdown links on hover */
+        .dropdown-content label:hover {background-color: #f1f1f1}
+
+        /* Show the dropdown menu when the button is clicked */
+        .show {display: block;}
+
+        /* Added style for the selected values display area */
+        #selectedValues {
+        width: 600px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        height: 100%;
+        font-size: 16px;
+        }
     </style>
 </head>
 
@@ -77,112 +140,125 @@ if ($result) {
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
 
         <div class="main col neumorphic p-5">
-            <div class="d-flex">
-                <div class="d-flex p-0">
-                    <?php if (isset($_GET["search"])): ?>
-                        <a class="btn btn-neumorphic user-btn mt-0" href="users.php" title="回使用者列表"><i class="fa-solid fa-left-long"></i></a>
-                    <?php endif; ?>
-                    <h2 class="mb-3">會員管理</h2>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row d-flex">
-                    <form action="">
-                        <div class="input-group mb-3">
-                            <input type="search" class="form-control" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="請輸入欲搜尋的使用者">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-warning m-0" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <h2>推送「 <?= $row_coupon["name"] ?> 」(id = <?= $row_coupon["coupon_id"] ?>)<?= $row_coupon["activation"] == 0 ? "<span class='text-danger'>(注意：此優惠活動為停用狀態)</span>" : "" ; ?></h2>
+            <hr>
+
+            <!-- 篩選器 -->
+            <div class="py-2">
+                <form action="" class ="d-flex">
+                    <div class="input-group">
+                        <input type="hidden" name="coupon_id" value="<?= $coupon_id ?>">
+                        <input type="search" class="form-control" name="search_n" value="<?php echo isset($_GET["search_n"]) ? $_GET["search_n"] : "" ?>" placeholder="搜尋會員名稱">
+                        <input type="search" class="form-control" name="search_a" value="<?php echo isset($_GET["search_a"]) ? $_GET["search_a"] : "" ?>" placeholder="搜尋帳號">
+                        
+                        <!-- 自定義的下拉式多選選單 -->
+                        <div class="d-flex align-items-center">
+                            <!-- 顯示已勾選選項值的區域 -->
+                            <div class="d-flex align-items-center" id="selectedValues">
+                                所有月份
                             </div>
-                        </div>
+                            <!-- 展開下拉式選單的按鈕 -->
+                            <div class="dropdown">
+                                <button class="dropbtn btn neumorphic" type="button"><i class="fa-solid fa-sort-down"></i></button>
+                                <div id="myDropdown" class="dropdown-content">
+                                    <?php
+                                        // 檢查是否有 GET 參數，若無則預設勾選所有月份
+                                        $selected_months = isset($_GET["pick_month"]) ? $_GET["pick_month"] : range(1, 12);
 
-                        <div class="d-flex justify-content-between my-3">
-                            <div>
-                                <a class="btn btn-neumorphic user-btn" <?php if($order==1)echo"active"?>href="users.php?p=<?= $page?>&order=1">排序
-                                    <i class="fa-solid fa-arrow-up-a-z"></i>
-                                </a>
-                                <a class="btn btn-neumorphic user-btn" <?php if($order==2)echo"active"?>href="users.php?p=<?= $page?>&order=2">排序
-                                    <i class="fa-solid fa-arrow-down-a-z"></i>
-                                </a>
-                            </div>
-                            <div>
-                                <a href="user-add.php" class="btn btn-neumorphic user-btn">新增
-                                    <i class="fa-solid fa-plus"></i>
-                                </a>
-                            </div>
-                        </div>
+                                        // 如果 $selected_months 不是陣列，將其轉換為陣列
+                                        if (!is_array($selected_months)) {
+                                            $selected_months = [$selected_months];
+                                        }
 
-                        <div class="main col neumorphic p-2">
-                            <h3>
-                                <?php if (isset($_GET["search"]) && $search !== ''): ?>
-                                    <?= htmlspecialchars($search) ?> 的搜尋結果: 共有<?= $userCount['count'] ?>個使用者
-                                <?php elseif (isset($_GET["search"]) && $search === ''): ?>
-                                    請輸入有效搜尋字
-                                <?php else: ?>
-                                    共有<?= $userCount['count'] ?>個使用者
-                                <?php endif; ?>
-                            </h3>
-
-                            <?php if (!empty($users)): ?>
-                                <ul class="nav nav-tabs">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" aria-current="page" href="users.php">全部</a>
-                                    </li>
-                                </ul>
-                                <table class="table table-bordered">
-                                    <thead class="user-text">
-                                        <tr>
-                                            <th>User ID</th>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Phone</th>
-                                            <th>其他功能</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($users as $user): ?>
-                                            <tr>
-                                                <td><?= htmlspecialchars($user["user_id"]) ?></td>
-                                                <td><?= htmlspecialchars($user["name"]) ?></td>
-                                                <td><?= htmlspecialchars($user["email"]) ?></td>
-                                                <td><?= htmlspecialchars($user["phone"]) ?></td>
-                                                <td>
-                                                    <a class="btn btn-primary" href="user.php?user_id=<?= htmlspecialchars($user["user_id"]) ?>"><i class="fa-solid fa-eye"></i></a>
-                                                    <a class="btn btn-danger" href="doDeleteUser.php?user_id=<?= htmlspecialchars($user["user_id"]) ?>"><i class="fa-solid fa-trash"></i></a>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
-
-                                <div class="d-flex justify-content-center">
-                                    <nav aria-label="page navigation">
-                                        <ul class="pagination pagination-lg">
-                                            <?php if ($page > 1): ?>
-                                                <li class="page-item"><a class="page-link" href="?p=<?= $page - 1 ?><?= isset($_GET["search"]) ? '&search=' . urlencode($search) : '' ?>">Previous</a></li>
-                                            <?php endif; ?>
-
-                                            <?php for ($i = 1; $i <= $totalPage; $i++): ?>
-                                                <li class="page-item <?= ($page == $i) ? 'active' : '' ?>">
-                                                    <a class="page-link" href="?p=<?= $i ?><?= isset($_GET["search"]) ? '&search=' . urlencode($search) : '' ?>"><?= $i ?></a>
-                                                </li>
-                                            <?php endfor; ?>
-
-                                            <?php if ($page < $totalPage): ?>
-                                                <li class="page-item"><a class="page-link" href="?p=<?= $page + 1 ?><?= isset($_GET["search"]) ? '&search=' . urlencode($search) : '' ?>">Next</a></li>
-                                            <?php endif; ?>
-                                        </ul>
-                                    </nav>
+                                        // 生成月份選項
+                                        for ($i = 1; $i <= 12; $i++) {
+                                            $checked = in_array($i, $selected_months) ? "checked" : "";
+                                            echo '<label><input type="checkbox" value="' . $i . '" name="pick_month[]" onchange="updateSelectedValues()" ' . $checked . '> ' . $i . '月</label>';
+                                        }
+                                    ?>
                                 </div>
-                            <?php endif; ?>
+                            </div>
                         </div>
-                    </form>
-                </div>
+                        <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </div>
+                </form>
             </div>
+            <hr>
+            <div class="">
+            </div>
+
+            <!-- 顯示users資料的表格 -->
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>會員編號<br>(user_id)</th>
+                        <th>會員名稱<br>(name)</th>
+                        <th>帳號<br>(account)</th>
+                        <th>生日<br>(birthday)</th>
+                        <th>註冊時間<br>(sign_up_time)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($rows_user as $row_user) : ?>
+                        <tr>
+                            <td><?= $row_user['user_id'];?></td>
+                            <td><?= $row_user['name'];?></td>
+                            <td><?= $row_user['account'];?></td>
+                            <td><?= $row_user['birthday'];?></td>
+                            <td><?= $row_user['sign_up_time'];?></td>
+                        </tr>
+                    <?php endforeach;?>
+                </tbody>
+            </table>
         </div>
     </div>
 
     <?php include("../js.php"); ?>
     <?php $conn->close() ?>
+    <script>
+        window.onload = function() {
+            updateSelectedValues(); // 只更新顯示文字，不進行預設勾選
+        };
+
+        function toggleDropdown() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
+
+        // 點擊按鈕後顯示/隱藏下拉選單
+        document.querySelector('.dropbtn').addEventListener('click', function(event) {
+            event.stopPropagation();
+            toggleDropdown();
+        });
+
+        // 如果使用者點擊了按鈕以外的區域，收起選單
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropbtn') && !event.target.closest('.dropdown-content')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+
+        // 更新已選擇的值
+        function updateSelectedValues() {
+            var checkboxes = document.querySelectorAll('#myDropdown input[type="checkbox"]:checked');
+            var allCheckboxes = document.querySelectorAll('#myDropdown input[type="checkbox"]');
+            
+            // 如果所有選項都被勾選，顯示"所有月份"
+            if (checkboxes.length === allCheckboxes.length) {
+                document.getElementById('selectedValues').innerText = '所有月份';
+            } else if (checkboxes.length > 0) {
+                var selectedValues = Array.from(checkboxes).map(cb => cb.value + '月');
+                document.getElementById('selectedValues').innerText = '已選擇的月份: ' + selectedValues.join(', ');
+            } else {
+                document.getElementById('selectedValues').innerText = '未選擇月份';
+            }
+        }
+    </script>
 </body>
 
 </html>
