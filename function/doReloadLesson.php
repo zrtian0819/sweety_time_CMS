@@ -11,4 +11,4 @@ $sql = "UPDATE lesson SET activation = 1 WHERE lesson_id = $id";
 $conn->query($sql);
 
 $conn->close();
-header("location:../page/lesson.php?status=off");
+header("Location: " . $_SERVER['HTTP_REFERER']);//回到上一頁

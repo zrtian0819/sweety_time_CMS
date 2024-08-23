@@ -15,6 +15,14 @@ $sql = "SELECT * FROM lesson WHERE lesson_id = $id";
 $result = $conn->query($sql);
 $row = $result->fetch_assoc();
 
+$sqlAll = "SELECT lesson.* FROM lesson";
+$allResult = $conn->query($sqlAll);
+$rows = $allResult->num_rows;
+
+if ($id > $rows) {
+    echo "尚未有課程";
+    exit;
+}
 
 //teacher
 $sqlTeacher = "SELECT * FROM teacher ORDER BY teacher_id";
@@ -101,12 +109,11 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                 <div class="row justify-content-center">
                     <div class="col-lg-3 m-2">
                         <div class="upload">
-                            <!-- ratio ratio-4x3 -->
                             <div class="photo ">
-                                <img src="../images/lesson/<?= $row["img_path"] ?>" alt="<?= $row["name"] ?>" class="w-100 h-100 object-fit-cover">
+                                <img src="../images/lesson/<?= $row["img_path"] ?>" alt="<?= $row["name"] ?>" class="w-100 h-100 object-fit-cover" id="output">
                                 <div class="cover position-absolute w-100 h-100"></div>
-                                <label for="picUpload" class="uploadStyle btn-custom">更新照片</label>
-                                <input type="file" name="pic" id="picUpload">
+                                <label for="picUpload" class="uploadStyle btn-custom" >更新照片</label>
+                                <input type="file" name="pic" id="picUpload" onchange="loadFile(event)">
                             </div>
                         </div>
                         <table class="table mt-2 table-hover align-middle">
@@ -195,6 +202,16 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
     <?php include("../js.php") ?>
     <?php $conn->close() ?>
     <script>
+        //預覽
+        let loadFile = function(event) {
+            let output = document.getElementById("output");
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.onload = function() {
+                URL.revokeObjectURL(output.src); // free memory
+            };
+        };
+
+        //所見即所得編輯器
         tinymce.init({
             selector: 'textarea#tiny'
         });
