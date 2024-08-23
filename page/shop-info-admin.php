@@ -126,14 +126,16 @@ $shopCount = $result->num_rows;
                                             </td>
                                             <td class="text-center align-middle"><?= $row["sign_up_time"] ?></td>
                                             <td class="text-center align-middle">
-                                                <?php
-                                                $activation = $row["activation"];
-                                                if ($activation == 1) {
-                                                    echo '<i class="fa-solid fa-check text-success"></i>';
-                                                } else {
-                                                    echo '<i class="fa-solid fa-xmark text-danger"></i>';
-                                                }
-                                                ?>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input activation-switch" type="checkbox" 
+                                                        id="activationSwitch<?= $row['shop_id'] ?>" 
+                                                        <?= $row["activation"] == 1 ? 'checked' : '' ?>
+                                                        data-shop-id="<?= $row['shop_id'] ?>"
+                                                        data-current-status="<?= $row['activation'] ?>">
+                                                    <label class="form-check-label text-nowrap" for="activationSwitch<?= $row['shop_id'] ?>">
+                                                        <?= $row["activation"] == 1 ? '啟用' : '停用' ?>
+                                                    </label>
+                                                </div>
                                             </td>
                                             <td class="text-center align-middle">
                                                 <a href="javascript:void(0);" class="btn btn-custom dontNextLine btn-sm m-2" data-shop-id="<?= $row['shop_id'] ?>" onclick="saveShopId(this)">
@@ -166,9 +168,9 @@ $shopCount = $result->num_rows;
                                     // 計算應該顯示的頁碼範圍
                                     $start = max(2, $page - 2);
                                     $end = min($total_page - 1, $page + 2);
-                                    
                                     // 如果範圍的起始不是2,顯示省略號
-                                    if ($start > 2): ?>
+                                    if ($start > 2): 
+                                    ?>
                                         <li class="page-item px-1 disabled">
                                             <span class="page-link">...</span>
                                         </li>
@@ -238,6 +240,45 @@ $shopCount = $result->num_rows;
                 }
             });
         }
+    </script>
+    <!-- 開關切換 -->
+    <script>
+        $(document).ready(function() {
+            $('.activation-switch').change(function() {
+                var shopId = $(this).data('shop-id');  // 修正：使用 shop-id 而不是 shop_id
+                var currentStatus = $(this).data('current-status');
+                var newStatus = this.checked ? 1 : 0;
+                var $switch = $(this);
+                
+                $.ajax({
+                    url: '../api/update_shop_activation.php',
+                    method: 'POST',
+                    data: { 
+                        shop_id: shopId, 
+                        activation: newStatus 
+                    },
+                    dataType: 'json',  // 明確指定預期的數據類型
+                    success: function(response) {
+                        if(response.success) {
+                            // 更新標籤文字
+                            $switch.next('label').text(newStatus == 1 ? '啟用' : '停用');
+                            // 更新 data-current-status
+                            $switch.data('current-status', newStatus);
+                            console.log('店鋪狀態已更新');  // 使用 console.log 而不是 alert
+                        } else {
+                            console.error('更新失敗: ' + (response.message || '未知錯誤'));
+                            // 恢復開關狀態
+                            $switch.prop('checked', currentStatus == 1);
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error('更新時發生錯誤:', textStatus, errorThrown);
+                        // 恢復開關狀態
+                        $switch.prop('checked', currentStatus == 1);
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>
