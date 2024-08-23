@@ -62,6 +62,21 @@ $shopCount = $result->num_rows;
         .dontNextLine {
             white-space: nowrap;
         }
+        .table {
+        color: var(--text-color);
+        }
+        .table thead th {
+            color: var(--text-color);
+        }
+        .table tbody td {
+            color: var(--text-color);
+        }
+        .form-check-label {
+            color: var(--text-color);
+        }
+        .align-middle .teacher-profile{
+            background-color:rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -93,7 +108,7 @@ $shopCount = $result->num_rows;
                         <div class="table-responsive">
                         <?php if ($shopCount > 0): ?>
                         <table class="table table-bordered table-hover bdrs table-responsive align-middle" style="min-width: 1000px;">
-                                <thead class="text-center table-dark">
+                                <thead class="text-center">
                                     <tr>
                                     <th class="dontNextLine text-center">Shop_Logo</th>
                                     <th class="dontNextLine text-center">店家名稱</th>
@@ -110,9 +125,13 @@ $shopCount = $result->num_rows;
                                     <?php foreach ($rows as $row): ?>
                                         <tr>
                                             <td class="align-middle">
-                                                <a class="teacher-profile d-flex align-items-center" href="">
-                                                    <img src="../images/shop_logo/<?= $row["logo_path"] ?>" alt="<?= htmlspecialchars($teacher["name"]) ?>" class="ratio ratio-4x3">
-                                                </a>
+                                                <div class="teacher-profile d-flex align-items-center justify-content-center">
+                                                    <?php if (!empty($row["logo_path"]) && file_exists("../images/shop_logo/" . $row["logo_path"])): ?>
+                                                        <img src="../images/shop_logo/<?= $row["logo_path"] ?>" alt="<?= htmlspecialchars($row["name"]) ?> Logo" class="ratio ratio-4x3">
+                                                    <?php else: ?>
+                                                        <i class="fa-regular fa-image"></i>
+                                                    <?php endif; ?>
+                                                </div>
                                             </td>
                                             <td class="text-center align-middle"><?= $row["name"] ?></td>
                                             <td class="text-center dontNextLine align-middle"><?= $row["phone"] ?></td>
