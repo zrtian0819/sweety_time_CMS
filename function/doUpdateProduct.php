@@ -85,11 +85,13 @@ if ($file_count > 0) {
 }
 
 
-//傳入要刪除的檔案數量
-$delFileCount = count($_POST["delFiles"]);
 
-if(isset($_POST["delFiles"]) && $delFileCount>0){
+
+if(isset($_POST["delFiles"]) && count($_POST["delFiles"])>0){
     print_r($_POST["delFiles"]);
+
+    // 要刪除的檔案數量
+    $delFileCount = count($_POST["delFiles"]);
 
     $delPhotos = $_POST["delFiles"];
 
