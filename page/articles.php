@@ -161,16 +161,18 @@ foreach ($rowsUsers as $users) {
 
                 <?php if ($articlesCount > 0): $rows = $result->fetch_all(MYSQLI_ASSOC); ?>
                     <h3 class="d-flex justify-content-center">共有<?= $articlesCount ?>篇文章</h3>
-
+                    
+                    
+                    <!-- 搜尋 -->
                     <form action="">
                         <div class=" input-group m-2 d-flex justify-content-end">
                             <div>
                                 <input type="search" class="form-control" name="search" value="<?php echo isset($_GET["search"]) ? $_GET["search"] : "" ?>" placeholder="輸入文章、主題關鍵字">
                             </div>
-
                             <div class="input-group-append">
                                 <button class="btn btn-outline-warning m-0 " type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                             </div>
+                            
                         </div>
                     </form>
 
@@ -185,13 +187,14 @@ foreach ($rowsUsers as $users) {
                             </a>
                         </div>
                         <div>
-                            <a href="#" class="btn btn-neumorphic articles-btn">
+                            <a href="articles-create.php" class="btn btn-neumorphic articles-btn">
                                 <i class="fa-solid fa-plus"></i>新增文章
                             </a>
                         </div>
                     </div>
             </div>
 
+            <!-- 上架狀態 -->
             <ul class="nav nav-tabs-custom">
                 <li class="nav-item">
                     <a class="main-nav nav-link <?= $status === 'all' ? 'active' : '' ?>" href="?status=all">全部</a>
@@ -258,7 +261,7 @@ foreach ($rowsUsers as $users) {
                                     </div>
 
                                     <div class="me-1">
-                                        <a href="edit-article.php?id=<?= $articles["article_id"] ?>" class="btn btn-custom"><i class="fa-solid fa-pen"></i></a>
+                                        <a href="articles-edit.php?id=<?= $articles["article_id"] ?>" class="btn btn-custom"><i class="fa-solid fa-pen"></i></a>
                                     </div>
                                 </div>
                             </td>
@@ -280,6 +283,22 @@ foreach ($rowsUsers as $users) {
                 </nav>
             <?php endif; ?>
         <?php else: ?>
+            <table class="table table-hover">
+                <thead class="text-content">
+                    <tr>
+                        <th>文章編號</th>
+                        <th>上架狀態</th>
+                        <th>主題</th>
+                        <th>內容</th>
+                        <th>文章分類</th>
+                        <th>作者</th>
+                        <th>建立<br>時間</th>
+                        <th>一鍵<br>修改</th>
+                        <th>詳細<br>資訊</th>
+                    </tr>
+                </thead>
+                                   
+            </table>
             目前沒有文章
         <?php endif; ?>
 

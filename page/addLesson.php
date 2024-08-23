@@ -37,10 +37,28 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
     <?php include("../css/css_Joe.php"); ?>
     <script src="https://cdn.tiny.cloud/1/cfug9ervjy63v3sj0voqw9d94ojiglomezxkdd4s5jr9owvu/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
     <style>
-        .upload {
-            width: 100%;
+        input[type="file"] {
+            display: none;
         }
-        .uploadArea{
+
+        .photo {
+            position: relative;
+        }
+        .photo img{
+            width: 100dvh;
+        }
+        .uploadStyle {
+            cursor: pointer;
+            font-size: 1.5rem;
+            padding: 5px;
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            translate: -50% -50%;
+        }
+
+        .uploadArea {
             border: 5px solid black;
             width: 100%;
             height: 40dvh;
@@ -64,11 +82,12 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                 </h1>
                 <div class="row justify-content-center">
                     <div class="col-lg-3 m-2">
-                        <div class="mb-2 upload text-center">
-                            <div class="uploadArea">
-                                <h4>上傳照片</h4>
+                        <div class="upload">
+                            <div class="photo ">
+                                <img class="w-100 h-100 object-fit-cover" id="output">
+                                <label for="picUpload" class="uploadStyle btn-custom">新增照片</label>
+                                <input type="file" name="pic" id="picUpload" onchange="loadFile(event)" required>
                             </div>
-                            <input type="file" class="form-control" name="pic" required>
                         </div>
                         <table class="table mt-2 table-hover align-middle">
                             <tbody>
@@ -145,6 +164,15 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
     <?php include("../js.php") ?>
     <?php $conn->close() ?>
     <script>
+        //預覽
+        let loadFile = function(event) {
+            let output = document.getElementById("output");
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.onload = function() {
+                URL.revokeObjectURL(output.src); // free memory
+            };
+        };
+        //所見即所得編輯器
         tinymce.init({
             selector: 'textarea#tiny'
         });
