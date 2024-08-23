@@ -44,14 +44,15 @@ if (!isset($_GET["productId"])) {
     // }
 
     //撈出照片檔
-    // $photosql = "SELECT * FROM product_photo 
-    // WHERE is_valid = 1 AND product_id = $id
-    // ORDER BY product_id";
+    $photosql = "SELECT * FROM product_photo 
+    WHERE is_valid = 1 AND product_id = $id
+    ORDER BY product_id";
 
-    // $photorResult = $conn->query($photosql);
-    // $photoRows= $photorResult->fetch_all(MYSQLI_ASSOC);
+    $photorResult = $conn->query($photosql);
+    $photoRows = $photorResult->fetch_all(MYSQLI_ASSOC);
+    $photoCount = $photorResult-> num_rows;
+
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -87,6 +88,52 @@ if (!isset($_GET["productId"])) {
         .text-attention {
             color: red !important;
         }
+
+        .subPhoto{
+            width: 120px;
+            height: 120px;
+            margin: 10px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .delPhoto{
+            transition:0.2s;
+            cursor: pointer;
+            position: relative;
+
+            .crossCover{
+                z-index: 2;
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                color:white;
+                font-size: 2rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0;
+                
+            }
+
+            &:hover{
+                scale: 1.05;
+                filter: contrast(0.4) brightness(1.2);
+
+                .crossCover{
+                    opacity: 1;
+                }
+            }
+            &:active{
+                transition:0s;
+                scale: 0.98;
+            }
+
+
+        }
+
+        
+
     </style>
 </head>
 
@@ -188,11 +235,24 @@ if (!isset($_GET["productId"])) {
                                     </div>
 
                                     <div class="photo-upload">
-                                        <h4 class="text-center">圖片上傳</h4>
+                                        <h4 class="text-center">刪除與新增圖片</h4>
+                                        
+                                        <div class="container">
+                                            <h6>請選擇欲刪除的圖片</h6>
+                                            <div class="row row-cols-6 d-flex" id="fileEdit">
+                                                <?php foreach($photoRows as $photoRow): ?>
+                                                    <div class="subPhoto delPhoto overflow-hidden">
+                                                        <div class="crossCover"><i class="fa-solid fa-xmark"></i></div>
+                                                        <img class="w-100 h-100 object-fit-cover" src="../images/products/<?=$photoRow["file_name"]?>" alt="">
+                                                        <input type="" name="delFiles[]" value="<?=$photoRow["product_photo_id"]?>" hidden>
+                                                    </div>
+                                                <?php endforeach; ?> 
+                                            </div>
+                                        </div>
 
                                         <div class="container d-flex flex-column">
                                             <label for="fileUpload" class="custom-file-upload my-2">
-                                                新增圖片
+                                                新增圖片<i class="fa-solid fa-arrow-down"></i>
                                             </label>
                                             <input type="file" name="pic[]" id="fileUpload" class="file-input" accept=".jpg, .png, .jpeg, .gif" multiple>
                                             <div class="row row-cols-6 d-flex" id="preview-imgbox">
@@ -240,12 +300,7 @@ if (!isset($_GET["productId"])) {
                     reader.onload = function(e) {
                         const img = document.createElement('img');
                         img.src = e.target.result;
-                        img.style.width = '120px';
-                        img.style.height = '120px';
-                        img.style.margin = '10px';
-                        img.style.objectFit = "cover";
-                        img.style.borderRadius = '5px';
-
+                        img.classList.add("subPhoto");
                         previewImgBox.appendChild(img); // 將圖片添加到預覽區域
                     }
 
@@ -253,6 +308,11 @@ if (!isset($_GET["productId"])) {
                 }
             }
         });
+
+
+        const fileEdit = document.querySelector("#fileEdit");
+
+
     </script>
 </body>
 
