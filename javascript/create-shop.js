@@ -1,6 +1,6 @@
 $(document).ready(function() {
     // 檢查帳號
-    $('.btn-check-account').on('click', function() {
+    $('#account').on('change', function() {
         var account = $('#account').val();
         if(account != '') {
             $.ajax({

@@ -61,7 +61,7 @@ require_once("../db_connect.php");
                                     <label for="account" class="form-label">Account</label>
                                     <div class="d-flex">
                                         <input class="form-control form-control-custom" type="text" id="account" name="account" required/>
-                                        <button type="button" class="btn btn-neumorphic btn-check-account"><i class="fa-solid fa-user-check"></i></button>
+                                        <!-- <button type="button" class="btn btn-neumorphic btn-check-account"><i class="fa-solid fa-user-check"></i></button> -->
                                     </div>
                                     <div id="accountFeedback" class="invalid-feedback"></div>
                                 </div>
