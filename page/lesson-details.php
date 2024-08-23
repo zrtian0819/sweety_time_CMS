@@ -22,7 +22,7 @@ $allResult = $conn->query($sqlAll);
 $rows = $allResult->num_rows;
 
 if ($id > $rows) {
-    echo "尚未有課程";
+    header("location: lesson.php");
     exit;
 }
 
