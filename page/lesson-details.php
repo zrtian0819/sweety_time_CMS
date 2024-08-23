@@ -34,10 +34,12 @@ $rowsTea = $resultTea->fetch_all(MYSQLI_ASSOC);
 
 //關聯式陣列
 $teacherArr = [];
+$teacherStatus = [];
 foreach ($rowsTea as $teacher) {
     $teacherArr[$teacher["teacher_id"]] = $teacher["name"];
+    $teacherStatus[$teacher["teacher_id"]] = $teacher["valid"];
+    // print_r($teacherArr);
 }
-
 
 //student
 $sqlStudent = "SELECT * FROM student WHERE lesson_id = $id";
@@ -134,11 +136,15 @@ $rowPro = $resultProduct->fetch_assoc();
                                 <th>
                                     <h5>狀態</h5>
                                 </th>
-                                <?php echo ($row["activation"] == 1) ? "<td>" . "上架中" : "<td class='text-danger'>" . "已下架"; ?></td>
+                                <?php echo ($row["activation"] == 1 && $teacherStatus[$row["teacher_id"]] == 1) ? "<td>" . "上架中" : "<td class='text-danger'>" . "已下架"; ?></td>
                             </tr>
                         </tbody>
                     </table>
-                    <a href="editLesson.php?id=<?= $id ?>"><button class="btn-custom w-100">編輯資料</button></a>
+                    <?php if ($teacherStatus[$row["teacher_id"]] != 0): ?>
+                        <a href="editLesson.php?id=<?= $id ?>"><button class="btn-custom w-100">編輯資料</button></a>
+                    <?php else: ?>
+                        <a href="teacher.php"><button class="btn-custom w-100">此老師已下架，請至師資管理頁編輯</button></a>
+                    <?php endif; ?>
                 </div>
                 <div class="col-lg-8 ms-2">
                     <h3 class="p-2">課程介紹</h3>
