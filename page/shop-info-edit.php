@@ -7,10 +7,6 @@ $shop_id = $_SESSION["shop"]["shop_id"];
 
 
 if(isset($_SESSION["shop"]["shop_id"])){
-    
-    // if($shop_id=="admin"){
-    //     header("location: dashboard-home_Joe.php");
-    //}
 
     if(isset($_GET["shopId"])){
         if( $_GET["shopId"]!=$_SESSION["shop"]["shop_id"] ){
