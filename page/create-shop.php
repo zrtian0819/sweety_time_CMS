@@ -33,7 +33,11 @@ require_once("../db_connect.php");
                     </div>
                         <div class="create-shop-card mx-auto  mb-5">
                         <div class="w-75">
-                            <form action="../api/doCreateShop.php" method="POST">
+                            <form action="../function/doCreateShop.php" method="POST" enctype="multipart/form-data">
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Name</label>
+                                    <input class="form-control form-control-custom" type="text" class="form-control" id="username" name="username" required/>
+                                </div>
                                 <div class="mb-3">
                                     <label for="account" class="form-label">Account</label>
                                     <input class="form-control form-control-custom" type="text" class="form-control" id="account" name="account" required/>
@@ -43,10 +47,6 @@ require_once("../db_connect.php");
                                     <input class="form-control form-control-custom" type="password" class="form-control" id="password" name="password" required/>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="repassword" class="form-label">RePassword</label>
-                                    <input class="form-control form-control-custom" type="password" class="form-control" id="repassword" name="repassword" required/>
-                                </div>
-                                <div class="mb-3">
                                     <label for="birthday" class="form-label">生日</label>
                                     <input class="form-control form-control-custom" type="date" class="form-control" id="birthday" name="birthday" required/>
                                 </div>
@@ -54,7 +54,6 @@ require_once("../db_connect.php");
                                     <label for="email" class="form-label">E-mail</label>
                                     <input class="form-control form-control-custom" type="text" class="form-control" id="email" name="email" required/>
                                 </div>
-                                <!-- phone -->
                                 <div class="mb-3">
                                     <label for="phone" class="form-label">Phone</label>
                                     <input class="form-control form-control-custom" type="text" class="form-control" id="phone" name="phone" required/>
@@ -81,7 +80,7 @@ require_once("../db_connect.php");
                                         <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" id="uploadButton">
                                             上傳照片
                                         </a>
-                                        <input type="file" class="form-control d-none" id="shopImage" name="shopImage" required>
+                                        <input type="file" class="form-control d-none" id="shopImage" name="shopImage">
                                     </div>
                                 </div>
                                 <hr>
