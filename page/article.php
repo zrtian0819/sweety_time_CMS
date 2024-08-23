@@ -100,9 +100,15 @@ foreach ($rowsUsers as $users) {
     <div class="container-fluid d-flex flex-row px-4">
 
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
-        
+
         <div class="main col neumorphic p-5">
             <div class="row">
+                <h2 class="mb-5 text-center">文章管理</h2>
+                <div class="col-3">
+                    <a class="btn-animation btn btn-custom d-inline-flex flex-row align-items-center mb-3" href="articles.php">
+                        <i class="fa-solid fa-arrow-left-long"></i><span class="btn-animation-innerSpan d-inline-block">返回</span>
+                    </a>
+                </div>
                 <!-- 文章 -->
                 <h1 class="d-flex justify-content-center">
                     <?= $row["title"] ?>
@@ -110,7 +116,7 @@ foreach ($rowsUsers as $users) {
 
                 <!-- 建立時間/作者/分類 -->
                 <div class="row-col-3 d-flex justify-content-center">
-                    建立時間：<?= $row["created_at"] ?>／作者：<?= $users["user_id"] = $users["name"]  ?>／分類：<?= $rowProduct["class_name"] ?>
+                    建立時間：<?= $row["created_at"] ?>／作者：<?= $users["user_id"]   ?>／分類：<?= $rowProduct["class_name"] ?>
 
                 </div>
 
