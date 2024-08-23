@@ -93,6 +93,12 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
             top: 0;
             left: 0;
         }
+
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
     </style>
 </head>
 
@@ -105,7 +111,9 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
             <!-- Content -->
             <a href="lesson.php" class="btn btn-custom"><i class="fa-solid fa-arrow-left"></i></a>
             <form action="../function/doUpdateLesson.php?id=<?= $id ?>" method="post" enctype="multipart/form-data">
-                <h1 class="m-2"><input type="text" class="textarea-custom" value="<?= $row["name"] ?>" name="name"></h1>
+                <div class="col-lg-8">
+                    <h1 class="m-2"><input type="text" class="form-control form-control-custom fs-1" value="<?= $row["name"] ?>" name="name"></h1>
+                </div>
                 <div class="row justify-content-center">
                     <div class="col-lg-3 m-2">
                         <div class="upload">
@@ -144,19 +152,19 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                                     <th>
                                         <h5>價錢</h5>
                                     </th>
-                                    <td class="text-danger"><input type="text" class="textarea-custom" value=<?= ($row["price"]) ?> name="price"></td>
+                                    <td class="text-danger"><input type="number" class="form-control form-control-custom" value=<?= ($row["price"]) ?> name="price"></td>
                                 </tr>
                                 <tr>
                                     <th>
                                         <h5>時間</h5>
                                     </th>
-                                    <td><input type="datetime-local" class="textarea-custom" name="updateTime" value="<?= $row["start_date"] ?>"></td>
+                                    <td><input type="datetime-local" class="form-control form-control-custom" name="updateTime" value="<?= $row["start_date"] ?>"></td>
                                 </tr>
                                 <tr>
                                     <th>
                                         <h5>課程人數</h5>
                                     </th>
-                                    <td><input type="text" class="textarea-custom" value=<?= $row["quota"] ?> name="quota"></td>
+                                    <td><input type="number" class="form-control form-control-custom" value=<?= $row["quota"] ?> name="quota"></td>
                                 </tr>
                                 <tr>
                                     <th>
@@ -168,20 +176,20 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                                     <th>
                                         <h5>地點</h5>
                                     </th>
-                                    <td><input type="text" class="textarea-custom" value="<?= $row["classroom_name"] ?>" name="classroom_name"></td>
+                                    <td><input type="text" class="form-control form-control-custom" value="<?= $row["classroom_name"] ?>" name="classroom_name"></td>
                                 </tr>
                                 <tr>
                                     <th>
                                         <h5>地址</h5>
                                     </th>
-                                    <td><input type="text" class="textarea-custom" value="<?= $row["location"] ?>" name="location"></td>
+                                    <td><input type="text" class="form-control form-control-custom" value="<?= $row["location"] ?>" name="location"></td>
                                 </tr>
                                 <tr>
                                     <th>
                                         <h5>狀態</h5>
                                     </th>
                                     <td>
-                                        <select id="status" name="status">
+                                        <select id="status" name="status" class="form-select form-control-custom">
                                             <option value="1" <?= $row["activation"] == 1 ? "selected" : ""; ?>>上架中</option>
                                             <option value="0" <?= $row["activation"] == 0 ? "selected" : ""; ?>>下架</option>
                                         </select>
