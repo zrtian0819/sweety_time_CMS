@@ -6,6 +6,7 @@ if (!isset($_GET["user_id"])) {
 $user_id = $_GET["user_id"];
 
 require_once("../db_connect.php");
+include("../function/login_status_inspect.php");
 
 $sql = "SELECT * FROM users WHERE user_id = '$user_id' AND activation=1";
 $result = $conn->query($sql);

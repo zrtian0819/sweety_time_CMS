@@ -1,6 +1,9 @@
 <?php
 
 require_once("../db_connect.php");
+include("../function/login_status_inspect.php");
+
+$sql = "SELECT * FROM users WHERE role = 'user'";
 
 // 分頁條件設置
 $per_page = 10;
@@ -13,7 +16,6 @@ $search = isset($_GET["search"]) ? trim($_GET["search"]) : '';
 
 // 狀態
 $status = isset($_GET["status"]) ? $_GET["status"] : 'on';
-$sql = "SELECT * FROM users WHERE role = 'user'";
 
 if ($status === 'on') {
     $sql .= " AND activation = 1";
