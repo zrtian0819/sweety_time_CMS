@@ -112,7 +112,7 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                             <div class="photo ">
                                 <img src="../images/lesson/<?= $row["img_path"] ?>" alt="<?= $row["name"] ?>" class="w-100 h-100 object-fit-cover" id="output">
                                 <div class="cover position-absolute w-100 h-100"></div>
-                                <label for="picUpload" class="uploadStyle btn-custom" >更新照片</label>
+                                <label for="picUpload" class="uploadStyle btn-custom">更新照片</label>
                                 <input type="file" name="pic" id="picUpload" onchange="loadFile(event)">
                             </div>
                         </div>
@@ -180,7 +180,12 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                                     <th>
                                         <h5>狀態</h5>
                                     </th>
-                                    <?php echo ($row["activation"] == 1) ? "<td>" . "上架中" : "<td class='text-danger'>" . "已下架"; ?></td>
+                                    <td>
+                                        <select id="status" name="status">
+                                            <option value="1" <?= $row["activation"] == 1 ? "selected" : ""; ?>>上架中</option>
+                                            <option value="0" <?= $row["activation"] == 0 ? "selected" : ""; ?>>下架</option>
+                                        </select>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>

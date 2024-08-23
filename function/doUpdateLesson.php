@@ -20,6 +20,8 @@ $formattedDateTime = $dateTime->format('Y-m-d H:i:s');
 $quota = $_POST["quota"];
 $classroom_name = $_POST["classroom_name"];
 $location = $_POST["location"];
+$status = $_POST["status"];
+
 $description = $_POST["description"];
 
 
@@ -31,7 +33,7 @@ if ($_FILES["pic"]["error"] == 0) {
     $newFileName = time() . ".$extension";
 
     if (move_uploaded_file($_FILES["pic"]["tmp_name"], "../images/lesson/" . $newFileName)) {
-        $sql = "UPDATE lesson SET name = '$name',product_class_id='$class', img_path = '$newFileName',teacher_id='$teacher',price='$price',start_date='$formattedDateTime',quota='$quota',classroom_name='$classroom_name',location='$location',description='$description' WHERE lesson_id ='$id'";
+        $sql = "UPDATE lesson SET name = '$name',product_class_id='$class', img_path = '$newFileName',teacher_id='$teacher',price='$price',start_date='$formattedDateTime',quota='$quota',classroom_name='$classroom_name',location='$location',activation='$status',description='$description' WHERE lesson_id ='$id'";
         if ($conn->query($sql) === TRUE) {
             header("location:../page/lesson-details.php?id=$id");
         } else {
@@ -39,7 +41,7 @@ if ($_FILES["pic"]["error"] == 0) {
         }
     }
 } else {
-    $sql = "UPDATE lesson SET name = '$name',product_class_id='$class',teacher_id='$teacher',price='$price',start_date='$formattedDateTime',quota='$quota',classroom_name='$classroom_name',location='$location',description='$description' WHERE lesson_id ='$id'";
+    $sql = "UPDATE lesson SET name = '$name',product_class_id='$class',teacher_id='$teacher',price='$price',start_date='$formattedDateTime',quota='$quota',classroom_name='$classroom_name',location='$location',activation='$status',description='$description' WHERE lesson_id ='$id'";
     if ($conn->query($sql) === TRUE) {
         header("location:../page/lesson-details.php?id=$id");
     } else {
