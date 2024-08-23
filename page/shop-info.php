@@ -1,15 +1,7 @@
 <?php
 require_once("../db_connect.php");      //避免sidebar先載入錯誤,人天先加的
 
-if (session_status() == PHP_SESSION_NONE) {  //啟動session
-    session_start();
-}
-
-// 检查用户是否已登录以及是否有角色信息
-if (!isset($_SESSION["user"])) {
-    header("Location: login.php");
-    exit;
-}
+include("../function/login_status_inspect.php");//檢查登入狀況
 
 $role = $_SESSION["user"]["role"];
  //假設session之中沒有shop_id則為NULL
