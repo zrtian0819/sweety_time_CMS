@@ -61,12 +61,8 @@ $resultUsers = $conn->query($sqlUsers);
 $rowsUsers = $resultUsers->fetch_all(MYSQLI_ASSOC);
 
 //使用者關聯式陣列
-$usersArr = [];
-foreach ($rowsUsers as $users) {
-    $usersArr[$users["user_id"]] = $users["name"];
-};
-
-
+$firstUser = $rowsUsers[0]; // 這裡取得第一筆使用者資料
+$authorName = $firstUser["name"]; // 取得使用者名稱
 
 ?>
 
@@ -116,7 +112,7 @@ foreach ($rowsUsers as $users) {
 
                 <!-- 建立時間/作者/分類 -->
                 <div class="row-col-3 d-flex justify-content-center">
-                    建立時間：<?= $row["created_at"] ?>／作者：<?= $users["user_id"]   ?>／分類：<?= $rowProduct["class_name"] ?>
+                    建立時間：<?= $row["created_at"] ?>／作者：<?= $authorName ?>／分類：<?= $rowProduct["class_name"] ?>
 
                 </div>
 
