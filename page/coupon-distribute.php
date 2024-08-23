@@ -47,6 +47,51 @@ if (isset($_GET["pick_month"]) && !empty($_GET["pick_month"])) {
     }
 }
 
+// 篩選註冊日期
+if(!isset($_GET["signUp_compair"])){
+    $signUp_compair = "before";
+}else{
+    $signUp_compair = $_GET["signUp_compair"];
+}
+if (isset($_GET["signUp_date"]) && !empty($_GET["signUp_date"]) && isset($_GET["signUp_compair"]) && !empty($_GET["signUp_compair"])) {
+    $signUp_date = $_GET["signUp_date"];
+    if($signUp_compair == "before"){
+        $sql_users .= " AND sign_up_time < ?";
+    }
+    if($signUp_compair == "after"){
+        $sql_users .= " AND sign_up_time > ?";
+    }
+    array_push($params, $signUp_date);
+    $types .= "s";
+} 
+
+// 排序條件
+if (!isset($_GET["sort"])){
+    $sort = "id_asc";
+}else{
+    $sort = $_GET["sort"];
+    switch ($sort) {
+        case "id_asc":
+            $sql_users .= " ORDER BY user_id ASC";
+            break;
+        case "id_desc":
+            $sql_users .= " ORDER BY user_id DESC";
+            break;
+        case "birthday_asc":
+            $sql_users .= " ORDER BY birthday ASC";
+            break;
+        case "birthday_desc":
+            $sql_users .= " ORDER BY birthday DESC";
+            break;
+        case "signUp_asc":
+            $sql_users .= " ORDER BY sign_up_time ASC";
+            break;
+        case "signUp_desc":
+            $sql_users .= " ORDER BY sign_up_time DESC";
+            break;
+    }
+}
+
 // 撈users資料
 $stmt_users = $conn->prepare($sql_users);
 if (!empty($params)) {
@@ -99,14 +144,19 @@ $row_coupon = $result_coupons->fetch_assoc();
         }
 
         /* Dropdown Content (Hidden by Default) */
+        /* 修改下拉選單的樣式 */
         .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #f9f9f9;
-        min-width: 160px;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        z-index: 1;
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            left: -600px; /* 保持與 selectedValues 的左邊對齊 */
+            top: 100%; /* 緊貼在 selectedValues 區域下方 */
+            margin-top: 5px; /* 稍微向下偏移一點 */
         }
+
 
         /* Links inside the dropdown */
         .dropdown-content label {
@@ -129,6 +179,8 @@ $row_coupon = $result_coupons->fetch_assoc();
         border: 1px solid #ddd;
         height: 100%;
         font-size: 16px;
+        cursor: pointer;
+        color: #000;
         }
     </style>
 </head>
@@ -147,38 +199,57 @@ $row_coupon = $result_coupons->fetch_assoc();
             <div class="py-2">
                 <form action="" class ="d-flex">
                     <div class="input-group">
+
+                        <!-- 確保coupon_id不會跑掉 -->
                         <input type="hidden" name="coupon_id" value="<?= $coupon_id ?>">
+
+                        <!-- 搜尋條件 -->
                         <input type="search" class="form-control" name="search_n" value="<?php echo isset($_GET["search_n"]) ? $_GET["search_n"] : "" ?>" placeholder="搜尋會員名稱">
                         <input type="search" class="form-control" name="search_a" value="<?php echo isset($_GET["search_a"]) ? $_GET["search_a"] : "" ?>" placeholder="搜尋帳號">
+
+                        <!-- 註冊時間條件 -->
+                        <div class="d-flex">
+                            <input type="date" class="form-control" name="signUp_date" value="<?php echo isset($_GET["signUp_date"]) ? $_GET["signUp_date"] : "" ?>">
+                            <select class="form-select" aria-label="Default select example" name="signUp_compair">
+                                <option <?php echo $signUp_compair == "before" ? "selected" : ""; ?> value="before">前註冊</option>
+                                <option <?php echo $signUp_compair == "after" ? "selected" : ""; ?> value="after">後註冊</option>
+                            </select>
+                        </div>
+
+                        <!-- 排序條件 -->
+                        <select class="form-select" aria-label="Default select example" name="sort">
+                            <option <?php echo $sort == "id_asc" ? "selected" : ""; ?> value="id_asc">依id排序（少⭢多）</option>
+                            <option <?php echo $sort == "id_desc" ? "selected" : ""; ?> value="id_desc">依id排序（少⭢多）</option>
+                            <option <?php echo $sort == "birthday_asc" ? "selected" : ""; ?> value="birthday_asc">依生日（先⭢後）</option>
+                            <option <?php echo $sort == "birthday_desc" ? "selected" : ""; ?> value="birthday_desc">依生日（後⭢先）</option>
+                            <option <?php echo $sort == "signUp_asc" ? "selected" : ""; ?> value="signUp_asc">依註冊時間（先⭢後）</option>
+                            <option <?php echo $sort == "signUp_desc" ? "selected" : ""; ?> value="signUp_desc">依註冊時間（後⭢先）</option>
+                        </select>
                         
                         <!-- 自定義的下拉式多選選單 -->
-                        <div class="d-flex align-items-center">
-                            <!-- 顯示已勾選選項值的區域 -->
-                            <div class="d-flex align-items-center" id="selectedValues">
-                                所有月份
-                            </div>
-                            <!-- 展開下拉式選單的按鈕 -->
-                            <div class="dropdown">
-                                <button class="dropbtn btn neumorphic" type="button"><i class="fa-solid fa-sort-down"></i></button>
-                                <div id="myDropdown" class="dropdown-content">
-                                    <?php
-                                        // 檢查是否有 GET 參數，若無則預設勾選所有月份
-                                        $selected_months = isset($_GET["pick_month"]) ? $_GET["pick_month"] : range(1, 12);
+                            <div class="d-flex align-items-center">
+                                <!-- 顯示已勾選選項值的區域 -->
+                                <div class="d-flex align-items-center" id="selectedValues">
+                                    生日：所有月份
+                                </div>
+                                <!-- 下拉選單的內容 -->
+                                <div class="dropdown" style="position: relative;">
+                                    <div id="myDropdown" class="dropdown-content">
+                                        <?php
+                                            $selected_months = isset($_GET["pick_month"]) ? $_GET["pick_month"] : range(1, 12);
 
-                                        // 如果 $selected_months 不是陣列，將其轉換為陣列
-                                        if (!is_array($selected_months)) {
-                                            $selected_months = [$selected_months];
-                                        }
+                                            if (!is_array($selected_months)) {
+                                                $selected_months = [$selected_months];
+                                            }
 
-                                        // 生成月份選項
-                                        for ($i = 1; $i <= 12; $i++) {
-                                            $checked = in_array($i, $selected_months) ? "checked" : "";
-                                            echo '<label><input type="checkbox" value="' . $i . '" name="pick_month[]" onchange="updateSelectedValues()" ' . $checked . '> ' . $i . '月</label>';
-                                        }
-                                    ?>
+                                            for ($i = 1; $i <= 12; $i++) {
+                                                $checked = in_array($i, $selected_months) ? "checked" : "";
+                                                echo '<label><input type="checkbox" value="' . $i . '" name="pick_month[]" onchange="updateSelectedValues()" ' . $checked . '> ' . $i . '月</label>';
+                                            }
+                                        ?>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                     </div>
                 </form>
@@ -224,15 +295,15 @@ $row_coupon = $result_coupons->fetch_assoc();
             document.getElementById("myDropdown").classList.toggle("show");
         }
 
-        // 點擊按鈕後顯示/隱藏下拉選單
-        document.querySelector('.dropbtn').addEventListener('click', function(event) {
+        // 點擊顯示已選擇的值的區域後顯示/隱藏下拉選單
+        document.querySelector('#selectedValues').addEventListener('click', function(event) {
             event.stopPropagation();
             toggleDropdown();
         });
 
-        // 如果使用者點擊了按鈕以外的區域，收起選單
+        // 如果使用者點擊了下拉選單以外的區域，收起選單
         window.onclick = function(event) {
-            if (!event.target.matches('.dropbtn') && !event.target.closest('.dropdown-content')) {
+            if (!event.target.matches('#selectedValues') && !event.target.closest('.dropdown-content')) {
                 var dropdowns = document.getElementsByClassName("dropdown-content");
                 for (var i = 0; i < dropdowns.length; i++) {
                     var openDropdown = dropdowns[i];
@@ -248,14 +319,13 @@ $row_coupon = $result_coupons->fetch_assoc();
             var checkboxes = document.querySelectorAll('#myDropdown input[type="checkbox"]:checked');
             var allCheckboxes = document.querySelectorAll('#myDropdown input[type="checkbox"]');
             
-            // 如果所有選項都被勾選，顯示"所有月份"
             if (checkboxes.length === allCheckboxes.length) {
-                document.getElementById('selectedValues').innerText = '所有月份';
+                document.getElementById('selectedValues').innerText = '生日：所有月份';
             } else if (checkboxes.length > 0) {
                 var selectedValues = Array.from(checkboxes).map(cb => cb.value + '月');
-                document.getElementById('selectedValues').innerText = '已選擇的月份: ' + selectedValues.join(', ');
+                document.getElementById('selectedValues').innerText = '生日： ' + selectedValues.join(', ');
             } else {
-                document.getElementById('selectedValues').innerText = '未選擇月份';
+                document.getElementById('selectedValues').innerText = '生日：';
             }
         }
     </script>
