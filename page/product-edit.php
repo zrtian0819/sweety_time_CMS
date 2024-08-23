@@ -113,7 +113,7 @@ if (!isset($_GET["productId"])) {
                 align-items: center;
                 justify-content: center;
                 opacity: 0;
-                filter: contrast(0.4) brightness(1.2);
+                
                 
             }
 
@@ -121,6 +121,10 @@ if (!isset($_GET["productId"])) {
                 scale: 1.05;
                 .crossCover{
                     opacity: 1;
+                }
+
+                img{
+                    filter: contrast(0.4) brightness(1.2);
                 }
             }
             &:active{
@@ -313,13 +317,16 @@ if (!isset($_GET["productId"])) {
         cover.addEventListener('click', function() {
             console.log("click",this);
             var input = this.parentElement.querySelector('.delControl');
+            var img = this.parentElement.querySelector('img');
 
             if (input.disabled) {
                 input.disabled = false;
                 this.style.opacity = "1";
+                img.style.opacity = "0.3"
             } else {
                 input.disabled = true;
                 this.style.opacity = "0";
+                img.style.opacity = "1"
             }
             });
         });
