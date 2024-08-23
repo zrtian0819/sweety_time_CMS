@@ -21,6 +21,14 @@ if ($status === 'on') {
     $sql .= " AND activation = 1";
 } elseif ($status === 'off') {
     $sql .= " AND activation = 0";
+    // 查詢黑名單列表的人數
+    $off_sql = str_replace('*', 'COUNT(*) as count', $sql);
+    $off_result = $conn->query($off_sql);
+    if ($off_result) {
+        $off_count = $off_result->fetch_assoc()['count'];
+    } else {
+        die("計數查詢錯誤: " . $conn->error);
+    }
 } elseif ($status === 'all') {
 }
 
@@ -80,6 +88,47 @@ if ($result) {
         .user-search {
             width: 200px;
         }
+
+        .user-info-container {
+            text-align: center;
+            margin: 20px;
+        }
+
+        .user-portrait {
+            display: block;
+            margin: 0 auto 30px auto;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-info-box {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .user-info {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .user-info strong {
+            color: #333;
+            font-weight: bold;
+        }
+
+        .modal-dialog {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .modal-content {
+            margin: auto;
+        }
     </style>
 </head>
 
@@ -95,10 +144,13 @@ if ($result) {
                     <?php if ($search !== ''): ?>
                         <a class="btn btn-neumorphic user-btn mt-0" href="users.php" title="回使用者列表"><i class="fa-solid fa-left-long"></i></a>
                     <?php endif; ?>
+                    <?php if ($status === 'off' && $off_count == 0): ?>
+                        <a class="btn btn-neumorphic user-btn mt-0" href="users.php" title="回使用者列表"><i class="fa-solid fa-left-long"></i></a>
+                    <?php endif; ?>
                     <h2 class="mb-3">會員管理</h2>
                 </div>
             </div>
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row d-flex">
                     <form action="">
                         <div class="input-group mb-3">
@@ -124,52 +176,58 @@ if ($result) {
                             </div>
                         </div>
 
-                        <div class="main col neumorphic p-2">
-                            <h3>
-                                <?php if ($search !== ''): ?>
-                                    <?= ($search) ?> 的搜尋結果: 共有 <?= $userCount['count'] ?> 個使用者
-                                <?php else: ?>
-                                    共有 <?= $userCount['count'] ?> 個使用者
-                                <?php endif; ?>
-                            </h3>
-
+                        <div class="col p-2">
                             <?php if (!empty($users)): ?>
-                                <ul class="nav nav-tabs-custom">
-                                    <li class="nav-item">
-                                        <a class="main-nav nav-link <?= $status === 'all' ? 'active' : '' ?>" href="?status=all&search=<?= urlencode($search) ?>&p=<?= $page ?>&order=<?= $order ?>">全部</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="main-nav nav-link <?= $status === 'on' ? 'active' : '' ?>" href="?status=on&search=<?= urlencode($search) ?>&p=<?= $page ?>&order=<?= $order ?>">正常使用者</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="main-nav nav-link <?= $status === 'off' ? 'active' : '' ?>" href="?status=off&search=<?= urlencode($search) ?>&p=<?= $page ?>&order=<?= $order ?>">黑名單列表</a>
-                                    </li>
-                                </ul>
+                                <div class="d-flex justify-content-between">
+                                    <ul class="nav nav-tabs-custom">
+                                        <li class="nav-item">
+                                            <a class="main-nav nav-link <?= $status === 'all' ? 'active' : '' ?>" href="?status=all&search=<?= urlencode($search) ?>&p=<?= $page ?>&order=<?= $order ?>">全部</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="main-nav nav-link <?= $status === 'on' ? 'active' : '' ?>" href="?status=on&search=<?= urlencode($search) ?>&p=<?= $page ?>&order=<?= $order ?>">正常使用者</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="main-nav nav-link <?= $status === 'off' ? 'active' : '' ?>" href="?status=off&search=<?= urlencode($search) ?>&p=<?= $page ?>&order=<?= $order ?>">黑名單列表</a>
+                                        </li>
+                                    </ul>
+                                    <h3 class="mx-2 my-0">
+                                        <?php if ($search !== ''): ?>
+                                            <?= ($search) ?> 的搜尋結果: 共有 <?= $userCount['count'] ?> 個使用者
+                                        <?php else: ?>
+                                            共有 <?= $userCount['count'] ?> 個使用者
+                                        <?php endif; ?>
+                                    </h3>
+                                </div>
 
                                 <table class="table table-bordered">
                                     <thead class="user-text">
                                         <tr>
-                                            <th>User ID</th>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Phone</th>
-                                            <th>其他功能</th>
+                                            <th class="text-center">User ID</th>
+                                            <th class="text-center">Name</th>
+                                            <th class="text-center">Email</th>
+                                            <th class="text-center">Phone</th>
+                                            <th class="text-center">詳細資訊</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php foreach ($users as $user): ?>
                                             <tr>
-                                                <td><?= ($user["user_id"]) ?></td>
-                                                <td><?= ($user["name"]) ?></td>
-                                                <td><?= ($user["email"]) ?></td>
-                                                <td><?= ($user["phone"]) ?></td>
+                                                <td class="text-center"><?= ($user["user_id"]) ?></td>
+                                                <td class="text-center"><?= ($user["name"]) ?></td>
+                                                <td class="text-center"><?= ($user["email"]) ?></td>
+                                                <td class="text-center"><?= ($user["phone"]) ?></td>
                                                 <td>
-                                                    <a class="btn btn-primary" href="user.php?user_id=<?= $user["user_id"] ?>"><i class="fa-solid fa-eye"></i></a>
-                                                    <?php if ($user["activation"] == 1): ?>
-                                                        <a class="btn btn-danger" href="../function/doDeleteUser.php?id=<?= $user["user_id"] ?>"><i class="fa-solid fa-trash"></i></a>
-                                                    <?php else: ?>
-                                                        <a class="btn btn-danger" href="../function/doReloadUser.php?id=<?= $user["user_id"] ?>"><i class="fa-solid fa-plus"></i></a>
-                                                    <?php endif; ?>
+                                                    <div class="d-flex justify-content-around">
+                                                        <button type="button" class="btn btn-custom view-details" data-id="<?= ($user["user_id"]) ?>" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                            <i class="fa-solid fa-eye"></i>
+                                                        </button>
+                                                        <a href="user-edit.php?user_id=<?= $user["user_id"] ?>" class="btn btn-custom"><i class="fa-solid fa-user-pen"></i></a>
+                                                        <?php if ($user["activation"] == 1): ?>
+                                                            <a class="btn btn-danger" href="../function/doDeleteUser.php?id=<?= $user["user_id"] ?>"><i class="fa-solid fa-trash"></i></a>
+                                                        <?php else: ?>
+                                                            <a class="btn btn-danger" href="../function/doReloadUser.php?id=<?= $user["user_id"] ?>"><i class="fa-solid fa-plus"></i></a>
+                                                        <?php endif; ?>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -177,40 +235,40 @@ if ($result) {
                                 </table>
 
                                 <div class="d-flex justify-content-center">
-                                    <nav aria-label="page navigation">
-                                        <ul class="pagination pagination-lg">
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination d-flex justify-content-center">
                                             <!-- 第一頁 -->
                                             <?php if ($page > 1): ?>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="?p=1&status=<?= $status ?>&search=<?= urlencode($search) ?>&order=<?= $order ?>">第一頁</a>
+                                                <li class="page-item px-1">
+                                                    <a class="page-link btn-custom" href="?p=1&status=<?= $status ?>&search=<?= urlencode($search) ?>&order=<?= $order ?>">頁首</a>
                                                 </li>
                                             <?php endif; ?>
 
                                             <!-- 前面的 "..." -->
                                             <?php if ($page > 3): ?>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="?p=<?= $page - 3 ?>&status=<?= $status ?>&search=<?= urlencode($search) ?>&order=<?= $order ?>">...</a>
+                                                <li class="page-item px-1">
+                                                    <a class="page-link btn-custom" href="?p=<?= $page - 3 ?>&status=<?= $status ?>&search=<?= urlencode($search) ?>&order=<?= $order ?>">...</a>
                                                 </li>
                                             <?php endif; ?>
 
                                             <!-- 中間頁碼 -->
                                             <?php for ($i = max(1, $page - 2); $i <= min($totalPage, $page + 2); $i++): ?>
-                                                <li class="page-item <?= ($page == $i) ? 'active' : '' ?>">
-                                                    <a class="page-link" href="?p=<?= $i ?>&status=<?= $status ?>&search=<?= urlencode($search) ?>&order=<?= $order ?>"><?= $i ?></a>
+                                                <li class="page-item px-1 <?= ($page == $i) ? 'active' : '' ?>">
+                                                    <a class="page-link btn-custom" href="?p=<?= $i ?>&status=<?= $status ?>&search=<?= urlencode($search) ?>&order=<?= $order ?>"><?= $i ?></a>
                                                 </li>
                                             <?php endfor; ?>
 
                                             <!-- 後面的 "..." -->
                                             <?php if ($page < $totalPage - 2): ?>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="?p=<?= $page + 3 ?>&status=<?= $status ?>&search=<?= urlencode($search) ?>&order=<?= $order ?>">...</a>
+                                                <li class="page-item px-1">
+                                                    <a class="page-link btn-custom" href="?p=<?= $page + 3 ?>&status=<?= $status ?>&search=<?= urlencode($search) ?>&order=<?= $order ?>">...</a>
                                                 </li>
                                             <?php endif; ?>
 
                                             <!-- 最後一頁 -->
                                             <?php if ($page < $totalPage): ?>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="?p=<?= $totalPage ?>&status=<?= $status ?>&search=<?= urlencode($search) ?>&order=<?= $order ?>">最後一頁</a>
+                                                <li class="page-item px-1">
+                                                    <a class="page-link btn-custom" href="?p=<?= $totalPage ?>&status=<?= $status ?>&search=<?= urlencode($search) ?>&order=<?= $order ?>">頁尾</a>
                                                 </li>
                                             <?php endif; ?>
                                         </ul>
@@ -223,9 +281,78 @@ if ($result) {
             </div>
         </div>
     </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title h4" id="exampleModalLabel">詳細資訊</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="userDetails">
+                        <!-- user詳細信息 -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="modal-footer">
+                        <!-- <a href="user-edit.php?user_id=<?= $user["user_id"] ?>" class="btn btn-custom">編輯</a> -->
+                        <button type="button" class="btn btn-custom" data-bs-dismiss="modal">關閉</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <?php include("../js.php"); ?>
-    <?php $conn->close() ?>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 點擊按鈕時彈跳出會員資料
+            document.querySelectorAll('.view-details').forEach(button => {
+                button.addEventListener('click', function() {
+                    let userId = this.getAttribute('data-id');
+
+                    // 使用 fetch 從 PHP 獲取會員詳細資料
+                    fetch(`user-view.php?id=${userId}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.error) {
+                                document.getElementById('userDetails').innerHTML = `<p>${data.error}</p>`;
+                            } else {
+                                // 填充彈跳視窗的內容
+                                let portraitPath = data.portrait_path ? `../images/users/${data.portrait_path}` : '../images/default-user.png';
+                                document.getElementById('userDetails').innerHTML = `
+                                    <div class="user-info-container">
+                                        <div class="text-center">
+                                            <img src="${portraitPath}" alt="${data.name}" class="img-fluid user-portrait">
+                                        </div>
+                                        <table class="user-info-box m-2">
+                                            <p class="user-info"><strong>ID:</strong> ${data.user_id}</p>
+                                            <p class="user-info"><strong>Name:</strong> ${data.name}</p>
+                                            <p class="user-info"><strong>Account:</strong> ${data.account}</p>
+                                            <p class="user-info"><strong>Birthday:</strong> ${data.birthday}</p>
+                                            <p class="user-info"><strong>Email:</strong> ${data.email}</p>
+                                            <p class="user-info"><strong>Phone:</strong> ${data.phone}</p>
+                                            <p class="user-info"><strong>Sign up time:</strong> ${data.sign_up_time}</p>
+                                        </table>
+                                    </div>`;
+                            }
+                        })
+                        .catch(error => {
+                            console.error('There was a problem with the fetch operation:', error);
+                            document.getElementById('userDetails').innerHTML = `<p>加载数据时发生错误，请稍后再试。</p>`;
+                        });
+                });
+            });
+        });
+    </script>
+
 </body>
 
 </html>
