@@ -113,6 +113,7 @@ if (!isset($_GET["productId"])) {
                 align-items: center;
                 justify-content: center;
                 opacity: 0;
+                filter: contrast(0.4) brightness(1.2);
                 
             }
 
@@ -120,9 +121,6 @@ if (!isset($_GET["productId"])) {
                 scale: 1.05;
                 .crossCover{
                     opacity: 1;
-                }
-                img{
-                    filter: contrast(0.4) brightness(1.2);
                 }
             }
             &:active{
@@ -245,7 +243,7 @@ if (!isset($_GET["productId"])) {
                                                     <div class="subPhoto delPhoto overflow-hidden">
                                                         <div class="crossCover"><i class="fa-solid fa-xmark"></i></div>
                                                         <img class="w-100 h-100 object-fit-cover" src="../images/products/<?=$photoRow["file_name"]?>" alt="">
-                                                        <input class="delControl" type="hidden" name="delFiles[]" value="<?=$photoRow["product_photo_id"]?>">
+                                                        <input class="delControl" type="hidden" name="delFiles[]" value="<?=$photoRow["product_photo_id"]?>" disabled>
                                                     </div>
                                                 <?php endforeach; ?> 
                                             </div>
@@ -311,14 +309,17 @@ if (!isset($_GET["productId"])) {
         });
 
 
-        document.querySelectorAll('.delPhoto .crossCover').forEach(function(img) {
-        img.addEventListener('click', function() {
+        document.querySelectorAll('.delPhoto .crossCover').forEach(function(cover) {
+        cover.addEventListener('click', function() {
             console.log("click",this);
             var input = this.parentElement.querySelector('.delControl');
+
             if (input.disabled) {
                 input.disabled = false;
+                this.style.opacity = "1";
             } else {
                 input.disabled = true;
+                this.style.opacity = "0";
             }
             });
         });
