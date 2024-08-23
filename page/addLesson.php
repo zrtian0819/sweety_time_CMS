@@ -44,9 +44,11 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
         .photo {
             position: relative;
         }
-        .photo img{
+
+        .photo img {
             width: 100dvh;
         }
+
         .uploadStyle {
             cursor: pointer;
             font-size: 1.5rem;
@@ -65,6 +67,12 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
             align-content: center;
             margin-bottom: 5px;
         }
+
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
     </style>
 </head>
 
@@ -77,9 +85,11 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
             <!-- Content -->
             <a href="lesson.php" class="btn btn-custom"><i class="fa-solid fa-arrow-left"></i></a>
             <form action="../function/doAddLesson.php" method="POST" enctype="multipart/form-data">
-                <h1>
-                    <input type="text" class="textarea-custom m-2" placeholder="課程名稱" name="name" required>
-                </h1>
+                <div class="col-lg-8">
+                    <h1 class="m-2">
+                        <input type="text" class="form-control form-control-custom fs-1" placeholder="課程名稱" name="name" required>
+                    </h1>
+                </div>
                 <div class="row justify-content-center">
                     <div class="col-lg-3 m-2">
                         <div class="upload">
@@ -117,31 +127,31 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                                     <th>
                                         <h5>價錢</h5>
                                     </th>
-                                    <td class="text-danger"><input type="text" class="textarea-custom" value="" name="price" required></td>
+                                    <td class="text-danger"><input type="number" class="form-control form-control-custom" value="" name="price" required></td>
                                 </tr>
                                 <tr>
                                     <th>
                                         <h5>時間</h5>
                                     </th>
-                                    <td><input type="datetime-local" class="textarea-custom" name="createTime" required></td>
+                                    <td><input type="datetime-local" class="form-control form-control-custom" name="createTime" required></td>
                                 </tr>
                                 <tr>
                                     <th>
                                         <h5>課程人數</h5>
                                     </th>
-                                    <td><input type="text" class="textarea-custom" value="" name="quota" required></td>
+                                    <td><input type="number" class="form-control form-control-custom" value="" name="quota" required></td>
                                 </tr>
                                 <tr>
                                     <th>
                                         <h5>地點</h5>
                                     </th>
-                                    <td><input type="text" class="textarea-custom" value="" name="classroom_name" required></td>
+                                    <td><input type="text" class="form-control form-control-custom" value="" name="classroom_name" required></td>
                                 </tr>
                                 <tr>
                                     <th>
                                         <h5>地址</h5>
                                     </th>
-                                    <td><input type="text" class="textarea-custom" value="" name="location" required></td>
+                                    <td><input type="text" class="form-control form-control-custom" value="" name="location" required></td>
                                 </tr>
                             </tbody>
                         </table>
