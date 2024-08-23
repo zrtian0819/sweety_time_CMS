@@ -118,7 +118,12 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
         <div class="main col neumorphic p-5 pt-4">
             <!-- 回文章列表按鈕 -->
-            <a href="articles.php" class="btn btn-custom"><i class="fa-solid fa-arrow-left"></i></a>
+            <h2 class="mb-5 text-center">修改文章</h2>
+            <div class="col-3">
+                <a class="btn-animation btn btn-custom d-inline-flex flex-row align-items-center mb-3" href="articles.php">
+                    <i class="fa-solid fa-arrow-left-long"></i><span class="btn-animation-innerSpan d-inline-block">返回文章列表</span>
+                </a>
+            </div>
             <!-- 表單 -->
             <form action="../function/doUpdate4Articles.php?id=<?= htmlspecialchars($id, ENT_QUOTES, 'UTF-8') ?>" method="post" enctype="multipart/form-data">
                 <div class="container-fluid">
@@ -201,7 +206,9 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                         </tbody>
                     </table>
                 </div>
-                <button type="submit" class="btn-custom w-50">確認修改</button>
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn-custom w-50 ">確認修改</button>
+                </div>
             </form>
         </div>
     </div>
