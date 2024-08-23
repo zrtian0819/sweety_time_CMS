@@ -153,7 +153,7 @@ $shopCount = $result->num_rows;
                                     <!-- 前往第一頁的箭頭按鈕 -->
                                     <?php if($page > 1): ?>
                                         <li class="page-item px-1">
-                                            <a class="page-link btn-custom" href="?p=1&search=<?= $search ?>" aria-label="First">
+                                            <a class="page-link btn-custom" href="?p=1&search=<?= $search ?>&filter=<?= $filter ?>" aria-label="First">
                                                 <span aria-hidden="true"><i class="fa-solid fa-backward-fast"></i></span>
                                             </a>
                                         </li>
@@ -161,7 +161,7 @@ $shopCount = $result->num_rows;
                                     
                                     <!-- 固定顯示第一頁 -->
                                     <li class="page-item px-1 <?= ($page == 1) ? 'active' : '' ?>">
-                                        <a class="page-link btn-custom" href="?p=1&search=<?= $search ?>">1</a>
+                                        <a class="page-link btn-custom" href="?p=1&search=<?= $search ?>&filter=<?= $filter ?>">1</a>
                                     </li>
                                     
                                     <?php
@@ -179,7 +179,7 @@ $shopCount = $result->num_rows;
                                     <!-- 循環創建頁碼按鈕 -->
                                     <?php for($i = $start; $i <= $end; $i++): ?>
                                         <li class="page-item px-1 <?= ($i == $page) ? 'active' : '' ?>">
-                                            <a class="page-link btn-custom" href="?p=<?= $i ?>&search=<?= $search ?>"><?= $i ?></a>
+                                            <a class="page-link btn-custom" href="?p=<?= $i ?>&search=<?= $search ?>&filter=<?= $filter ?>"><?= $i ?></a>
                                         </li>
                                     <?php endfor; ?>
 
@@ -193,14 +193,14 @@ $shopCount = $result->num_rows;
                                     <!-- 固定顯示最後一頁 -->
                                     <?php if($total_page > 1): ?>
                                         <li class="page-item px-1 <?= ($page == $total_page) ? 'active' : '' ?>">
-                                            <a class="page-link btn-custom" href="?p=<?= $total_page ?>&search=<?= $search ?>"><?= $total_page ?></a>
+                                            <a class="page-link btn-custom" href="?p=<?= $total_page ?>&search=<?= $search ?>&filter=<?= $filter ?>"><?= $total_page ?></a>
                                         </li>
                                     <?php endif; ?>
                                     
                                     <!-- 前往最後一頁的箭頭按鈕 -->
                                     <?php if($page < $total_page): ?>
                                         <li class="page-item px-1">
-                                            <a class="page-link btn-custom" href="?p=<?= $total_page ?>&search=<?= $search ?>" aria-label="Last">
+                                            <a class="page-link btn-custom" href="?p=<?= $total_page ?>&search=<?= $search ?>&filter=<?= $filter ?>" aria-label="Last">
                                                 <span aria-hidden="true"><i class="fa-solid fa-forward-fast"></i></span>
                                             </a>
                                         </li>
