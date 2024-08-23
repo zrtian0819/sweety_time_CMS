@@ -118,10 +118,11 @@ if (!isset($_GET["productId"])) {
 
             &:hover{
                 scale: 1.05;
-                filter: contrast(0.4) brightness(1.2);
-
                 .crossCover{
                     opacity: 1;
+                }
+                img{
+                    filter: contrast(0.4) brightness(1.2);
                 }
             }
             &:active{
@@ -244,7 +245,7 @@ if (!isset($_GET["productId"])) {
                                                     <div class="subPhoto delPhoto overflow-hidden">
                                                         <div class="crossCover"><i class="fa-solid fa-xmark"></i></div>
                                                         <img class="w-100 h-100 object-fit-cover" src="../images/products/<?=$photoRow["file_name"]?>" alt="">
-                                                        <input type="" name="delFiles[]" value="<?=$photoRow["product_photo_id"]?>" hidden>
+                                                        <input class="delControl" type="hidden" name="delFiles[]" value="<?=$photoRow["product_photo_id"]?>">
                                                     </div>
                                                 <?php endforeach; ?> 
                                             </div>
@@ -310,7 +311,17 @@ if (!isset($_GET["productId"])) {
         });
 
 
-        const fileEdit = document.querySelector("#fileEdit");
+        document.querySelectorAll('.delPhoto .crossCover').forEach(function(img) {
+        img.addEventListener('click', function() {
+            console.log("click",this);
+            var input = this.parentElement.querySelector('.delControl');
+            if (input.disabled) {
+                input.disabled = false;
+            } else {
+                input.disabled = true;
+            }
+            });
+        });
 
 
     </script>
