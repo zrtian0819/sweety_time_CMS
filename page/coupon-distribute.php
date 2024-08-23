@@ -259,30 +259,47 @@ $row_coupon = $result_coupons->fetch_assoc();
             </div>
 
             <!-- 顯示users資料的表格 -->
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>會員編號<br>(user_id)</th>
-                        <th>會員名稱<br>(name)</th>
-                        <th>帳號<br>(account)</th>
-                        <th>生日<br>(birthday)</th>
-                        <th>註冊時間<br>(sign_up_time)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($rows_user as $row_user) : ?>
+            <form action="../function/doDistributeCoupon.php" method="post">
+                <table class="table table-bordered">
+                    <thead>
                         <tr>
-                            <td><?= $row_user['user_id'];?></td>
-                            <td><?= $row_user['name'];?></td>
-                            <td><?= $row_user['account'];?></td>
-                            <td><?= $row_user['birthday'];?></td>
-                            <td><?= $row_user['sign_up_time'];?></td>
+                            <th>勾選</th>
+                            <th>會員編號<br>(user_id)</th>
+                            <th>會員名稱<br>(name)</th>
+                            <th>帳號<br>(account)</th>
+                            <th>生日<br>(birthday)</th>
+                            <th>註冊時間<br>(sign_up_time)</th>
                         </tr>
-                    <?php endforeach;?>
-                </tbody>
-            </table>
+                    </thead>
+
+                    <tbody>
+                            <?php foreach ($rows_user as $row_user) : ?>
+                                <tr>
+                                    <td><input type="checkbox"  class="" name="userIdList[]" value="<?= $row_user['user_id']; ?>"></td>
+                                    <td><?= $row_user['user_id'];?></td>
+                                    <td><?= $row_user['name'];?></td>
+                                    <td><?= $row_user['account'];?></td>
+                                    <td><?= $row_user['birthday'];?></td>
+                                    <td><?= $row_user['sign_up_time'];?></td>
+                                </tr>
+                            <?php endforeach;?>
+                    </tbody> 
+                </table>
+                <input type="hidden" name="coupon_id" value="<?= $coupon_id ?>">
+                <button class="btn neumorphic" type="submit">推送優惠券</button>  
+            </form>
         </div>
     </div>
+    
+    <!-- 顯示推送的成功or失敗訊息 -->
+    <!-- 有時間可以用中介頁面來避免使用GET -->
+    <!-- 有時間可以用別的設計取代alert -->
+    <?php
+        if (isset($_GET['message'])) {
+            $message = htmlspecialchars($_GET['message']);
+            echo "<script type='text/javascript'>alert('$message');</script>";
+        }
+    ?>
 
     <?php include("../js.php"); ?>
     <?php $conn->close() ?>
