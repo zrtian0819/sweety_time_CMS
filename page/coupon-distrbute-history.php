@@ -4,11 +4,68 @@ require_once("../db_connect.php");
 include("../function/login_status_inspect.php");
 include("../function/rebuildURL.php");
 
-$sql = "SELECT coupon_id, recieved_time, GROUP_CONCAT(user_id ORDER BY user_id ASC) AS user_ids
-        FROM users_coupon
-        WHERE coupon_id =? AND user_id=? AND user_id
-        GROUP BY coupon_id, recieved_time;"
 
+
+// $sql = "SELECT coupon_id, recieved_time, GROUP_CONCAT(user_id ORDER BY user_id ASC) AS user_ids
+//         FROM users_coupon
+//         WHERE coupon_id =? AND user_id=? 
+//         GROUP BY coupon_id, recieved_time;"
+
+$sql = "SELECT uc.coupon_id, c.name AS coupon_name, uc.recieved_time, GROUP_CONCAT(uc.user_id ORDER BY uc.user_id ASC) AS user_ids
+        FROM users_coupon uc
+        INNER JOIN coupon c ON uc.coupon_id = c.coupon_id
+        WHERE 1 = 1";
+$params = []; // 用來裝條件
+$types = ""; // 用來紀錄條件型別
+
+
+// 搜尋 優惠券名稱
+if (isset($_GET["search_coupon"]) && !empty($_GET["search_coupon"])) {
+    $search_coupon = "%" . $_GET["search_coupon"] . "%";
+    $sql .= " AND c.name LIKE ?";
+    array_push($params, $search_coupon);
+    $types .= "s";
+}
+
+// 將 同coupon_id 且 同發送時間 視為一次發送事件
+$sql .= " GROUP BY uc.coupon_id, uc.recieved_time"; //GROUP BY 要寫在 WHERE 之後
+
+// 排序條件 
+if(!isset($_GET["sort"])){
+    $sort = "time_desc";
+    $sql .= " ORDER BY uc.recieved_time DESC";
+}else{
+    $sort = $_GET["sort"];
+    switch($sort){
+        case "time_desc":
+            $sql .= " ORDER BY uc.recieved_time DESC";
+            break;
+        case "time_asc":
+            $sql .= " ORDER BY uc.recieved_time ASC";
+            break;
+        case "couponId_asc":
+            $sql .= " ORDER BY c.coupon_id ASC";
+            break;
+        case "couponId_desc":
+            $sql .= " ORDER BY c.coupon_id DESC";
+            break;
+    }
+}
+
+// 撈資料
+$stmt = $conn->prepare($sql);
+if (!empty($params)) {
+    $stmt->bind_param($types, ...$params);
+}
+
+$stmt->execute();
+$result = $stmt->get_result();
+$rows = $result->fetch_all(MYSQLI_ASSOC);
+
+// 計算 收到優惠券的人數
+foreach ($rows as $row) {
+    $userAmount = count(explode(',', $row['user_ids']));
+}
 
 ?>
 
@@ -35,57 +92,51 @@ $sql = "SELECT coupon_id, recieved_time, GROUP_CONCAT(user_id ORDER BY user_id A
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
 
         <div class="main col neumorphic p-5">
-            <!-- 訂單資訊 -->
-            <h2 class="mb-4">訂單資訊</h2>
+            <!-- 篩選器 -->
+            <div class="py-2">
+                <form action="">
+                    <div class="input-group">
+                        <input type="search" class="form-control" name="search_coupon" value="<?php echo isset($_GET["search_coupon"]) ? $_GET["search_coupon"] : "" ?>" placeholder="搜尋優惠券名稱">
+                        <select class="form-select" aria-label="Default select example" name="sort">
+                            <option <?php echo $sort == "time_desc" ? "selected" : ""; ?> value="time_desc">依發券時間（新⭢舊）</option>
+                            <option <?php echo $sort == "time_asc" ? "selected" : ""; ?> value="time_asc">依發券時間（舊⭢新）</option>
+                            <option <?php echo $sort == "couponId_asc" ? "selected" : ""; ?> value="couponId_asc">依優惠券id（少⭢多）</option>
+                            <option <?php echo $sort == "couponId_desc" ? "selected" : ""; ?> value="couponId_desc">依優惠券id（多⭢少）</option>
+                        </select>
+                        <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </div>
+                </form>
+            </div>
+            <hr>
+
+            <!-- 資料表格 -->
+            <h2 class="mb-4">優惠券發送歷史</h2>
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>訂單編號<br>(order_id)</th>
-                        <th>訂單狀態<br>(status)</th>
-                        <th>會員名稱<br></th>
-                        <th>店家名稱<br></th>
-                        <th>使用的優惠券<br></th>
-                        <th>收貨地址<br>(delivery_address)</th>
-                        <th>收件人姓名<br>(delivery_name)</th>
-                        <th>收件人電話<br>(delivery_phone)</th>
-                        <th>訂單成立時間<br>(order_time)</th>
-                        <th>總金額<br>(total_price)</th>
+                        <th>優惠券id</th>
+                        <th>優惠券名稱</th>
+                        <th>發送人數</th>
+                        <th>發送時間<br></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td><?php echo $row_orders["order_id"];?></td>
-                        <td><?php echo $row_orders["status"];?></td>
-                        <td><?php echo $row_users["name"];?></td>
-                        <td><?php echo $row_shops["name"];?></td>
-                        <td><?php echo $row_coupons["name"];?></td>
-                        <td><?php echo $row_orders["delivery_address"];?></td>
-                        <td><?php echo $row_orders["delivery_name"];?></td>
-                        <td><?php echo $row_orders["delivery_phone"];?></td>
-                        <td><?php echo $row_orders["order_time"];?></td>
-                        <td><?php echo $row_orders["total_price"];?></td>
-                    </tr>
-                </tbody>
-            </table>
-            <!-- 訂單明細 -->
-            <h2 class="mb-4">訂單明細</h2>
-            <!-- 顯示資料的表格 -->
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>商品id<br>(product_id)</th>
-                        <th>數量<br>(amount)</th>
-                        <th>小計(原價)<br>(that_time_price)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($rows_order_items as $order_items_row) : ?>
+                    <?php foreach ($rows as $row) : ?>
                         <tr>
-                            <td><?= $row_products[$order_items_row['product_id'] - 1]["name"];?></td>
-                            <td><?= $order_items_row['amount'];?></td>
-                            <td><?= $order_items_row['that_time_price'];?></td>
+                            <td><?php echo $row["coupon_id"];?></td>
+                            <td><?php echo $row["coupon_name"];?></td>
+                            <td>
+                                <?php echo $userAmount;?>人
+                                <br>
+                                <form action="">
+                                    <input type="hidden" name="recieved_time" value="<?= $row['recieved_time'] ?>">
+                                    <input type="hidden" name="coupon_id" value="<?= $row['coupon_id'] ?>">
+                                    <button type="submmit">查看名單</button>
+                                </form>
+                            </td>
+                            <td><?php echo $row["recieved_time"];?></td>
                         </tr>
-                    <?php endforeach;?>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
