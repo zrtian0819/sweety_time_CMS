@@ -4,6 +4,7 @@
 
 :root {
   --primary-color: #f4a293;
+  --primary-color-fade: rgba(244, 161, 147, 0.5);
   --text-color: #968c8a;
   --bg-color: #fff;
   --box-shadow-blue: 4px 4px 12px #d1d9e6, -4px -4px 12px #ffffff;
@@ -431,4 +432,9 @@ h6 {
 .btn-danger {
   --bs-btn-bg: #e0616d;
   --bs-btn-border-color: #e0616d;
+}
+
+
+.text-pink {
+  color: var(--primary-color-fade)
 }

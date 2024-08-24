@@ -73,7 +73,7 @@ if (isset($_GET["shop"])) {
         $nav_page_name .= "&shop=" . $shop;
     }
 } else {
-    $class = "all";
+    $shop = "all";
 }
 array_push($whereArr, $where_shop);
 
@@ -206,7 +206,7 @@ foreach ($storeRows as $storeRow) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>您的商品列表清單</title>
+    <title>管理您的商品列表</title>
     <?php include("../css/css_Joe.php"); ?>
 
     <style>
@@ -260,7 +260,7 @@ foreach ($storeRows as $storeRow) {
 
                             <?php if ($SessRole == "admin"): ?>
                                 <select class="form-select" aria-label="Default select example" name="shop">
-                                    <option value="all">商家</option>
+                                    <option class="text-pink" value="all">商家</option>
                                     <?php foreach ($storeArr as $key => $value): ?>
                                         <option value="<?= $key ?>" <?= $key == $shop ? "selected" : "" ?>><?= $value ?></option>
                                     <?php endforeach; ?>
@@ -268,19 +268,19 @@ foreach ($storeRows as $storeRow) {
                             <?php endif; ?>
 
                             <select class="form-select" aria-label="Default select example" name="class">
-                                <option value="all">商品類別</option>
+                                <option class="text-pink" value="all">商品類別</option>
                                 <?php foreach ($classArr as $key => $value): ?>
                                     <option value="<?= $key ?>" <?= $key == $class ? "selected" : "" ?>><?= $value ?></option>
                                 <?php endforeach; ?>
                             </select>
 
                             <select class="form-select" aria-label="Default select example" name="order">
-                                <option value="ida" <?= $order == "ida" ? "selected" : "" ?>>依商品編號排序(小>大)</option>
-                                <option value="idd" <?= $order == "idd" ? "selected" : "" ?>>依商品編號排序(大>小)</option>
-                                <option value="pria" <?= $order == "pria" ? "selected" : "" ?>>依價格排序(小>大)</option>
-                                <option value="prid" <?= $order == "prid" ? "selected" : "" ?>>依價格排序(大>小)</option>
-                                <option value="stoa" <?= $order == "stoa" ? "selected" : "" ?>>依庫存量排序(小>大)</option>
-                                <option value="stod" <?= $order == "stod" ? "selected" : "" ?>>依庫存量排序(大>小)</option>
+                                <option value="ida" <?= $order == "ida" ? "selected" : "" ?>>商品編號(小→大)</option>
+                                <option value="idd" <?= $order == "idd" ? "selected" : "" ?>>商品編號(大→小)</option>
+                                <option value="pria" <?= $order == "pria" ? "selected" : "" ?>>價格(低→高)</option>
+                                <option value="prid" <?= $order == "prid" ? "selected" : "" ?>>價格(高→低)</option>
+                                <option value="stoa" <?= $order == "stoa" ? "selected" : "" ?>>庫存量(少→多)</option>
+                                <option value="stod" <?= $order == "stod" ? "selected" : "" ?>>庫存量(多→少)</option>
                             </select>
                             <a class="btn neumorphic" href="product-list.php"><i class="fa-solid fa-xmark"></i></a>
                             <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
