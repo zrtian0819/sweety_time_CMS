@@ -38,6 +38,26 @@ require_once("../db_connect.php");
                 margin-top: 10px;
                 display: none;
             }
+            .input-group .form-control {
+                border-right: none;
+            }
+            .btn-toggle-password {
+                background-color: #f0f0f0;
+                border: 1px solid #ced4da;
+                border-left: none;
+                color: #495057;
+                padding: 0.375rem 0.75rem;
+            }
+            .btn-toggle-password:hover,
+            .btn-toggle-password:focus {
+                background-color: #e9ecef;
+                color: #495057;
+            }
+            .input-group:focus-within .form-control,
+            .input-group:focus-within .btn-toggle-password {
+                border-color: #80bdff;
+                box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+            }
 
         </style>
     </head>
@@ -67,7 +87,12 @@ require_once("../db_connect.php");
                                 </div>
                                 <div class="mb-3">
                                     <label for="password" class="form-label">Password</label>
-                                    <input class="form-control form-control-custom" type="password"  id="password" name="password" required/>
+                                    <div class="input-group">
+                                        <input class="form-control form-control-custom" type="password" id="password" name="password" required/>
+                                        <button class="btn btn-toggle-password" type="button" id="togglePassword">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="birthday" class="form-label">生日</label>
@@ -132,5 +157,19 @@ require_once("../db_connect.php");
         ></script>
         <!-- 按鈕觸發上傳檔案 -->
         <script src="../javascript/create-shop.js"></script>
+        
+        <!-- 切換顯示密碼 -->
+        <script>
+        document.getElementById('togglePassword').addEventListener('click', function (e) {
+            // 切換密碼可見性
+            const password = document.getElementById('password');
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            
+            // 切換眼睛圖標
+            this.querySelector('i').classList.toggle('fa-eye');
+            this.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+        </script>
     </body>
 </html>
