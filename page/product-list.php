@@ -63,6 +63,21 @@ if (isset($_GET["search"]) && !empty($_GET["search"])) {
 array_push($whereArr, $where_search);
 
 
+$where_shop = "";
+if (isset($_GET["shop"])) {
+    $shop = $_GET["shop"];
+    if ($shop == "all") {
+        $where_shop = "";
+    } else {
+        $where_shop = "shop_id= $shop";
+        $nav_page_name .= "&shop=" . $shop;
+    }
+} else {
+    $class = "all";
+}
+array_push($whereArr, $where_shop);
+
+
 $where_class = "";
 if (isset($_GET["class"])) {
     $class = $_GET["class"];
@@ -202,16 +217,6 @@ foreach ($storeRows as $storeRow) {
         .dontNextLine {
             white-space: nowrap;
         }
-
-        .btn-success {
-            --bs-btn-bg: #52b484;
-            --bs-btn-border-color: #52b484;
-        }
-
-        .btn-danger {
-            --bs-btn-bg: #e0616d;
-            --bs-btn-border-color: #e0616d;
-        }
     </style>
 </head>
 
@@ -252,12 +257,23 @@ foreach ($storeRows as $storeRow) {
                     <form action="product-list.php" method="get">
                         <div class="input-group">
                             <input type="search" class="form-control" placeholder="品名關鍵字" name="search" value="<?= isset($_GET["search"]) ? $_GET["search"] : ""; ?>">
+
+                            <?php if ($SessRole == "admin"): ?>
+                                <select class="form-select" aria-label="Default select example" name="shop">
+                                    <option value="all">商家</option>
+                                    <?php foreach ($storeArr as $key => $value): ?>
+                                        <option value="<?= $key ?>" <?= $key == $shop ? "selected" : "" ?>><?= $value ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            <?php endif; ?>
+
                             <select class="form-select" aria-label="Default select example" name="class">
-                                <option value="all">分類</option>
+                                <option value="all">商品類別</option>
                                 <?php foreach ($classArr as $key => $value): ?>
                                     <option value="<?= $key ?>" <?= $key == $class ? "selected" : "" ?>><?= $value ?></option>
                                 <?php endforeach; ?>
                             </select>
+
                             <select class="form-select" aria-label="Default select example" name="order">
                                 <option value="ida" <?= $order == "ida" ? "selected" : "" ?>>依商品編號排序(小>大)</option>
                                 <option value="idd" <?= $order == "idd" ? "selected" : "" ?>>依商品編號排序(大>小)</option>
@@ -280,8 +296,8 @@ foreach ($storeRows as $storeRow) {
                             <tr>
                                 <th class="dontNextLine">商品編號</th>
                                 <th class="dontNextLine">名稱</th>
-                                <th class="dontNextLine">商家</th>
-                                <th class="dontNextLine">類別</th>
+                                <?= $SessRole == "admin" ? '<th class="dontNextLine">商家</th>' : ""; ?>
+                                <th class="dontNextLine">商品類別</th>
                                 <th class="dontNextLine">價格</th>
                                 <th class="dontNextLine">描述</th>
                                 <th class="dontNextLine">庫存數量</th>
@@ -295,7 +311,9 @@ foreach ($storeRows as $storeRow) {
                                 <tr>
                                     <td class="text-center"><?= $row["product_id"] ?></td>
                                     <td><?= $row["name"] ?></td>
-                                    <td class="text-center"><?= $storeArr[$row["shop_id"]] ?></td>
+                                    <?php if ($SessRole == "admin"): ?>
+                                        <td class="text-center"><?= $storeArr[$row["shop_id"]] ?></td>
+                                    <?php endif; ?>
                                     <td class="dontNextLine text-center"><?= $classArr[$row["product_class_id"]] ?></td>
                                     <td class="text-center"><?= number_format($row["price"]) ?></td>
                                     <td><?= getLeftChar($row["description"], 100) . "..." ?></td>
