@@ -1,3 +1,17 @@
+<?php
+require_once("../db_connect.php");
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+// 檢查 session 中是否已有使用者資料
+if (isset($_SESSION['user']) && !empty($_SESSION['user'])) {
+    // 如果有使用者資料，直接導向到儀表板
+    header("Location: ../page/dashboard-home_Joe.php");
+    exit();
+}
+?>
 <!doctype html>
 <html lang="en">
     <head>
@@ -52,7 +66,7 @@
         ></script>
 
         <?php include("../js.php");?>
-
+        <!-- 提交表單 -->
         <script>
             const account = document.querySelector("#account");
             const password = document.querySelector("#password");
