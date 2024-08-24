@@ -421,3 +421,14 @@ h6 {
 .file-input {
   display: none;
 }
+
+
+.btn-success {
+  --bs-btn-bg: #52b484;
+  --bs-btn-border-color: #52b484;
+}
+
+.btn-danger {
+  --bs-btn-bg: #e0616d;
+  --bs-btn-border-color: #e0616d;
+}
