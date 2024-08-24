@@ -65,6 +65,10 @@ require_once("../db_connect.php");
             border-color: #80bdff;
             box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
         }
+
+        * {
+            /* border: 1px solid #000; */
+        }
     </style>
 </head>
 
@@ -74,24 +78,24 @@ require_once("../db_connect.php");
         <div class="row">
             <div class="col-md-6 mx-auto">
                 <div class="d-flex justify-content-center">
-                    <h3 class="mt-3" style="color: var( --text-color);">會員店家註冊申請</h3>
+                    <h3 class="mt-4 text-white fw-bolder" style="color: var( --text-color);">會員店家註冊申請</h3>
                 </div>
-                <div class="create-shop-card mx-auto  mb-5">
+                <div class="create-shop-card mx-auto mb-5">
                     <div class="w-75">
                         <form action="../function/doCreateShop.php" method="POST" enctype="multipart/form-data">
                             <div class="mb-3">
-                                <label for="username" class="form-label">Name</label>
+                                <label for="username" class="form-label">使用者姓名</label>
                                 <input class="form-control form-control-custom" type="text" id="username" name="username" required />
                             </div>
                             <div class="mb-3">
-                                <label for="account" class="form-label">Account</label>
+                                <label for="account" class="form-label">帳號</label>
                                 <div class="d-flex">
                                     <input class="form-control form-control-custom" type="text" id="account" name="account" required />
                                 </div>
                                 <div id="accountFeedback" class="invalid-feedback"></div>
                             </div>
                             <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
+                                <label for="password" class="form-label" id="passWord-input">密碼</label>
                                 <div class="input-group">
                                     <input class="form-control form-control-custom" type="password" id="password" name="password" required />
                                     <button class="btn btn-toggle-password" type="button" id="togglePassword">
@@ -108,7 +112,7 @@ require_once("../db_connect.php");
                                 <input class="form-control form-control-custom" type="text" id="email" name="email" required />
                             </div>
                             <div class="mb-3">
-                                <label for="phone" class="form-label">Phone</label>
+                                <label for="phone" class="form-label">電話</label>
                                 <input class="form-control form-control-custom" type="text" id="phone" name="phone" required />
                             </div>
                             <div class="mb-3">
@@ -131,16 +135,18 @@ require_once("../db_connect.php");
                                 <label for="shopImage" class="form-label">店家圖片</label>
                                 <div class="d-flex align-items-center">
                                     <input type="file" class="form-control form-control-custom" id="shopImage" name="shopImage" accept="image/*">
-                                    <button type="button" class="btn btn-neumorphic ms-2" id="uploadButton">
+                                    <button type="button" class="btn btn-neumorphic" id="uploadButton">
                                         上傳照片
                                     </button>
                                 </div>
-                                <div class="d-flex">
-                                    <img id="imagePreview" src="#" alt="圖片預覽" />
+                                <div class="d-flex justify-content-center overflow-hidden">
+                                    <img id="imagePreview" class="rounded" src="#" alt="圖片預覽" />
                                 </div>
+
+                                <hr>
+                                <button type="submit" class="btn btn-neumorphic  fw-bolder">送出</button>
                             </div>
-                            <hr>
-                            <button type="submit" class="btn btn-neumorphic px-4 mx-3 fw-bolder">送出</button>
+
                         </form>
                     </div>
                 </div>

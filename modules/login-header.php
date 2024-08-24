@@ -1,4 +1,4 @@
-<div class="header my-0 py-0 fixed-top">
+<div class="header my-0 py-0 sticky-top">
     <div class="navbar navbar-dark d-flex align-content-center justify-content-around">
         <img class="sweet_logo" src="../images/sweet_time_logo1.png" alt="">
         <ul class="navbar-nav flex-row gap-3 fs-5 fw-bold">
