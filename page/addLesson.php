@@ -9,7 +9,7 @@ $row = $result->fetch_assoc();
 
 
 //teacher
-$sqlTeacher = "SELECT * FROM teacher ORDER BY teacher_id";
+$sqlTeacher = "SELECT * FROM teacher WHERE valid = 1 ORDER BY teacher_id";
 $resultTea = $conn->query($sqlTeacher);
 $rowsTea = $resultTea->fetch_all(MYSQLI_ASSOC);
 // print_r($rowsTea);
@@ -105,7 +105,7 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                                     <th>
                                         <h5>分類</h5>
                                     </th>
-                                    <td><select name="class" id="class" required>
+                                    <td><select name="class" id="class" class="form-select form-control-custom" required>
                                             <?php foreach ($rowsAllPro as $rowProduct): ?>
                                                 <option value="<?= $rowProduct["product_class_id"] ?>"><?= $rowProduct["class_name"] ?></option>
                                             <?php endforeach; ?>
@@ -116,7 +116,7 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                                         <h5>講師</h5>
                                     </th>
                                     <td>
-                                        <select name="teacher" id="teacher" required>
+                                        <select name="teacher" id="teacher" class="form-select form-control-custom" required>
                                             <?php foreach ($rowsTea as $rowTea): ?>
                                                 <option value="<?= $rowTea["teacher_id"] ?>"><?= $rowTea["name"] ?></option>
                                             <?php endforeach; ?>
