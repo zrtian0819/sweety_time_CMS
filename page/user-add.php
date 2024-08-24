@@ -1,5 +1,6 @@
 <?php
 require_once("../db_connect.php");
+include("../function/login_status_inspect.php");
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -29,7 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $sql = "INSERT INTO users (role,name, account, password, email, phone, birthday, sign_up_time,activation,portrait_path) 
 VALUES ('user','$name', '$account', '$password', '$email', '$phone', '$birthday','$now',1,'$newFileName')";
                 if ($conn->query($sql) === TRUE) {
-                    // echo "資料和圖片儲存成功";
                     header("location:users.php");
                     exit;
                 } else {

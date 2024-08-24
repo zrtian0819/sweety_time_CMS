@@ -6,6 +6,7 @@ if (!isset($_GET["user_id"])) {
 $user_id = $_GET["user_id"];
 
 require_once("../db_connect.php");
+include("../function/login_status_inspect.php");
 
 $sql = "SELECT * FROM users WHERE user_id = '$user_id' AND activation=1";
 $result = $conn->query($sql);
@@ -14,7 +15,7 @@ $row = $result->fetch_assoc();
 
 $sql_img = "SELECT portrait_path FROM users WHERE user_id = $user_id";
 $result_img = $conn->query($sql_img);
-$row_img = $result_img->$num_rows;
+$row_img = $result_img->num_rows;
 $user_img = $result_img->fetch_assoc();
 
 
@@ -71,7 +72,7 @@ if ($userCount > 0) {
                         <?php if ($userCount > 0): ?>
                             
                             <div class="mb-3 d-flex justify-content-center align-items-center flex-column">
-                                <img src="<?= htmlspecialchars($imagePath) ?>" alt="Profile Image" class="object-fit-fill user-img">
+                                <img src="<?= ($imagePath) ?>" alt="Profile Image" class="object-fit-fill user-img">
                             </div>
                             <table class="table table-bordered">
                                 <tr>
