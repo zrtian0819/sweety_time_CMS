@@ -99,8 +99,10 @@ $rowsTea = $resultTea->fetch_all(MYSQLI_ASSOC);
 
 //老師關聯式陣列
 $teacherArr = [];
+$teacherStatus = [];
 foreach ($rowsTea as $teacher) {
     $teacherArr[$teacher["teacher_id"]] = $teacher["name"];
+    $teacherStatus[$teacher["teacher_id"]] = $teacher["valid"];
     // print_r($teacherArr);
 }
 
@@ -197,7 +199,11 @@ foreach ($rowsPro as $productClass) {
                     <tbody>
                         <tr class="text-center m-auto align-middle">
                             <td><?= $id ?></td>
-                            <?php echo ($row["activation"] == 1) ? "<td>" . "上架中" : "<td class='text-danger'>" . "已下架"; ?></td>
+                            <?php if ($row["activation"] == 1 && $teacherStatus[$row["teacher_id"]] == 1) : ?>
+                                <td>上架中</td>
+                            <?php else: ?>
+                                <td class='text-danger'>已下架</td>
+                            <?php endif; ?>
                             <td><?= $row["name"] ?></td>
                             <td><?= $productClassArr[$row["product_class_id"]] ?></td>
                             <td><?= $teacherArr[$row["teacher_id"]] ?></td>
@@ -211,16 +217,24 @@ foreach ($rowsPro as $productClass) {
                                 ?>
                                 <?= $count ?></td>
                             </td>
-                            <td><a href="lesson-details.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-eye"></i></a>
-                                <a href="editLesson.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-pen-to-square"></i></a>
-                                <?php if ($status === "off"): ?>
-                                    <a href="../function/doReloadLesson.php?id=<?= $id ?>" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
-                                <?php else: ?>
-                                    <?php if ($row["activation"] == 1): ?>
-                                        <a href="../function/doDeleteLesson.php?id=<?= $id ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
-                                    <?php else: ?>
+                            <td>
+                                <?php if ($teacherStatus[$row["teacher_id"]] != 0): ?>
+                                    <a href="lesson-details.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-eye"></i></a>
+                                    <a href="editLesson.php?id=<?= $id ?>" class="btn btn-custom"><i class="fa-solid fa-pen-to-square"></i></a>
+                                    <?php if ($status === "off"): ?>
                                         <a href="../function/doReloadLesson.php?id=<?= $id ?>" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
+                                    <?php else: ?>
+                                        <?php if ($row["activation"] == 1): ?>
+                                            <a href="../function/doDeleteLesson.php?id=<?= $id ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+                                        <?php else: ?>
+                                            <a href="../function/doReloadLesson.php?id=<?= $id ?>" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
+                                        <?php endif; ?>
                                     <?php endif; ?>
+                                <?php else: ?>
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <a href="lesson-details.php?id=<?= $id ?>" class="btn btn-custom me-2"><i class="fa-solid fa-eye"></i></a>
+                                        <div class="text-danger text-center">此老師已下架</div>
+                                    </div>
                                 <?php endif; ?>
                             </td>
                         </tr>
