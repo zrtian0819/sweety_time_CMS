@@ -11,7 +11,7 @@
   --area-border: 0.5px solid #f4a1939f;
 }
 
-html{
+html {
   /* border: 1px solid red; */
   height: 100%;
 }
@@ -20,20 +20,21 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background: linear-gradient(45deg, #dda63fc4, #f7816c70 ,#3f64dd9d);
+  background: linear-gradient(to top, #d29937d5, #f7816c70, #3f64dd9d);
   background-size: 100vw 200vh;
   /* background-color: var(--bg-color); */
   color: var(--text-color);
   font-family: "Noto Serif TC", "Noto Sans TC", "Noto Serif HK", "serif";
   font-optical-sizing: auto;
-  animation: bg-animation 10s infinite alternate;
+  animation: bg-animation 4s infinite alternate;
 }
 
-@keyframes bg-animation{
-  0%{
+@keyframes bg-animation {
+  0% {
     background-position: center top;
   }
-  100%{
+
+  100% {
     background-position: center 50%;
   }
 }
