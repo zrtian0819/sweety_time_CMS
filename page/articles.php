@@ -108,10 +108,13 @@ foreach ($rowsProduct as $productClass) {
     $productClassArr[$productClass["product_class_id"]] = $productClass["class_name"];
 };
 
+
 // 使用者
 $sqlUsers = "SELECT * FROM users ORDER BY user_id";
 $resultUsers = $conn->query($sqlUsers);
 $rowsUsers = $resultUsers->fetch_all(MYSQLI_ASSOC);
+
+
 
 //使用者關聯式陣列
 $usersArr = [];

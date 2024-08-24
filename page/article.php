@@ -61,12 +61,8 @@ $resultUsers = $conn->query($sqlUsers);
 $rowsUsers = $resultUsers->fetch_all(MYSQLI_ASSOC);
 
 //使用者關聯式陣列
-$usersArr = [];
-foreach ($rowsUsers as $users) {
-    $usersArr[$users["user_id"]] = $users["name"];
-};
-
-
+$firstUser = $rowsUsers[0]; // 這裡取得第一筆使用者資料
+$authorName = $firstUser["name"]; // 取得使用者名稱
 
 ?>
 
@@ -100,13 +96,14 @@ foreach ($rowsUsers as $users) {
     <div class="container-fluid d-flex flex-row px-4">
 
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
-        <!-- 回到文章列表按鈕 -->
+
         <div class="main col neumorphic p-5">
             <div class="row">
-                <div class="d-flex justify-content-end">
-                    <div>
-                        <a class="btn btn-neumorphic article-btn mt-0" href="articles.php" title="回文章列表"><i class="fa-solid fa-left-long"></i>回到文章列表</a>
-                    </div>
+                <h2 class="mb-5 text-center">文章管理</h2>
+                <div class="col-3">
+                    <a class="btn-animation btn btn-custom d-inline-flex flex-row align-items-center mb-3" href="articles.php">
+                        <i class="fa-solid fa-arrow-left-long"></i><span class="btn-animation-innerSpan d-inline-block">返回</span>
+                    </a>
                 </div>
                 <!-- 文章 -->
                 <h1 class="d-flex justify-content-center">
@@ -115,14 +112,14 @@ foreach ($rowsUsers as $users) {
 
                 <!-- 建立時間/作者/分類 -->
                 <div class="row-col-3 d-flex justify-content-center">
-                    建立時間：<?= $row["created_at"] ?>／作者：<?= $usersArr[$users["user_id"]] ?>／分類：<?= $rowProduct["class_name"] ?>
+                    建立時間：<?= $row["created_at"] ?>／作者：<?= $authorName ?>／分類：<?= $rowProduct["class_name"] ?>
 
                 </div>
 
                 <!-- 圖片 -->
                 <div class="row-col-3 d-flex justify-content-center ">
                     <div class="m-3">
-                        <img style="height: auto; object-fit: cover; max-width: 100%;" class="rounded m" src="../images/article/<?= $row["img_path"] ?>" alt="<?= $row["title"] ?>">
+                        <img style="height: auto; object-fit: cover; max-width: 100%;" class="rounded m" src="../images/articles/<?= $row["img_path"] ?>" alt="<?= $row["title"] ?>">
                     </div>
                 </div>
 

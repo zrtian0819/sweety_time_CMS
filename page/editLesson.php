@@ -130,7 +130,7 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                                     <th>
                                         <h5>分類</h5>
                                     </th>
-                                    <td><select name="class" id="class">
+                                    <td><select name="class" id="class" class="form-select form-control-custom">
                                             <?php foreach ($rowsAllPro as $rowProduct): ?>
                                                 <option value="<?= $rowProduct["product_class_id"] ?>"><?= $rowProduct["class_name"] ?></option>
                                             <?php endforeach; ?>
@@ -141,7 +141,7 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                                         <h5>講師</h5>
                                     </th>
                                     <td>
-                                        <select name="teacher" id="teacher">
+                                        <select name="teacher" id="teacher" class="form-select form-control-custom">
                                             <?php foreach ($rowsTea as $rowTea): ?>
                                                 <option value="<?= $rowTea["teacher_id"] ?>"><?= $rowTea["name"] ?></option>
                                             <?php endforeach; ?>

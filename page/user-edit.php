@@ -6,6 +6,7 @@ if (!isset($_GET["user_id"])) {
 
 require_once("../db_connect.php");
 
+
 $user_id = $_GET["user_id"];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -37,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $sql = "UPDATE users SET portrait_path='$newFileName' WHERE user_id = $user_id";
                 if ($conn->query($sql)) {
                     // echo "圖片更新成功";
-                    header("Location: user-edit.php?user_id=$user_id");
+                    header("Location: user.php?user_id=$user_id");
                     exit;
                 } else {
                     echo "資料更新失敗: " . $conn->error;
@@ -66,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $sql = "UPDATE users SET name = '$name', password = '$password', email = '$email' WHERE user_id = $user_id";
     if ($conn->query($sql)) {
         // echo "資料更新成功";
+        header("Location: user.php?user_id=$user_id");
     } else {
         echo "資料更新失敗: " . $conn->error;
     }
@@ -122,7 +124,7 @@ $conn->close();
         <div class="container-fluid d-flex flex-row px-4">
             <div class="main col neumorphic p-5">
                 <div class="py-2">
-                    <a class="btn btn-neumorphic user-btn" href="user.php?user_id=<?= ($row["user_id"]) ?>" title="回使用者"><i class="fa-solid fa-left-long"></i></a>
+                    <a class="btn btn-neumorphic user-btn" href="users.php" title="回使用者"><i class="fa-solid fa-left-long"></i></a>
                 </div>
                 <h2 class="mb-3">修改資料</h2>
                 <div class="container">

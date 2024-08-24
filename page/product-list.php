@@ -202,6 +202,16 @@ foreach ($storeRows as $storeRow) {
         .dontNextLine {
             white-space: nowrap;
         }
+
+        .btn-success {
+            --bs-btn-bg: #52b484;
+            --bs-btn-border-color: #52b484;
+        }
+
+        .btn-danger {
+            --bs-btn-bg: #e0616d;
+            --bs-btn-border-color: #e0616d;
+        }
     </style>
 </head>
 
@@ -266,7 +276,7 @@ foreach ($storeRows as $storeRow) {
 
                 <?php if ($productCount > 0): ?>
                     <table class="table table-hover bdrs table-responsive align-middle"> <!--移除的樣式 table-bordered -->
-                        <thead class="text-center table-dark">
+                        <thead class="text-center">
                             <tr>
                                 <th class="dontNextLine">商品編號</th>
                                 <th class="dontNextLine">名稱</th>

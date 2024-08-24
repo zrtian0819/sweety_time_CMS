@@ -61,9 +61,11 @@
              <h5 class="h5">店家管理</h5>
          </button>
          <ul id="storeList" class="nav flex-column align-items-center">
+         <?php if ($role == "shop"): ?>
              <li class="nav-item">
                  <a class="nav-link" href="shop-info.php?shopId=<?= $shopId ?>">店家基本資料</a>
              </li>
+        <?php endif; ?>
              <li class="nav-item">
                  <a class="nav-link" href="product-list.php?shopId=<?= $shopId ?>">商品管理</a>
              </li>
