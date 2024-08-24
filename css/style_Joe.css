@@ -4,7 +4,7 @@
 
 :root {
   --primary-color: #f4a293;
-  --primary-color-fade: rgba(244, 161, 147, 0.5);
+  --primary-color-fade: rgba(244, 161, 147, 0.15);
   --text-color: #968c8a;
   --bg-color: #fff;
   --box-shadow-blue: 4px 4px 12px #d1d9e6, -4px -4px 12px #ffffff;
@@ -13,9 +13,8 @@
 }
 
 html {
-  /* border: 1px solid red; */
-  /* height: 100%; */
   height: 100vh;
+  /* min-width: 525px; */
 }
 
 body {
@@ -101,7 +100,8 @@ h6 {
 
 /* 滾動槽 */
 ::-webkit-scrollbar-track {
-  background: #dbe0ea;
+  /* background: #dbe0ea; */
+  background: white;
 
   /* 背景顏色 */
   border-radius: 10px;
@@ -434,7 +434,13 @@ h6 {
   --bs-btn-border-color: #e0616d;
 }
 
+.table {
+
+  --bs-table-hover-bg: var(--primary-color-fade);
+}
+
+
 
 .text-pink {
-  color: var(--primary-color-fade)
+  color: var(--primary-color)
 }
