@@ -81,7 +81,6 @@ require_once("../db_connect.php");
                                     <label for="account" class="form-label">Account</label>
                                     <div class="d-flex">
                                         <input class="form-control form-control-custom" type="text" id="account" name="account" required/>
-                                        <!-- <button type="button" class="btn btn-neumorphic btn-check-account"><i class="fa-solid fa-user-check"></i></button> -->
                                     </div>
                                     <div id="accountFeedback" class="invalid-feedback"></div>
                                 </div>
@@ -155,9 +154,7 @@ require_once("../db_connect.php");
             integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
             crossorigin="anonymous"
         ></script>
-        <!-- 按鈕觸發上傳檔案 -->
-        <script src="../javascript/create-shop.js"></script>
-        
+
         <!-- 切換顯示密碼 -->
         <script>
         document.getElementById('togglePassword').addEventListener('click', function (e) {
@@ -171,5 +168,10 @@ require_once("../db_connect.php");
             this.querySelector('i').classList.toggle('fa-eye-slash');
         });
         </script>
+
+        <!-- 按鈕觸發上傳檔案 -->
+        <script src="../javascript/create-shop.js"></script>
+        
+
     </body>
 </html>

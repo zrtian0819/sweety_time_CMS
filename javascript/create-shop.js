@@ -4,7 +4,7 @@ $(document).ready(function() {
         var account = $('#account').val();
         if(account != '') {
             $.ajax({
-                url: '../api/doCheck_account.php',
+                url: '../function/Check_account.php',
                 type: 'post',
                 data: {account: account},
                 success: function(response) {
