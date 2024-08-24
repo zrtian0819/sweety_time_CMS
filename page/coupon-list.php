@@ -193,7 +193,7 @@ $rows_page = $result_page->fetch_all(MYSQLI_ASSOC);
             </div>
 
             <!-- 設定一頁幾筆資料 -->
-            <div class="my-2">
+            <div class="my-2 d-flex justify-content-between">
                 <form class="d-flex align-items-center">
                     <span>每頁</span>
                     <input type="text" class="form-control coupon-input-bar" name="per_page" id="perPageInput" value="<?= $per_page ?>" placeholder="">
@@ -201,6 +201,7 @@ $rows_page = $result_page->fetch_all(MYSQLI_ASSOC);
                     <a class="btn neumorphic mx-2" id="perPageBtn">GO</a>
                     <span>，共有<?= $total_rows ?>筆資料</span>
                 </form>
+                <a class="btn" href="./coupon-create.php">新增優惠券</a>
             </div>
 
             <!-- 顯示資料的表格 -->
@@ -248,6 +249,7 @@ $rows_page = $result_page->fetch_all(MYSQLI_ASSOC);
                             <td>
                                 <?= $row['created_at'];?>
                                 <a href="./coupon-edit.php?coupon_id=<?= $row['coupon_id'] ?>">編輯</a>
+                                <a href="./coupon-distribute.php?coupon_id=<?= $row['coupon_id'] ?>">發送</a>
                             </td>
                         </tr>
                     <?php endforeach;?>
