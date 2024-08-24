@@ -8,6 +8,7 @@
 }
 
   .header{
+      min-width: 20rem;
       align-items: center;
       padding-top: 1rem;
       padding-bottom: 1rem;
@@ -24,15 +25,15 @@
     max-width: 25rem;
     height: 20rem;
     width: 50%;
-    margin: 5em auto 0 auto;
+    margin: 20% auto 0 auto;
     padding: 0 3em 0 3em;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     background-color: rgb(245, 245, 245);
-    box-shadow: -7px -7px 10px #ffffff, 5px 5px 10px rgba(0, 0, 0, 0.585);
+    box-shadow: var(--box-shadow-blue);
   }
   
 .create-shop-card{
@@ -75,10 +76,8 @@
     text-transform: uppercase;
     font-size: 1rem;
     border-radius: 25px;
-    box-shadow: -5px -5px 10px white, 5px 5px 10px rgba(0, 0, 0, 0.485);
-    background-color: rgb(255, 255, 255);
     border: none;
-    color: #000;
+    color: var(--text-color);
     &:hover {
       background-color: #e8e8e8;
       color:var(--primary-color);
@@ -93,7 +92,8 @@
     margin-top: 3em;
     font-size: 1.2rem;
     font-weight: 600;
-    color: black;
+    color: var(--text-color);
+
     &:hover{
       color: rgb(247, 152, 10);
     }
