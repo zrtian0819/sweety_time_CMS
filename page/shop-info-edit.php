@@ -58,6 +58,24 @@ if ($shop_id > 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>商家基本資料</title>
     <?php include("../css/css_Joe.php"); ?>
+    <style>
+        .shop-logo-container {
+            min-width: 150px;
+            width: 100%;
+            max-width: 300px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color:rgba(0, 0, 0, 0.1);
+
+        }
+        .shop-logo-container img {
+            width: 100%;
+            height: auto; 
+            object-fit: contain; 
+            max-height: 300px; 
+        }
+    </style>
 </head>
 
 <body>
@@ -74,11 +92,11 @@ if ($shop_id > 0) {
             </div>
             <div class="container">
                 <div class="row">
-                    <div class="col-12 col-md-6 col-lg-5 position-relative d-flex flex-column justify-content-center align-items-center mb-3 mb-md-0">
-                        <a href="">
-                            <img class="shop-info-logo" src="../images/shop_logo/<?=$logo_path;?>?t=<?=time();?>" alt="店家Logo">
-                        </a>
-                    </div>
+                    <div class="col-12 col-md-6 col-lg-5 position-relative d-flex justify-content-center align-items-center mb-3 mb-md-0">
+                            <div class="shop-logo-container">
+                                <img src="../images/shop_logo/<?=$logo_path;?>?t=<?=time();?>" alt="<?= htmlspecialchars($shop_name) ?> Logo">
+                            </div>
+                        </div>
                     <div class="col-12 col-md-6 col-lg-6 px-4 shop-info-detail">
                         <h3 class="mb-3 <?= $activation == 0 ? 'text-danger' : 'text-success'; ?>"><?= $activation == 0 ? '關閉中' : '啟用中'; ?></h3>
                     <form action="../function/doUploadLogo.php" method="POST" enctype="multipart/form-data">

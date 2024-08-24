@@ -48,7 +48,7 @@ require_once("../db_connect.php");
             <div class="row">
                 <div class="col-md-6 mx-auto">
                     <div class="d-flex justify-content-center">
-                        <h3 class="mt-3" style="color: var(--primary-color);">會員店家註冊申請</h3>
+                        <h3 class="mt-3" style="color: var( --text-color);">會員店家註冊申請</h3>
                     </div>
                         <div class="create-shop-card mx-auto  mb-5">
                         <div class="w-75">
