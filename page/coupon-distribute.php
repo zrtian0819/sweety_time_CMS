@@ -257,7 +257,12 @@ $row_coupon = $result_coupons->fetch_assoc();
             <hr>
             <div class="">
             </div>
-
+            
+            <!-- 全選 & 清除 按鈕 -->
+             <div class="container-flex">
+                <button class="btn" id="checkAll">全選</button>
+                <button class="btn" id="uncheckAll">全不選</button>
+             </div>
             <!-- 顯示users資料的表格 -->
             <form action="../function/doDistributeCoupon.php" method="post">
                 <table class="table table-bordered">
@@ -275,7 +280,7 @@ $row_coupon = $result_coupons->fetch_assoc();
                     <tbody>
                             <?php foreach ($rows_user as $row_user) : ?>
                                 <tr>
-                                    <td><input type="checkbox"  class="" name="userIdList[]" value="<?= $row_user['user_id']; ?>"></td>
+                                    <td><input type="checkbox"  class="usersCheckBox" name="userIdList[]" value="<?= $row_user['user_id']; ?>"></td>
                                     <td><?= $row_user['user_id'];?></td>
                                     <td><?= $row_user['name'];?></td>
                                     <td><?= $row_user['account'];?></td>
@@ -304,6 +309,22 @@ $row_coupon = $result_coupons->fetch_assoc();
     <?php include("../js.php"); ?>
     <?php $conn->close() ?>
     <script>
+        //----------------------------------------全選 & 全不選 按鈕--------------------------------------------
+        document.getElementById('checkAll').addEventListener('click', function() {
+            var checkboxes = document.querySelectorAll('.usersCheckBox');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = true;
+            });
+        });
+        
+        document.getElementById('uncheckAll').addEventListener('click', function() {
+            var checkboxes = document.querySelectorAll('.usersCheckBox');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = false;
+            });
+        })
+
+        // ---------------------------------------自定義下拉式選單----------------------------------------------
         window.onload = function() {
             updateSelectedValues(); // 只更新顯示文字，不進行預設勾選
         };

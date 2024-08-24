@@ -314,7 +314,7 @@ $user_row = $user_result->fetch_assoc();
                             </td>
                             <td>
                                 <?php 
-                                echo $userCoupon_row['received_time'];
+                                echo $userCoupon_row['recieved_time'];
                                 ?>
                             </td>
                             <td>
