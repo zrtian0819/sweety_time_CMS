@@ -11,7 +11,7 @@ $length = count($userIdList);
 $now = date("Y-m-d H:i:s");
 
 // 準備 SQL 語法
-$sql = "INSERT INTO users_coupon (user_id, coupon_id, order_id, enabled, received_time, used_time, used_status) VALUES ";
+$sql = "INSERT INTO users_coupon (user_id, coupon_id, order_id, enabled, recieved_time, used_time, used_status) VALUES ";
 
 $values = [];
 foreach ($userIdList as $user_id) {

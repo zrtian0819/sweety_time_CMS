@@ -23,11 +23,22 @@ $stmt->bind_param("is", $coupon_id, $recieved_time);
 $stmt->execute();
 $result = $stmt->get_result();
 $row = $result->fetch_assoc();
+// print_r($row);
 
 // 計算 收到優惠券的人數
-foreach ($rows as $row) {
-    $userAmount = count(explode(',', $row['user_ids']));
-}
+$user_ids_array = explode(',', $row['user_ids']);
+$userAmount = count($user_ids_array);
+
+// 撈users 的資料
+$user_ids_str = $row['user_ids'];
+$sql_users = "SELECT * 
+            FROM users 
+            WHERE user_id IN ($user_ids_str);";
+            // ORDER BY FIELD(user_id, $userIdStr);"; 這段可使排序依 $userIdListStr原始的順序排序
+$stmt_users = $conn->prepare($sql_users);
+$stmt_users->execute();
+$result_users = $stmt_users->get_result();
+$rows_users = $result_users->fetch_all(MYSQLI_ASSOC);
 
 ?>
 
@@ -82,24 +93,22 @@ foreach ($rows as $row) {
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>優惠券編號<br>(user_coupon_id)</th>
-                        <th>優惠券id<br>(coupon_id)</th>
-                        <th>優惠券名稱<br>(name)</th>
-                        <th>折扣率<br>(used_status)</th>
-                        <th>使用期限<br></th>
-                        <th>發券日期<br>(received_time)</th>
-                        <th>使用日期<br>(used_time)</th>
-                        <th>可用狀態(enabled)</th>
+                        <th>使用者id</th>
+                        <th>使用者名稱</th>
+                        <th>帳號</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($userCoupon_rows as $userCoupon_row) : ?>
+                    <?php foreach ($rows_users as $row_user) : ?>
                         <tr>
                             <td>
-                                <?php echo $userCoupon_row['users_coupon_id'];?>
+                                <?php echo $row_user['user_id'];?>
                             </td>
                             <td>
-                                <?php echo $userCoupon_row['coupon_id'];?>
+                                <?php echo $row_user['name'];?>
+                            </td>
+                            <td>
+                                <?php echo $row_user['account'];?>
                             </td>
                         </tr>
                     <?php endforeach;?>

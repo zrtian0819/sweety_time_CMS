@@ -61,12 +61,6 @@ if (!empty($params)) {
 $stmt->execute();
 $result = $stmt->get_result();
 $rows = $result->fetch_all(MYSQLI_ASSOC);
-
-// 計算 收到優惠券的人數
-foreach ($rows as $row) {
-    $userAmount = count(explode(',', $row['user_ids']));
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -126,9 +120,12 @@ foreach ($rows as $row) {
                             <td><?php echo $row["coupon_id"];?></td>
                             <td><?php echo $row["coupon_name"];?></td>
                             <td>
-                                <?php echo $userAmount;?>人
+                                <?php 
+                                $userAmount = count(explode(',', $row['user_ids']));
+                                echo $userAmount;
+                                ?>人
                                 <br>
-                                <form action="">
+                                <form action="./coupon-distrbute-history-detail.php">
                                     <input type="hidden" name="recieved_time" value="<?= $row['recieved_time'] ?>">
                                     <input type="hidden" name="coupon_id" value="<?= $row['coupon_id'] ?>">
                                     <button type="submmit">查看名單</button>
