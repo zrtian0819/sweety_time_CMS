@@ -30,23 +30,19 @@ if (isset($_SESSION['user']) && !empty($_SESSION['user'])) {
         <?php include ("../modules/login-header.php");?>
         <div class="container">
             <div class="login-card">
-                <h1>Log In</h1>
+                <h1 class="my-auto">Log In</h1>
                 <form id="loginForm" action="doLogin.php" method="POST" class="d-flex flex-column">
                     <input class="form-control form-control-custom" type="text" placeholder="Account" id="account" name="account" required>
                     <input class="form-control form-control-custom mt-3" type="password" placeholder="password" id="password" name="password" required>
-                    <button class="log-in-button" type="submit" id="signIn">Log In</button>
+                    <div class="d-flex justify-content-center">
+                        <button class="log-in-button" type="button" onclick="window.location.href='../page/create-shop.php'">註冊帳號</button>
+                        <button class="log-in-button" type="submit" id="signIn">Log In</button>
+                    </div>
                 </form>
             </div>
         </div>
         <div class="container">
-            <div class="w-50 d-flex justify-content-between mx-auto py-3">
-                    <p>
-                        <a class="sign-in" href="../page/create-shop.php">註冊帳號</a>
-                    </p>
-                    <p>
-                        <a class="sign-in forgot-pw" href="../page/password/reset">忘記密碼?</a>
-                    </p>
-            </div>
+
         </div>
         
 
