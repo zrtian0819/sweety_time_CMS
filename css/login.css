@@ -63,11 +63,13 @@ body {
   justify-content: space-between;
   align-items: center;
   background-color: rgb(245, 245, 245);
-  box-shadow: var(--box-shadow-blue);
-  transition: 0.5s;
+  /* box-shadow: var(--box-shadow-blue); */
+  box-shadow: 10px 10px 10px 2px rgba(0, 0, 0, 0.1), inset 10px 10px 20px 10px #ffffff;
+  transition: 2s;
+  animation: fadeIn 1.5s forwards;
 
   &:hover {
-    box-shadow: 0 0 50px 10px rgba(255, 255, 255, 0.7);
+    box-shadow: 0 0 50px 5px rgba(255, 255, 255, 0.8);
   }
 
   h1 {
@@ -253,4 +255,16 @@ input[type="file"] {
 .login-card h4 {
   margin: 0;
   padding: 0;
+}
+
+@keyframes fadeIn {
+  0% {
+    translate: 0 15px;
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+    translate: 0 0;
+  }
 }
