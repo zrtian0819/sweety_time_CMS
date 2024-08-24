@@ -1,6 +1,6 @@
 <?php
-
 require_once("../db_connect.php");
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -8,16 +8,79 @@ if (session_status() == PHP_SESSION_NONE) {
 $name = $_SESSION["user"]["name"];
 $SessRole = $_SESSION["user"]["role"];
 
-$sql = "SELECT 
-    COUNT(*) AS total_users,
-    SUM(CASE WHEN activation = '1' THEN 1 ELSE 0 END) AS active_users
-FROM users";
+$sql = "SELECT
+            (SELECT COUNT(*) FROM users) AS total_users,
+            (SELECT COUNT(*) FROM users WHERE activation = '1') AS active_users,
+            (SELECT COUNT(*) FROM shop) AS total_shops,
+            (SELECT COUNT(*) FROM shop WHERE activation = '1') AS active_shops,
+            (SELECT COUNT(*) FROM product) AS total_products,
+            (SELECT COUNT(*) FROM product WHERE available = '1') AS active_products,
+            shop.name AS shop_name,
+            SUM(orders.total_price) AS total_sales,
+            DATE(orders.order_time) AS order_date
+        FROM
+            orders
+        JOIN
+            shop ON orders.shop_id = shop.shop_id
+        GROUP BY
+            orders.shop_id, shop.name, DATE(orders.order_time)
+        ORDER BY
+            total_sales DESC, order_date";
 
 $result = $conn->query($sql);
-$counts = $result->fetch_assoc();
 
-$userCount = $counts['total_users'];
-$userCountActive = $counts['active_users'];
+$counts = array();
+$money_data = array();
+$sweety_money_data = array();
+
+while ($row = $result->fetch_assoc()) {
+    // 只在第一次迭代時設置計數
+    if (empty($counts)) {
+        $counts = array(
+            'total_users' => $row['total_users'],
+            'active_users' => $row['active_users'],
+            'total_shops' => $row['total_shops'],
+            'active_shops' => $row['active_shops'],
+            'total_products' => $row['total_products'],
+            'active_products' => $row['active_products']
+        );
+    }
+
+    // 收集商店銷售數據
+    if (count($money_data) < 10) {
+        $money_data[] = array(
+            'name' => $row['shop_name'],
+            'total_sales' => $row['total_sales']
+        );
+    }
+
+    // 收集每日銷售數據
+    $date = $row['order_date'];
+    if (!isset($sweety_money_data[$date])) {
+        $sweety_money_data[$date] = 0;
+    }
+    $sweety_money_data[$date] += $row['total_sales'];
+}
+// 按日期排序數據（最新的日期在前）
+krsort($sweety_money_data);
+
+// 只保留最近7天的數據
+$seven_day_data = array_slice($sweety_money_data, 0, 7, true);
+
+// 反轉數組，使日期按升序排列
+$seven_day_data = array_reverse($seven_day_data, true);
+
+// 將處理後的數據轉換為 JSON 格式，以便在 JavaScript 中使用
+$seven_day_json = json_encode($seven_day_data);
+
+
+$userCount = $counts['total_users']; //會員總數
+$userCountActive = $counts['active_users']; //啟用中的會員數量
+$shopCount = $counts['total_shops'];//商家總數
+$shopCountActive = $counts['active_shops'];//啟用中的商家數量
+$productCount = $counts['total_products'];//商品總數
+$productCountActive = $counts['active_products'];//上架中的商品數量
+
 ?>
 
 <!DOCTYPE html>
@@ -28,6 +91,7 @@ $userCountActive = $counts['active_users'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome Sweety Time</title>
     <?php include("../css/css_Joe.php"); ?>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script> <!-- chart.js -->
     <style>
         /* 自定義卡片容器 */
         .custom-card {
@@ -35,13 +99,11 @@ $userCountActive = $counts['active_users'];
             height: 100%;
             border: var(--area-border);
             border-radius: 10px;
-            /* background: black; */
             box-shadow: var(--box-shadow-blue);
         }
 
         /* 自定義圖表區域 */
         .chart {
-            height: 100px; /* 調整圖表高度 */
             background-color: blue; /* 給圖表區塊一個背景色來模擬圖表 */
             border-radius: 0.25rem;
         }
@@ -49,14 +111,27 @@ $userCountActive = $counts['active_users'];
         /* 第一行卡片內容高度調整 */
         .row .custom-card h4 {
             font-size: 1rem;
-            margin-bottom: 0.5rem;
         }
         .row .custom-card p {
             font-size: 2rem;
             font-weight: 700;
-            margin-bottom: 1rem;
         }
-
+        #canvas-holder {
+            width: 100%;
+            max-width: 100%;
+            height: 300px; 
+        }
+        #salesChart {
+            height: 200px !important;
+        }
+        #chart-area{
+            height: 300px !important;
+        }
+        .chart-container {
+            position: relative;
+            height: 200px;
+            width: 100%;
+        }
     </style>
 </head>
 
@@ -73,52 +148,59 @@ $userCountActive = $counts['active_users'];
             <p>
                 <?php if($SessRole=="admin"):?>
                     <!-- 請使用側邊導覽列以管理您的平台資料。 -->
-                    <div class="container my-4">
-                        <!-- 第一行 -->
-                        <div class="row mb-3">
-                            <div class="col-md-12">
-                                <div class="custom-card m-2">
-                                    <!-- 這裡放入長方形圖表 -->
-                                    <h4>年齡段/收入分佈</h4>
-                                    <div class="chart">圖表內容</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 第二行 -->
-                        <div class="row mb-3">
-                            <div class="col-md-2">
-                                <div class="custom-card text-center d-flex flex-column justify-content-between m-2">
-                                    <div class="d-flex">
-                                        <h4>會員數量 <i class="fa-solid fa-user"></i></h4>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6 me-4">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="custom-card text-center d-flex flex-column justify-content-between">
+                                            <div class="d-flex">
+                                                <h4>會員數量 <i class="fa-solid fa-user"></i></h4>
+                                            </div>
+                                                <p>
+                                                    <?= $userCountActive;?>/<?= $userCount;?>
+                                                </p>
+                                            
+                                        </div>
                                     </div>
-                                        <p>
-                                            <?= $userCountActive;?>/<?= $userCount;?>
-                                        </p>
-                                    
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="custom-card text-center d-flex flex-column justify-content-between m-2">
-                                <div class="d-flex">
-                                        <h4>店家數量 <i class="fa-solid fa-shop"></i></h4>
+                                    <div class="col-md-4">
+                                        <div class="custom-card text-center d-flex flex-column justify-content-between">
+                                        <div class="d-flex">
+                                                <h4>店家數量 <i class="fa-solid fa-shop"></i></h4>
+                                            </div>
+                                            <p>
+                                                <?= $shopCountActive;?>/<?= $shopCount;?>
+                                            </p>
+                                        </div>
                                     </div>
-                                    <p>73,949</p>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="custom-card text-center d-flex flex-column justify-content-between m-2">
-                                <div class="d-flex">
-                                        <h4>商品數量 <i class="fa-solid fa-bag-shopping"></i>  </h4>
+                                    <div class="col-md-4">
+                                        <div class="custom-card text-center d-flex flex-column justify-content-between">
+                                        <div class="d-flex">
+                                                <h4>商品數量 <i class="fa-solid fa-bag-shopping"></i>  </h4>
+                                            </div>
+                                            <p>
+                                                <?= $productCountActive;?>/<?= $productCount;?>
+                                            </p>
+                                        </div>
                                     </div>
-                                    <p>10.53</p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="custom-card">
+                                            <h4>全站銷售量</h4>
+                                            <div class="chart-container">
+                                                <canvas id="salesChart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="custom-card m-2 ">
-                                    <!-- 這裡放入第一個圓形圖表 -->
-                                    <h4>性別分佈</h4>
-                                    <div class="chart">圓形圖表</div>
+                            <div class="col-md-5">
+                                <div class="custom-card">
+                                    <h4>熱銷名店</h4>
+                                    <div class="chart-container">
+                                        <canvas id="chart-area"></canvas>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -130,11 +212,137 @@ $userCountActive = $counts['active_users'];
                 <?php endif;?>
 
             </p>
-            
-
+        </div>
     </div>
 
     <?php include("../js.php"); ?>
+    <!-- 將moneyData轉成JSON格式 -->
+    <script>var moneyData = <?php echo json_encode($money_data); ?>;</script>
+    
+    <!-- 熱銷名店的chart控制 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var ctx = document.getElementById('chart-area').getContext('2d');
+
+            // 從 moneyData 中提取標籤和數據，並截斷標籤
+            var labels = moneyData.map(function(item) {
+                return item.name.length > 5 ? item.name.substring(0, 5) + '...' : item.name;
+            });
+            var data = moneyData.map(function(item) {
+                return item.total_sales;
+            });
+
+            // 設定統一的顏色
+            var barColor = 'rgb(244, 162, 147)';
+
+            var myChart = new Chart(ctx, {
+                type: 'horizontalBar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '銷售額',
+                        data: data,
+                        backgroundColor: barColor,
+                        borderColor: barColor,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,// 保持圖表比例
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '銷售額'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: '店鋪名稱'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: '熱銷名店銷售額排行'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    // 在工具提示中顯示完整的店鋪名稱
+                                    return moneyData[tooltipItems[0].dataIndex].name;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+    <!-- 銷售總額的chart控制 -->
+    <script>
+        // 使用 PHP 處理後的數據
+        var sevenDayData = <?php echo $seven_day_json; ?>;
+
+        // 準備數據
+        var dates = Object.keys(sevenDayData);
+        var sales = Object.values(sevenDayData);
+
+        // 創建圖表
+        var ctx = document.getElementById('salesChart').getContext('2d');
+        var salesChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: '每日銷售總額',
+                    data: sales,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,// 保持圖表比例
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'day',
+                            displayFormats: {
+                                day: 'MM-DD'
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: '日期'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: '銷售總額'
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '近七天每日銷售總額趨勢'
+                    }
+                }
+            }
+        });
+        </script>
 </body>
 
 </html>
