@@ -33,10 +33,10 @@ if (isset($_SESSION['user']) && !empty($_SESSION['user'])) {
                 <h1 class="my-auto">Log In</h1>
                 <form id="loginForm" action="doLogin.php" method="POST" class="d-flex flex-column">
                     <input class="form-control form-control-custom" type="text" placeholder="Account" id="account" name="account" required>
-                    <input class="form-control form-control-custom mt-3" type="password" placeholder="password" id="password" name="password" required>
+                    <input class="form-control form-control-custom mt-3 mb-1" type="password" placeholder="password" id="password" name="password" required>
                     <div class="d-flex justify-content-center">
-                        <button class="log-in-button" type="button" onclick="window.location.href='../page/create-shop.php'">註冊帳號</button>
-                        <button class="log-in-button" type="submit" id="signIn">Log In</button>
+                        <button class="log-in-button btn-custom" type="button" onclick="window.location.href='../page/create-shop.php'">註冊帳號</button>
+                        <button class="log-in-button btn-custom" type="submit" id="signIn">Log In</button>
                     </div>
                 </form>
             </div>
