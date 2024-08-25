@@ -316,10 +316,10 @@ h6 {
 
 /* 增加active狀態 */
 .nav-link.active {
-  color: #fff; 
+  color: #fff;
   background: var(--primary-color);
-  border-radius: 10px; 
-  font-weight: bold; 
+  border-radius: 10px;
+  font-weight: bold;
 }
 
 
@@ -453,8 +453,16 @@ h6 {
   --bs-table-hover-bg: var(--primary-color-fade);
 }
 
+.table-pink {
+  --bs-table-bg: var(--primary-color);
+  --bs-table-color: white;
+}
 
-
+.pagination {
+  /* 頁碼被選擇時的顏色 */
+  --bs-pagination-active-bg: #994eac;
+  --bs-pagination-active-border-color: #994eac;
+}
 
 .text-pink {
   color: var(--primary-color)
