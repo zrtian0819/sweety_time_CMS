@@ -164,8 +164,8 @@ foreach ($rowsUsers as $users) {
 
                 <?php if ($articlesCount > 0): $rows = $result->fetch_all(MYSQLI_ASSOC); ?>
                     <h3 class="d-flex justify-content-center">共有<?= $articlesCount ?>篇文章</h3>
-                    
-                    
+
+
                     <!-- 搜尋 -->
                     <form action="">
                         <div class=" input-group m-2 d-flex justify-content-end">
@@ -175,7 +175,7 @@ foreach ($rowsUsers as $users) {
                             <div class="input-group-append">
                                 <button class="btn btn-outline-warning m-0 " type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                             </div>
-                            
+
                         </div>
                     </form>
 
@@ -266,27 +266,47 @@ foreach ($rowsUsers as $users) {
                                     <div class="me-1">
                                         <a href="articles-edit.php?id=<?= $articles["article_id"] ?>" class="btn btn-custom"><i class="fa-solid fa-pen"></i></a>
                                     </div>
+                                    
                                 </div>
                             </td>
                         </tr>
-                    <?php endforeach; ?>
+                        
                 </tbody>
-
+                <?php endforeach; ?>
             </table>
 
             <?php if (isset($page)): ?>
                 <nav aria-label="Page navigation">
-                    <ul class="bot-ul pagination pagination-lg ">
-                        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                            <li class="me-1 page-item <?php if ($page == $i) echo "active"; ?>">
-                                <a class="page-link btn-custom" href="articles.php?p=<?= $i ?>&sortArt=<?= $sortArt ?>&sortDir=<?= $sortDir ?>&search=<?= isset($_GET["search"]) ? $_GET["search"] : '' ?>"><?= $i ?></a>
-                            </li>
+                    <ul class="pagination justify-content-center">
+                        <?php for ($i = 1; $i <= $total_page; $i++) : ?>
+                            <li class="page-item m-2 <?php if ($i == $page) echo "active" ?>"><a class="page-link btn-custom" href="lesson.php?status=<?= $status ?>&search=<?= $search ?>&class=<?= $class ?>&sort=<?= $sort ?>&p=<?= $i ?>"><?= $i ?></a></li>
                         <?php endfor; ?>
                     </ul>
+
                 </nav>
             <?php endif; ?>
         <?php else: ?>
+            <!-- 返回文章列表按鈕 -->
+            <div class="col-3">
+                <a class="btn-animation btn btn-custom d-inline-flex flex-row align-items-center mb-3" href="articles.php">
+                    <i class="fa-solid fa-arrow-left-long"></i><span class="btn-animation-innerSpan d-inline-block">返回文章列表</span>
+                </a>
+            </div>
+            <!-- 狀態 -->
+            <ul class="nav nav-tabs-custom">
+                <li class="nav-item">
+                    <a class="main-nav nav-link <?= $status === 'all' ? 'active' : '' ?>" href="?status=all">全部</a>
+                </li>
+                <li class="nav-item">
+                    <a class="main-nav nav-link <?= $status === 'on' ? 'active' : '' ?>" href="?status=on&search=<?= isset($_GET['search']) ? urlencode($_GET['search']) : '' ?>&sortArt=<?= $sortArt ?>&sortDir=<?= $sortDir ?>&p=<?= $page ?>">上架中</a>
+                </li>
+                <li class="nav-item">
+                    <a class="main-nav nav-link <?= $status === 'off' ? 'active' : '' ?>" href="?status=off&search=<?= isset($_GET['search']) ? urlencode($_GET['search']) : '' ?>&sortArt=<?= $sortArt ?>&sortDir=<?= $sortDir ?>&p=<?= $page ?>">已下架</a>
+                </li>
+            </ul>
+            <!-- 欄位 -->
             <table class="table table-hover">
+                
                 <thead class="text-content">
                     <tr>
                         <th>文章編號</th>

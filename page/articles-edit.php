@@ -1,29 +1,29 @@
 <?php
 
-require_once("../db_connect.php");
-
-// 檢查是否有 ID 且為數字
-if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
-    die("Invalid or missing article ID");
+if (!isset($_GET["id"])) {
+    header("location:articles.php");
+    exit;
 }
 
-$id = intval($_GET["id"]);
+
+require_once("../db_connect.php");
+
+
+$id = $_GET["id"];
 
 // 查詢單一文章
-$stmt = $conn->prepare("SELECT * FROM articles WHERE article_id = ?");
-$stmt->bind_param("i", $id);
-$stmt->execute();
-$result = $stmt->get_result();
+$sql = "SELECT * FROM articles WHERE article_id = $id";
+$result = $conn->query($sql);
+$row = $result->fetch_assoc();
 
 if (!$result) {
     die("Query failed: " . $conn->error);
 }
 
-$row = $result->fetch_assoc();
-
 if (!$row) {
     die("Article not found");
 }
+
 
 // 查詢所有文章的數量
 $stmtAll = $conn->prepare("SELECT COUNT(*) AS total FROM articles");
@@ -54,10 +54,9 @@ if (!$rowUsers) {
 }
 
 // 查詢文章分類
-$stmtProductClass = $conn->prepare("SELECT * FROM product_class WHERE product_class_id = ?");
-$stmtProductClass->bind_param("i", $row["product_class_id"]);
-$stmtProductClass->execute();
-$resultProduct = $stmtProductClass->get_result();
+$productClass = $row["product_class_id"];
+$sqlProductClass = "SELECT * FROM product_class WHERE product_class_id = $productClass";
+$resultProduct = $conn->query($sqlProductClass);
 $rowPro = $resultProduct->fetch_assoc();
 
 // 查詢所有分類
@@ -125,10 +124,8 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                 </a>
             </div>
             <!-- 表單 -->
-            <form action="../function/doUpdate4Articles.php?id=<?= htmlspecialchars($id, ENT_QUOTES, 'UTF-8') ?>" method="post" enctype="multipart/form-data">
-                <div class="container-fluid">
-                    <h1 class="m-2"><input type="text" class="form-control form-control-custom fs-1" value="<?= htmlspecialchars($row["title"], ENT_QUOTES, 'UTF-8') ?>" name="title"></h1>
-                </div>
+            <form action="../function/doUpdate4Articles.php" method="post" enctype="multipart/form-data">
+
                 <!-- 照片 -->
                 <div class="row justify-content-center">
                     <div class="col-lg-3 m-2">
@@ -168,18 +165,13 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                             </tr>
                             <tr>
                                 <th>
-                                    <h5>建立者</h5>
+                                    <h5>作者</h5>
                                 </th>
-                                <td class="text-danger">
-                                    <input type="text" class="form-control form-control-custom" value=<?= ($rowUsers["name"]) ?> name="price">
+                                <td>
+                                    <?= ($rowUsers["name"]) ?>
                                 </td>
                             </tr>
-                            <tr>
-                                <th>
-                                    <h5>建立時間</h5>
-                                </th>
-                                <td><input type="datetime-local" class="form-control form-control-custom" name="updateTime" value="<?= htmlspecialchars(date('Y-m-d\TH:i', strtotime($row["created_at"])), ENT_QUOTES, 'UTF-8') ?>"></td>
-                            </tr>
+
                             <tr>
                                 <th>
                                     <h5>狀態</h5>
@@ -198,7 +190,7 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                                 <td>
                                     <p class="p-2 lh-lg">
                                     <div>
-                                        <textarea id="tiny" name="content"><?= htmlspecialchars($row["content"], ENT_QUOTES, 'UTF-8') ?></textarea>
+                                        <textarea id="tiny" name="content"><?= $row["content"] ?></textarea>
                                     </div>
                                     </p>
                                 </td>
@@ -207,15 +199,17 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                     </table>
                 </div>
                 <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn-custom w-50 ">確認修改</button>
+                    <button type="submit" class="btn-custom w-50">確認修改</button>
                 </div>
             </form>
         </div>
     </div>
+
     <?php include("../js.php") ?>
     <?php $conn->close() ?>
 
     <script>
+        // 預覽
         let loadFile = function(event) {
             let output = document.getElementById("output");
             output.src = URL.createObjectURL(event.target.files[0]);
@@ -224,6 +218,7 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
             };
         };
 
+        //所見即所得編輯器
         tinymce.init({
             selector: 'textarea#tiny'
         });

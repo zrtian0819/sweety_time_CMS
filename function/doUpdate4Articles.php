@@ -7,10 +7,15 @@ if (!isset($_GET["id"])) {
     exit;
 }
 
+// 判斷開啟Session
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 $id = intval($_GET["id"]);
 
 // 檢查 POST 請求中是否包含所有必要的資料
-$requiredFields = ["title", "content", "product_class_id", "status", "updateTime"];
+$requiredFields = ["title", "content", "product_class_id", "status"];
 foreach ($requiredFields as $field) {
     if (!isset($_POST[$field])) {
         echo "缺少必要的資料: " . htmlspecialchars($field);
@@ -22,14 +27,18 @@ $title = $_POST["title"];
 $content = $_POST["content"];
 $product_class_id = intval($_POST["product_class_id"]);
 $status = intval($_POST["status"]);
-$updateTime = $_POST["updateTime"];
 
-$dateTime = DateTime::createFromFormat('Y-m-d\TH:i', $updateTime);
-if (!$dateTime) {
-    echo "無效的時間格式。請確認時間格式為 'Y-m-dTH:i'，例如 '2024-08-24T14:30'";
-    exit;
-}
-$formattedDateTime = $dateTime->format('Y-m-d H:i:s');
+// 直接抓系統時間(非使用者輸入時間)
+// $createdTime = date('Y/m/d H:i:s');
+// echo $createdTime;
+// exit;
+
+// $dateTime = DateTime::createFromFormat('Y-m-d\TH:i', $createdTime);
+// if (!$dateTime) {
+//     echo "無效的時間格式。請確認時間格式為 'Y-m-dTH:i'，例如 '2024-08-24T14:30'";
+//     exit;
+// }
+// $formattedDateTime = $dateTime->format('Y-m-d H:i:s');
 
 // 預設圖片更新為 false
 $updateImage = false;
@@ -56,7 +65,7 @@ if (isset($_FILES["pic"]) && $_FILES["pic"]["error"] === UPLOAD_ERR_OK) {
 }
 
 // 準備 SQL 語句
-$sql = "UPDATE articles SET title = ?, content = ?, product_class_id = ?,created_at = ?, activation = ?, artValid = ?";
+$sql = "UPDATE articles SET title = ?, content = ?, product_class_id = ?, user_id = ?, activation = ?, artValid = ?";
 if ($updateImage) {
     $sql .= ", img_path = ?";
 }
@@ -66,9 +75,9 @@ $sql .= " WHERE article_id = ?";
 $stmt = $conn->prepare($sql);
 if ($updateImage) {
     // 需要多一個變數來綁定 img_path
-    $stmt->bind_param("ssiiisisi", $title, $content, $product_class_id, $formattedDateTime, $status, $artValid, $newFileName, $id);
+    $stmt->bind_param("ssiiisi", $title, $content, $product_class_id, $user_id, $status, $artValid, $newFileName, $id);
 } else {
-    $stmt->bind_param("ssiiisis", $title, $content, $product_class_id, $formattedDateTime, $status, $artValid, $id);
+    $stmt->bind_param("ssiiis", $title, $content, $product_class_id, $user_id, $status, $artValid, $id);
 }
 
 if ($stmt->execute()) {
