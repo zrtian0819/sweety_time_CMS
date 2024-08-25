@@ -108,7 +108,7 @@ $shopCount = $result->num_rows;
                     <div class="col-12 position-relative d-flex justify-content-center mb-3 mb-md-0 mt-3 mt-mb-0">
                         <div class="table-responsive">
                         <?php if ($shopCount > 0): ?>
-                        <table class="table table-bordered table-hover bdrs table-responsive align-middle" style="min-width: 1000px;">
+                        <table class="table  table-hover bdrs table-responsive align-middle" style="min-width: 1000px;">
                                 <thead class="text-center">
                                     <tr>
                                     <th class="dontNextLine text-center">Shop_Logo</th>
