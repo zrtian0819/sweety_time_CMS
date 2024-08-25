@@ -85,11 +85,11 @@ $conn->close();
 
         <div class="container-fluid d-flex flex-row px-4">
             <div class="main col neumorphic p-5">
-                <div class="py-2">
-                    <a class="btn btn-neumorphic user-btn" href="users.php" title="回使用者列表"><i class="fa-solid fa-left-long"></i></a>
-                </div>
-                <div class="d-flex justify-content-center">
-                    <h2 class="mb-5">新增資料</h2>
+                <div class="d-flex">
+                    <a class="btn-animation btn btn-custom d-inline-flex flex-row align-items-center mb-3 mx-3" href="users.php">
+                        <i class="fa-solid fa-arrow-left-long"></i><span class="btn-animation-innerSpan d-inline-block">返回</span>
+                    </a>
+                    <h2 class="mb-3">新增資料</h2>
                 </div>
                 <div class="container-fluid col-9">
                     <div class="row">
@@ -98,8 +98,8 @@ $conn->close();
                                 <label for="profile_image">
                                     <input type="file" name="profile_image" class="my-3 ms-5 ps-5" data-target="preview_img">
                                 </label>
-                                <div>
-                                    <img src="<?= ($imagePath) ?>" alt="Profile Image" class="object-fit-fill user-img" id="preview_img">
+                                <div class="user-img">
+                                    <img src="<?= ($imagePath) ?>" alt="請新增使用者圖片" class="w-100 h-100 object-fit-cover" id="preview_img">
                                 </div>
                             </div>
                             <div class="mb-2">
@@ -137,22 +137,22 @@ $conn->close();
     </div>
     <?php include("../js.php"); ?>
     <script>
-        let input =document.querySelector('input[name=profile_image]')
-        input.addEventListener('change',function(e){
+        let input = document.querySelector('input[name=profile_image]')
+        input.addEventListener('change', function(e) {
             readURL(e.target);
         })
-        function readURL(input){
-            if(input.files && input.files[0]){
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
                 let reader = new FileReader();
-                reader.onload = function(e){
+                reader.onload = function(e) {
                     let imgId = input.getAttribute('data-target')
-                    let img =document.querySelector('#'+imgId)
-                    img.setAttribute('src',e.target.result);
+                    let img = document.querySelector('#' + imgId)
+                    img.setAttribute('src', e.target.result);
                 }
                 reader.readAsDataURL(input.files[0]);
             }
         }
-        
     </script>
 </body>
 

@@ -15,7 +15,7 @@ $start_item = ($page - 1) * $per_page;
 $search = isset($_GET["search"]) ? trim($_GET["search"]) : '';
 
 // 狀態
-$status = isset($_GET["status"]) ? $_GET["status"] : 'on';
+$status = isset($_GET["status"]) ? $_GET["status"] : 'all';
 
 if ($status === 'on') {
     $sql .= " AND activation = 1";
@@ -158,7 +158,7 @@ if ($result) {
                 <div class="row d-flex">
                     <form action="">
                         <div class="input-group mb-3">
-                            <input type="search" class="form-control" name="search" value="<?= ($search) ?>" placeholder="請輸入欲搜尋的使用者">
+                            <input type="search" class="form-control input-border-pink" name="search" value="<?= ($search) ?>" placeholder="請輸入欲搜尋的使用者">
                             <div class="input-group-append">
                                 <button class="btn btn-custom" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                             </div>
