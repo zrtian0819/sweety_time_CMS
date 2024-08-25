@@ -65,7 +65,8 @@ $shopCount = $result->num_rows;
         color: var(--text-color);
         }
         .table thead th {
-            color: var(--text-color);
+            background-color: var(--primary-color);
+            color: white;
         }
         .table tbody td {
             color: var(--text-color);
@@ -105,20 +106,20 @@ $shopCount = $result->num_rows;
                             <a class="main-nav nav-link <?php if(isset($_GET['filter']) && $_GET['filter'] == 'inactive') echo 'active'; ?>" href="shop-info-admin.php?filter=inactive">已關閉商家</a>
                         </li>
                     </ul>
-                    <div class="col-12 position-relative d-flex justify-content-center mb-3 mb-md-0 mt-3 mt-mb-0">
+                    <div class="col-12 position-relative d-flex justify-content-center mb-3 mb-md-0 mt-0">
                         <div class="table-responsive">
                         <?php if ($shopCount > 0): ?>
-                        <table class="table  table-hover bdrs table-responsive align-middle" style="min-width: 1000px;">
+                        <table class="table table-hover bdrs table-responsive align-middle" style="min-width: 1000px;">
                                 <thead class="text-center">
                                     <tr>
-                                    <th class="dontNextLine text-center">Shop_Logo</th>
-                                    <th class="dontNextLine text-center">店家名稱</th>
-                                    <th class="dontNextLine text-center">電話</th>
-                                    <th class="dontNextLine text-center">地址</th>
-                                    <th class="dontNextLine text-center">簡介</th>
-                                    <th class="dontNextLine text-center">註冊時間</th>
-                                    <th class="dontNextLine text-center">啟用</th>
-                                    <th class="dontNextLine text-center">操作</th>
+                                        <th class="dontNextLine text-center">Shop_Logo</th>
+                                        <th class="dontNextLine text-center">店家名稱</th>
+                                        <th class="dontNextLine text-center">電話</th>
+                                        <th class="dontNextLine text-center">地址</th>
+                                        <th class="dontNextLine text-center">簡介</th>
+                                        <th class="dontNextLine text-center">註冊時間</th>
+                                        <th class="dontNextLine text-center">啟用</th>
+                                        <th class="dontNextLine text-center">操作</th>
                                     </tr>
                                 </thead>
                                 
