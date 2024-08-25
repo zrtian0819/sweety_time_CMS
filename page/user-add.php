@@ -2,6 +2,8 @@
 require_once("../db_connect.php");
 include("../function/login_status_inspect.php");
 
+$name = $account = $password = $email = $phone = $birthday = "";
+$errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = $_POST['name'];
@@ -12,53 +14,60 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $birthday = $_POST["birthday"];
     $now = date('Y-m-d H:i:s');
 
-    if (empty($account) || empty($password) || empty($email) || empty($phone) || empty($birthday)) {
-        echo "有內容未填寫，欄位不能為空";
-        exit;
-    }
+    if (empty($account)) $errors['account'] = "Account cannot be empty";
+    if (empty($password)) $errors['password'] = "Password cannot be empty";
+    if (empty($email)) $errors['email'] = "Email cannot be empty";
+    if (empty($phone)) $errors['phone'] = "Phone cannot be empty";
+    if (empty($birthday)) $errors['birthday'] = "Birthday cannot be empty";
 
-    if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == 0) {
-        $targetDir = '../images/users/';
-        $fileType = pathinfo($_FILES['profile_image']['name'], PATHINFO_EXTENSION);
-        $allowTypes = array('jpg', 'png', 'jpeg', 'gif');
+    if (empty($errors)) {
+        if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == 0) {
+            $targetDir = '../images/users/';
+            $fileType = pathinfo($_FILES['profile_image']['name'], PATHINFO_EXTENSION);
+            $allowTypes = array('jpg', 'png', 'jpeg', 'gif');
 
-        if (in_array(strtolower($fileType), $allowTypes)) {
-            $originalFileName = pathinfo($_FILES['profile_image']['name'], PATHINFO_FILENAME);
-            $newFileName = $originalFileName . '_' . time() . '.' . $fileType;
-            $targetFilePath = $targetDir . $newFileName;
-            if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $targetFilePath)) {
-                $sql = "INSERT INTO users (role,name, account, password, email, phone, birthday, sign_up_time,activation,portrait_path) 
-                VALUES ('user','$name', '$account', '$password', '$email', '$phone', '$birthday','$now',1,'$newFileName')";
-                if ($conn->query($sql) === TRUE) {
-                    header("location:users.php");
-                    exit;
+            if (in_array(strtolower($fileType), $allowTypes)) {
+                $originalFileName = pathinfo($_FILES['profile_image']['name'], PATHINFO_FILENAME);
+                $newFileName = $originalFileName . '_' . time() . '.' . $fileType;
+                $targetFilePath = $targetDir . $newFileName;
+                if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $targetFilePath)) {
+                    $sql = "INSERT INTO users (role,name, account, password, email, phone, birthday, sign_up_time,activation,portrait_path) 
+                    VALUES ('user','$name', '$account', '$password', '$email', '$phone', '$birthday','$now',1,'$newFileName')";
+                    if ($conn->query($sql) === TRUE) {
+                        header("location:users.php");
+                        exit;
+                    } else {
+                        $errors['database'] = "圖片路徑儲存失敗: " . $conn->error;
+                    }
                 } else {
-                    echo "圖片路徑儲存失敗: " . $conn->error;
+                    $errors['image'] = "圖片上傳失敗";
                 }
             } else {
-                echo "圖片上傳失敗";
+                $errors['image'] = "不支援的檔案格式";
             }
         } else {
-            echo "不支援的檔案格式";
+            $sql = "INSERT INTO users (role,name, account, password, email, phone, birthday, sign_up_time,activation) 
+            VALUES ('user','$name', '$account', '$password', '$email', '$phone', '$birthday','$now',1)";
+            if ($conn->query($sql) === TRUE) {
+                header("location:users.php");
+                exit;
+            } else {
+                $errors['database'] = "資料儲存失敗: " . $conn->error;
+            }
         }
-    } else {
-        echo "資料儲存成功，但未上傳圖片。";
     }
 }
 
 $conn->close();
-
 ?>
+
 <!doctype html>
 <html lang="en">
 
 <head>
     <title>新增資料</title>
     <meta charset="utf-8" />
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <?php include("../css/css_Joe.php"); ?>
     <style>
         .user-btn {
@@ -80,7 +89,6 @@ $conn->close();
     <?php include("../modules/dashboard-header_Joe.php"); ?>
 
     <div class="container-fluid d-flex flex-row px-4">
-
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
 
         <div class="container-fluid d-flex flex-row px-4">
@@ -99,32 +107,53 @@ $conn->close();
                                     <input type="file" name="profile_image" class="my-3 ms-5 ps-5" data-target="preview_img">
                                 </label>
                                 <div class="user-img">
-                                    <img src="<?= ($imagePath) ?>" alt="請新增使用者圖片" class="w-100 h-100 object-fit-cover" id="preview_img">
+                                    <img src="" alt="請新增使用者圖片" class="w-100 h-100 object-fit-cover" id="preview_img">
                                 </div>
+                                <?php if(isset($errors['image'])): ?>
+                                    <div class="text-danger"><?= $errors['image'] ?></div>
+                                <?php endif; ?>
                             </div>
                             <div class="mb-2">
                                 <label class="form-label"><span class="text-danger">* </span>Name</label>
-                                <input type="text" class="form-control" name="name" require>
+                                <input type="text" class="form-control" name="name" value="<?= htmlspecialchars($name) ?>" required>
+                                <?php if(isset($errors['name'])): ?>
+                                    <div class="text-danger"><?= $errors['name'] ?></div>
+                                <?php endif; ?>
                             </div>
                             <div class="mb-2">
                                 <label class="form-label"><span class="text-danger">* </span>account</label>
-                                <input type="text" class="form-control" name="account" require>
+                                <input type="text" class="form-control" name="account" value="<?= htmlspecialchars($account) ?>" required>
+                                <?php if(isset($errors['account'])): ?>
+                                    <div class="text-danger"><?= $errors['account'] ?></div>
+                                <?php endif; ?>
                             </div>
                             <div class="mb-2">
                                 <label class="form-label"><span class="text-danger">* </span>password</label>
-                                <input type="password" class="form-control" name="password" require>
+                                <input type="password" class="form-control" name="password" required>
+                                <?php if(isset($errors['password'])): ?>
+                                    <div class="text-danger"><?= $errors['password'] ?></div>
+                                <?php endif; ?>
                             </div>
                             <div class="mb-2">
                                 <label class="form-label"><span class="text-danger">* </span>email</label>
-                                <input type="text" class="form-control" name="email" require>
+                                <input type="text" class="form-control" name="email" value="<?= htmlspecialchars($email) ?>" required>
+                                <?php if(isset($errors['email'])): ?>
+                                    <div class="text-danger"><?= $errors['email'] ?></div>
+                                <?php endif; ?>
                             </div>
                             <div class="mb-2">
                                 <label class="form-label"><span class="text-danger">* </span>phone</label>
-                                <input type="tel" class="form-control" name="phone" require>
+                                <input type="tel" class="form-control" name="phone" value="<?= htmlspecialchars($phone) ?>" required>
+                                <?php if(isset($errors['phone'])): ?>
+                                    <div class="text-danger"><?= $errors['phone'] ?></div>
+                                <?php endif; ?>
                             </div>
                             <div class="mb-2">
                                 <label class="form-label"><span class="text-danger">* </span>birthday</label>
-                                <input type="date" name="birthday" class="mx-3 my-1">
+                                <input type="date" name="birthday" class="mx-3 my-1" value="<?= htmlspecialchars($birthday) ?>" required>
+                                <?php if(isset($errors['birthday'])): ?>
+                                    <div class="text-danger"><?= $errors['birthday'] ?></div>
+                                <?php endif; ?>
                             </div>
                             <div class="d-flex justify-content-end">
                                 <button type="submit" class="btn btn-neumorphic user-btn">儲存</button>
