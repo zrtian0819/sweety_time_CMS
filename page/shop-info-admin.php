@@ -65,7 +65,8 @@ $shopCount = $result->num_rows;
         color: var(--text-color);
         }
         .table thead th {
-            color: var(--text-color);
+            background-color: var(--primary-color);
+            color: white;
         }
         .table tbody td {
             color: var(--text-color);
@@ -83,13 +84,13 @@ $shopCount = $result->num_rows;
     <div class="container-fluid d-flex flex-row px-4">
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
         <div class="main col neumorphic p-5">
+            <a class="btn-animation btn btn-custom d-inline-flex flex-row align-items-center mb-3" href="shop-info-admin.php">
+                <i class="fa-solid fa-arrow-left-long"></i><span class="btn-animation-innerSpan d-inline-block">返回</span>
+            </a>
         <form action="">
             <div class="input-group d-flex justify-content-end align-items-center mb-2">
-                <a class="btn neumorphic " href="shop-info-admin.php" style="color: var(--primary-color);">
-                    <i class="fa-solid fa-circle-left"></i>
-                </a>
                 <input type="search" class="form-control" placeholder="搜尋店家" name="search" style="max-width:200px" value="<?php echo htmlspecialchars($search); ?>">
-                <button class="btn neumorphic" type="submit" style="color: var(--primary-color);"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="btn btn-custom" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
         </form>
             <div class="container">
@@ -105,20 +106,20 @@ $shopCount = $result->num_rows;
                             <a class="main-nav nav-link <?php if(isset($_GET['filter']) && $_GET['filter'] == 'inactive') echo 'active'; ?>" href="shop-info-admin.php?filter=inactive">已關閉商家</a>
                         </li>
                     </ul>
-                    <div class="col-12 position-relative d-flex justify-content-center mb-3 mb-md-0 mt-3 mt-mb-0">
+                    <div class="col-12 position-relative d-flex justify-content-center mb-3 mb-md-0 mt-0">
                         <div class="table-responsive">
                         <?php if ($shopCount > 0): ?>
-                        <table class="table table-bordered table-hover bdrs table-responsive align-middle" style="min-width: 1000px;">
+                        <table class="table table-hover bdrs table-responsive align-middle" style="min-width: 1000px;">
                                 <thead class="text-center">
                                     <tr>
-                                    <th class="dontNextLine text-center">Shop_Logo</th>
-                                    <th class="dontNextLine text-center">店家名稱</th>
-                                    <th class="dontNextLine text-center">電話</th>
-                                    <th class="dontNextLine text-center">地址</th>
-                                    <th class="dontNextLine text-center">簡介</th>
-                                    <th class="dontNextLine text-center">註冊時間</th>
-                                    <th class="dontNextLine text-center">啟用</th>
-                                    <th class="dontNextLine text-center">操作</th>
+                                        <th class="dontNextLine text-center">Shop_Logo</th>
+                                        <th class="dontNextLine text-center">店家名稱</th>
+                                        <th class="dontNextLine text-center">電話</th>
+                                        <th class="dontNextLine text-center">地址</th>
+                                        <th class="dontNextLine text-center">簡介</th>
+                                        <th class="dontNextLine text-center">註冊時間</th>
+                                        <th class="dontNextLine text-center">啟用</th>
+                                        <th class="dontNextLine text-center">操作</th>
                                     </tr>
                                 </thead>
                                 
