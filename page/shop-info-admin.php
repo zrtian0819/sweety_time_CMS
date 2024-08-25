@@ -83,11 +83,11 @@ $shopCount = $result->num_rows;
     <div class="container-fluid d-flex flex-row px-4">
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
         <div class="main col neumorphic p-5">
+            <a class="btn-animation btn btn-custom d-inline-flex flex-row align-items-center mb-3" href="shop-info-admin.php">
+                <i class="fa-solid fa-arrow-left-long"></i><span class="btn-animation-innerSpan d-inline-block">返回</span>
+            </a>
         <form action="">
             <div class="input-group d-flex justify-content-end align-items-center mb-2">
-                <a class="btn neumorphic " href="shop-info-admin.php" style="color: var(--primary-color);">
-                    <i class="fa-solid fa-circle-left"></i>
-                </a>
                 <input type="search" class="form-control" placeholder="搜尋店家" name="search" style="max-width:200px" value="<?php echo htmlspecialchars($search); ?>">
                 <button class="btn neumorphic" type="submit" style="color: var(--primary-color);"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
