@@ -237,7 +237,7 @@ foreach ($storeRows as $storeRow) {
 
             <div class="container-fluid">
                 <!-- 篩選表單 -->
-                <div class="">
+                <div class="mt-4">
                     <form action="product-list.php" method="get" class="d-flex flex-row">
                         <div class="input-group">
                             <input type="search" class="form-control input-hover input-border-pink" placeholder="品名關鍵字" name="search" value="<?= isset($_GET["search"]) ? $_GET["search"] : ""; ?>">

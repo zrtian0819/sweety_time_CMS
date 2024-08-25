@@ -76,10 +76,10 @@ $seven_day_json = json_encode($seven_day_data);
 
 $userCount = $counts['total_users']; //會員總數
 $userCountActive = $counts['active_users']; //啟用中的會員數量
-$shopCount = $counts['total_shops'];//商家總數
-$shopCountActive = $counts['active_shops'];//啟用中的商家數量
-$productCount = $counts['total_products'];//商品總數
-$productCountActive = $counts['active_products'];//上架中的商品數量
+$shopCount = $counts['total_shops']; //商家總數
+$shopCountActive = $counts['active_shops']; //啟用中的商家數量
+$productCount = $counts['total_products']; //商品總數
+$productCountActive = $counts['active_products']; //上架中的商品數量
 
 ?>
 
@@ -104,7 +104,8 @@ $productCountActive = $counts['active_products'];//上架中的商品數量
 
         /* 自定義圖表區域 */
         .chart {
-            background-color: blue; /* 給圖表區塊一個背景色來模擬圖表 */
+            background-color: blue;
+            /* 給圖表區塊一個背景色來模擬圖表 */
             border-radius: 0.25rem;
         }
 
@@ -113,26 +114,32 @@ $productCountActive = $counts['active_products'];//上架中的商品數量
             text-wrap: nowrap;
             font-size: 1rem;
         }
+
         .row .custom-card p {
             font-size: 1.6rem;
             font-weight: 700;
         }
+
         #canvas-holder {
             width: 100%;
             max-width: 100%;
-            height: 300px; 
+            height: 300px;
         }
+
         #salesChart {
             height: 250px !important;
         }
-        #chart-area{
+
+        #chart-area {
             height: 400px !important;
         }
+
         .chart-container-sales {
             position: relative;
             height: 300px;
             width: 100%;
         }
+
         .chart-container-area {
             position: relative;
             height: 400px;
@@ -150,81 +157,83 @@ $productCountActive = $counts['active_products'];//上架中的商品數量
 
         <div class="main col neumorphic ps-4 pe-2 py-5">
 
-            <h2 class="fw-bolder mb-5"><?= $name?>, 您好！</h2>
-                <?php if($SessRole=="admin"):?>
-                    <div class="container-fluid">
-                        <div class="row ms-2 me-0">
-                            <div class="col-md-6">
-                                <div class="row mb-2 mx-0">
-                                    <div class="col-md-4">
-                                        <div class="custom-card text-center d-flex flex-column justify-content-between">
-                                            <div class="d-flex ms-2 mt-2">
-                                                <h4>會員數量 <i class="fa-solid fa-user"></i></h4>
-                                            </div>
-                                                <p>
-                                                    <?= $userCountActive;?>/<?= $userCount;?>
-                                                </p>
-                                            
+            <h2 class="fw-bolder mb-5"><?= $name ?>, 您好！</h2>
+            <?php if ($SessRole == "admin"): ?>
+                <div class="container-fluid">
+                    <div class="row ms-2 me-0">
+                        <div class="col-md-6">
+                            <div class="row mb-2 mx-0">
+                                <div class="col-md-4">
+                                    <div class="custom-card text-center d-flex flex-column justify-content-between">
+                                        <div class="d-flex ms-2 mt-2">
+                                            <h4>會員數量 <i class="fa-solid fa-user"></i></h4>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="custom-card text-center d-flex flex-column justify-content-between">
-                                            <div class="d-flex ms-2 mt-2">
-                                                <h4>店家數量 <i class="fa-solid fa-shop"></i></h4>
-                                            </div>
-                                            <p>
-                                                <?= $shopCountActive;?>/<?= $shopCount;?>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="custom-card text-center d-flex flex-column justify-content-between">
-                                            <div class="d-flex ms-2 mt-2">
-                                                <h4>商品數量 <i class="fa-solid fa-bag-shopping"></i>  </h4>
-                                            </div>
-                                            <p>
-                                                <?= $productCountActive;?>/<?= $productCount;?>
-                                            </p>
-                                        </div>
+                                        <p>
+                                            <?= $userCountActive; ?>/<?= $userCount; ?>
+                                        </p>
+
                                     </div>
                                 </div>
-                                <div class="row mx-0">
-                                    <div class="col-md-12">
-                                        <div class="custom-card">
-                                            <div class="d-flex ms-2 mt-2">    
-                                                <h4>全站銷售量</h4>
-                                            </div>
-                                            <div class="chart-container-sales">
-                                                <canvas id="salesChart"></canvas>
-                                            </div>
+                                <div class="col-md-4">
+                                    <div class="custom-card text-center d-flex flex-column justify-content-between">
+                                        <div class="d-flex ms-2 mt-2">
+                                            <h4>店家數量 <i class="fa-solid fa-shop"></i></h4>
                                         </div>
+                                        <p>
+                                            <?= $shopCountActive; ?>/<?= $shopCount; ?>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="custom-card text-center d-flex flex-column justify-content-between">
+                                        <div class="d-flex ms-2 mt-2">
+                                            <h4>商品數量 <i class="fa-solid fa-bag-shopping"></i> </h4>
+                                        </div>
+                                        <p>
+                                            <?= $productCountActive; ?>/<?= $productCount; ?>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-5 ms-3">
-                                <div class="custom-card">
-                                    <div class="d-flex ms-2 mt-2">
-                                        <h4>熱銷名店</h4>
-                                    </div>
-                                    <div class="chart-container-area d-flex justify-cont-center">
-                                        <canvas id="chart-area"></canvas>
+                            <div class="row mx-0">
+                                <div class="col-md-12">
+                                    <div class="custom-card">
+                                        <div class="d-flex ms-2 mt-2">
+                                            <h4>全站銷售量</h4>
+                                        </div>
+                                        <div class="chart-container-sales">
+                                            <canvas id="salesChart"></canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-5 ms-md-3 mt-2 mt-md-0">
+                            <div class="custom-card">
+                                <div class="d-flex ms-2 mt-2">
+                                    <h4>熱銷名店</h4>
+                                </div>
+                                <div class="chart-container-area d-flex justify-cont-center">
+                                    <canvas id="chart-area"></canvas>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                <?php elseif($SessRole=="shop"): ?>
-                    請使用側邊導覽列以管理您的商店資料。
-                <?php else:?>
-                    您沒有任何後台權限。
-                <?php endif;?>
+                </div>
+            <?php elseif ($SessRole == "shop"): ?>
+                請使用側邊導覽列以管理您的商店資料。
+            <?php else: ?>
+                您沒有任何後台權限。
+            <?php endif; ?>
         </div>
     </div>
 
     <?php include("../js.php"); ?>
     <!-- 將moneyData轉成JSON格式 -->
-    <script>var moneyData = <?php echo json_encode($money_data); ?>;</script>
-    
+    <script>
+        var moneyData = <?php echo json_encode($money_data); ?>;
+    </script>
+
     <!-- 熱銷名店的chart控制 -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -256,7 +265,7 @@ $productCountActive = $counts['active_products'];//上架中的商品數量
                 options: {
                     indexAxis: 'y',
                     responsive: true,
-                    maintainAspectRatio: true,// 保持圖表比例
+                    maintainAspectRatio: true, // 保持圖表比例
                     scales: {
                         x: {
                             beginAtZero: true,
@@ -317,7 +326,7 @@ $productCountActive = $counts['active_products'];//上架中的商品數量
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false,// 保持圖表比例
+                maintainAspectRatio: false, // 保持圖表比例
                 scales: {
                     x: {
                         type: 'time',
@@ -348,7 +357,7 @@ $productCountActive = $counts['active_products'];//上架中的商品數量
                 }
             }
         });
-        </script>
+    </script>
 </body>
 
 </html>

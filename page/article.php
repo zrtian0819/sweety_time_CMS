@@ -99,7 +99,6 @@ $authorName = $firstUser["name"]; // 取得使用者名稱
 
         <div class="main col neumorphic p-5">
             <div class="row">
-                <h2 class="mb-5 text-center">文章管理</h2>
                 <div class="col-3">
                     <a class="btn-animation btn btn-custom d-inline-flex flex-row align-items-center mb-3" href="articles.php">
                         <i class="fa-solid fa-arrow-left-long"></i><span class="btn-animation-innerSpan d-inline-block">返回</span>

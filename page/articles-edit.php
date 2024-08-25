@@ -5,9 +5,7 @@ if (!isset($_GET["id"])) {
     exit;
 }
 
-
 require_once("../db_connect.php");
-
 
 $id = $_GET["id"];
 
@@ -23,7 +21,6 @@ if (!$result) {
 if (!$row) {
     die("Article not found");
 }
-
 
 // 查詢所有文章的數量
 $stmtAll = $conn->prepare("SELECT COUNT(*) AS total FROM articles");
@@ -117,7 +114,6 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
         <div class="main col neumorphic p-5 pt-4">
             <!-- 回文章列表按鈕 -->
-            <h2 class="mb-5 text-center">修改文章</h2>
             <div class="col-3">
                 <a class="btn-animation btn btn-custom d-inline-flex flex-row align-items-center mb-3" href="articles.php">
                     <i class="fa-solid fa-arrow-left-long"></i><span class="btn-animation-innerSpan d-inline-block">返回文章列表</span>
@@ -125,7 +121,7 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
             </div>
             <!-- 表單 -->
             <form action="../function/doUpdate4Articles.php" method="post" enctype="multipart/form-data">
-
+                <input type="hidden" name="id" value="<?= htmlspecialchars($id) ?>">
                 <!-- 照片 -->
                 <div class="row justify-content-center">
                     <div class="col-lg-3 m-2">

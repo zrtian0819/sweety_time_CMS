@@ -2,17 +2,12 @@
 
 require_once("../db_connect.php");
 
-if (!isset($_GET["id"])) {
+if (!isset($_POST["id"])) {
     echo "請循正常管道進入";
     exit;
 }
 
-// 判斷開啟Session
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-
-$id = intval($_GET["id"]);
+$id = intval($_POST["id"]);
 
 // 檢查 POST 請求中是否包含所有必要的資料
 $requiredFields = ["title", "content", "product_class_id", "status"];
@@ -27,18 +22,6 @@ $title = $_POST["title"];
 $content = $_POST["content"];
 $product_class_id = intval($_POST["product_class_id"]);
 $status = intval($_POST["status"]);
-
-// 直接抓系統時間(非使用者輸入時間)
-// $createdTime = date('Y/m/d H:i:s');
-// echo $createdTime;
-// exit;
-
-// $dateTime = DateTime::createFromFormat('Y-m-d\TH:i', $createdTime);
-// if (!$dateTime) {
-//     echo "無效的時間格式。請確認時間格式為 'Y-m-dTH:i'，例如 '2024-08-24T14:30'";
-//     exit;
-// }
-// $formattedDateTime = $dateTime->format('Y-m-d H:i:s');
 
 // 預設圖片更新為 false
 $updateImage = false;
@@ -65,7 +48,7 @@ if (isset($_FILES["pic"]) && $_FILES["pic"]["error"] === UPLOAD_ERR_OK) {
 }
 
 // 準備 SQL 語句
-$sql = "UPDATE articles SET title = ?, content = ?, product_class_id = ?, user_id = ?, activation = ?, artValid = ?";
+$sql = "UPDATE articles SET title = ?, content = ?, product_class_id = ?, activation = ?";
 if ($updateImage) {
     $sql .= ", img_path = ?";
 }
@@ -74,10 +57,9 @@ $sql .= " WHERE article_id = ?";
 // 使用 prepared statement 來執行 SQL
 $stmt = $conn->prepare($sql);
 if ($updateImage) {
-    // 需要多一個變數來綁定 img_path
-    $stmt->bind_param("ssiiisi", $title, $content, $product_class_id, $user_id, $status, $artValid, $newFileName, $id);
+    $stmt->bind_param("ssiisi", $title, $content, $product_class_id, $status, $newFileName, $id);
 } else {
-    $stmt->bind_param("ssiiis", $title, $content, $product_class_id, $user_id, $status, $artValid, $id);
+    $stmt->bind_param("ssiii", $title, $content, $product_class_id, $status, $id);
 }
 
 if ($stmt->execute()) {

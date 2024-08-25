@@ -89,8 +89,6 @@ foreach ($usersRows as $usersRow) {
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
 
         <main class="product main col neumorphic p-5">
-
-            <h2 class="mb-5 text-center">新增商品</h2>
             <a class="btn-animation btn btn-custom d-inline-flex flex-row align-items-center mb-3" href="articles.php">
                 <i class="fa-solid fa-arrow-left-long"></i><span class="btn-animation-innerSpan d-inline-block">返回文章列表</span>
             </a>
@@ -130,7 +128,7 @@ foreach ($usersRows as $usersRow) {
                                         <tr>
                                             <td class="dontNextLine fw-bold">文章內容</td>
                                             <td>
-                                                <textarea name="description" class="form-control textarea-custom" id="tiny" rows="5" placeholder="請輸入文章內容"></textarea>
+                                                <textarea name="content" class="form-control textarea-custom" id="tiny" rows="5" placeholder="請輸入文章內容"></textarea>
                                             </td>
                                         </tr>
                                     </table>
@@ -152,8 +150,8 @@ foreach ($usersRows as $usersRow) {
                                     </div>
 
                                 <div class="option-area d-flex justify-content-center mt-4 ">
-                                    <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="product-list.php">取消</a>
-                                    <button class="btn btn-neumorphic px-4 mx-3 fw-bolder" type="submit">新增商品</button>
+                                    <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="articles.php">取消</a>
+                                    <button class="btn btn-neumorphic px-4 mx-3 fw-bolder" type="submit">新增文章</button>
                                 </div>
                             </div>
                         </form>
