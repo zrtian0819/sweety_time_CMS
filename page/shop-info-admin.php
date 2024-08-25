@@ -77,22 +77,36 @@ $shopCount = $result->num_rows;
         .align-middle .teacher-profile{
             background-color:rgba(0, 0, 0, 0.1);
         }
+        .nav-tabs-custom .nav-link{
+            text-align: center;
+            width: 120px;
+            color: var(--text-color);
+            box-shadow: none;
+            border-radius: 20px 20px 0px 0px;
+        }
     </style>
 </head>
 <body>
     <?php include("../modules/dashboard-header_Joe.php"); ?>
     <div class="container-fluid d-flex flex-row px-4">
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
-        <div class="main col neumorphic p-5">
-            <a class="btn-animation btn btn-custom d-inline-flex flex-row align-items-center mb-3" href="shop-info-admin.php">
-                <i class="fa-solid fa-arrow-left-long"></i><span class="btn-animation-innerSpan d-inline-block">返回</span>
-            </a>
-        <form action="">
-            <div class="input-group d-flex justify-content-end align-items-center mb-2">
-                <input type="search" class="form-control" placeholder="搜尋店家" name="search" style="max-width:200px" value="<?php echo htmlspecialchars($search); ?>">
-                <button class="btn btn-custom" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <div class="main col neumorphic py-5">
+            <div class="container d-flex justify-content-between align-items-center gx-0">
+                <div class="d-flex justify-content-start">
+                    <a class="btn-animation btn btn-custom d-inline-flex flex-row align-items-center mb-3" href="shop-info-admin.php">
+                        <i class="fa-solid fa-arrow-left-long"></i><span class="btn-animation-innerSpan d-inline-block">返回</span>
+                    </a>
+                    <form action="">
+                        <div class="input-group d-flex justify-content-end align-items-center mb-2">
+                            <input type="search" class="form-control" placeholder="搜尋店家" name="search" style="max-width:200px" value="<?php echo htmlspecialchars($search); ?>">
+                            <button class="btn btn-custom" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        </div>
+                    </form>
+                </div>
+                <a class="btn-animation btn btn-custom d-flex flex-row align-items-center" href="../page/create-shop.php">
+                    <i class="fa-solid fa-plus align-middle"></i><span class="btn-animation-innerSpan d-inline-block"> 新增店家</span>
+                </a>
             </div>
-        </form>
             <div class="container">
                 <div class="row">
                     <ul class="nav nav-tabs-custom">
