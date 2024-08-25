@@ -58,6 +58,7 @@ if ($shop_id > 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>商家基本資料</title>
     <?php include("../css/css_Joe.php"); ?>
+    <script src="https://cdn.ckeditor.com/ckeditor5/38.0.1/classic/ckeditor.js"></script>
     <style>
         .shop-logo-container {
             min-width: 150px;
@@ -129,7 +130,7 @@ if ($shop_id > 0) {
 
                                 <div class="mb-3">
                                     <label for="description" class="form-label">店家簡介</label>
-                                    <textarea class="form-control"  name="description" rows="5" required><?= $description ?></textarea>
+                                    <textarea class="form-control" id="editor" name="description" rows="5" required><?= $description ?></textarea>
                                 </div>
                                 <div class="d-flex justify-content-end">
                                     <button type="submit" class="btn btn-secondary m-2">儲存變更</button>
@@ -158,5 +159,15 @@ if ($shop_id > 0) {
     </div>
     <?php include("../js.php"); ?>
     
+    <!-- ck editor -->
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#editor'), {
+                toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'insertTable', 'undo', 'redo']
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
 </body>
 </html>
