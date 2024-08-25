@@ -5,9 +5,7 @@ if (!isset($_GET["id"])) {
     exit;
 }
 
-
 require_once("../db_connect.php");
-
 
 $id = $_GET["id"];
 
@@ -23,7 +21,6 @@ if (!$result) {
 if (!$row) {
     die("Article not found");
 }
-
 
 // 查詢所有文章的數量
 $stmtAll = $conn->prepare("SELECT COUNT(*) AS total FROM articles");
@@ -125,7 +122,7 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
             </div>
             <!-- 表單 -->
             <form action="../function/doUpdate4Articles.php" method="post" enctype="multipart/form-data">
-
+                <input type="hidden" name="id" value="<?= htmlspecialchars($id) ?>">
                 <!-- 照片 -->
                 <div class="row justify-content-center">
                     <div class="col-lg-3 m-2">
