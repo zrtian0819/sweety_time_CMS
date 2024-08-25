@@ -29,9 +29,9 @@ $filter = isset($_GET['filter']) ? $_GET['filter'] : 'all';
 //是否啟用的分頁
 $whereClause = "WHERE shop.name LIKE '%$search%'";
 if ($filter == 'active') {
-    $whereClause .= " AND activation = 1";
+    $whereClause .= " AND shop.activation = 1";
 } elseif ($filter == 'inactive') {
-    $whereClause .= " AND activation = 0";
+    $whereClause .= " AND shop.activation = 0";
 }
 
 // 計算總記錄數
@@ -47,7 +47,7 @@ $sql = "SELECT shop.*, users.name AS username
         FROM shop
         JOIN users ON shop.user_id = users.user_id
         $whereClause
-        ORDER BY shop_id ASC
+        ORDER BY shop.shop_id ASC
         LIMIT $start_item, $per_page";
 
 $result = $conn->query($sql);
