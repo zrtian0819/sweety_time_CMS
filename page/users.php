@@ -141,12 +141,7 @@ if ($result) {
         <div class="main col neumorphic p-5">
             <div class="d-flex">
                 <div class="d-flex p-0">
-                    <?php if ($search !== ''): ?>
-                        <a class="btn-animation btn btn-custom d-inline-flex flex-row align-items-center mb-3 mx-3" href="users.php" title="回使用者列表">
-                            <i class="fa-solid fa-arrow-left-long"></i><span class="btn-animation-innerSpan d-inline-block">返回</span>
-                        </a>
-                    <?php endif; ?>
-                    <?php if ($status === 'off' && $off_count == 0): ?>
+                    <?php if ($search !== '' || $status === 'off' && $off_count == 0): ?>
                         <a class="btn-animation btn btn-custom d-inline-flex flex-row align-items-center mb-3 mx-3" href="users.php" title="回使用者列表">
                             <i class="fa-solid fa-arrow-left-long"></i><span class="btn-animation-innerSpan d-inline-block">返回</span>
                         </a>
