@@ -1,6 +1,10 @@
 <?php
 require_once("../db_connect.php");
 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 if (!isset($_GET["productId"])) {
     $message = "請依照正常管道進入此頁";
     header("location: product-list.php");
@@ -14,6 +18,14 @@ if (!isset($_GET["productId"])) {
 
     if (isset($row["shop_id"])) {
         $shopId = $row["shop_id"];
+
+        if ($_SESSION["user"]["role"] != "admin") {
+            if ($_SESSION["shop"]["shop_id"] <> $shopId) {
+                $message = "你無權查詢其它商家的產品";
+                header("location: product-list.php");
+            }
+        }
+
         $shopsql = "SELECT * from shop WHERE shop_id = $shopId";
         $shopResult = $conn->query($shopsql);
         $shopRow = $shopResult->fetch_assoc();
@@ -28,6 +40,7 @@ if (!isset($_GET["productId"])) {
         $classRow = $classResult->fetch_assoc();
 
         $className = $classRow["class_name"];
+        $classId = $classRow["product_class_id"];
         // $shopsql = "SELECT "
     }
 
@@ -137,7 +150,7 @@ if (!isset($_GET["productId"])) {
 
         <main class="product main col neumorphic p-5">
 
-            <h2 class="mb-5 text-center">商品管理</h2>
+            <!-- <h2 class="mb-5 text-center">商品管理</h2> -->
             <a class="btn-animation btn btn-custom d-inline-flex flex-row align-items-center mb-3" href="product-list.php">
                 <i class="fa-solid fa-arrow-left-long"></i><span class="btn-animation-innerSpan d-inline-block">返回</span>
             </a>
@@ -197,7 +210,7 @@ if (!isset($_GET["productId"])) {
                                         </tr>
                                         <tr>
                                             <td class="dontNextLine fw-bold">商品分類</td>
-                                            <td><?= $className ?></td>
+                                            <td><a class="btn btn-custom" href="product-list.php?class=<?= $classId ?>"><?= $className ?></a></td>
                                         </tr>
                                         <tr>
                                             <td class="dontNextLine fw-bold">描述</td>

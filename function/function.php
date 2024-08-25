@@ -8,7 +8,9 @@
 */
 function getLeftChar($text, $num)
 {
-    return substr($text, 0, $num);
+    $textLength = mb_strlen($text, "UTF-8");
+    $textLength > $num ? $word = "..." : $word = "";
+    return mb_substr($text, 0, $num, "UTF-8") . $word;
 }
 
 
@@ -21,4 +23,15 @@ function statusStrRemoveJoe($text)
     $replace = ["", "", ""];
     $newText = str_replace($search, $replace, $text);
     return $newText;
+}
+
+
+/*先取名為超級模糊搜尋*/
+function superSearch($text)
+{
+    // 使用 mb_str_split() 將字串正確地拆分為字符數組
+    $characters = mb_str_split($text, 1, 'UTF-8');
+    // 用 '%' 將字符數組連接起來
+    $result = '%' . implode('%', $characters) . '%';
+    return $result;
 }

@@ -147,7 +147,7 @@ if ($result) {
                     <?php if ($status === 'off' && $off_count == 0): ?>
                         <a class="btn btn-neumorphic user-btn mt-0" href="users.php" title="回使用者列表"><i class="fa-solid fa-left-long"></i></a>
                     <?php endif; ?>
-                    <h2 class="mb-3">會員管理</h2>
+                    <!-- <h2 class="mb-3">會員管理</h2> -->
                 </div>
             </div>
             <div class="container-fluid">
@@ -156,7 +156,7 @@ if ($result) {
                         <div class="input-group mb-3">
                             <input type="search" class="form-control" name="search" value="<?= ($search) ?>" placeholder="請輸入欲搜尋的使用者">
                             <div class="input-group-append">
-                                <button class="btn btn-outline-warning m-0" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                             </div>
                         </div>
 
@@ -170,8 +170,8 @@ if ($result) {
                                 </a>
                             </div>
                             <div>
-                                <a href="user-add.php" class="btn btn-neumorphic user-btn">新增
-                                    <i class="fa-solid fa-plus"></i>
+                                <a class="btn-animation btn btn-custom d-flex flex-row align-items-center" href="user-add.php">
+                                    <i class="fa-solid fa-plus align-middle"></i><span class="btn-animation-innerSpan d-inline-block"> 新增會員</span>
                                 </a>
                             </div>
                         </div>
@@ -201,7 +201,7 @@ if ($result) {
 
                                 <table class="table table-bordered">
                                     <thead class="user-text">
-                                        <tr>
+                                        <tr class="text-center m-auto align-middle">
                                             <th class="text-center">User ID</th>
                                             <th class="text-center">Name</th>
                                             <th class="text-center">Email</th>
@@ -211,7 +211,7 @@ if ($result) {
                                     </thead>
                                     <tbody>
                                         <?php foreach ($users as $user): ?>
-                                            <tr>
+                                            <tr class="text-center m-auto align-middle">
                                                 <td class="text-center"><?= ($user["user_id"]) ?></td>
                                                 <td class="text-center"><?= ($user["name"]) ?></td>
                                                 <td class="text-center"><?= ($user["email"]) ?></td>
@@ -293,11 +293,12 @@ if ($result) {
                         <!-- user詳細信息 -->
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <div class="modal-footer">
-                        <!-- <a href="user-edit.php?user_id=<?= $user["user_id"] ?>" class="btn btn-custom">編輯</a> -->
-                        <button type="button" class="btn btn-custom" data-bs-dismiss="modal">關閉</button>
+                <div class="modal-footer d-flex justify-content-between">
+                    <div>
+                        <a href="user-coupon-list.php?user_id=<?= $user["user_id"] ?>" class="btn btn-custom">優惠卷</a>
+                        <a href="user-edit.php?user_id=<?= $user["user_id"] ?>" class="btn btn-custom">編輯</a>
                     </div>
+                    <button type="button" class="btn btn-custom bg-danger" data-bs-dismiss="modal">關閉</button>
                 </div>
             </div>
         </div>
@@ -313,7 +314,7 @@ if ($result) {
                 button.addEventListener('click', function() {
                     let userId = this.getAttribute('data-id');
 
-                    // 使用 fetch 從 PHP 獲取會員詳細資料
+                    //從 PHP 會員詳細資料
                     fetch(`user-view.php?id=${userId}`)
                         .then(response => {
                             if (!response.ok) {
@@ -328,20 +329,23 @@ if ($result) {
                                 // 填充彈跳視窗的內容
                                 let portraitPath = data.portrait_path ? `../images/users/${data.portrait_path}` : '../images/default-user.png';
                                 document.getElementById('userDetails').innerHTML = `
-                                    <div class="user-info-container">
-                                        <div class="text-center">
-                                            <img src="${portraitPath}" alt="${data.name}" class="img-fluid user-portrait">
-                                        </div>
-                                        <table class="user-info-box m-2">
-                                            <p class="user-info"><strong>ID:</strong> ${data.user_id}</p>
-                                            <p class="user-info"><strong>Name:</strong> ${data.name}</p>
-                                            <p class="user-info"><strong>Account:</strong> ${data.account}</p>
-                                            <p class="user-info"><strong>Birthday:</strong> ${data.birthday}</p>
-                                            <p class="user-info"><strong>Email:</strong> ${data.email}</p>
-                                            <p class="user-info"><strong>Phone:</strong> ${data.phone}</p>
-                                            <p class="user-info"><strong>Sign up time:</strong> ${data.sign_up_time}</p>
-                                        </table>
-                                    </div>`;
+                            <div class="user-info-container">
+                                <div class="text-center">
+                                    <img src="${portraitPath}" alt="${data.name}" class="img-fluid user-portrait">
+                                </div>
+                                <table class="user-info-box m-2">
+                                    <p class="user-info"><strong>ID:</strong> ${data.user_id}</p>
+                                    <p class="user-info"><strong>Name:</strong> ${data.name}</p>
+                                    <p class="user-info"><strong>Account:</strong> ${data.account}</p>
+                                    <p class="user-info"><strong>Birthday:</strong> ${data.birthday}</p>
+                                    <p class="user-info"><strong>Email:</strong> ${data.email}</p>
+                                    <p class="user-info"><strong>Phone:</strong> ${data.phone}</p>
+                                    <p class="user-info"><strong>Sign up time:</strong> ${data.sign_up_time}</p>
+                                </table>
+                            </div>`;
+
+                                document.querySelector('.modal-footer .btn-custom[href*="user-edit.php"]').href = `user-edit.php?user_id=${data.user_id}`;
+                                document.querySelector('.modal-footer .btn-custom[href*="user-coupon-list.php"]').href = `user-coupon-list.php?user_id=${data.user_id}`;
                             }
                         })
                         .catch(error => {
