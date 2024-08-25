@@ -140,6 +140,21 @@ $rows_page = $result_page->fetch_all(MYSQLI_ASSOC);
         .coupon-input-bar{
             width: 50px;
         }
+        .table{
+            table-layout: auto;
+        }
+        .btns-box{
+            width: 200px
+        }
+        .search-input{
+            width: 300px;
+        }
+        .options-input{
+            width: 700px;
+        }
+        .btn-white{
+            /* box-shadow: 0px 0px 3px #d1d9e6; */
+        }
     </style>
 </head>
 
@@ -159,32 +174,42 @@ $rows_page = $result_page->fetch_all(MYSQLI_ASSOC);
 
             <!-- 篩選器 -->
             <div class="py-2">
-                <form action="">
-                    <div class="input-group">
+                <form action="" class="d-flex justify-content-between">
+                    <div class="input-group search-input">
                         <input type="search" class="form-control" name="search" value="<?php echo isset($_GET["search"]) ? $_GET["search"] : "" ?>" placeholder="搜尋優惠券名稱">
-                        <select class="form-select" aria-label="Default select example" name="sort">
-                            <option <?php echo $sort == "id_asc" ? "selected" : ""; ?> value="id_asc">依id排序(預設)</option>
-                            <option <?php echo $sort == "discount_desc" ? "selected" : ""; ?> value="discount_desc">折扣由低至高</option>
-                            <option <?php echo $sort == "discount_asc" ? "selected" : ""; ?> value="discount_asc">折扣由高至低</option>
-                            <option <?php echo $sort == "start_asc" ? "selected" : ""; ?> value="start_asc">啟用日由先至後</option>
-                            <option <?php echo $sort == "start_desc" ? "selected" : ""; ?> value="start_desc">啟用日由後至先</option>
-                            <option <?php echo $sort == "end_asc" ? "selected" : ""; ?> value="end_asc">到期日由先至後</option>
-                            <option <?php echo $sort == "end_desc" ? "selected" : ""; ?> value="end_desc">到期日由後至先</option>
-                            <option <?php echo $sort == "created_asc" ? "selected" : ""; ?> value="created_asc">創建日由舊至新</option>
-                            <option <?php echo $sort == "created_desc" ? "selected" : ""; ?> value="created_desc">創建日由新至舊</option>
-                        </select>
-                        <select class="form-select" aria-label="Default select example" name="act_status">
-                            <option <?php echo is_null($act_status) ? "selected" : ""; ?> value=""><span class="text-secondery">不限啟用狀態</span></option>
-                            <option <?php echo $act_status == "1" ? "selected" : ""; ?> value="1"><span class="text-success">啟用中</span></option>
-                            <option <?php echo $act_status == "0" ? "selected" : ""; ?> value="0"><span class="text-danger">停用中</span></option>
-                        </select>
-                        <select class="form-select" aria-label="Default select example" name="expr_status">
-                            <option <?php echo $expr_status == "expr_all" ? "selected" : ""; ?> value="expr_all"><span class="text-secondery">不限效期狀態</span></option>
-                            <option <?php echo $expr_status == "expr_notStart" ? "selected" : ""; ?> value="expr_notStart"><span class="text-success">尚未開始</span></option>
-                            <option <?php echo $expr_status == "expr_canUse" ? "selected" : ""; ?> value="expr_canUse"><span class="text-success">效期內</span></option>
-                            <option <?php echo $expr_status == "expr_exprd" ? "selected" : ""; ?> value="expr_exprd"><span class="text-danger">已過期</span></option>
-                        </select>
-                        <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        <button class="btn btn-custom" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </div>
+
+                    <div class="d-flex options-input">
+                        <div class="input-group order-input mx-2">
+                            <select class="form-select" aria-label="Default select example" name="sort">
+                                <option <?php echo $sort == "id_asc" ? "selected" : ""; ?> value="id_asc">依id排序(預設)</option>
+                                <option <?php echo $sort == "discount_desc" ? "selected" : ""; ?> value="discount_desc">折扣由低至高</option>
+                                <option <?php echo $sort == "discount_asc" ? "selected" : ""; ?> value="discount_asc">折扣由高至低</option>
+                                <option <?php echo $sort == "start_asc" ? "selected" : ""; ?> value="start_asc">啟用日由先至後</option>
+                                <option <?php echo $sort == "start_desc" ? "selected" : ""; ?> value="start_desc">啟用日由後至先</option>
+                                <option <?php echo $sort == "end_asc" ? "selected" : ""; ?> value="end_asc">到期日由先至後</option>
+                                <option <?php echo $sort == "end_desc" ? "selected" : ""; ?> value="end_desc">到期日由後至先</option>
+                                <option <?php echo $sort == "created_asc" ? "selected" : ""; ?> value="created_asc">創建日由舊至新</option>
+                                <option <?php echo $sort == "created_desc" ? "selected" : ""; ?> value="created_desc">創建日由新至舊</option>
+                            </select>
+                            <button class="btn btn-custom" type="submit"><i class="fa-solid fa-arrow-down-wide-short"></i></button>
+                        </div>
+
+                        <div class="input-group filter-input">
+                            <select class="form-select" aria-label="Default select example" name="act_status">
+                                <option <?php echo is_null($act_status) ? "selected" : ""; ?> value=""><span class="text-secondery">不限啟用狀態</span></option>
+                                <option <?php echo $act_status == "1" ? "selected" : ""; ?> value="1"><span class="text-success">啟用中</span></option>
+                                <option <?php echo $act_status == "0" ? "selected" : ""; ?> value="0"><span class="text-danger">停用中</span></option>
+                            </select>
+                            <select class="form-select" aria-label="Default select example" name="expr_status">
+                                <option <?php echo $expr_status == "expr_all" ? "selected" : ""; ?> value="expr_all"><span class="text-secondery">不限效期狀態</span></option>
+                                <option <?php echo $expr_status == "expr_notStart" ? "selected" : ""; ?> value="expr_notStart"><span class="text-success">尚未開始</span></option>
+                                <option <?php echo $expr_status == "expr_canUse" ? "selected" : ""; ?> value="expr_canUse"><span class="text-success">效期內</span></option>
+                                <option <?php echo $expr_status == "expr_exprd" ? "selected" : ""; ?> value="expr_exprd"><span class="text-danger">已過期</span></option>
+                            </select>
+                            <button class="btn btn-custom" type="submit"><i class="fa-solid fa-filter"></i></button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -193,51 +218,59 @@ $rows_page = $result_page->fetch_all(MYSQLI_ASSOC);
             </div>
 
             <!-- 設定一頁幾筆資料 -->
-            <div class="my-2 d-flex justify-content-between">
+            <div class="mt-2 mb-4 d-flex justify-content-between">
                 <form class="d-flex align-items-center">
+                    <span>共有 <?= $total_rows ?> 筆資料，</span>
                     <span>每頁</span>
-                    <input type="text" class="form-control coupon-input-bar" name="per_page" id="perPageInput" value="<?= $per_page ?>" placeholder="">
+                    <input type="text" class="form-control coupon-input-bar mx-1" name="per_page" id="perPageInput" value="<?= $per_page ?>" placeholder="">
                     <span>筆</span>
-                    <a class="btn neumorphic mx-2" id="perPageBtn">GO</a>
-                    <span>，共有<?= $total_rows ?>筆資料</span>
+                    <a class="btn btn-white" id="perPageBtn"><span class="fw-bold fs-6">GO</span></a>
                 </form>
-                <a class="btn" href="./coupon-create.php">新增優惠券</a>
+                <a class="btn-animation btn btn-custom d-flex flex-row align-items-center" href="./coupon-create.php">
+                    <i class="fa-solid fa-plus"></i><span class="btn-animation-innerSpan d-inline-block">新增優惠券</span>
+                </a>
             </div>
 
             <!-- 顯示資料的表格 -->
-            <table class="table table-bordered">
+            <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>優惠券種類編號<br>(coupon_id)</th>
-                        <th>優惠券名稱<br>(name)</th>
-                        <th>折扣率<br>(discount_rate)</th>
-                        <th>啟用日期<br>(start_time)</th>
-                        <th>到期日<br>(end_date)</th>
-                        <th>啟用狀態<br>(activation)</th>
-                        <th>創建日期<br>(created_at)</th>
+                        <th class="text-center">優惠券編號</th>
+                        <th class="text-center">優惠券名稱</th>
+                        <th class="text-center">折扣率</th>
+                        <th class="text-center">啟用日期</th>
+                        <th class="text-center">到期日</th>
+                        <th class="text-center">啟用狀態</th>
+                        <th class="text-center">效期狀態</th>
+                        <th class="text-center">創建日期</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($rows_page as $row) : ?>
                         <tr>
-                            <td><?= $row['coupon_id'];?></td>
-                            <td><?= $row['name'];?></td>
-                            <td><?= $row['discount_rate'];?></td>
-                            <td><?= $row['start_time'];?></td>
-                            <td>
+                            <td class="text-center"><?= $row['coupon_id'];?></td>
+                            <td class="text-center"><?= $row['name'];?></td>
+                            <td class="text-center"><?= $row['discount_rate'];?></td>
+                            <td class="text-center"><?= $row['start_time'];?></td>
+                            <td class="text-center">
                                 <?php if(is_null($row['end_date'])) : ?>
                                     <p>永久有效</p>    
                                 <?php else :?>
                                     <?= $row['end_date'];?>
                                 <?php endif;?>
                             </td>
-                            <td class="d-flex">
-                                <p class="activ_status-text <?= $row['activation'] == 1 ? 'text-success' : 'text-danger'; ?>" data-id="<?= $row['coupon_id']; ?>">
-                                    <?= $row['activation'] == 1 ? '啟用中' : '停用中'; ?>
-                                </p>
-                                <div class="form-check form-switch d-inline-block">
-                                    <input class="form-check-input activ_switch" type="checkbox" data-id="<?= $row['coupon_id']; ?>" <?php echo $row['activation'] == 1 ? "checked" : ""; ?>>
+                            <td class="">
+                                <div class="d-flex justify-content-center">
+                                    <p class="activ_status-text mx-2 <?= $row['activation'] == 1 ? 'text-success' : 'text-danger'; ?>" data-id="<?= $row['coupon_id']; ?>">
+                                        <?= $row['activation'] == 1 ? '啟用中' : '停用中'; ?>
+                                    </p>
+                                    <div class="form-check form-switch mx   -2">
+                                        <input class="form-check-input activ_switch" type="checkbox" data-id="<?= $row['coupon_id']; ?>" <?php echo $row['activation'] == 1 ? "checked" : ""; ?>>
+                                    </div>
                                 </div>
+                            </td>
+                            <td class="text-center">
                                 <?php if ($row['start_time'] > $now) : ?>
                                     <p class="text-secondary">尚未開始</p>
                                 <?php elseif ((is_null($row['end_date']) && $row['permanent'] == 1 ) || ($row['start_time'] <= $now && $now <= $row['end_date'])) : ?>
@@ -246,10 +279,18 @@ $rows_page = $result_page->fetch_all(MYSQLI_ASSOC);
                                     <p class="text-danger">已過期</p>
                                 <?php endif; ?>
                             </td>
-                            <td>
+                            <td class="text-center">
                                 <?= $row['created_at'];?>
-                                <a href="./coupon-edit.php?coupon_id=<?= $row['coupon_id'] ?>">編輯</a>
-                                <a href="./coupon-distribute.php?coupon_id=<?= $row['coupon_id'] ?>">發送</a>
+                            </td>
+                            <td class="text-center btns-box">
+                                <div class=" d-flex align-items-center justify-content-end">
+                                     <a class="btn-animation btn btn-custom d-flex flex-row align-items-center mx-2" href="./coupon-edit.php?coupon_id=<?= $row['coupon_id'] ?>">
+                                        <i class="fa-solid fa-pen-to-square"></i><span class="btn-animation-innerSpan d-inline-block">編輯此券</span>
+                                    </a>
+                                    <a class="btn-animation btn btn-custom d-flex flex-row align-items-center" href="./coupon-distribute.php?coupon_id=<?= $row['coupon_id'] ?>">
+                                        <i class="fa-regular fa-paper-plane"></i><span class="btn-animation-innerSpan d-inline-block">發送此券</span>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     <?php endforeach;?>
@@ -258,10 +299,10 @@ $rows_page = $result_page->fetch_all(MYSQLI_ASSOC);
             <!-- 換頁按鈕 -->
 
                 <nav aria-label="Page navigation example">
-                    <ul class="pagination">
+                    <ul class="pagination d-flex justify-content-center">
                         <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
-                            <li class="page-item <?php if ($current_page == $i) echo "active"; ?>">
-                                <a class="page-link" href="<?= rebuild_url(['page' => $i]) ?>">
+                            <li class="page-item mx-1 <?php if ($current_page == $i) echo "active"; ?>">
+                                <a class="page-link btn-custom" href="<?= rebuild_url(['page' => $i]) ?>">
                                     <?= $i ?>
                                 </a>
                             </li>
