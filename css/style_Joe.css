@@ -300,13 +300,28 @@ h6 {
 }
 
 .nav-link {
+  border: 1px solid transparent;
+  border-radius: 10px;
   color: #968c8a;
   transition: all 0.2s ease;
+  text-decoration: none;
 }
 
 .nav-link:hover {
-  color: #b6a7a4;
+  border: 1px solid var(--primary-color);
+  border-radius: 10px;
+  background: var(--primary-color);
+  color: #fff;
 }
+
+/* 增加active狀態 */
+.nav-link.active {
+  color: #fff; 
+  background: var(--primary-color);
+  border-radius: 10px; 
+  font-weight: bold; 
+}
+
 
 /* 樣式表 */
 
