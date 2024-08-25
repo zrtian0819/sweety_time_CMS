@@ -21,7 +21,6 @@ $start_item = ($page - 1) * $per_page;
 
 // 搜索條件
 $search = isset($_GET["search"]) ? $_GET["search"] : '';
-
 // 使用 mysqli_real_escape_string 來處理搜索字串中的特殊字符
 $search = $conn->real_escape_string($search);
 
@@ -84,13 +83,15 @@ $shopCount = $result->num_rows;
     <div class="container-fluid d-flex flex-row px-4">
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
         <div class="main col neumorphic p-5">
-            <form action="">
-                    <div class="input-group d-flex justify-content-end align-items-center mb-2">
-                        <a class="btn neumorphic" href="shop-info-admin.php"><i class="fa-solid fa-circle-left"></i></i></a>
-                        <input type="search" class="form-control" placeholder="搜尋店家" name="search" style="max-width:200px">
-                        <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-                    </div>
-                </form>
+        <form action="">
+            <div class="input-group d-flex justify-content-end align-items-center mb-2">
+                <a class="btn neumorphic " href="shop-info-admin.php" style="color: var(--primary-color);">
+                    <i class="fa-solid fa-circle-left"></i>
+                </a>
+                <input type="search" class="form-control" placeholder="搜尋店家" name="search" style="max-width:200px" value="<?php echo htmlspecialchars($search); ?>">
+                <button class="btn neumorphic" type="submit" style="color: var(--primary-color);"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+        </form>
             <div class="container">
                 <div class="row">
                     <ul class="nav nav-tabs-custom">
