@@ -31,50 +31,54 @@ include("../function/login_status_inspect.php");
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
 
         <div class="main col neumorphic p-5">
-            <div class="">
-                <a href="./coupon-home.php">優惠券管理</a>>
-                <a href="./coupon-create.php">新增優惠券</a>
-            </div>
-            <hr>
             <div class="container">
+            <div class="mb-4 row d-flex justify-content-center">
+                    <div class="col-8 col-xl-10 d-flex justify-content-center">
+                        <h2>新增優惠券</h2>
+                    </div>
+                </div>
                 <form action="../function/doCreateCoupon.php" method="post">
-                    <div class="mb-2 row">
-                        <div class="col-xl-6 col-lg-12">
-                            <label class="form-label" for="name">優惠券名稱</label>
-                            <input type="text" class="form-control coupon-input_bar " name="name" required>
+                    <div class="mb-2 row d-flex justify-content-center">
+                        <div class="col-8 col-xl-10">
+                            <label class="form-label text-dark fw-bold" for="name">優惠券名稱</label>
+                            <input type="text" class="form-control form-control-custom coupon-input_bar " name="name" required>
                         </div>
                     </div>
-                    <div class="mb-2 row">
-                        <div class="col-xl-6 col-lg-12">
-                            <label class="form-label" for="discount_rate">折扣率%</label>
-                            <input type="number" class="form-control coupon-input_bar" id="score" name="discount_rate" min="0" max="100" step="1" required>
+                    <div class="mb-2 row d-flex justify-content-center">
+                        <div class="col-8 col-xl-10">
+                            <label class="form-label text-dark fw-bold mt-3" for="discount_rate">折扣率%</label>
+                            <input type="number" class="form-control form-control-custom coupon-input_bar" id="score" name="discount_rate" min="0" max="100" step="1" required>
                         </div>
                     </div>
-                    <div class="mb-2 row">
-                        <div class="col-xl-6 col-lg-12">
-                            <label class="form-label" for="start_time">啟用日</label>
-                            <input type="date" class="form-control coupon-input_bar" name="start_time" required>
+                    <div class="mb-2 row d-flex justify-content-center">
+                        <div class="col-8 col-xl-10">
+                            <label class="form-label text-dark fw-bold mt-3" for="start_time">啟用日</label>
+                            <input type="date" class="form-control form-control-custom coupon-input_bar" name="start_time" required>
                         </div>
                     </div>
-                    <div class="mb-2 row">
-                        <div class="col-xl-6 col-lg-12">
-                            <label class="form-label" for="end_date">到期日(未填則視為永久有效)</label>
-                            <input type="date" class="form-control coupon-input_bar" name="end_date">
+                    <div class="mb-2 row d-flex justify-content-center">
+                        <div class="col-8 col-xl-10">
+                            <label class="form-label text-dark fw-bold mt-3" for="end_date">到期日(未填則視為永久有效)</label>
+                            <input type="date" class="form-control form-control-custom coupon-input_bar" name="end_date">
                         </div> 
                     </div>
-                    <div class="mb-2 row">
-                        <label class="form-label" for="phone">啟用狀態</label>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="activation" value="1" checked>
-                            <label class="form-check-label" for="activation">啟用</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="activation" value="0">
-                            <label class="form-check-label" for="activation">停用</label>
+                    <div class="mb-2 row d-flex justify-content-center">
+                        <div class="col-8 col-xl-10">
+                            <label class="form-label  text-dark fw-bold mt-3 me-3">啟用狀態</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input form-control-custom" type="radio" name="activation" value="1" checked>
+                                <label class="form-check-label form-control-custom" for="activation">啟用</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input form-control-custom" type="radio" name="activation" value="0">
+                                <label class="form-check-label form-control-custom" for="activation">停用</label>
+                            </div>
                         </div>
                     </div>
-                    <div class="mb-2 row">
-                        <button class="btn btn-neumorphic coupon-submit-btn" type="submit">新增他！</button>
+                    <div class="mb-2 row d-flex justify-content-center">
+                        <div class="col-8 col-xl-10 d-flex justify-content-center">
+                            <button class="btn btn-neumorphic coupon-submit-btn" type="submit">新增他！</button>
+                        </div>
                     </div>
                 </form>
             </div>

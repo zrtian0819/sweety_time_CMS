@@ -192,11 +192,10 @@ $row_coupon = $result_coupons->fetch_assoc();
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
 
         <div class="main col neumorphic p-5">
-            <h2>推送「 <?= $row_coupon["name"] ?> 」(id = <?= $row_coupon["coupon_id"] ?>)<?= $row_coupon["activation"] == 0 ? "<span class='text-danger'>(注意：此優惠活動為停用狀態)</span>" : "" ; ?></h2>
-            <hr>
+            <h2 class="d-flex justify-content-center align-items-end mb-5">推送「 <?= $row_coupon["name"] ?> 」<span class="fs-5">(id = <?= $row_coupon["coupon_id"] ?>)</span><?= $row_coupon["activation"] == 0 ? "<span class='text-danger'>(注意：此優惠活動為停用狀態)</span>" : "" ; ?></h2>
 
             <!-- 篩選器 -->
-            <div class="py-2">
+            <div class="py-2 mb-4">
                 <form action="" class ="d-flex">
                     <div class="input-group">
 
@@ -250,48 +249,45 @@ $row_coupon = $result_coupons->fetch_assoc();
                                     </div>
                                 </div>
                             </div>
-                        <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        <button class="btn btn-custom" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                     </div>
                 </form>
             </div>
-            <hr>
-            <div class="">
-            </div>
             
             <!-- 全選 & 清除 按鈕 -->
-             <div class="container-flex">
-                <button class="btn" id="checkAll">全選</button>
-                <button class="btn" id="uncheckAll">全不選</button>
+             <div class="container-flex mb-2">
+                <button class="btn neumorphic" id="checkAll">全選</button>
+                <button class="btn neumorphic mx-2" id="uncheckAll">全不選</button>
              </div>
             <!-- 顯示users資料的表格 -->
             <form action="../function/doDistributeCoupon.php" method="post">
-                <table class="table table-bordered">
-                    <thead>
+                <table class="table">
+                    <thead class="table-pink">
                         <tr>
-                            <th>勾選</th>
-                            <th>會員編號<br>(user_id)</th>
-                            <th>會員名稱<br>(name)</th>
-                            <th>帳號<br>(account)</th>
-                            <th>生日<br>(birthday)</th>
-                            <th>註冊時間<br>(sign_up_time)</th>
+                            <th class="text-center">勾選</th>
+                            <th class="text-center">會員編號</th>
+                            <th class="text-center">會員名稱</th>
+                            <th class="text-center">帳號</th>
+                            <th class="text-center">生日</th>
+                            <th class="text-center">註冊時間</th>
                         </tr>
                     </thead>
 
                     <tbody>
                             <?php foreach ($rows_user as $row_user) : ?>
                                 <tr>
-                                    <td><input type="checkbox"  class="usersCheckBox" name="userIdList[]" value="<?= $row_user['user_id']; ?>"></td>
-                                    <td><?= $row_user['user_id'];?></td>
-                                    <td><?= $row_user['name'];?></td>
-                                    <td><?= $row_user['account'];?></td>
-                                    <td><?= $row_user['birthday'];?></td>
-                                    <td><?= $row_user['sign_up_time'];?></td>
+                                    <td class="text-center"><input type="checkbox"  class="usersCheckBox" name="userIdList[]" value="<?= $row_user['user_id']; ?>"></td>
+                                    <td class="text-center"><?= $row_user['user_id'];?></td>
+                                    <td class="text-center"><?= $row_user['name'];?></td>
+                                    <td class="text-center"><?= $row_user['account'];?></td>
+                                    <td class="text-center"><?= $row_user['birthday'];?></td>
+                                    <td class="text-center"><?= $row_user['sign_up_time'];?></td>
                                 </tr>
                             <?php endforeach;?>
                     </tbody> 
                 </table>
                 <input type="hidden" name="coupon_id" value="<?= $coupon_id ?>">
-                <button class="btn neumorphic" type="submit">推送優惠券</button>  
+                <button class="btn neumorphic" type="submit">發送優惠券！</button>  
             </form>
         </div>
     </div>
