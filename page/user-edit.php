@@ -127,8 +127,8 @@ $conn->close();
                     <a class="btn btn-neumorphic user-btn" href="users.php" title="回使用者"><i class="fa-solid fa-left-long"></i></a>
                 </div>
                 <h2 class="mb-3">修改資料</h2>
-                <div class="container">
-                    <div class="row">
+                <div class="container-fluid d-flex justify-content-center">
+                    <div class="row col-10">
                         <?php if ($userCount > 0): ?>
                             <form action="user-edit.php?user_id=<?= ($user_id) ?>" method="post" enctype="multipart/form-data">
                                 <div class="mb-3 d-flex justify-content-center align-items-center flex-column">
@@ -142,29 +142,29 @@ $conn->close();
                                 <input type="hidden" name="user_id" value="<?= ($user_id) ?>">
                                 <table class="table table-bordered">
                                     <tr>
-                                        <th>Name</th>
+                                        <th class="text-center">Name</th>
                                         <td>
                                             <input type="text" value="<?= ($row["name"]) ?>" class="form-control" name="name">
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th>Password</th>
+                                        <th class="text-center">Password</th>
                                         <td>
                                             <input type="password" value="<?= ($row["password"]) ?>" class="form-control" name="password">
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th>Email</th>
+                                        <th class="text-center">Email</th>
                                         <td>
                                             <input type="text" value="<?= ($row["email"]) ?>" class="form-control" name="email">
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th>Birthday</th>
+                                        <th class="text-center">Birthday</th>
                                         <td><?= ($row["birthday"]) ?></td>
                                     </tr>
                                     <tr>
-                                        <th>Sign up time</th>
+                                        <th class="text-center">Sign up time</th>
                                         <td><?= ($row["sign_up_time"]) ?></td>
                                     </tr>
                                 </table>

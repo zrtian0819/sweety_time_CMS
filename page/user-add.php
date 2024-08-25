@@ -91,7 +91,7 @@ $conn->close();
                 <div class="d-flex justify-content-center">
                     <h2 class="mb-5">新增資料</h2>
                 </div>
-                <div class="container">
+                <div class="container-fluid col-9">
                     <div class="row">
                         <form action="user-add.php" method="post" enctype="multipart/form-data">
                             <div class="mb-3 d-flex justify-content-center align-items-center flex-column">
@@ -124,7 +124,7 @@ $conn->close();
                             </div>
                             <div class="mb-2">
                                 <label class="form-label"><span class="text-danger">* </span>birthday</label>
-                                <input type="date" name="birthday">
+                                <input type="date" name="birthday" class="mx-3 my-1">
                             </div>
                             <div class="d-flex justify-content-end">
                                 <button type="submit" class="btn btn-neumorphic user-btn">儲存</button>

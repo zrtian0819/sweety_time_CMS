@@ -281,7 +281,7 @@ if ($result) {
             </div>
         </div>
     </div>
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fad" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -295,8 +295,8 @@ if ($result) {
                 </div>
                 <div class="modal-footer d-flex justify-content-between">
                     <div>
-                        <a href="user-coupon-list.php?user_id=<?= $user["user_id"] ?>" class="btn btn-custom">優惠卷</a>
-                        <a href="user-edit.php?user_id=<?= $user["user_id"] ?>" class="btn btn-custom">編輯</a>
+                        <a href="user-edit.php?user_id=<?= $user["user_id"] ?>" class="btn btn-custom">使用者資料編輯</a>
+                        <a href="user-coupon-list.php?user_id=<?= $user["user_id"] ?>" class="btn btn-custom">個人優惠卷</a>
                     </div>
                     <button type="button" class="btn btn-custom bg-danger" data-bs-dismiss="modal">關閉</button>
                 </div>
@@ -350,7 +350,7 @@ if ($result) {
                         })
                         .catch(error => {
                             console.error('There was a problem with the fetch operation:', error);
-                            document.getElementById('userDetails').innerHTML = `<p>加载数据时发生错误，请稍后再试。</p>`;
+                            document.getElementById('userDetails').innerHTML = `<p>加載數據時發生錯誤，請稍後再試。</p>`;
                         });
                 });
             });
