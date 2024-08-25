@@ -123,14 +123,19 @@ $productCountActive = $counts['active_products'];//上架中的商品數量
             height: 300px; 
         }
         #salesChart {
-            height: 200px !important;
+            height: 250px !important;
         }
         #chart-area{
-            height: 300px !important;
+            height: 400px !important;
         }
-        .chart-container {
+        .chart-container-sales {
             position: relative;
-            height: 200px;
+            height: 300px;
+            width: 100%;
+        }
+        .chart-container-area {
+            position: relative;
+            height: 400px;
             width: 100%;
         }
     </style>
@@ -143,12 +148,12 @@ $productCountActive = $counts['active_products'];//上架中的商品數量
 
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
 
-        <div class="main col neumorphic px-2 py-5">
+        <div class="main col neumorphic ps-4 pe-2 py-5">
 
             <h2 class="fw-bolder mb-5"><?= $name?>, 您好！</h2>
                 <?php if($SessRole=="admin"):?>
                     <div class="container-fluid">
-                        <div class="row mx-0">
+                        <div class="row ms-2 me-0">
                             <div class="col-md-6">
                                 <div class="row mb-2 mx-0">
                                     <div class="col-md-4">
@@ -189,7 +194,7 @@ $productCountActive = $counts['active_products'];//上架中的商品數量
                                             <div class="d-flex ms-2 mt-2">    
                                                 <h4>全站銷售量</h4>
                                             </div>
-                                            <div class="chart-container">
+                                            <div class="chart-container-sales">
                                                 <canvas id="salesChart"></canvas>
                                             </div>
                                         </div>
@@ -201,7 +206,7 @@ $productCountActive = $counts['active_products'];//上架中的商品數量
                                     <div class="d-flex ms-2 mt-2">
                                         <h4>熱銷名店</h4>
                                     </div>
-                                    <div class="chart-container">
+                                    <div class="chart-container-area d-flex justify-cont-center">
                                         <canvas id="chart-area"></canvas>
                                     </div>
                                 </div>

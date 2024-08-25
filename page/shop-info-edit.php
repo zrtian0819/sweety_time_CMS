@@ -88,7 +88,9 @@ if ($shop_id > 0) {
         <div class="main col neumorphic p-5">
             <div class="d-flex justify-content-between">
                 <h2 class="mb-3">基本資料</h2>
-                <a class="btn neumorphic d-flex align-items-center px-3 py-0" href="shop-info-admin.php"><i class="fa-solid fa-circle-left"></i></i></a>
+                <a class="btn-animation btn btn-custom d-inline-flex flex-row align-items-center mb-3" href="shop-info-admin.php">
+                    <i class="fa-solid fa-arrow-left-long"></i><span class="btn-animation-innerSpan d-inline-block">返回</span>
+                </a>
             </div>
             <div class="container">
                 <div class="row">
