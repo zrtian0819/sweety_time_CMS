@@ -90,7 +90,7 @@ $shopCount = $result->num_rows;
         <form action="">
             <div class="input-group d-flex justify-content-end align-items-center mb-2">
                 <input type="search" class="form-control" placeholder="搜尋店家" name="search" style="max-width:200px" value="<?php echo htmlspecialchars($search); ?>">
-                <button class="btn neumorphic" type="submit" style="color: var(--primary-color);"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="btn btn-custom" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
         </form>
             <div class="container">
