@@ -316,7 +316,7 @@ foreach ($storeRows as $storeRow) {
                                     <?php endif; ?>
                                     <td class="dontNextLine text-center"><?= $classArr[$row["product_class_id"]] ?></td>
                                     <td class="text-center"><?= number_format($row["price"]) ?></td>
-                                    <td><?= getLeftChar($row["description"], 100) . "..." ?></td>
+                                    <td><?= getLeftChar($row["description"], 50) ?></td>
                                     <td class="text-center"><?= $row["stocks"] ?></td>
                                     <td class="text-center">
                                         <?php if ($row["deleted"] == 1): ?>

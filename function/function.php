@@ -8,7 +8,9 @@
 */
 function getLeftChar($text, $num)
 {
-    return substr($text, 0, $num);
+    $textLength = mb_strlen($text, "UTF-8");
+    $textLength > $num ? $word = "..." : $word = "";
+    return mb_substr($text, 0, $num, "UTF-8") . $word;
 }
 
 
