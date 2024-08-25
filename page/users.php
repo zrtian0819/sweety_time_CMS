@@ -156,16 +156,16 @@ if ($result) {
                         <div class="input-group mb-3">
                             <input type="search" class="form-control" name="search" value="<?= ($search) ?>" placeholder="請輸入欲搜尋的使用者">
                             <div class="input-group-append">
-                                <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                <button class="btn btn-custom" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                             </div>
                         </div>
 
                         <div class="d-flex justify-content-between my-3">
-                            <div>
-                                <a class="btn btn-neumorphic user-btn <?= $order == 1 ? 'active' : '' ?>" href="users.php?p=<?= $page ?>&order=1&status=<?= $status ?>&search=<?= urlencode($search) ?>">排序
+                            <div class="d-flex flex-row">
+                                <a class="btn btn-neumorphic user-btn nav-link <?= $order == 1 ? 'active' : '' ?>" href="users.php?p=<?= $page ?>&order=1&status=<?= $status ?>&search=<?= urlencode($search) ?>">排序
                                     <i class="fa-solid fa-arrow-up-a-z"></i>
                                 </a>
-                                <a class="btn btn-neumorphic user-btn <?= $order == 2 ? 'active' : '' ?>" href="users.php?p=<?= $page ?>&order=2&status=<?= $status ?>&search=<?= urlencode($search) ?>">排序
+                                <a class="btn btn-neumorphic user-btn nav-link <?= $order == 2 ? 'active' : '' ?>" href="users.php?p=<?= $page ?>&order=2&status=<?= $status ?>&search=<?= urlencode($search) ?>">排序
                                     <i class="fa-solid fa-arrow-down-a-z"></i>
                                 </a>
                             </div>
@@ -199,14 +199,14 @@ if ($result) {
                                     </h3>
                                 </div>
 
-                                <table class="table table-bordered">
-                                    <thead class="user-text">
+                                <table class="table table-hover">
+                                    <thead class="text-center table-pink">
                                         <tr class="text-center m-auto align-middle">
-                                            <th class="text-center">User ID</th>
-                                            <th class="text-center">Name</th>
-                                            <th class="text-center">Email</th>
-                                            <th class="text-center">Phone</th>
-                                            <th class="text-center">詳細資訊</th>
+                                            <th class="text-center col-2">User ID</th>
+                                            <th class="text-center col-2">Name</th>
+                                            <th class="text-center col-3">Email</th>
+                                            <th class="text-center col-3">Phone</th>
+                                            <th class="text-center col-2">詳細資訊</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -217,15 +217,15 @@ if ($result) {
                                                 <td class="text-center"><?= ($user["email"]) ?></td>
                                                 <td class="text-center"><?= ($user["phone"]) ?></td>
                                                 <td>
-                                                    <div class="d-flex justify-content-around">
+                                                    <div class="d-flex justify-content-center">
                                                         <button type="button" class="btn btn-custom view-details" data-id="<?= ($user["user_id"]) ?>" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                                             <i class="fa-solid fa-eye"></i>
                                                         </button>
-                                                        <a href="user-edit.php?user_id=<?= $user["user_id"] ?>" class="btn btn-custom"><i class="fa-solid fa-user-pen"></i></a>
+                                                        <a href="user-edit.php?user_id=<?= $user["user_id"] ?>" class="btn btn-custom mx-2"><i class="fa-solid fa-user-pen"></i></a>
                                                         <?php if ($user["activation"] == 1): ?>
                                                             <a class="btn btn-danger" href="../function/doDeleteUser.php?id=<?= $user["user_id"] ?>"><i class="fa-solid fa-trash"></i></a>
                                                         <?php else: ?>
-                                                            <a class="btn btn-danger" href="../function/doReloadUser.php?id=<?= $user["user_id"] ?>"><i class="fa-solid fa-plus"></i></a>
+                                                            <a class="btn btn-primary" href="../function/doReloadUser.php?id=<?= $user["user_id"] ?>"><i class="fa-solid fa-plus"></i></a>
                                                         <?php endif; ?>
                                                     </div>
                                                 </td>
@@ -274,6 +274,8 @@ if ($result) {
                                         </ul>
                                     </nav>
                                 </div>
+                            <?php else: ?>
+                                暫無符合條件的使用者
                             <?php endif; ?>
                         </div>
                     </form>
@@ -329,20 +331,20 @@ if ($result) {
                                 // 填充彈跳視窗的內容
                                 let portraitPath = data.portrait_path ? `../images/users/${data.portrait_path}` : '../images/default-user.png';
                                 document.getElementById('userDetails').innerHTML = `
-                            <div class="user-info-container">
-                                <div class="text-center">
-                                    <img src="${portraitPath}" alt="${data.name}" class="img-fluid user-portrait">
-                                </div>
-                                <table class="user-info-box m-2">
-                                    <p class="user-info"><strong>ID:</strong> ${data.user_id}</p>
-                                    <p class="user-info"><strong>Name:</strong> ${data.name}</p>
-                                    <p class="user-info"><strong>Account:</strong> ${data.account}</p>
-                                    <p class="user-info"><strong>Birthday:</strong> ${data.birthday}</p>
-                                    <p class="user-info"><strong>Email:</strong> ${data.email}</p>
-                                    <p class="user-info"><strong>Phone:</strong> ${data.phone}</p>
-                                    <p class="user-info"><strong>Sign up time:</strong> ${data.sign_up_time}</p>
-                                </table>
-                            </div>`;
+                        <div class="user-info-container">
+                            <div class="text-center">
+                                <img src="${portraitPath}" alt="${data.name}" class="img-fluid user-portrait">
+                            </div>
+                            <table class="user-info-box m-2">
+                                <p class="user-info"><strong>ID:</strong> ${data.user_id}</p>
+                                <p class="user-info"><strong>Name:</strong> ${data.name}</p>
+                                <p class="user-info"><strong>Account:</strong> ${data.account}</p>
+                                <p class="user-info"><strong>Birthday:</strong> ${data.birthday}</p>
+                                <p class="user-info"><strong>Email:</strong> ${data.email}</p>
+                                <p class="user-info"><strong>Phone:</strong> ${data.phone}</p>
+                                <p class="user-info"><strong>Sign up time:</strong> ${data.sign_up_time}</p>
+                            </table>
+                        </div>`;
 
                                 document.querySelector('.modal-footer .btn-custom[href*="user-edit.php"]').href = `user-edit.php?user_id=${data.user_id}`;
                                 document.querySelector('.modal-footer .btn-custom[href*="user-coupon-list.php"]').href = `user-coupon-list.php?user_id=${data.user_id}`;
@@ -352,6 +354,17 @@ if ($result) {
                             console.error('There was a problem with the fetch operation:', error);
                             document.getElementById('userDetails').innerHTML = `<p>加載數據時發生錯誤，請稍後再試。</p>`;
                         });
+                });
+            });
+
+            // 监听排序按钮点击事件，添加橘色背景类
+            document.querySelectorAll('.user-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    // 先移除所有按钮的橘色背景类
+                    document.querySelectorAll('.user-btn').forEach(btn => btn.classList.remove('btn-orange'));
+
+                    // 给当前点击的按钮添加橘色背景类
+                    this.classList.add('btn-orange');
                 });
             });
         });

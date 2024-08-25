@@ -11,12 +11,6 @@ $sql = "SELECT * FROM articles WHERE 1 = 1";
 $params = [];
 $types = "";
 
-// 文字縮排
-// function getLeftChar($text, $num)
-// {
-//     return substr($text, 0, $num);
-// }
-
 if ($status == "on") {
     $sql .= " AND activation = 1";
 } elseif ($status == "off") {
@@ -159,71 +153,76 @@ foreach ($rowsUsers as $users) {
 
         <div class="main col neumorphic p-5">
 
-            <h2 class="m-3 d-flex justify-content-center">文章列表</h2>
-
             <div class="row d-flex">
 
                 <?php if ($articlesCount > 0): $rows = $result->fetch_all(MYSQLI_ASSOC); ?>
-                    <h3 class="d-flex justify-content-center">共有<?= $articlesCount ?>篇文章</h3>
 
 
                     <!-- 搜尋 -->
-                    <form action="">
-                        <div class=" input-group m-2 d-flex justify-content-end">
-                            <div>
-                                <input type="search" class="form-control" name="search" value="<?php echo isset($_GET["search"]) ? $_GET["search"] : "" ?>" placeholder="輸入文章、主題關鍵字">
-                            </div>
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-warning m-0 " type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-                            </div>
+                    <div class="container-fluid">
+                        <form action="">
+                            <div class=" input-group m-2">
+                                <input type="search" class="form-control input-border-pink" name="search" value="<?php echo isset($_GET["search"]) ? $_GET["search"] : "" ?>" placeholder="輸入文章、主題關鍵字">
 
-                        </div>
-                    </form>
+                                <div class="input-group-append">
+                                    <button class="btn btn-custom" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                </div>
+                                <div class="ms-3">
+                                    <a href="articles-create.php" class="btn-animation btn btn-custom d-flex flex-row align-items-center">
+                                        <i class="fa-solid fa-plus"></i>
+                                        <span class="btn-animation-innerSpan d-inline-block"> 新增文章</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
 
                     <!-- 排序 -->
                     <div class="d-flex justify-content-between my-3">
-                        <div class="d-flex justify-content-between">
-                            <a href="?sortArt=<?= $sortArt ?>&sortDir=ASC&search=<?= isset($_GET['search']) ? $_GET['search'] : '' ?>" class="btn btn-neumorphic articles-btn">排序
+                        <div class="d-flex flex-row">
+                            <a href="?sortArt=<?= $sortArt ?>&sortDir=ASC&search=<?= isset($_GET['search']) ? $_GET['search'] : '' ?>" class="btn btn-neumorphic articles-btn nav-link active">排序
                                 <i class="fa-solid fa-arrow-down-a-z"></i>
                             </a>
-                            <a href="?sortArt=<?= $sortArt ?>&sortDir=DESC&search=<?= isset($_GET['search']) ? $_GET['search'] : '' ?>" class="btn btn-neumorphic articles-btn">排序
+                            <a href="?sortArt=<?= $sortArt ?>&sortDir=DESC&search=<?= isset($_GET['search']) ? $_GET['search'] : '' ?>" class="btn btn-neumorphic articles-btn nav-link">排序
                                 <i class="fa-solid fa-arrow-up-a-z"></i>
                             </a>
-                        </div>
-                        <div>
-                            <a href="articles-create.php" class="btn btn-neumorphic articles-btn">
-                                <i class="fa-solid fa-plus"></i>新增文章
-                            </a>
+
                         </div>
                     </div>
             </div>
 
             <!-- 上架狀態 -->
-            <ul class="nav nav-tabs-custom">
-                <li class="nav-item">
-                    <a class="main-nav nav-link <?= $status === 'all' ? 'active' : '' ?>" href="?status=all">全部</a>
-                </li>
-                <li class="nav-item">
-                    <a class="main-nav nav-link <?= $status === 'on' ? 'active' : '' ?>" href="?status=on&search=<?= isset($_GET['search']) ? urlencode($_GET['search']) : '' ?>&sortArt=<?= $sortArt ?>&sortDir=<?= $sortDir ?>&p=<?= $page ?>">上架中</a>
-                </li>
-                <li class="nav-item">
-                    <a class="main-nav nav-link <?= $status === 'off' ? 'active' : '' ?>" href="?status=off&search=<?= isset($_GET['search']) ? urlencode($_GET['search']) : '' ?>&sortArt=<?= $sortArt ?>&sortDir=<?= $sortDir ?>&p=<?= $page ?>">已下架</a>
-                </li>
-            </ul>
+            <div class="d-flex justify-content-between align-items-center ">
+                <ul class="nav nav-tabs-custom">
+                    <li class="nav-item">
+                        <a class="main-nav nav-link <?= $status === 'all' ? 'active' : '' ?>" href="?status=all">全部</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="main-nav nav-link <?= $status === 'on' ? 'active' : '' ?>" href="?status=on&search=<?= isset($_GET['search']) ? urlencode($_GET['search']) : '' ?>&sortArt=<?= $sortArt ?>&sortDir=<?= $sortDir ?>&p=<?= $page ?>">上架中</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="main-nav nav-link <?= $status === 'off' ? 'active' : '' ?>" href="?status=off&search=<?= isset($_GET['search']) ? urlencode($_GET['search']) : '' ?>&sortArt=<?= $sortArt ?>&sortDir=<?= $sortDir ?>&p=<?= $page ?>">已下架</a>
+                    </li>
+                </ul>
+                <p class="d-flex justify-content-end">共有<?= $articlesCount ?>篇文章</p>
+            </div>
+
+
+
 
             <!-- 欄位 -->
             <table class="table table-hover">
-                <thead class="text-content">
-                    <tr>
-                        <th>文章編號</th>
-                        <th>上架狀態</th>
-                        <th>主題</th>
-                        <th>內容</th>
-                        <th>文章分類</th>
-                        <th>作者</th>
-                        <th>建立<br>時間</th>
-                        <th>一鍵<br>修改</th>
-                        <th>詳細<br>資訊</th>
+                <thead class="text-content table-pink">
+                    <tr class="text-center m-auto align-middle">
+                        <th class="text-center col-1">文章編號</th>
+                        <th class="text-center col-1">上架狀態</th>
+                        <th class="text-center col-1">主題</th>
+                        <th class="text-center col-1">內容</th>
+                        <th class="text-center col-1">文章分類</th>
+                        <th class="text-center col-1">作者</th>
+                        <th class="text-center col-1">建立時間</th>
+                        <th class="text-center col-1">一鍵修改</th>
+                        <th class="text-center col-1">詳細資訊</th>
                     </tr>
                 </thead>
 
@@ -240,7 +239,7 @@ foreach ($rowsUsers as $users) {
                             <?php echo ($articles["activation"] == 1) ? "<td>" . "上架中" : "<td class='text-danger'>" . "已下架"; ?></td>
                             </td>
                             <td><?= $articles["title"] ?></td>
-                            <td><?= getLeftChar($articles["content"], 100) . "..." ?></td>
+                            <td><?= getLeftChar($articles["content"], 50) . "..." ?></td>
                             <td><?= $productClassArr[$articles["product_class_id"]] ?></td>
                             <td><?= $usersArr[$id] ?></td>
                             <td><?= $formartDate ?></td>
@@ -267,23 +266,22 @@ foreach ($rowsUsers as $users) {
                                     <div class="me-1">
                                         <a href="articles-edit.php?id=<?= $articles["article_id"] ?>" class="btn btn-custom"><i class="fa-solid fa-pen"></i></a>
                                     </div>
-                                    
+
                                 </div>
                             </td>
                         </tr>
-                        
-                </tbody>
-                <?php endforeach; ?>
-            </table>
 
+                </tbody>
+            <?php endforeach; ?>
+            </table>
             <?php if (isset($page)): ?>
                 <nav aria-label="Page navigation">
                     <ul class="pagination justify-content-center">
                         <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
                             <li class="page-item m-2 <?php if ($i == $page) echo "active" ?>"><a class="page-link btn-custom" href="lesson.php?status=<?= $status ?>&search=<?= $search ?>&class=<?= $class ?>&sort=<?= $sort ?>&p=<?= $i ?>"><?= $i ?></a></li>
                         <?php endfor; ?>
-                    </ul>
 
+                    </ul>
                 </nav>
             <?php endif; ?>
         <?php else: ?>
@@ -307,21 +305,21 @@ foreach ($rowsUsers as $users) {
             </ul>
             <!-- 欄位 -->
             <table class="table table-hover">
-                
-                <thead class="text-content">
-                    <tr>
-                        <th>文章編號</th>
-                        <th>上架狀態</th>
-                        <th>主題</th>
-                        <th>內容</th>
-                        <th>文章分類</th>
-                        <th>作者</th>
-                        <th>建立<br>時間</th>
-                        <th>一鍵<br>修改</th>
-                        <th>詳細<br>資訊</th>
+
+                <thead class="text-content table-pink">
+                    <tr class="text-center m-auto align-middle">
+                        <th class="text-center col-1">文章編號</th>
+                        <th class="text-center col-1">上架狀態</th>
+                        <th class="text-center col-1">主題</th>
+                        <th class="text-center col-1">內容</th>
+                        <th class="text-center col-1">文章分類</th>
+                        <th class="text-center col-1">作者</th>
+                        <th class="text-center col-1">建立時間</th>
+                        <th class="text-center col-1">一鍵修改</th>
+                        <th class="text-center col-1">詳細資訊</th>
                     </tr>
                 </thead>
-                                   
+
             </table>
             目前沒有文章
         <?php endif; ?>

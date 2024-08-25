@@ -89,8 +89,6 @@ foreach ($usersRows as $usersRow) {
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
 
         <main class="product main col neumorphic p-5">
-
-            <h2 class="mb-5 text-center">新增商品</h2>
             <a class="btn-animation btn btn-custom d-inline-flex flex-row align-items-center mb-3" href="articles.php">
                 <i class="fa-solid fa-arrow-left-long"></i><span class="btn-animation-innerSpan d-inline-block">返回文章列表</span>
             </a>
