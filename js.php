@@ -10,7 +10,7 @@
 
     $(document).ready(function() {
         function checkWidth() {
-            if ($(window).width() > 992) {
+            if ($(window).width() > 1200) {
                 $('#sideBar').removeClass('sideBarToggle');
             } else {
                 $('#sideBar').addClass('sideBarToggle');
@@ -25,12 +25,11 @@
     });
 
     //控制side-bar內按鈕的收合
-    $("#adminBtn").click(function(){
+    $("#adminBtn").click(function() {
         $("#adminList").toggleClass("adminToggle")
     })
 
-    $("#storeBtn").click(function(){
+    $("#storeBtn").click(function() {
         $("#storeList").toggleClass("storeToggle")
     })
-
 </script>
