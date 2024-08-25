@@ -10,10 +10,9 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 $id = intval($_GET["id"]);
 
 // 查詢單一文章
-$stmt = $conn->prepare("SELECT * FROM articles WHERE article_id = ?");
-$stmt->bind_param("i", $id);
-$stmt->execute();
-$result = $stmt->get_result();
+$sql = "SELECT * FROM articles WHERE article_id = $id";
+$result = $conn->query($sql);
+$row = $result->fetch_assoc();
 
 if (!$result) {
     die("Query failed: " . $conn->error);
@@ -168,10 +167,9 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                             </tr>
                             <tr>
                                 <th>
-                                    <h5>建立者</h5>
+                                    <h5>作者</h5>
                                 </th>
-                                <td class="text-danger">
-                                    <input type="text" class="form-control form-control-custom" value=<?= ($rowUsers["name"]) ?> name="price">
+                                    <input type="text" class="form-control form-control-custom" value=<?= ($rowUsers["name"]) ?> name="name">
                                 </td>
                             </tr>
                             <tr>
@@ -198,7 +196,7 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                                 <td>
                                     <p class="p-2 lh-lg">
                                     <div>
-                                        <textarea id="tiny" name="content"><?= htmlspecialchars($row["content"], ENT_QUOTES, 'UTF-8') ?></textarea>
+                                        <textarea id="tiny" name="content"><?= $row["content"] ?></textarea>
                                     </div>
                                     </p>
                                 </td>
@@ -212,10 +210,12 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
             </form>
         </div>
     </div>
+
     <?php include("../js.php") ?>
     <?php $conn->close() ?>
 
     <script>
+        // 預覽
         let loadFile = function(event) {
             let output = document.getElementById("output");
             output.src = URL.createObjectURL(event.target.files[0]);
@@ -224,6 +224,7 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
             };
         };
 
+        //所見即所得編輯器
         tinymce.init({
             selector: 'textarea#tiny'
         });

@@ -22,6 +22,7 @@ $title = $_POST["title"];
 $content = $_POST["content"];
 $product_class_id = intval($_POST["product_class_id"]);
 $status = intval($_POST["status"]);
+
 $updateTime = $_POST["updateTime"];
 
 $dateTime = DateTime::createFromFormat('Y-m-d\TH:i', $updateTime);
@@ -56,7 +57,7 @@ if (isset($_FILES["pic"]) && $_FILES["pic"]["error"] === UPLOAD_ERR_OK) {
 }
 
 // 準備 SQL 語句
-$sql = "UPDATE articles SET title = ?, content = ?, product_class_id = ?,created_at = ?, activation = ?, artValid = ?";
+$sql = "UPDATE articles SET title = ?, content = ?, product_class_id = ?, user_id = ?, created_at = ?, activation = ?, artValid = ?";
 if ($updateImage) {
     $sql .= ", img_path = ?";
 }
@@ -66,9 +67,9 @@ $sql .= " WHERE article_id = ?";
 $stmt = $conn->prepare($sql);
 if ($updateImage) {
     // 需要多一個變數來綁定 img_path
-    $stmt->bind_param("ssiiisisi", $title, $content, $product_class_id, $formattedDateTime, $status, $artValid, $newFileName, $id);
+    $stmt->bind_param("ssiiisisi", $title, $content, $product_class_id, $user_id, $formattedDateTime, $status, $artValid, $newFileName, $id);
 } else {
-    $stmt->bind_param("ssiiisis", $title, $content, $product_class_id, $formattedDateTime, $status, $artValid, $id);
+    $stmt->bind_param("ssiiisis", $title, $content, $product_class_id, $user_id, $formattedDateTime, $status, $artValid, $id);
 }
 
 if ($stmt->execute()) {
