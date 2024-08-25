@@ -27,7 +27,7 @@ $search = $conn->real_escape_string($search);
 // 分頁條件
 $filter = isset($_GET['filter']) ? $_GET['filter'] : 'all';
 //是否啟用的分頁
-$whereClause = "WHERE name LIKE '%$search%'";
+$whereClause = "WHERE shop.name LIKE '%$search%'";
 if ($filter == 'active') {
     $whereClause .= " AND activation = 1";
 } elseif ($filter == 'inactive') {
@@ -43,7 +43,13 @@ $total_rows = $result_total->fetch_assoc()['total'];
 $total_page = ceil($total_rows / $per_page);
 
 // 查詢當前頁面的記錄
-$sql = "SELECT * FROM shop $whereClause ORDER BY shop_id ASC LIMIT $start_item, $per_page";
+$sql = "SELECT shop.*, users.name AS username
+        FROM shop
+        JOIN users ON shop.user_id = users.user_id
+        $whereClause
+        ORDER BY shop_id ASC
+        LIMIT $start_item, $per_page";
+
 $result = $conn->query($sql);
 $rows = $result->fetch_all(MYSQLI_ASSOC);
 $shopCount = $result->num_rows;
@@ -75,7 +81,7 @@ $shopCount = $result->num_rows;
             color: var(--text-color);
         }
         .align-middle .teacher-profile{
-            background-color:rgba(0, 0, 0, 0.1);
+            background-color: white;
         }
         .nav-tabs-custom .nav-link{
             text-align: center;
@@ -90,8 +96,8 @@ $shopCount = $result->num_rows;
     <?php include("../modules/dashboard-header_Joe.php"); ?>
     <div class="container-fluid d-flex flex-row px-4">
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
-        <div class="main col neumorphic py-5">
-            <div class="container d-flex justify-content-between align-items-center gx-0">
+        <div class="main col neumorphic py-5 px-4">
+            <div class=" container-fluid d-flex justify-content-between align-items-center">
                 <div class="d-flex justify-content-start">
                     <a class="btn-animation btn btn-custom d-inline-flex flex-row align-items-center mb-3" href="shop-info-admin.php">
                         <i class="fa-solid fa-arrow-left-long"></i><span class="btn-animation-innerSpan d-inline-block">返回</span>
@@ -107,8 +113,8 @@ $shopCount = $result->num_rows;
                     <i class="fa-solid fa-plus align-middle"></i><span class="btn-animation-innerSpan d-inline-block"> 新增店家</span>
                 </a>
             </div>
-            <div class="container">
-                <div class="row">
+            <div class="container-fluid">
+                <div class="row gx-0">
                     <ul class="nav nav-tabs-custom">
                         <li class="nav-item">
                             <a class="main-nav nav-link <?php if(!isset($_GET['filter']) || $_GET['filter'] == 'all') echo 'active'; ?>" href="shop-info-admin.php?filter=all">全部商家</a>
@@ -128,6 +134,7 @@ $shopCount = $result->num_rows;
                                     <tr>
                                         <th class="dontNextLine text-center">Shop_Logo</th>
                                         <th class="dontNextLine text-center">店家名稱</th>
+                                        <th class="dontNextLine text-center">用戶名稱</th>
                                         <th class="dontNextLine text-center">電話</th>
                                         <th class="dontNextLine text-center">地址</th>
                                         <th class="dontNextLine text-center">簡介</th>
@@ -138,42 +145,52 @@ $shopCount = $result->num_rows;
                                 </thead>
                                 
                                 <tbody>
-                                    <?php foreach ($rows as $row): ?>
+                                    <?php foreach ($rows as $row): 
+                                        $shopId = $row['shop_id'];
+                                        $logoPath = $row['logo_path'];
+                                        $name = $row['name'];
+                                        $username = $row['username'];
+                                        $phone = $row['phone'];
+                                        $address = $row['address'];
+                                        $description = $row['description'];
+                                        $signUpTime = $row['sign_up_time'];
+                                        $activation = $row['activation'];
+                                    ?>
                                         <tr>
                                             <td class="align-middle">
                                                 <div class="teacher-profile d-flex align-items-center justify-content-center">
-                                                    <?php if (!empty($row["logo_path"]) && file_exists("../images/shop_logo/" . $row["logo_path"])): ?>
-                                                        <img src="../images/shop_logo/<?= $row["logo_path"] ?>" alt="<?= htmlspecialchars($row["name"]) ?> Logo" class="ratio ratio-4x3">
+                                                    <?php if (!empty($logoPath) && file_exists("../images/shop_logo/" . $logoPath)): ?>
+                                                        <img src="../images/shop_logo/<?= $logoPath ?>" alt="<?= htmlspecialchars($name) ?> Logo" class="ratio ratio-4x3">
                                                     <?php else: ?>
                                                         <i class="fa-regular fa-image"></i>
                                                     <?php endif; ?>
                                                 </div>
                                             </td>
-                                            <td class="text-center align-middle"><?= $row["name"] ?></td>
-                                            <td class="text-center dontNextLine align-middle"><?= $row["phone"] ?></td>
-                                            <td class="dontNextLine align-middle"><?= $row["address"] ?></td>
+                                            <td class="text-center align-middle"><?= $name ?></td>
+                                            <td class="text-center align-middle"><?= $username ?></td>
+                                            <td class="text-center dontNextLine align-middle"><?= $phone ?></td>
+                                            <td class="dontNextLine align-middle"><?= $address ?></td>
                                             <td class="text-center align-middle">
                                                 <?php
-                                                    $description = $row["description"];
                                                     $short_description = mb_strlen($description, 'UTF-8') > 100 ? mb_substr($description, 0, 100, 'UTF-8') . '...' : $description;
                                                     echo htmlspecialchars($short_description);
                                                 ?>
                                             </td>
-                                            <td class="text-center align-middle"><?= $row["sign_up_time"] ?></td>
+                                            <td class="text-center align-middle"><?= $signUpTime ?></td>
                                             <td class="text-center align-middle">
                                                 <div class="form-check form-switch">
                                                     <input class="form-check-input activation-switch" type="checkbox" 
-                                                        id="activationSwitch<?= $row['shop_id'] ?>" 
-                                                        <?= $row["activation"] == 1 ? 'checked' : '' ?>
-                                                        data-shop-id="<?= $row['shop_id'] ?>"
-                                                        data-current-status="<?= $row['activation'] ?>">
-                                                    <label class="form-check-label text-nowrap" for="activationSwitch<?= $row['shop_id'] ?>">
-                                                        <?= $row["activation"] == 1 ? '啟用' : '停用' ?>
+                                                        id="activationSwitch<?= $shopId ?>" 
+                                                        <?= $activation == 1 ? 'checked' : '' ?>
+                                                        data-shop-id="<?= $shopId ?>"
+                                                        data-current-status="<?= $activation ?>">
+                                                    <label class="form-check-label text-nowrap" for="activationSwitch<?= $shopId ?>">
+                                                        <?= $activation == 1 ? '啟用' : '停用' ?>
                                                     </label>
                                                 </div>
                                             </td>
                                             <td class="text-center align-middle">
-                                                <a href="javascript:void(0);" class="btn btn-custom dontNextLine btn-sm m-2" data-shop-id="<?= $row['shop_id'] ?>" onclick="saveShopId(this)">
+                                                <a href="javascript:void(0);" class="btn btn-custom dontNextLine btn-sm m-2" data-shop-id="<?= $shopId ?>" onclick="saveShopId(this)">
                                                         <i class="fa-solid fa-list"></i>
                                                 </a>
                                             </td>

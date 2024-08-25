@@ -66,9 +66,6 @@ require_once("../db_connect.php");
             box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
         }
 
-        * {
-            /* border: 1px solid #000; */
-        }
     </style>
 </head>
 
