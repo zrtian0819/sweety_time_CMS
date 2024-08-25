@@ -1,8 +1,9 @@
 <?php
-    // 獲取當前頁面名稱，不包括查詢字符串
-    function getBasePageName() {
-        return basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), ".php");
-    }
+// 獲取當前頁面名稱，不包括查詢字符串
+function getBasePageName()
+{
+    return basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), ".php");
+}
 ?>
 <div class="sidebar neumorphic setting" id="sideBar">
     <?php if ($role == "admin"): ?>
@@ -42,7 +43,7 @@
                 </li>
             <?php endif; ?>
             <li class="nav-item">
-                <a class="nav-link <?= (getBasePageName() == 'product-list') ? 'active' : '' ?>" href="product-list.php?shopId=<?= $shopId ?>">商品管理</a>
+                <a class="nav-link <?= (getBasePageName() == 'product-list') ? 'active' : '' ?>" href="product-list.php">商品管理</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">訂單管理</a>

@@ -54,20 +54,20 @@ if (!isset($_SESSION["user"])) {
                         </li>
                     <?php endif; ?>
 
-                    <li class="nav-item px-2">
-                        <a class="nav-link" href="dashboard-home_Joe.php"><i class="fa-solid fa-house fa-fw"></i></a>
+                    <li class="nav-item ms-1">
+                        <a class="nav-link px-2 py-1" href="dashboard-home_Joe.php"><i class="fa-solid fa-house fa-fw"></i></a>
                     </li>
-                    <li class="nav-item px-2">
-                        <a class="nav-link" href="../function/doLogout.php">
+                    <li class="nav-item ms-1">
+                        <a class="nav-link px-2 py-1" href="../function/doLogout.php">
                             <!-- <i class="fa-solid fa-user fa-fw"></i> -->
                             <i class="fa-solid fa-right-from-bracket fa-fw"></i>
                         </a>
                     </li>
-                    <!-- <li class="nav-item px-2">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-bell fa-fw"></i></a>
+                    <!-- <li class="nav-item ms-1">
+                        <a class="nav-link px-2 py-1" href="#"><i class="fa-solid fa-bell fa-fw"></i></a>
                     </li> -->
-                    <li class="nav-item px-2" id="sideBarController">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-bars fa-fw"></i></a>
+                    <li class="nav-item ms-1" id="sideBarController">
+                        <a class="nav-link px-2 py-1" href="#"><i class="fa-solid fa-bars fa-fw"></i></a>
                     </li>
                 </ul>
 

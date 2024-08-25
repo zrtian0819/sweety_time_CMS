@@ -139,11 +139,11 @@ foreach ($rowsPro as $productClass) {
     <div class="container-fluid d-flex flex-row px-4">
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
         <div class="main col neumorphic p-5 pt-3">
-            <div class="py-3">
-                <form action="" method="GET">
+            <div class="py-1">
+                <form action="" method="GET" class="d-flex flex-row">
                     <div class="input-group">
-                        <input type="search" class="form-control" placeholder="搜尋課程" name="search" value="<?= $search ?>">
-                        <select class="form-select" aria-label="Default select example" name="class">
+                        <input type="search" class="form-control input-hover input-border-pink" placeholder="搜尋課程" name="search" value="<?= $search ?>">
+                        <select class="form-select input-hover input-border-pink" aria-label="Default select example" name="class">
                             <option value="all" <?= $class == "all" ? "selected" : "" ?>>分類</option>
                             <option value="1" <?= $class == "1" ? "selected" : "" ?>>蛋糕</option>
                             <option value="2" <?= $class == "2" ? "selected" : "" ?>>餅乾</option>
@@ -152,15 +152,20 @@ foreach ($rowsPro as $productClass) {
                             <option value="5" <?= $class == "5" ? "selected" : "" ?>>冰淇淋</option>
                             <option value="6" <?= $class == "6" ? "selected" : "" ?>>其他</option>
                         </select>
-                        <select class="form-select" aria-label="Default select example" name="sort">
+                        <select class="form-select input-hover input-border-pink" aria-label="Default select example" name="sort">
                             <option value="id" <?= $sort == "id" ? "selected" : "" ?>>依課程編號排序(預設)</option>
                             <option value="people" <?= $sort == "people" ? "selected" : "" ?>>依報名人數排序</option>
                             <option value="date" <?= $sort == "date" ? "selected" : "" ?>>依時間排序</option>
                         </select>
-                        <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        <a class="btn btn-custom" href="lesson.php"><i class="fa-solid fa-xmark"></i></a>
+                        <button class="btn neumorphic btn-custom" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                     </div>
+                    <a href="addLesson.php" class="btn btn-custom addClass btn-animation d-inline-flex align-items-center ms-4">
+                        <i class="fa-solid fa-plus"></i><span class="btn-animation-innerSpan">新增課程</span>
+                    </a>
                 </form>
             </div>
+            <hr>
             <ul class="nav nav-tabs-custom">
                 <li class="nav-item">
                     <a class="main-nav nav-link <?= $status === 'all' ? 'active' : '' ?>" href="?status=all">全部</a>
@@ -171,13 +176,12 @@ foreach ($rowsPro as $productClass) {
                 <li class="nav-item">
                     <a class="main-nav nav-link <?= $status === 'off' ? 'active' : '' ?>" href="?status=off&search=<?= $search ?>&class=<?= $class ?>&sort=<?= $sort ?>&p=<?= $page ?>">已下架</a>
                 </li>
-                <a href="addLesson.php" class="btn btn-custom addClass btn-animation d-inline-flex align-items-center">
-                    <i class="fa-solid fa-plus"></i><span class="btn-animation-innerSpan">新增課程</span></a>
+
             </ul>
 
             <!-- Content -->
             <table class="table table-hover">
-                <thead class="text-center">
+                <thead class="text-center table-pink">
                     <th>課程編號</th>
                     <th>課程狀態</th>
                     <th>課程名稱</th>
@@ -243,7 +247,7 @@ foreach ($rowsPro as $productClass) {
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
                         <?php for ($i = 1; $i <= $total_page; $i++) : ?>
-                            <li class="page-item m-2 <?php if ($i == $page) echo "active" ?>"><a class="page-link btn-custom" href="lesson.php?status=<?= $status ?>&search=<?= $search ?>&class=<?= $class ?>&sort=<?= $sort ?>&p=<?= $i ?>"><?= $i ?></a></li>
+                            <li class="page-item m-1 <?php if ($i == $page) echo "active" ?>"><a class="page-link btn-custom" href="lesson.php?status=<?= $status ?>&search=<?= $search ?>&class=<?= $class ?>&sort=<?= $sort ?>&p=<?= $i ?>"><?= $i ?></a></li>
                         <?php endfor; ?>
                     </ul>
 

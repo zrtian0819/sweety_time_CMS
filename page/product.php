@@ -84,7 +84,7 @@ if (!isset($_GET["productId"])) {
         .dontNextLine {
             white-space: nowrap;
             text-align: end;
-            padding-right: 30px !important;
+            padding-right: 50px !important;
         }
 
         .img-box {

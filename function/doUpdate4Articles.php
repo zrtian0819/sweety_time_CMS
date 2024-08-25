@@ -57,9 +57,9 @@ $sql .= " WHERE article_id = ?";
 // 使用 prepared statement 來執行 SQL
 $stmt = $conn->prepare($sql);
 if ($updateImage) {
-    $stmt->bind_param("ssisi", $title, $content, $product_class_id, $status, $newFileName, $id);
+    $stmt->bind_param("ssiisi", $title, $content, $product_class_id, $status, $newFileName, $id);
 } else {
-    $stmt->bind_param("ssisi", $title, $content, $product_class_id, $status, $id);
+    $stmt->bind_param("ssiii", $title, $content, $product_class_id, $status, $id);
 }
 
 if ($stmt->execute()) {
