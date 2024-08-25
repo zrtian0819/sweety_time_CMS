@@ -17,6 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // 檢查檔案上傳
     if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == 0) {
         $targetDir = '../images/users/';
+        if (!is_dir($targetDir)) {
+            mkdir($targetDir, 0777, true); // 确保目标目录存在
+        }
         $fileType = pathinfo($_FILES['profile_image']['name'], PATHINFO_EXTENSION);
         $allowTypes = array('jpg', 'png', 'jpeg', 'gif');
 
@@ -74,7 +77,7 @@ $row = $result->fetch_assoc();
 if ($userCount > 0) {
     $title = $row["name"];
     // 如果有就顯示圖片，沒有就顯示預設圖
-    $defaultImage = 'https://images.unsplash.com/photo-1472396961693-142e6e269027?q=80&w=2152&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
+    $defaultImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXF4lcp3hYr_Pgj9kltPl5cBbrX_Fisj4hgg&s';
     $imagePath = !empty($row['portrait_path']) ? '../images/users/' . $row['portrait_path'] : $defaultImage;
 } else {
     $title = "使用者不存在";
@@ -113,85 +116,84 @@ $conn->close();
 
     <div class="container-fluid d-flex flex-row px-4">
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
-
-        <div class="container-fluid d-flex flex-row px-4">
-            <div class="main col neumorphic p-5">
-                <div class="py-2">
-                    <a class="btn btn-neumorphic user-btn" href="users.php" title="回使用者"><i class="fa-solid fa-left-long"></i></a>
-                </div>
+        <div class="main col neumorphic p-5">
+            <div class="d-flex">
+                <a class="btn-animation btn btn-custom d-inline-flex flex-row align-items-center mb-3 mx-3" href="users.php">
+                    <i class="fa-solid fa-arrow-left-long"></i><span class="btn-animation-innerSpan d-inline-block">返回</span>
+                </a>
                 <h2 class="mb-3">修改資料</h2>
-                <div class="container-fluid d-flex justify-content-center">
-                    <div class="row col-10">
-                        <?php if ($userCount > 0): ?>
-                            <form action="user-edit.php?user_id=<?= ($user_id) ?>" method="post" enctype="multipart/form-data">
-                                <div class="mb-3 d-flex justify-content-center align-items-center flex-column">
-                                    <label for="profile_image">
-                                        <input type="file" name="profile_image" class="my-3 ms-5 ps-5" data-target="preview_img">
-                                    </label>
-                                    <div>
-                                        <img src="<?= ($imagePath) ?>" alt="Profile Image" class="object-fit-fill" id="preview_img">
-                                    </div>
+            </div>
+            <div class="container-fluid d-flex justify-content-center">
+                <div class="row col-10">
+                    <?php if ($userCount > 0): ?>
+                        <form action="user-edit.php?user_id=<?= ($user_id) ?>" method="post" enctype="multipart/form-data">
+                            <div class="mb-3 d-flex justify-content-center align-items-center flex-column">
+                                <label for="profile_image">
+                                    <input type="file" name="profile_image" class="my-3 ms-5 ps-5" data-target="preview_img">
+                                </label>
+                                <div class="user-img">
+                                    <img src="<?= ($imagePath) ?>" alt="Profile Image" class="w-100 h-100 object-fit-cover" id="preview_img">
                                 </div>
-                                <input type="hidden" name="user_id" value="<?= ($user_id) ?>">
-                                <table class="table table-bordered">
-                                    <tr>
-                                        <th class="text-center">Name</th>
-                                        <td>
-                                            <input type="text" value="<?= ($row["name"]) ?>" class="form-control" name="name">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-center">Password</th>
-                                        <td>
-                                            <input type="password" value="<?= ($row["password"]) ?>" class="form-control" name="password">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-center">Email</th>
-                                        <td>
-                                            <input type="text" value="<?= ($row["email"]) ?>" class="form-control" name="email">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-center">Birthday</th>
-                                        <td><?= ($row["birthday"]) ?></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-center">Sign up time</th>
-                                        <td><?= ($row["sign_up_time"]) ?></td>
-                                    </tr>
-                                </table>
-                                <div class="d-flex justify-content-end">
-                                    <button type="submit" class="btn btn-neumorphic user-btn">儲存</button>
-                                </div>
-                            </form>
-                        <?php else: ?>
-                            使用者不存在
-                        <?php endif; ?>
-                    </div>
+                            </div>
+                            <input type="hidden" name="user_id" value="<?= ($user_id) ?>">
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th class="text-center">Name</th>
+                                    <td>
+                                        <input type="text" value="<?= ($row["name"]) ?>" class="form-control" name="name">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="text-center">Password</th>
+                                    <td>
+                                        <input type="password" value="<?= ($row["password"]) ?>" class="form-control" name="password">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="text-center">Email</th>
+                                    <td>
+                                        <input type="text" value="<?= ($row["email"]) ?>" class="form-control" name="email">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="text-center">Birthday</th>
+                                    <td><?= ($row["birthday"]) ?></td>
+                                </tr>
+                                <tr>
+                                    <th class="text-center">Sign up time</th>
+                                    <td><?= ($row["sign_up_time"]) ?></td>
+                                </tr>
+                            </table>
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" class="btn btn-neumorphic user-btn">儲存</button>
+                            </div>
+                        </form>
+                    <?php else: ?>
+                        使用者不存在
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
     </div>
     <?php include("../js.php"); ?>
     <script>
-        let input =document.querySelector('input[name=profile_image]')
-        input.addEventListener('change',function(e){
-            readURL(e.target);
-        })
-        function readURL(input){
-            if(input.files && input.files[0]){
-                let reader = new FileReader();
-                reader.onload = function(e){
-                    let imgId = input.getAttribute('data-target')
-                    let img =document.querySelector('#'+imgId)
-                    img.setAttribute('src',e.target.result);
-                }
-                reader.readAsDataURL(input.files[0]);
+    let input = document.querySelector('input[name=profile_image]')
+    input.addEventListener('change', function(e) {
+        readURL(e.target);
+    })
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let imgId = input.getAttribute('data-target')
+                let img = document.querySelector('#' + imgId)
+                img.setAttribute('src', e.target.result);
             }
+            reader.readAsDataURL(input.files[0]);
         }
-        
-    </script>
+    }
+</script>
 </body>
 
 </html>

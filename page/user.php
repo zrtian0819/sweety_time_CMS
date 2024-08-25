@@ -21,7 +21,7 @@ $user_img = $result_img->fetch_assoc();
 
 if ($userCount > 0) {
     $title = $row["name"];
-    $defaultImage = 'https://images.unsplash.com/photo-1472396961693-142e6e269027?q=80&w=2152&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
+    $defaultImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXF4lcp3hYr_Pgj9kltPl5cBbrX_Fisj4hgg&s';
     $imagePath = !empty($row['portrait_path']) ? '../images/users/' . $row['portrait_path'] : $defaultImage;
 } else {
     $title = "使用者不存在";
@@ -47,6 +47,7 @@ if ($userCount > 0) {
         .user-search {
             width: 200px;
         }
+
         .user-img {
             width: 300px;
             height: 300px;
@@ -63,14 +64,16 @@ if ($userCount > 0) {
 
         <div class="container-fluid d-flex flex-row px-4">
             <div class="main col neumorphic p-5">
-                <div class="py-2">
-                    <a class="btn btn-neumorphic user-btn" href="users.php" title="回使用者列表"><i class="fa-solid fa-left-long"></i></a>
+                <div class="d-flex">
+                    <a class="btn-animation btn btn-custom d-inline-flex flex-row align-items-center mb-3 mx-3" href="users.php">
+                        <i class="fa-solid fa-arrow-left-long"></i><span class="btn-animation-innerSpan d-inline-block">返回</span>
+                    </a>
+                    <h2 class="mb-3"><?= $title ?> 基本資料</h2>
                 </div>
-                <h2 class="mb-3"><?= $title ?> 基本資料</h2>
                 <div class="container">
                     <div class="row">
                         <?php if ($userCount > 0): ?>
-                            
+
                             <div class="mb-3 d-flex justify-content-center align-items-center flex-column">
                                 <img src="<?= ($imagePath) ?>" alt="Profile Image" class="object-fit-fill user-img">
                             </div>
@@ -97,7 +100,7 @@ if ($userCount > 0) {
                                 </tr>
                             </table>
                             <div class="d-flex justify-content-end">
-                                <a href="user-edit.php?user_id=<?=$row["user_id"]?>" class="btn btn-neumorphic user-btn"><i class="fa-solid fa-user-pen"></i></a>
+                                <a href="user-edit.php?user_id=<?= $row["user_id"] ?>" class="btn btn-neumorphic user-btn"><i class="fa-solid fa-user-pen"></i></a>
                             </div>
                         <?php else: ?>
                             使用者不存在
