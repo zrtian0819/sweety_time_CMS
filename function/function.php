@@ -24,3 +24,14 @@ function statusStrRemoveJoe($text)
     $newText = str_replace($search, $replace, $text);
     return $newText;
 }
+
+
+/*先取名為超級模糊搜尋*/
+function superSearch($text)
+{
+    // 使用 mb_str_split() 將字串正確地拆分為字符數組
+    $characters = mb_str_split($text, 1, 'UTF-8');
+    // 用 '%' 將字符數組連接起來
+    $result = '%' . implode('%', $characters) . '%';
+    return $result;
+}

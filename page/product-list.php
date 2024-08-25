@@ -56,8 +56,9 @@ array_push($whereArr, $where_status);
 $where_search = "";
 if (isset($_GET["search"]) && !empty($_GET["search"])) {
     $search = $_GET["search"];
-    $where_search = "name LIKE '%$search%'";
-
+    $Supersearch = superSearch($search);
+    // echo $Supersearch;
+    $where_search = "(name LIKE '$Supersearch' OR keywords LIKE '%$search%')";
     $nav_page_name .= "&search=" . $search;
 }
 array_push($whereArr, $where_search);
