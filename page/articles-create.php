@@ -130,7 +130,7 @@ foreach ($usersRows as $usersRow) {
                                         <tr>
                                             <td class="dontNextLine fw-bold">文章內容</td>
                                             <td>
-                                                <textarea name="description" class="form-control textarea-custom" id="tiny" rows="5" placeholder="請輸入文章內容"></textarea>
+                                                <textarea name="content" class="form-control textarea-custom" id="tiny" rows="5" placeholder="請輸入文章內容"></textarea>
                                             </td>
                                         </tr>
                                     </table>
@@ -153,7 +153,7 @@ foreach ($usersRows as $usersRow) {
 
                                 <div class="option-area d-flex justify-content-center mt-4 ">
                                     <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="product-list.php">取消</a>
-                                    <button class="btn btn-neumorphic px-4 mx-3 fw-bolder" type="submit">新增商品</button>
+                                    <button class="btn btn-neumorphic px-4 mx-3 fw-bolder" type="submit">新增文章</button>
                                 </div>
                             </div>
                         </form>

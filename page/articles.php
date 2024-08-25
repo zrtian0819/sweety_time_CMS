@@ -2,6 +2,7 @@
 
 require_once("../db_connect.php");
 include("../function/login_status_inspect.php");
+include("../function/function.php");
 
 $status = isset($_GET["status"]) ? $_GET["status"] : "all";
 
@@ -11,10 +12,10 @@ $params = [];
 $types = "";
 
 // 文字縮排
-function getLeftChar($text, $num)
-{
-    return substr($text, 0, $num);
-}
+// function getLeftChar($text, $num)
+// {
+//     return substr($text, 0, $num);
+// }
 
 if ($status == "on") {
     $sql .= " AND activation = 1";
@@ -239,7 +240,7 @@ foreach ($rowsUsers as $users) {
                             <?php echo ($articles["activation"] == 1) ? "<td>" . "上架中" : "<td class='text-danger'>" . "已下架"; ?></td>
                             </td>
                             <td><?= $articles["title"] ?></td>
-                            <td><?= getLeftChar($articles["content"], 200) . "..." ?></td>
+                            <td><?= getLeftChar($articles["content"], 100) . "..." ?></td>
                             <td><?= $productClassArr[$articles["product_class_id"]] ?></td>
                             <td><?= $usersArr[$id] ?></td>
                             <td><?= $formartDate ?></td>
@@ -278,7 +279,7 @@ foreach ($rowsUsers as $users) {
             <?php if (isset($page)): ?>
                 <nav aria-label="Page navigation">
                     <ul class="pagination justify-content-center">
-                        <?php for ($i = 1; $i <= $total_page; $i++) : ?>
+                        <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
                             <li class="page-item m-2 <?php if ($i == $page) echo "active" ?>"><a class="page-link btn-custom" href="lesson.php?status=<?= $status ?>&search=<?= $search ?>&class=<?= $class ?>&sort=<?= $sort ?>&p=<?= $i ?>"><?= $i ?></a></li>
                         <?php endfor; ?>
                     </ul>
