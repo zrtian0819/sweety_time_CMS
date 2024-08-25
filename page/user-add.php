@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $targetFilePath = $targetDir . $newFileName;
             if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $targetFilePath)) {
                 $sql = "INSERT INTO users (role,name, account, password, email, phone, birthday, sign_up_time,activation,portrait_path) 
-VALUES ('user','$name', '$account', '$password', '$email', '$phone', '$birthday','$now',1,'$newFileName')";
+                VALUES ('user','$name', '$account', '$password', '$email', '$phone', '$birthday','$now',1,'$newFileName')";
                 if ($conn->query($sql) === TRUE) {
                     header("location:users.php");
                     exit;
