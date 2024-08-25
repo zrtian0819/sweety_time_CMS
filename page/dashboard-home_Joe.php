@@ -95,7 +95,7 @@ $productCountActive = $counts['active_products'];//上架中的商品數量
     <style>
         /* 自定義卡片容器 */
         .custom-card {
-            padding: 1rem;
+            /* padding: 1rem; */
             height: 100%;
             border: var(--area-border);
             border-radius: 10px;
@@ -110,10 +110,11 @@ $productCountActive = $counts['active_products'];//上架中的商品數量
 
         /* 第一行卡片內容高度調整 */
         .row .custom-card h4 {
+            text-wrap: nowrap;
             font-size: 1rem;
         }
         .row .custom-card p {
-            font-size: 2rem;
+            font-size: 1.6rem;
             font-weight: 700;
         }
         #canvas-holder {
@@ -142,19 +143,17 @@ $productCountActive = $counts['active_products'];//上架中的商品數量
 
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
 
-        <div class="main col neumorphic p-5">
+        <div class="main col neumorphic px-2 py-5">
 
-            <h2 class="fw-bolder"><?= $name?>, 您好！</h2>
-            <p>
+            <h2 class="fw-bolder mb-5"><?= $name?>, 您好！</h2>
                 <?php if($SessRole=="admin"):?>
-                    <!-- 請使用側邊導覽列以管理您的平台資料。 -->
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-6 me-4">
-                                <div class="row">
+                    <div class="container-fluid">
+                        <div class="row mx-0">
+                            <div class="col-md-6">
+                                <div class="row mb-2 mx-0">
                                     <div class="col-md-4">
                                         <div class="custom-card text-center d-flex flex-column justify-content-between">
-                                            <div class="d-flex">
+                                            <div class="d-flex ms-2 mt-2">
                                                 <h4>會員數量 <i class="fa-solid fa-user"></i></h4>
                                             </div>
                                                 <p>
@@ -165,7 +164,7 @@ $productCountActive = $counts['active_products'];//上架中的商品數量
                                     </div>
                                     <div class="col-md-4">
                                         <div class="custom-card text-center d-flex flex-column justify-content-between">
-                                        <div class="d-flex">
+                                            <div class="d-flex ms-2 mt-2">
                                                 <h4>店家數量 <i class="fa-solid fa-shop"></i></h4>
                                             </div>
                                             <p>
@@ -175,7 +174,7 @@ $productCountActive = $counts['active_products'];//上架中的商品數量
                                     </div>
                                     <div class="col-md-4">
                                         <div class="custom-card text-center d-flex flex-column justify-content-between">
-                                        <div class="d-flex">
+                                            <div class="d-flex ms-2 mt-2">
                                                 <h4>商品數量 <i class="fa-solid fa-bag-shopping"></i>  </h4>
                                             </div>
                                             <p>
@@ -184,10 +183,12 @@ $productCountActive = $counts['active_products'];//上架中的商品數量
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row mx-0">
                                     <div class="col-md-12">
                                         <div class="custom-card">
-                                            <h4>全站銷售量</h4>
+                                            <div class="d-flex ms-2 mt-2">    
+                                                <h4>全站銷售量</h4>
+                                            </div>
                                             <div class="chart-container">
                                                 <canvas id="salesChart"></canvas>
                                             </div>
@@ -195,9 +196,11 @@ $productCountActive = $counts['active_products'];//上架中的商品數量
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-5 ms-3">
                                 <div class="custom-card">
-                                    <h4>熱銷名店</h4>
+                                    <div class="d-flex ms-2 mt-2">
+                                        <h4>熱銷名店</h4>
+                                    </div>
                                     <div class="chart-container">
                                         <canvas id="chart-area"></canvas>
                                     </div>
@@ -210,8 +213,6 @@ $productCountActive = $counts['active_products'];//上架中的商品數量
                 <?php else:?>
                     您沒有任何後台權限。
                 <?php endif;?>
-
-            </p>
         </div>
     </div>
 
@@ -250,7 +251,7 @@ $productCountActive = $counts['active_products'];//上架中的商品數量
                 options: {
                     indexAxis: 'y',
                     responsive: true,
-                    maintainAspectRatio: false,// 保持圖表比例
+                    maintainAspectRatio: true,// 保持圖表比例
                     scales: {
                         x: {
                             beginAtZero: true,
