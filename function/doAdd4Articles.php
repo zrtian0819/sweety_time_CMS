@@ -7,10 +7,15 @@ if (!isset($_POST["title"])) {
 
 require_once("../db_connect.php");
 
+// 判斷開啟Session
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 $title = $_POST["title"] ?? ''; // 如果 POST 沒有值，使用空字串
 $content = $_POST["content"] ?? ''; // 預設值為空字串
 $class = $_POST["class"] ?? ''; // 預設值為空字串
-$user_id = $_POST["user_id"] ?? 0; // 預設值為 0，可能需要設定為其他值
+$user_id = $_SESSION["user"]["user_id"] ?? 0; // 把當前使用者傳入
 
 $time = $_POST["createTime"];
 $dateTime = DateTime::createFromFormat('Y-m-d\TH:i', $time);

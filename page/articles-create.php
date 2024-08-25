@@ -113,7 +113,7 @@ foreach ($usersRows as $usersRow) {
                                         </tr>
                                         <tr>
                                             <td class="dontNextLine fw-bold">建立時間</td>
-                                            <td><input type="datetime-local" class="form-control form-control-custom" name="updateTime"></td>
+                                            <td><input type="datetime-local" class="form-control form-control-custom" name="createTime"></td>
                                         </tr>
                                         <tr>
                                             <td class="dontNextLine fw-bold">文章分類</td>
