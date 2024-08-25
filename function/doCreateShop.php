@@ -120,7 +120,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conn->commit();
 
         $_SESSION['success_message'] = "註冊成功！";
-        header("Location: ../page/login.php");
+        if (isset($_SESSION['user']) && isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin') {
+            header("Location: ../page/shop-info-admin.php");
+            exit;
+        } else {
+            header("Location: ../page/login.php");
+            exit;
+        }
         exit;
         } catch (Exception $e) {
             // 如果出現錯誤，回滾事務
@@ -136,9 +142,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_stmt->close();
     $shop_stmt->close();
     $conn->close();
+    header("location: ../page/login.php");
+    exit;
 } else {
     $_SESSION['error_message'] = "Invalid request method.";
+    
+    if (isset($_SESSION['user']) && isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin') {
+        header("Location: ../page/shop-info-admin.php");
+    } else {
+        header("Location: ../page/login.php");
+    }
+    exit;
 }
-header("location: ../page/login.php");
-exit;
 ?>
