@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <?php include("../modules/dashboard-header_Joe.php"); ?>
     <div class="container-fluid d-flex flex-row px-4">
-        <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
+        <?php include("../modules/dashboard-sidebar_Su.php"); ?>
         <div class="main col neumorphic p-5">
             <form action="create-teacher.php" method="POST" enctype="multipart/form-data">
                 <div class="mb-3">
@@ -117,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <option value="0">已下架</option>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary">Save Teacher</button>
+                <button type="submit" class="btn btn-custom">儲存變更</button>
             </form>
         </div>
     </div>

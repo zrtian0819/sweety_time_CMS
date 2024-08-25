@@ -63,7 +63,7 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
 <body>
     <?php include("../modules/dashboard-header_Joe.php"); ?>
     <div class="container-fluid d-flex flex-row px-4">
-        <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
+        <?php include("../modules/dashboard-sidebar_Su.php"); ?>
         <div class="main col neumorphic p-5">
             <ul class="nav nav-tabs nav-tabs-custom d-flex justify-content-between">
                 <div class="d-flex">
@@ -77,14 +77,17 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                         <a class="nav-link <?= $status === 'off' ? 'active' : '' ?>" href="?status=off">已下架</a>
                     </li>
                 </div>
-                <li><a class="btn btn-custom" href="create-teacher.php"><i class="fa-solid fa-user-plus"></i></a></li>
+                <li>
+                <a class="btn-animation btn btn-custom d-flex flex-row align-items-center" href="create-teacher.php">
+                <i class="fa-solid fa-user-plus"></i><span class="btn-animation-innerSpan d-inline-block">新增教師</span>
+                </a></li>
             </ul>
 
             <div class="input-group mb-3 mt-4">
                 <form method="GET" action="teacher.php" class="d-flex">
                     <input type="hidden" name="status" value="<?= htmlspecialchars($status) ?>">
-                    <input type="text" class="form-control form-control-custom" name="search" placeholder="請輸入..." aria-label="輸入文字" aria-describedby="button-addon1" value="<?= htmlspecialchars($search) ?>">
-                    <button class="btn btn-enter" type="submit" id="button-addon1">提交</button>
+                    <input type="search" class="form-control" name="search" placeholder="搜尋教師..." aria-label="輸入文字" aria-describedby="button-addon1" value="<?= htmlspecialchars($search) ?>" style="max-width:200px">
+                    <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </form>
             </div>
 
@@ -105,7 +108,17 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                                 <td class="align-middle"><a class="teacher-profile" href=""> <img src="../images/teachers/<?= htmlspecialchars($teacher["img_path"]) ?>" alt="<?= htmlspecialchars($teacher["name"]) ?>" class="ratio ratio-4x3"></a></td>
                                 <td class="align-middle"><?= htmlspecialchars($teacher["teacher_id"]) ?></td>
                                 <td class="align-middle"><?= htmlspecialchars($teacher["name"]) ?></td>
-                                <td class="align-middle"><?= htmlspecialchars($teacher["expertise"]) ?></td>
+                                <td class="align-middle">
+                                    <?php
+                                    $expertise_text = htmlspecialchars($teacher["expertise"]);
+                                    // 限制字數為 30 個字元
+                                    if (mb_strlen($expertise_text) > 30) {
+                                        $expertise_text = mb_substr($expertise_text, 0, 30) . '...';
+                                    }
+                                    echo $expertise_text;
+                                    ?>
+                                </td>
+
                                 <td class="align-middle">
                                     <!-- 查看按鈕 -->
                                     <button type="button" class="btn btn-custom view-details" data-id="<?= htmlspecialchars($teacher["teacher_id"]) ?>" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -133,7 +146,7 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                     <ul class="pagination">
                         <?php for ($i = 1; $i <= $total_page; $i++) : ?>
                             <li class="page-item <?= ($page == $i) ? 'active' : '' ?>">
-                                <a class="btn-neumorphic" href="teacher.php?status=<?= htmlspecialchars($status) ?>&search=<?= htmlspecialchars($search) ?>&p=<?= $i ?>"><?= $i ?></a>
+                                <a class="page-link btn-custom" href="teacher.php?status=<?= htmlspecialchars($status) ?>&search=<?= htmlspecialchars($search) ?>&p=<?= $i ?>"><?= $i ?></a>
                             </li>
                         <?php endfor; ?>
                     </ul>
