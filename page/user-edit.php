@@ -128,8 +128,8 @@ $conn->close();
                                 <label for="profile_image">
                                     <input type="file" name="profile_image" class="my-3 ms-5 ps-5" data-target="preview_img">
                                 </label>
-                                <div>
-                                    <img src="<?= ($imagePath) ?>" alt="Profile Image" class="object-fit-fill" id="preview_img">
+                                <div class="user-img">
+                                    <img src="<?= ($imagePath) ?>" alt="Profile Image" class="w-100 h-100 object-fit-cover" id="preview_img">
                                 </div>
                             </div>
                             <input type="hidden" name="user_id" value="<?= ($user_id) ?>">
