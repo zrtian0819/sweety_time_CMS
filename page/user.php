@@ -21,7 +21,7 @@ $user_img = $result_img->fetch_assoc();
 
 if ($userCount > 0) {
     $title = $row["name"];
-    $defaultImage = 'https://images.unsplash.com/photo-1472396961693-142e6e269027?q=80&w=2152&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
+    $defaultImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXF4lcp3hYr_Pgj9kltPl5cBbrX_Fisj4hgg&s';
     $imagePath = !empty($row['portrait_path']) ? '../images/users/' . $row['portrait_path'] : $defaultImage;
 } else {
     $title = "使用者不存在";

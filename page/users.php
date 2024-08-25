@@ -149,7 +149,7 @@ if ($result) {
                     <?php if ($status === 'off' && $off_count == 0): ?>
                         <a class="btn-animation btn btn-custom d-inline-flex flex-row align-items-center mb-3 mx-3" href="users.php" title="回使用者列表">
                             <i class="fa-solid fa-arrow-left-long"></i><span class="btn-animation-innerSpan d-inline-block">返回</span>
-                        </a> 
+                        </a>
                     <?php endif; ?>
                     <!-- <h2 class="mb-3">會員管理</h2> -->
                 </div>
@@ -333,22 +333,24 @@ if ($result) {
                                 document.getElementById('userDetails').innerHTML = `<p>${data.error}</p>`;
                             } else {
                                 // 填充彈跳視窗的內容
-                                let portraitPath = data.portrait_path ? `../images/users/${data.portrait_path}` : '../images/default-user.png';
+                                const defaultImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXF4lcp3hYr_Pgj9kltPl5cBbrX_Fisj4hgg&s';
+                                const imagePath = data.portrait_path ? `../images/users/${data.portrait_path}`:defaultImage;
+
                                 document.getElementById('userDetails').innerHTML = `
-                        <div class="user-info-container">
-                            <div class="text-center">
-                                <img src="${portraitPath}" alt="${data.name}" class="img-fluid user-portrait">
-                            </div>
-                            <table class="user-info-box m-2">
-                                <p class="user-info"><strong>ID:</strong> ${data.user_id}</p>
-                                <p class="user-info"><strong>Name:</strong> ${data.name}</p>
-                                <p class="user-info"><strong>Account:</strong> ${data.account}</p>
-                                <p class="user-info"><strong>Birthday:</strong> ${data.birthday}</p>
-                                <p class="user-info"><strong>Email:</strong> ${data.email}</p>
-                                <p class="user-info"><strong>Phone:</strong> ${data.phone}</p>
-                                <p class="user-info"><strong>Sign up time:</strong> ${data.sign_up_time}</p>
-                            </table>
-                        </div>`;
+                            <div class="user-info-container">
+                                <div class="text-center">
+                                    <img src="${imagePath}" alt="${data.name}" class="img-fluid user-portrait">
+                                </div>
+                                <table class="user-info-box m-2">
+                                    <p class="user-info"><strong>ID:</strong> ${data.user_id}</p>
+                                    <p class="user-info"><strong>Name:</strong> ${data.name}</p>
+                                    <p class="user-info"><strong>Account:</strong> ${data.account}</p>
+                                    <p class="user-info"><strong>Birthday:</strong> ${data.birthday}</p>
+                                    <p class="user-info"><strong>Email:</strong> ${data.email}</p>
+                                    <p class="user-info"><strong>Phone:</strong> ${data.phone}</p>
+                                    <p class="user-info"><strong>Sign up time:</strong> ${data.sign_up_time}</p>
+                                </table>
+                            </div>`;
 
                                 document.querySelector('.modal-footer .btn-custom[href*="user-edit.php"]').href = `user-edit.php?user_id=${data.user_id}`;
                                 document.querySelector('.modal-footer .btn-custom[href*="user-coupon-list.php"]').href = `user-coupon-list.php?user_id=${data.user_id}`;
@@ -360,19 +362,10 @@ if ($result) {
                         });
                 });
             });
-
-            // 监听排序按钮点击事件，添加橘色背景类
-            document.querySelectorAll('.user-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    // 先移除所有按钮的橘色背景类
-                    document.querySelectorAll('.user-btn').forEach(btn => btn.classList.remove('btn-orange'));
-
-                    // 给当前点击的按钮添加橘色背景类
-                    this.classList.add('btn-orange');
-                });
-            });
         });
     </script>
+
+
 
 </body>
 

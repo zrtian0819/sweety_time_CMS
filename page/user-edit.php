@@ -17,6 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // 檢查檔案上傳
     if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == 0) {
         $targetDir = '../images/users/';
+        if (!is_dir($targetDir)) {
+            mkdir($targetDir, 0777, true); // 确保目标目录存在
+        }
         $fileType = pathinfo($_FILES['profile_image']['name'], PATHINFO_EXTENSION);
         $allowTypes = array('jpg', 'png', 'jpeg', 'gif');
 
@@ -74,7 +77,7 @@ $row = $result->fetch_assoc();
 if ($userCount > 0) {
     $title = $row["name"];
     // 如果有就顯示圖片，沒有就顯示預設圖
-    $defaultImage = 'https://images.unsplash.com/photo-1472396961693-142e6e269027?q=80&w=2152&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
+    $defaultImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXF4lcp3hYr_Pgj9kltPl5cBbrX_Fisj4hgg&s';
     $imagePath = !empty($row['portrait_path']) ? '../images/users/' . $row['portrait_path'] : $defaultImage;
 } else {
     $title = "使用者不存在";
@@ -174,23 +177,23 @@ $conn->close();
     </div>
     <?php include("../js.php"); ?>
     <script>
-        let input = document.querySelector('input[name=profile_image]')
-        input.addEventListener('change', function(e) {
-            readURL(e.target);
-        })
+    let input = document.querySelector('input[name=profile_image]')
+    input.addEventListener('change', function(e) {
+        readURL(e.target);
+    })
 
-        function readURL(input) {
-            if (input.files && input.files[0]) {
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    let imgId = input.getAttribute('data-target')
-                    let img = document.querySelector('#' + imgId)
-                    img.setAttribute('src', e.target.result);
-                }
-                reader.readAsDataURL(input.files[0]);
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let imgId = input.getAttribute('data-target')
+                let img = document.querySelector('#' + imgId)
+                img.setAttribute('src', e.target.result);
             }
+            reader.readAsDataURL(input.files[0]);
         }
-    </script>
+    }
+</script>
 </body>
 
 </html>

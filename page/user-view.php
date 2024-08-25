@@ -15,7 +15,6 @@ if ($user_id > 0) {
     // 找到資料，返回 JSON 
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
-
         // 返回用戶資料的 JSON 格式
         echo json_encode($user);
     } else {
@@ -27,3 +26,4 @@ if ($user_id > 0) {
 
 $stmt->close();
 $conn->close();
+?>
