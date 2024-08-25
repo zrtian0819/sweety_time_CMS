@@ -179,6 +179,10 @@ $user_row = $user_result->fetch_assoc();
         .coupon-input-bar{
             width: 50px;
         }
+        p{
+            margin-bottom: auto;
+            margin-top: auto;
+        }
     </style>
 </head>
 
@@ -190,13 +194,7 @@ $user_row = $user_result->fetch_assoc();
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
 
         <div class="main col neumorphic p-5">
-            <div class="">
-                <a href="./users.php">使用者管理</a>>
-                <a href="./user-coupon-list.php?user_id=<?= $user_id ?>>"><?php echo $user_row['name'] ?>的優惠券</a>
-            </div>
-            <hr>
-
-            <h2>
+            <h2 class="d-flex justify-content-center mb-5">
                 <a href="./user.php?user_id=<?= $user_id ?>" class="text-decoration-none" title="查看使用者資料">
                     <?php echo $user_row['name'] ?>
                 </a>
@@ -204,7 +202,7 @@ $user_row = $user_result->fetch_assoc();
             </h2>
 
             <!-- 篩選器 -->
-            <div class="py-2">
+            <div class="py-2 myFilter mb-3">
                 <form action="">
                     <div class="input-group">
                         <input type="hidden" class="form-control" name="user_id" value="<?= $user_id ?>">
@@ -241,58 +239,59 @@ $user_row = $user_result->fetch_assoc();
                             <option <?php echo $enabled_status == "1" ? "selected" : ""; ?> value="1"><span class="text-success">可使用</span></option>
                             <option <?php echo $enabled_status == "0" ? "selected" : ""; ?> value="0"><span class="text-danger">被禁用</span></option>
                         </select>
-                        <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        <button class="btn btn-custom" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                     </div>
                 </form>
             </div>
-            <hr>
 
             <!-- 設定一頁幾筆資料 -->
-            <div class="my-2">
+            <div class="my-2 d-flex justify-content-start">
                 <form class="d-flex align-items-center">
+                    <span>共有<?= $total_rows ?>筆資料，</span>
                     <span>每頁</span>
                     <input type="text" class="form-control coupon-input-bar" name="per_page" id="perPageInput" value="<?= $per_page ?>" placeholder="">
                     <span>筆</span>
-                    <a class="btn neumorphic mx-2" id="perPageBtn">GO</a>
-                    <span>，共有<?= $total_rows ?>筆資料</span>
+                    <a class="btn mx-1 fs-6 fw-bold" id="perPageBtn">GO</a>
                 </form>
             </div>
 
             <!-- 顯示資料的表格 -->
-            <table class="table table-bordered">
-                <thead>
+            <table class="table">
+                <thead class="table-pink">
                     <tr>
-                        <th>優惠券編號<br>(user_coupon_id)</th>
-                        <th>優惠券id<br>(coupon_id)</th>
-                        <th>優惠券名稱<br>(name)</th>
-                        <th>折扣率<br>(used_status)</th>
-                        <th>使用期限<br></th>
-                        <th>發券日期<br>(received_time)</th>
-                        <th>使用日期<br>(used_time)</th>
-                        <th>可用狀態(enabled)</th>
+                        <th class="text-center">優惠券編號</th>
+                        <th class="text-center">優惠券id</th>
+                        <th class="text-center">優惠券名稱</th>
+                        <th class="text-center">折扣率</th>
+                        <th class="text-center">使用期限</th>
+                        <th></th>
+                        <th class="text-center">發券日期</th>
+                        <th class="text-center">使用日期</th>
+                        <th class="text-center">可用狀態</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($userCoupon_rows as $userCoupon_row) : ?>
                         <tr>
-                            <td>
+                            <td class="text-center align-middle">
                                 <?php echo $userCoupon_row['users_coupon_id'];?>
                             </td>
-                            <td>
+                            <td class="text-center align-middle">
                                 <?php echo $userCoupon_row['coupon_id'];?>
                             </td>
-                            <td>
+                            <td class="text-center align-middle">
                                 <?php 
                                 echo $userCoupon_row['coupon_name'];
                                 echo '<br>';
                                 echo $userCoupon_row['activation'] == 0 ?'<span class="text-danger">（本優惠活動已暫停）</span>' : '';
                                 ?>
                             </td>
-                            <td>
+                            <td class="text-center align-middle">
                                 <?php echo ($userCoupon_row['discount_rate'])*100;?>
                                 %
                             </td>
-                            <td>
+                            <td class="text-center align-middle">
                                 <?php echo $userCoupon_row['start_time'];?>
                                 ~
                                 <?php 
@@ -301,23 +300,25 @@ $user_row = $user_result->fetch_assoc();
                                 }else{
                                     echo $userCoupon_row['end_date'];
                                 }
-                                echo '<br>';
-                                if($userCoupon_row['start_time'] > $now){
-                                    echo '<span class="text-secondary">尚未開始</span>';
-                                }elseif($userCoupon_row['start_time'] <= $now && ($now <= $userCoupon_row['end_date'] || $userCoupon_row['permanent'] == 1)){
-                                    echo '<span class="text-success">效期內</span>';
-                                }elseif($userCoupon_row['end_date'] <= $now && $userCoupon_row['permanent'] == 0){
-                                    echo '<span class="text-danger">已過期</span>';
-                                }
-                                
                                 ?>
                             </td>
-                            <td>
+                            <td class="text-center align-middle">
+                                <?php
+                                    if($userCoupon_row['start_time'] > $now){
+                                        echo '<p class="text-secondary">尚未開始</p>';
+                                    }elseif($userCoupon_row['start_time'] <= $now && ($now <= $userCoupon_row['end_date'] || $userCoupon_row['permanent'] == 1)){
+                                        echo '<p class="text-success">效期內</p>';
+                                    }elseif($userCoupon_row['end_date'] <= $now && $userCoupon_row['permanent'] == 0){
+                                        echo '<p class="text-danger">已過期</p>';
+                                    }
+                                ?>
+                            </td>
+                            <td class="text-center align-middle">
                                 <?php 
                                 echo $userCoupon_row['recieved_time'];
                                 ?>
                             </td>
-                            <td>
+                            <td class="text-center align-middle">
                                 <?php
                                 if($userCoupon_row['used_status'] == "TRUE"){
                                     echo 
@@ -333,10 +334,13 @@ $user_row = $user_result->fetch_assoc();
                                 }
                                 ?>
                             </td>
-                            <td>
+                            <td class="text-center align-middle">
                                 <p class="enabled_status-text <?= $userCoupon_row['enabled'] == 1 ? 'text-success' : 'text-danger'; ?>" data-id="<?= $userCoupon_row['users_coupon_id']; ?>">
                                     <?= $userCoupon_row['enabled'] == 1 ? '可使用' : '被禁用'; ?>
                                 </p>
+                                
+                            </td>
+                            <td>
                                 <button class="btn enabled_switch <?= $userCoupon_row['enabled'] == 1 ? 'btn-danger' : 'btn-success'; ?>" data-id="<?= $userCoupon_row['users_coupon_id']; ?>" data-is_enabled="<?= $userCoupon_row['enabled'] ?>">
                                     <?= $userCoupon_row['enabled'] == 1? '禁用此張券' : '解禁此張券' ?>
                                 </button>
@@ -348,10 +352,10 @@ $user_row = $user_result->fetch_assoc();
 
             <!-- 換頁按鈕 -->
             <nav aria-label="Page navigation example">
-                <ul class="pagination">
+                <ul class="pagination d-flex justify-content-center">
                     <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
-                        <li class="page-item <?php if ($current_page == $i) echo "active"; ?>">
-                            <a class="page-link" href="<?= rebuild_url(['page' => $i]) ?>">
+                        <li class="page-item mx-1 <?php if ($current_page == $i) echo "active"; ?>">
+                            <a class="page-link btn-custom" href="<?= rebuild_url(['page' => $i]) ?>">
                                 <?= $i ?>
                             </a>
                         </li>
