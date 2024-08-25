@@ -1,16 +1,18 @@
 <?php
 
-require_once("../db_connect.php");
-
-// 檢查是否有 ID 且為數字
-if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
-    die("Invalid or missing article ID");
+if (!isset($_GET["id"])) {
+    header("location:articles.php");
+    exit;
 }
 
-$id = intval($_GET["id"]);
+
+require_once("../db_connect.php");
+
+
+$id = $GET["id"];
 
 // 查詢單一文章
-$sql = "SELECT * FROM articles WHERE article_id = $id";
+$sql = "SELECT * FROM articles WHERE article_id";
 $result = $conn->query($sql);
 $row = $result->fetch_assoc();
 
@@ -53,10 +55,9 @@ if (!$rowUsers) {
 }
 
 // 查詢文章分類
-$stmtProductClass = $conn->prepare("SELECT * FROM product_class WHERE product_class_id = ?");
-$stmtProductClass->bind_param("i", $row["product_class_id"]);
-$stmtProductClass->execute();
-$resultProduct = $stmtProductClass->get_result();
+$productClass = $row["product_class_id"];
+$sqlProductClass = "SELECT * FROM product_class WHERE product_class_id = $productClass";
+$resultProduct = $conn->query($sqlProductClass);
 $rowPro = $resultProduct->fetch_assoc();
 
 // 查詢所有分類
@@ -156,7 +157,7 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
                                     <h5>分類</h5>
                                 </th>
                                 <td>
-                                    <select name="product_class_id" id="class">
+                                    <select  name="product_class_id" id="class">
                                         <?php foreach ($rowsAllPro as $rowProduct): ?>
                                             <option value="<?= htmlspecialchars($rowProduct["product_class_id"], ENT_QUOTES, 'UTF-8') ?>" <?= $rowProduct["product_class_id"] == $row["product_class_id"] ? "selected" : ""; ?>>
                                                 <?= htmlspecialchars($rowProduct["class_name"], ENT_QUOTES, 'UTF-8') ?>
