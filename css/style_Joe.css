@@ -460,10 +460,23 @@ h6 {
 
 .pagination {
   /* 頁碼被選擇時的顏色 */
-  --bs-pagination-active-bg: #994eac;
-  --bs-pagination-active-border-color: #994eac;
+  --bs-pagination-active-bg: #9b8cc0;
+  --bs-pagination-active-border-color: #9b8cc0;
 }
 
 .text-pink {
   color: var(--primary-color)
+}
+
+
+.input-border-pink {
+  --bs-border-color: var(--primary-color);
+}
+
+.input-hover {
+  transition: 0.4s;
+
+  &:hover {
+    --bs-body-bg: var(--primary-color-fade);
+  }
 }

@@ -226,56 +226,39 @@ foreach ($storeRows as $storeRow) {
 
     <div class="container-fluid d-flex flex-row px-4">
 
-        <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
+        <?php include("../modules/dashboard-sidebar_Su.php"); ?>
 
         <div class="main col neumorphic p-4">
 
-            <div class="d-flex justify-content-between align-items-center">
+            <!-- <div class="d-flex justify-content-between align-items-center">
                 <h2>商品列表</h2>
-                <a class="btn-animation btn btn-custom d-flex flex-row align-items-center" href="product-add.php">
-                    <i class="fa-solid fa-plus align-middle"></i><span class="btn-animation-innerSpan d-inline-block"> 新增商品</span>
-                </a>
-            </div>
 
-
-            <p><?= $productCount ?>/<?= $allProductCount ?>筆 </p>
+            </div> -->
 
             <div class="container-fluid">
-                <ul class="nav nav-tabs-custom">
-                    <li class="nav-item">
-                        <a class="main-nav nav-link <?= $status === 'all' ? 'active' : '' ?>" href="<?= statusStrRemoveJoe($nav_page_name) ?>&status=all">全部</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="main-nav nav-link <?= $status === 'on' ? 'active' : '' ?>" href="<?= statusStrRemoveJoe($nav_page_name) ?>&status=on">上架中</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="main-nav nav-link <?= $status === 'off' ? 'active' : '' ?>" href="<?= statusStrRemoveJoe($nav_page_name) ?>&status=off">已下架</a>
-                    </li>
-                </ul>
-
                 <!-- 篩選表單 -->
                 <div class="">
-                    <form action="product-list.php" method="get">
+                    <form action="product-list.php" method="get" class="d-flex flex-row">
                         <div class="input-group">
-                            <input type="search" class="form-control" placeholder="品名關鍵字" name="search" value="<?= isset($_GET["search"]) ? $_GET["search"] : ""; ?>">
+                            <input type="search" class="form-control input-hover input-border-pink" placeholder="品名關鍵字" name="search" value="<?= isset($_GET["search"]) ? $_GET["search"] : ""; ?>">
 
                             <?php if ($SessRole == "admin"): ?>
-                                <select class="form-select" aria-label="Default select example" name="shop">
-                                    <option class="text-pink" value="all">商家</option>
+                                <select class="form-select input-hover input-border-pink" aria-label="Default select example" name="shop">
+                                    <option class="text-pink" value="all">所有商家</option>
                                     <?php foreach ($storeArr as $key => $value): ?>
                                         <option value="<?= $key ?>" <?= $key == $shop ? "selected" : "" ?>><?= $value ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             <?php endif; ?>
 
-                            <select class="form-select" aria-label="Default select example" name="class">
-                                <option class="text-pink" value="all">商品類別</option>
+                            <select class="form-select input-hover input-border-pink" aria-label="Default select example" name="class">
+                                <option class="text-pink" value="all">所有商品類別</option>
                                 <?php foreach ($classArr as $key => $value): ?>
                                     <option value="<?= $key ?>" <?= $key == $class ? "selected" : "" ?>><?= $value ?></option>
                                 <?php endforeach; ?>
                             </select>
 
-                            <select class="form-select" aria-label="Default select example" name="order">
+                            <select class="form-select input-hover input-border-pink" aria-label="Default select example" name="order">
                                 <option value="ida" <?= $order == "ida" ? "selected" : "" ?>>商品編號(小→大)</option>
                                 <option value="idd" <?= $order == "idd" ? "selected" : "" ?>>商品編號(大→小)</option>
                                 <option value="pria" <?= $order == "pria" ? "selected" : "" ?>>價格(低→高)</option>
@@ -283,13 +266,34 @@ foreach ($storeRows as $storeRow) {
                                 <option value="stoa" <?= $order == "stoa" ? "selected" : "" ?>>庫存量(少→多)</option>
                                 <option value="stod" <?= $order == "stod" ? "selected" : "" ?>>庫存量(多→少)</option>
                             </select>
-                            <a class="btn neumorphic" href="product-list.php"><i class="fa-solid fa-xmark"></i></a>
-                            <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                            <a class="btn btn-custom" href="product-list.php"><i class="fa-solid fa-xmark"></i></a>
+                            <button class="btn btn-custom" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+
+
                         </div>
+                        <a class="btn-animation btn btn-custom d-flex flex-row align-items-center ms-4" href="product-add.php">
+                            <i class="fa-solid fa-plus align-middle"></i><span class="btn-animation-innerSpan d-inline-block"> 新增商品</span>
+                        </a>
                     </form>
                 </div>
 
                 <hr>
+
+                <div class="d-flex justify-content-between align-items-center ">
+                    <ul class="nav nav-tabs-custom">
+                        <li class="nav-item">
+                            <a class="main-nav nav-link <?= $status === 'all' ? 'active' : '' ?>" href="<?= statusStrRemoveJoe($nav_page_name) ?>&status=all">全部</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="main-nav nav-link <?= $status === 'on' ? 'active' : '' ?>" href="<?= statusStrRemoveJoe($nav_page_name) ?>&status=on">上架中</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="main-nav nav-link <?= $status === 'off' ? 'active' : '' ?>" href="<?= statusStrRemoveJoe($nav_page_name) ?>&status=off">已下架</a>
+                        </li>
+                    </ul>
+                    <p class="me-2"><?= $productCount ?>/<?= $allProductCount ?>筆 </p>
+                </div>
+
 
                 <?php if ($productCount > 0): ?>
                     <table class="table table-hover bdrs table-responsive align-middle"> <!--移除的樣式 table-bordered -->
@@ -357,7 +361,7 @@ foreach ($storeRows as $storeRow) {
                         </nav>
                     <?php endif; ?>
                 <?php else: ?>
-                    暫無符合條件的商品
+                    <div class="mt-3">暫無符合條件的商品</div>
                 <?php endif; ?>
             </div>
 
