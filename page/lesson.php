@@ -139,8 +139,6 @@ foreach ($rowsPro as $productClass) {
     <div class="container-fluid d-flex flex-row px-4">
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
         <div class="main col neumorphic p-5 pt-3">
-            <h1>課程列表</h1>
-
             <div class="py-3">
                 <form action="" method="GET">
                     <div class="input-group">
