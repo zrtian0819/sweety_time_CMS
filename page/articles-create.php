@@ -150,7 +150,7 @@ foreach ($usersRows as $usersRow) {
                                     </div>
 
                                 <div class="option-area d-flex justify-content-center mt-4 ">
-                                    <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="product-list.php">取消</a>
+                                    <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="articles.php">取消</a>
                                     <button class="btn btn-neumorphic px-4 mx-3 fw-bolder" type="submit">新增文章</button>
                                 </div>
                             </div>
