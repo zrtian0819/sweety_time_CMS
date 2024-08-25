@@ -19,9 +19,11 @@ if (!isset($_GET["productId"])) {
     if (isset($row["shop_id"])) {
         $shopId = $row["shop_id"];
 
-        if ($_SESSION["shop"]["shop_id"] <> $shopId) {
-            $message = "你無權查詢其它商家的產品";
-            header("location: product-list.php");
+        if ($_SESSION["user"]["role"] != "admin") {
+            if ($_SESSION["shop"]["shop_id"] <> $shopId) {
+                $message = "你無權查詢其它商家的產品";
+                header("location: product-list.php");
+            }
         }
 
         $shopsql = "SELECT * from shop WHERE shop_id = $shopId";
