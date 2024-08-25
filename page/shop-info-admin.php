@@ -140,9 +140,9 @@ $shopCount = $result->num_rows;
                                             <td class="dontNextLine align-middle"><?= $row["address"] ?></td>
                                             <td class="text-center align-middle">
                                                 <?php
-                                                $description = $row["description"];
-                                                $short_description = strlen($description) > 100 ? substr($description, 0, 100) . '...' : $description;
-                                                echo $short_description;
+                                                    $description = $row["description"];
+                                                    $short_description = mb_strlen($description, 'UTF-8') > 100 ? mb_substr($description, 0, 100, 'UTF-8') . '...' : $description;
+                                                    echo htmlspecialchars($short_description);
                                                 ?>
                                             </td>
                                             <td class="text-center align-middle"><?= $row["sign_up_time"] ?></td>
