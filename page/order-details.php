@@ -10,6 +10,10 @@ if (!isset($_GET["user_id"])) {
 }
 
 $user_id = $_GET["user_id"];
+if(isset($_GET["order_id"])){
+    $order_id = $_GET["order_id"];
+}
+
 
 // 每頁顯示的訂單數量
 $per_page = 10;
@@ -29,12 +33,22 @@ $total_orders = $result_orders_count->fetch_assoc()['count'];
 $total_pages = ceil($total_orders / $per_page);
 
 // 撈訂單資料，依當前頁面及每頁顯示數量限制查詢
-$sql_orders = "SELECT * FROM orders WHERE user_id = ? LIMIT ?, ?";
-$stmt_orders = $conn->prepare($sql_orders);
-$stmt_orders->bind_param("iii", $user_id, $start_item, $per_page);
-$stmt_orders->execute();
-$result_orders = $stmt_orders->get_result();
-$rows_orders = $result_orders->fetch_all(MYSQLI_ASSOC);
+if(isset($order_id)){
+    $sql_orders = "SELECT * FROM orders WHERE user_id = ? AND order_id = ? LIMIT ?, ?";
+    $stmt_orders = $conn->prepare($sql_orders);
+    $stmt_orders->bind_param("iiii", $user_id, $order_id, $start_item, $per_page);
+    $stmt_orders->execute();
+    $result_orders = $stmt_orders->get_result();
+    $rows_orders = $result_orders->fetch_all(MYSQLI_ASSOC);
+}else{
+    $sql_orders = "SELECT * FROM orders WHERE user_id = ? LIMIT ?, ?";
+    $stmt_orders = $conn->prepare($sql_orders);
+    $stmt_orders->bind_param("iii", $user_id, $start_item, $per_page);
+    $stmt_orders->execute();
+    $result_orders = $stmt_orders->get_result();
+    $rows_orders = $result_orders->fetch_all(MYSQLI_ASSOC);
+
+}
 
 // 撈 users 的 name
 $sql_users = "SELECT name FROM users WHERE user_id = ?";
