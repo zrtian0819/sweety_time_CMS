@@ -18,13 +18,13 @@ function getBasePageName()
                 <a class="nav-link <?= (getBasePageName() == 'articles') ? 'active' : '' ?>" href="articles.php">文章管理</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link <?= (getBasePageName() == 'teacher' || getBasePageName() == 'create-teacher' || getBasePageName() == 'teacher-edit') ? 'active' : '' ?>" href="teacher.php">師資管理</a>
+                <a class="nav-link <?= (getBasePageName() == 'teacher') ? 'active' : '' ?>" href="teacher.php">師資管理</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <?= (getBasePageName() == 'lesson') ? 'active' : '' ?>" href="lesson.php">課程管理</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link <?= (getBasePageName() == 'coupon-home') ? 'active' : '' ?>" href="coupon-home.php">優惠券管理</a>
+                <a class="nav-link <?= (getBasePageName() == 'coupon-list') ? 'active' : '' ?>" href="coupon-home.php">優惠券管理</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <?= (getBasePageName() == 'shop-info-admin') ? 'active' : '' ?>" href="shop-info-admin.php">總商家管理</a>
