@@ -159,9 +159,9 @@ $productCountActive = $counts['active_products']; //上架中的商品數量
 
             <h2 class="fw-bolder mb-5"><?= $name ?>, 您好！</h2>
             <?php if ($SessRole == "admin"): ?>
-                <div class="container-fluid">
-                    <div class="row ms-2 me-0">
-                        <div class="col-md-6">
+                <div class="container">
+                    <div class="row gap-2 me-0 d-flex justify-content-center">
+                        <div class="col-md-10">
                             <div class="row mb-2 mx-0">
                                 <div class="col-md-4">
                                     <div class="custom-card text-center d-flex flex-column justify-content-between">
@@ -208,7 +208,7 @@ $productCountActive = $counts['active_products']; //上架中的商品數量
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-5 ms-md-3 mt-2 mt-md-0">
+                        <div class="col-md-10 mt-2 mt-md-0">
                             <div class="custom-card">
                                 <div class="d-flex ms-2 mt-2">
                                     <h4>熱銷名店</h4>
