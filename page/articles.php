@@ -179,10 +179,10 @@ foreach ($rowsUsers as $users) {
                     <!-- 排序 -->
                     <div class="d-flex justify-content-between my-3">
                         <div class="d-flex flex-row">
-                            <a href="?sortArt=<?= $sortArt ?>&sortDir=ASC&search=<?= isset($_GET['search']) ? $_GET['search'] : '' ?>" class="btn btn-neumorphic articles-btn nav-link active">排序
+                            <a href="?sortArt=<?= $sortArt ?>&sortDir=ASC&search=<?= isset($_GET['search']) ? $_GET['search'] : '' ?>" class="btn btn-neumorphic articles-btn nav-link <?= $sortDir == 'ASC' ? 'active' : '' ?>">排序
                                 <i class="fa-solid fa-arrow-down-a-z"></i>
                             </a>
-                            <a href="?sortArt=<?= $sortArt ?>&sortDir=DESC&search=<?= isset($_GET['search']) ? $_GET['search'] : '' ?>" class="btn btn-neumorphic articles-btn nav-link">排序
+                            <a href="?sortArt=<?= $sortArt ?>&sortDir=DESC&search=<?= isset($_GET['search']) ? $_GET['search'] : '' ?>" class="btn btn-neumorphic articles-btn nav-link <?= $sortDir == 'DESC' ? 'active' : '' ?>">排序
                                 <i class="fa-solid fa-arrow-up-a-z"></i>
                             </a>
 

@@ -172,7 +172,8 @@ $shopCount = $result->num_rows;
                                             <td class="dontNextLine align-middle"><?= $address ?></td>
                                             <td class="text-center align-middle">
                                                 <?php
-                                                    $short_description = mb_strlen($description, 'UTF-8') > 100 ? mb_substr($description, 0, 100, 'UTF-8') . '...' : $description;
+                                                    $clean_description = strip_tags($description);
+                                                    $short_description = mb_strlen($clean_description, 'UTF-8') > 100 ? mb_substr($clean_description, 0, 100, 'UTF-8') . '...' : $clean_description;
                                                     echo htmlspecialchars($short_description);
                                                 ?>
                                             </td>

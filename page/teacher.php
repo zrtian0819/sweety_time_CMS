@@ -84,7 +84,7 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                         <a class="nav-link <?= $status === 'all' ? 'active' : '' ?>" href="?status=all">全部</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= $status === 'on' ? 'active' : '' ?>" href="?status=on">開課中</a>
+                        <a class="nav-link <?= $status === 'on' ? 'active' : '' ?>" href="?status=on">聘僱中</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?= $status === 'off' ? 'active' : '' ?>" href="?status=off">已下架</a>

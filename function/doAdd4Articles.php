@@ -19,39 +19,50 @@ $user_id = $_SESSION["user"]["user_id"] ?? 0; // 把當前使用者傳入
 
 $time = $_POST["createTime"];
 $dateTime = DateTime::createFromFormat('Y-m-d\TH:i', $time);
+if ($dateTime === false) {
+    die("日期格式錯誤，請檢查輸入的時間格式");
+}
 $formattedDateTime = $dateTime->format('Y-m-d H:i:s');
-
 
 $activation = isset($_POST["activation"]) ? $_POST["activation"] : 1; // 預設為 1（上架）
 $artValid = isset($_POST["artValid"]) ? $_POST["artValid"] : 1; // 預設為 1（有效）
 
 $pic = $_FILES["pic"] ?? null; // 預設為 null
 
-if ($pic && $_FILES["pic"]["error"] == 0) {
-    $fileName = $_FILES["pic"]["name"];
-    $fileInfo = pathinfo($fileName);
-    $extension = $fileInfo["extension"];
+if ($pic && $_FILES["pic"]["error"][0] == 0) {
+    $fileNames = [];
+    for ($i = 0; $i < count($_FILES["pic"]["name"]); $i++) {
+        $fileName = $_FILES["pic"]["name"][$i];
+        $fileInfo = pathinfo($fileName);
+        $extension = $fileInfo["extension"];
+        $newFileName = time() . "_$i.$extension";
 
-    $newFileName = time() . ".$extension";
-    if (move_uploaded_file($_FILES["pic"]["tmp_name"], "../images/articles/" . $newFileName)) {
-        $sql = "INSERT INTO articles (title, content, product_class_id, user_id, created_at, img_path, activation, artValid) VALUES ('$title', '$content', '$class', '$user_id', '$formattedDateTime', '$newFileName', '$activation', '$artValid')";
-        if ($conn->query($sql) === TRUE) {
-            echo "新增成功";
-            header("location:../page/articles.php");
+        if (move_uploaded_file($_FILES["pic"]["tmp_name"][$i], "../images/articles/" . $newFileName)) {
+            $fileNames[] = $newFileName;
         } else {
-            echo "新增失敗: " . $conn->error;
+            die("圖片上傳失敗");
         }
-    } else {
-        echo "圖片上傳失敗";
     }
-} else {
-    // 處理沒有上傳圖片的情況
-    $sql = "INSERT INTO articles (title, content, product_class_id, user_id, created_at, activation, artValid) VALUES ('$title', '$content', '$class', '$user_id', '$formattedDateTime', '$activation', '$artValid')";
+
+    // 將圖片名稱存入資料庫
+    $imgPaths = implode(',', $fileNames);
+    $sql = "INSERT INTO articles (title, content, product_class_id, user_id, created_at, img_path, activation, artValid) 
+            VALUES ('$title', '$content', '$class', '$user_id', '$formattedDateTime', '$imgPaths', '$activation', '$artValid')";
     if ($conn->query($sql) === TRUE) {
         echo "新增成功";
         header("location:../page/articles.php");
     } else {
-        echo "新增失敗: " . $conn->error;
+        die("新增失敗: " . $conn->error);
+    }
+} else {
+    // 處理沒有上傳圖片的情況
+    $sql = "INSERT INTO articles (title, content, product_class_id, user_id, created_at, activation, artValid) 
+            VALUES ('$title', '$content', '$class', '$user_id', '$formattedDateTime', '$activation', '$artValid')";
+    if ($conn->query($sql) === TRUE) {
+        echo "新增成功";
+        header("location:../page/articles.php");
+    } else {
+        die("新增失敗: " . $conn->error);
     }
 }
 
