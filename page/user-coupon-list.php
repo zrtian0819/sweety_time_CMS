@@ -329,6 +329,7 @@ $user_row = $user_result->fetch_assoc();
                                         "</div>".
                                         "<a class='btn text-muted' href='./order-details.php?order_id=".
                                         $userCoupon_row['order_id'].
+                                        "&user_id=$user_id".
                                         "'><i class='fa-solid fa-list'></i></a>";
                                     }else{
                                         echo "<span class='text-success'>未使用</span>";
