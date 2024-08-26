@@ -234,6 +234,16 @@ $photoCount = $photorResult->num_rows;
         .small-img {
             width: 50px;
             height: 50px;
+            transition: 0.2s;
+
+            &:hover {
+                scale: 5;
+            }
+
+            &:active {
+                transition: 0;
+                scale: 4.8;
+            }
         }
     </style>
 </head>
