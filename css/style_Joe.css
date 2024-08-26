@@ -398,12 +398,14 @@ h6 {
   box-shadow: none;
   border-radius: 20px 20px 0px 0px;
   border: .3px solid #e9aba1;
+  border-bottom: none;
 }
 
 .nav-tabs-custom .nav-link.active {
   color: var(--bg-color);
   box-shadow: var(--box-shadow);
   background-color: var(--primary-color);
+  border-bottom: none;
 }
 
 .alert-success-custom {
@@ -460,8 +462,12 @@ h6 {
 
 .pagination {
   /* 頁碼被選擇時的顏色 */
-  --bs-pagination-active-bg: #9b8cc0;
-  --bs-pagination-active-border-color: #9b8cc0;
+  /* --bs-pagination-active-bg: #9b8cc0;
+  --bs-pagination-active-border-color: #9b8cc0; */
+
+   /* 蘇雅改 */
+   --bs-pagination-active-bg: var(--text-color);
+   --bs-pagination-active-border-color:  var(--primary-color-fade);
 }
 
 .text-pink {
