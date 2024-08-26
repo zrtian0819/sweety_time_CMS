@@ -155,7 +155,7 @@ $productCountActive = $counts['active_products']; //上架中的商品數量
 
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
 
-        <div class="main col neumorphic ps-4 pe-2 py-5">
+        <div class="main col neumorphic ps-5 pe-2 py-5">
 
             <h2 class="fw-bolder mb-5"><?= $name ?>, 您好！</h2>
             <?php if ($SessRole == "admin"): ?>
