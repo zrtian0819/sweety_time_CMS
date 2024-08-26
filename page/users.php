@@ -220,7 +220,8 @@ if ($result) {
                                                         <button type="button" class="btn btn-custom view-details" data-id="<?= ($user["user_id"]) ?>" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                                             <i class="fa-solid fa-eye"></i>
                                                         </button>
-                                                        <a href="user-edit.php?user_id=<?= $user["user_id"] ?>" class="btn btn-custom mx-2"><i class="fa-solid fa-user-pen"></i></a>
+                                                        <a href="user-edit.php?user_id=<?= $user["user_id"] ?>" class="btn btn-custom ms-2"><i class="fa-solid fa-user-pen"></i></a>
+                                                        <a href="order-details.php?user_id=<?= ($user["user_id"]) ?>" class="btn btn-custom mx-2"><i class="fa-solid fa-list"></i></a> 
                                                         <?php if ($user["activation"] == 1): ?>
                                                             <a class="btn btn-danger" href="../function/doDeleteUser.php?id=<?= $user["user_id"] ?>"><i class="fa-solid fa-trash"></i></a>
                                                         <?php else: ?>
