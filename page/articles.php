@@ -117,7 +117,6 @@ foreach ($rowsUsers as $users) {
     $usersArr[$users["user_id"]] = $users["name"];
 };
 
-
 ?>
 
 <!DOCTYPE html>
@@ -149,7 +148,7 @@ foreach ($rowsUsers as $users) {
 
     <div class="container-fluid d-flex flex-row px-4">
 
-        <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
+        <?php include("../modules/dashboard-sidebar_Su.php"); ?>
 
         <div class="main col neumorphic p-5">
 
@@ -245,13 +244,13 @@ foreach ($rowsUsers as $users) {
                             <td><?= $formartDate ?></td>
                             <td>
                                 <?php if ($status === "off"): ?>
-                                    <a href="../function/doReload4Articles.php?id=<?= $id ?>" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
+                                    <a href="../function/doReload4Articles.php?id=<?= $articles["article_id"] ?>" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
                                 <?php else: ?>
                                     <?php if ($articles["activation"] == 1): ?>
-                                        <a href="../function/doDelete4Articles.php?id=<?= $id ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+                                        <a href="../function/doDelete4Articles.php?id=<?= $articles["article_id"] ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
                                     <?php else: ?>
 
-                                        <a href="../function/doReload4Articles.php?id=<?= $id ?>" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
+                                        <a href="../function/doReload4Articles.php?id=<?= $articles["article_id"] ?>" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
 
                                     <?php endif; ?>
                                 <?php endif; ?>

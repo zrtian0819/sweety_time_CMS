@@ -111,7 +111,7 @@ $rowsAllPro = $resultAllProduct->fetch_all(MYSQLI_ASSOC);
 <body>
     <?php include("../modules/dashboard-header_Joe.php"); ?>
     <div class="container-fluid d-flex flex-row px-4">
-        <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
+        <?php include("../modules/dashboard-sidebar_Su.php"); ?>
         <div class="main col neumorphic p-5 pt-4">
             <!-- 回文章列表按鈕 -->
             <div class="col-3">
