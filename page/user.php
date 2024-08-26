@@ -78,23 +78,23 @@ if ($userCount > 0) {
                         </div>
                         <table class="table table-bordered">
                             <tr>
-                                <th>User ID</th>
+                                <th class="text-center">User ID</th>
                                 <td><?= $row["user_id"] ?></td>
                             </tr>
                             <tr>
-                                <th>Name</th>
+                                <th class="text-center">Name</th>
                                 <td><?= $row["name"] ?></td>
                             </tr>
                             <tr>
-                                <th>Password</th>
+                                <th class="text-center">Password</th>
                                 <td><?= $row["password"] ?></td>
                             </tr>
                             <tr>
-                                <th>Birthday</th>
+                                <th class="text-center">Birthday</th>
                                 <td><?= $row["birthday"] ?></td>
                             </tr>
                             <tr>
-                                <th>Sign up time</th>
+                                <th class="text-center">Sign up time</th>
                                 <td><?= $row["sign_up_time"] ?></td>
                             </tr>
                         </table>

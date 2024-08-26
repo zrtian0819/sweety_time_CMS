@@ -100,10 +100,6 @@ $conn->close();
             width: 100px;
         }
 
-        .user-search {
-            width: 200px;
-        }
-
         .user-img {
             width: 300px;
             height: 300px;
