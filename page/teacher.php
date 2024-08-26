@@ -65,6 +65,19 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
     <div class="container-fluid d-flex flex-row px-4">
         <?php include("../modules/dashboard-sidebar_Su.php"); ?>
         <div class="main col neumorphic p-5">
+
+        <form method="GET" action="teacher.php" class="d-flex">
+                <div class="input-group d-flex justify-content-start align-items-center mb-4">
+                    <input type="search" class="form-control" placeholder="搜尋教師..." name="search" style="max-width:200px" value="<?php echo htmlspecialchars($search); ?>">
+                    <button class="btn btn-custom" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+
+                <a class="h-100 btn-animation btn btn-custom d-flex flex-row align-items-center" href="create-teacher.php">
+                <i class="fa-solid fa-user-plus"></i><span class="btn-animation-innerSpan d-inline-block">新增教師</span>
+                </a>
+            </form>
+
+
             <ul class="nav nav-tabs nav-tabs-custom d-flex justify-content-between">
                 <div class="d-flex">
                     <li class="nav-item">
@@ -77,23 +90,11 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                         <a class="nav-link <?= $status === 'off' ? 'active' : '' ?>" href="?status=off">已下架</a>
                     </li>
                 </div>
-                <li>
-                <a class="btn-animation btn btn-custom d-flex flex-row align-items-center" href="create-teacher.php">
-                <i class="fa-solid fa-user-plus"></i><span class="btn-animation-innerSpan d-inline-block">新增教師</span>
-                </a></li>
             </ul>
 
-            <div class="input-group mb-3 mt-4">
-                <form method="GET" action="teacher.php" class="d-flex">
-                    <input type="hidden" name="status" value="<?= htmlspecialchars($status) ?>">
-                    <input type="search" class="form-control" name="search" placeholder="搜尋教師..." aria-label="輸入文字" aria-describedby="button-addon1" value="<?= htmlspecialchars($search) ?>" style="max-width:200px">
-                    <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-                </form>
-            </div>
-
             <?php if ($teacherCount > 0) : ?>
-                <table class="table table-hover mt-4">
-                    <thead class="text-center">
+                <table class="table table-hover">
+                    <thead class="text-center table-pink">
                         <tr>
                             <th>Image</th>
                             <th>ID</th>
@@ -105,7 +106,7 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                     <tbody>
                         <?php foreach ($rows as $teacher) : ?>
                             <tr class="text-center m-auto">
-                                <td class="align-middle"><a class="teacher-profile" href=""> <img src="../images/teachers/<?= htmlspecialchars($teacher["img_path"]) ?>" alt="<?= htmlspecialchars($teacher["name"]) ?>" class="ratio ratio-4x3"></a></td>
+                                <td class="align-middle"><a class="teacher-profile" href=""> <img src="../images/teachers/<?= htmlspecialchars($teacher["img_path"]) ?>" alt="<?= htmlspecialchars($teacher["name"]) ?>" class="w-100 h-100 object-fit-cover"></a></td>
                                 <td class="align-middle"><?= htmlspecialchars($teacher["teacher_id"]) ?></td>
                                 <td class="align-middle"><?= htmlspecialchars($teacher["name"]) ?></td>
                                 <td class="align-middle">
@@ -142,10 +143,10 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                     </tbody>
                 </table>
 
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
                         <?php for ($i = 1; $i <= $total_page; $i++) : ?>
-                            <li class="page-item <?= ($page == $i) ? 'active' : '' ?>">
+                            <li class="page-item mx-1 <?= ($page == $i) ? 'active' : '' ?>">
                                 <a class="page-link btn-custom" href="teacher.php?status=<?= htmlspecialchars($status) ?>&search=<?= htmlspecialchars($search) ?>&p=<?= $i ?>"><?= $i ?></a>
                             </li>
                         <?php endfor; ?>
