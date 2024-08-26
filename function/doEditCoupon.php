@@ -9,6 +9,8 @@ $discount_rate = ($_POST["discount_rate"]/100);
 $start_time = $_POST["start_time"];
 $activation = $_POST["activation"];
 
+$now = date("Y-m-d H:i:s");
+
 
 // 自動判斷數據
 if (isset($_POST["end_date"]) && !empty($_POST["end_date"])) {
@@ -24,13 +26,13 @@ $created_at = date("Y-m-d H:i:s");
 // 準備 SQL 語句
 $stmt = $conn -> prepare (
     "UPDATE coupon 
-    SET name = ?, discount_rate = ?, start_time = ?, end_date = ?, activation = ?, permanent = ?, created_at = ? 
+    SET name = ?, discount_rate = ?, start_time = ?, end_date = ?, activation = ?, permanent = ?, created_at = ?, last_edited_at = ?
     WHERE coupon_id = ?"
 );
 
 // 將參數取代佔位符
-$stmt -> bind_param("sdsssisi",
-                    $name, $discount_rate, $start_time, $end_date, $activation, $permanent, $created_at, $coupon_id
+$stmt -> bind_param("sdsssissi",
+                    $name, $discount_rate, $start_time, $end_date, $activation, $permanent, $created_at, $now, $coupon_id
                     );
 
 // 寫入資料

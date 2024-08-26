@@ -68,7 +68,7 @@ if(!isset($_GET['coupon_id'])) {
                                 <div class="d-flex justify-content-end">
                                     <p class="coupon-id-text mt-3">現正編輯的優惠券id：<?= $coupon_id ?></p>
                                 </div>
-                                <p class="last-edited-text">最後編輯：<?= $row["last_edited_at"] ?></p>
+                                <p class="last-edited-text text-end">最後編輯：<?php echo $row["last_edited_at"] == NULL ? "無" : $row["last_edited_at"] ?></p>
                             </div>
                             <input type="hidden" name="coupon_id" value="<?= $row["coupon_id"] ?>">
                         </div>
