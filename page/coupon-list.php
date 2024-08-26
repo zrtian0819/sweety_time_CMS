@@ -147,7 +147,7 @@ $rows_page = $result_page->fetch_all(MYSQLI_ASSOC);
             width: 200px
         }
         .coupon-filter{
-            width: 700px;
+            width: 780px;
         }
         .coupon-filter .search-input {
             width: 40%; /* 設定固定寬度 */
@@ -160,9 +160,7 @@ $rows_page = $result_page->fetch_all(MYSQLI_ASSOC);
         .coupon-filter .activ-select {
             width: 15%;
         }
-        .btn-white{
-            /* box-shadow: 0px 0px 3px #d1d9e6; */
-        }
+
         p{
             margin-top: auto;
             margin-bottom: auto;
@@ -175,7 +173,7 @@ $rows_page = $result_page->fetch_all(MYSQLI_ASSOC);
 
     <div class="container-fluid d-flex flex-row px-4">
 
-        <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
+        <?php include("../modules/dashboard-sidebar_Su.php"); ?>
 
         <div class="main col neumorphic p-5">
 
@@ -186,15 +184,15 @@ $rows_page = $result_page->fetch_all(MYSQLI_ASSOC);
                     <div class="input-group coupon-filter">
                         <input type="search" class="form-control search-input" name="search" value="<?php echo isset($_GET["search"]) ? $_GET["search"] : "" ?>" placeholder="搜尋優惠券名稱">
                         <select class="form-select order-select" aria-label="Default select example" name="sort">
-                            <option <?php echo $sort == "id_asc" ? "selected" : ""; ?> value="id_asc">依id排序(預設)</option>
-                            <option <?php echo $sort == "discount_desc" ? "selected" : ""; ?> value="discount_desc">折扣由低至高</option>
-                            <option <?php echo $sort == "discount_asc" ? "selected" : ""; ?> value="discount_asc">折扣由高至低</option>
-                            <option <?php echo $sort == "start_asc" ? "selected" : ""; ?> value="start_asc">啟用日由先至後</option>
-                            <option <?php echo $sort == "start_desc" ? "selected" : ""; ?> value="start_desc">啟用日由後至先</option>
-                            <option <?php echo $sort == "end_asc" ? "selected" : ""; ?> value="end_asc">到期日由先至後</option>
-                            <option <?php echo $sort == "end_desc" ? "selected" : ""; ?> value="end_desc">到期日由後至先</option>
-                            <option <?php echo $sort == "created_asc" ? "selected" : ""; ?> value="created_asc">創建日由舊至新</option>
-                            <option <?php echo $sort == "created_desc" ? "selected" : ""; ?> value="created_desc">創建日由新至舊</option>
+                            <option <?php echo $sort == "id_asc" ? "selected" : ""; ?> value="id_asc">依id排序（少⭢多）</option>
+                            <option <?php echo $sort == "discount_desc" ? "selected" : ""; ?> value="discount_desc">依折扣量（低⭢高）</option>
+                            <option <?php echo $sort == "discount_asc" ? "selected" : ""; ?> value="discount_asc">依折扣量（高⭢低）</option>
+                            <option <?php echo $sort == "start_asc" ? "selected" : ""; ?> value="start_asc">啟用日（先⭢後）</option>
+                            <option <?php echo $sort == "start_desc" ? "selected" : ""; ?> value="start_desc">啟用日（後⭢先）</option>
+                            <option <?php echo $sort == "end_asc" ? "selected" : ""; ?> value="end_asc">到期日（先⭢後）</option>
+                            <option <?php echo $sort == "end_desc" ? "selected" : ""; ?> value="end_desc">到期日（後⭢先）</option>
+                            <option <?php echo $sort == "created_asc" ? "selected" : ""; ?> value="created_asc">創建日（舊⭢新）</option>
+                            <option <?php echo $sort == "created_desc" ? "selected" : ""; ?> value="created_desc">創建日（新⭢舊）</option>
                             </select>
                         <select class="form-select activ-select" aria-label="Default select example" name="expr_status">
                             <option <?php echo $expr_status == "expr_all" ? "selected" : ""; ?> value="expr_all"><span class="text-secondery">不限效期狀態</span></option>
@@ -219,13 +217,13 @@ $rows_page = $result_page->fetch_all(MYSQLI_ASSOC);
             <div class="d-flex justify-content-between">
                 <ul class="nav nav-tabs-custom">
                     <li class="nav-item">
-                        <a class="main-nav nav-link <?php echo $act_status == "" ? "active" : ""; ?>" href="<?= rebuild_url(['act_status' => '', 'message' => '']); ?>">全部</a>
+                        <a class="main-nav nav-link <?php echo $act_status == "" ? "active" : ""; ?>" href="<?= rebuild_url(['act_status' => '', 'message' => '','page' => '1']); ?>">全部</a>
                     </li>
                     <li class="nav-item">
-                        <a class="main-nav nav-link <?php echo $act_status == "1" ? "active" : ""; ?>" href="<?= rebuild_url(['act_status' => '1', 'message' => '']); ?>">啟用中</a>
+                        <a class="main-nav nav-link <?php echo $act_status == "1" ? "active" : ""; ?>" href="<?= rebuild_url(['act_status' => '1', 'message' => '','page' => '1']); ?>">啟用中</a>
                     </li>
                     <li class="nav-item">
-                        <a class="main-nav nav-link <?php echo $act_status == "0" ? "active" : ""; ?>" href="<?= rebuild_url(['act_status' => '0', 'message' => '']); ?>">已停用</a>
+                        <a class="main-nav nav-link <?php echo $act_status == "0" ? "active" : ""; ?>" href="<?= rebuild_url(['act_status' => '0', 'message' => '','page' => '1']); ?>">已停用</a>
                     </li>
                 </ul>
                 <!-- 設定一頁幾筆資料 -->
@@ -289,7 +287,7 @@ $rows_page = $result_page->fetch_all(MYSQLI_ASSOC);
                             </td>
                             <td class="text-center btns-box align-middle">
                                 <div class=" d-flex align-items-center justify-content-end">
-                                     <a class="btn-animation btn btn-custom d-flex flex-row align-items-center mx-2" href="./coupon-edit.php?coupon_id=<?= $row['coupon_id'] ?>">
+                                    <a class="btn-animation btn btn-custom d-flex flex-row align-items-center mx-2" href="./coupon-edit.php?coupon_id=<?= $row['coupon_id'] ?>">
                                         <i class="fa-solid fa-pen-to-square"></i><span class="btn-animation-innerSpan d-inline-block">編輯此券</span>
                                     </a>
                                     <a class="btn-animation btn btn-custom d-flex flex-row align-items-center" href="./coupon-distribute.php?coupon_id=<?= $row['coupon_id'] ?>">
