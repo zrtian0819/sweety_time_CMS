@@ -46,7 +46,7 @@ function getBasePageName()
                 <a class="nav-link <?= (getBasePageName() == 'product-list') ? 'active' : '' ?>" href="product-list.php">商品管理</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">訂單管理</a>
+                <a class="nav-link <?= (getBasePageName() == 'order-list') ? 'active' : '' ?>" href="order-list.php">訂單管理</a>
             </li>
         </ul>
     <?php endif; ?>
