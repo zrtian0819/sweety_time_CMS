@@ -27,7 +27,7 @@ body {
   color: var(--text-color);
   font-family: "Noto Serif TC", "Noto Sans TC", "Noto Serif HK", "serif";
   font-optical-sizing: auto;
-  animation: bg-animation 20s -1s infinite alternate;
+  animation: bg-animation 10s -1s infinite alternate;
 }
 
 @keyframes bg-animation {
