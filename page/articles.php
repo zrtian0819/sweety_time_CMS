@@ -149,7 +149,7 @@ foreach ($rowsUsers as $users) {
 
     <div class="container-fluid d-flex flex-row px-4">
 
-        <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
+        <?php include("../modules/dashboard-sidebar_Su.php"); ?>
 
         <div class="main col neumorphic p-5">
 
