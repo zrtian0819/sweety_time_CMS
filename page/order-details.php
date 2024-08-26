@@ -79,20 +79,20 @@ $row_products = $result_products->fetch_all(MYSQLI_ASSOC);
 
         <div class="main col neumorphic p-5">
             <!-- 訂單資訊 -->
-            <h2 class="mb-4">訂單資訊</h2>
-            <table class="table table-bordered">
-                <thead>
+            <h4 class="mt-3">訂單資訊</h4>
+            <table class="table">
+                <thead class="table-pink">
                     <tr>
-                        <th>訂單編號<br>(order_id)</th>
-                        <th>訂單狀態<br>(status)</th>
-                        <th>會員名稱<br></th>
-                        <th>店家名稱<br></th>
-                        <th>使用的優惠券<br></th>
-                        <th>收貨地址<br>(delivery_address)</th>
-                        <th>收件人姓名<br>(delivery_name)</th>
-                        <th>收件人電話<br>(delivery_phone)</th>
-                        <th>訂單成立時間<br>(order_time)</th>
-                        <th>總金額<br>(total_price)</th>
+                        <th>訂單編號</th>
+                        <th>訂單狀態</th>
+                        <th>會員名稱</th>
+                        <th>店家名稱</th>
+                        <th>使用的優惠券</th>
+                        <th>收貨地址</th>
+                        <th>收件人姓名</th>
+                        <th>收件人電話</th>
+                        <th>訂單成立時間</th>
+                        <th>總金額(已包含折扣)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -111,14 +111,14 @@ $row_products = $result_products->fetch_all(MYSQLI_ASSOC);
                 </tbody>
             </table>
             <!-- 訂單明細 -->
-            <h2 class="mb-4">訂單明細</h2>
+            <h4 class="mt-5">訂單明細</h4>
             <!-- 顯示資料的表格 -->
-            <table class="table table-bordered">
-                <thead>
+            <table class="table">
+                <thead  class="table-pink">
                     <tr>
-                        <th>商品id<br>(product_id)</th>
-                        <th>數量<br>(amount)</th>
-                        <th>小計(原價)<br>(that_time_price)</th>
+                        <th>商品id</th>
+                        <th>數量</th>
+                        <th>小計(原價)</th>
                     </tr>
                 </thead>
                 <tbody>
