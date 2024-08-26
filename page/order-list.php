@@ -57,8 +57,8 @@ $result = $conn->query($sql);
         <?php include("../modules/dashboard-sidebar_Su.php"); ?>
         <div class="main col neumorphic p-4">
             <h2>訂單列表</h2>
-            <table>
-                <thead>
+            <table class="table table-hover">
+                <thead class="table-pink">
                     <tr>
                         <th>用戶名稱</th>
                         <th>商店名稱</th>
