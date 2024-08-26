@@ -86,7 +86,7 @@ foreach ($usersRows as $usersRow) {
 
     <div class="container-fluid d-flex flex-row px-4">
 
-        <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
+        <?php include("../modules/dashboard-sidebar_Su.php"); ?>
 
         <main class="product main col neumorphic p-5">
             <a class="btn-animation btn btn-custom d-inline-flex flex-row align-items-center mb-3" href="articles.php">
