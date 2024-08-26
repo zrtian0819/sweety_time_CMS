@@ -239,6 +239,7 @@ $photoCount = $photorResult->num_rows;
 
             &:hover {
                 scale: 5;
+                box-shadow: 0 0 20px 3px pink;
             }
 
             &:active {
