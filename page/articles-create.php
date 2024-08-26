@@ -135,19 +135,19 @@ foreach ($usersRows as $usersRow) {
                                 </div>
 
                                 <div class="photo-upload">
-                                    
-                                        <h4 class="text-center">圖片上傳</h4>
 
-                                        <div class="container d-flex flex-column">
-                                            <label for="fileUpload" class="custom-file-upload my-2">
-                                                新增圖片
-                                            </label>
-                                            <input type="file" name="pic[]" id="fileUpload" class="file-input" accept=".jpg, .png, .jpeg, .gif" multiple>
-                                            <div class="row row-cols-6 d-flex" id="preview-imgbox">
-                                                <!-- 圖片預覽區 -->
-                                            </div>
+                                    <h4 class="text-center">圖片上傳</h4>
+
+                                    <div class="container d-flex flex-column">
+                                        <label for="fileUpload" class="custom-file-upload my-2">
+                                            新增圖片
+                                        </label>
+                                        <input type="file" name="pic[]" id="fileUpload" class="file-input" accept=".jpg, .png, .jpeg, .gif" multiple>
+                                        <div class="row row-cols-6 d-flex" id="preview-imgbox">
+                                            <!-- 圖片預覽區 -->
                                         </div>
                                     </div>
+                                </div>
 
                                 <div class="option-area d-flex justify-content-center mt-4 ">
                                     <a class="btn btn-neumorphic px-4 mx-3 fw-bolder" href="articles.php">取消</a>
@@ -169,34 +169,34 @@ foreach ($usersRows as $usersRow) {
     <script>
         const fileUpload = document.querySelector("#fileUpload");
 
-fileUpload.addEventListener('change', function(event) {
+        fileUpload.addEventListener('change', function(event) {
 
-    const files = event.target.files; // 取得所有選擇的文件
-    const previewImgBox = document.querySelector("#preview-imgbox");
-    previewImgBox.innerHTML = ''; // 清空預覽區域
+            const files = event.target.files; // 取得所有選擇的文件
+            const previewImgBox = document.querySelector("#preview-imgbox");
+            previewImgBox.innerHTML = ''; // 清空預覽區域
 
-    if (files) {
-        // 遍歷所有選擇的文件
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const reader = new FileReader();
+            if (files) {
+                // 遍歷所有選擇的文件
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    const reader = new FileReader();
 
-            reader.onload = function(e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.style.width = '120px';
-                img.style.height = '120px';
-                img.style.margin = '10px';
-                img.style.objectFit = "cover";
-                img.style.borderRadius = '5px';
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.style.width = '120px';
+                        img.style.height = '120px';
+                        img.style.margin = '10px';
+                        img.style.objectFit = "cover";
+                        img.style.borderRadius = '5px';
 
-                previewImgBox.appendChild(img); // 將圖片添加到預覽區域
+                        previewImgBox.appendChild(img); // 將圖片添加到預覽區域
+                    }
+
+                    reader.readAsDataURL(file); // 將文件讀取為 Data URL
+                }
             }
-
-            reader.readAsDataURL(file); // 將文件讀取為 Data URL
-        }
-    }
-});
+        });
 
         //所見即所得編輯器
         tinymce.init({
