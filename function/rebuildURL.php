@@ -13,13 +13,24 @@ function rebuild_url($params = []) {
     }
 
     // 遍歷傳入的參數陣列，設定或修改對應的GET參數
-    foreach ($params as $paraName => $paraValue) {
-        if ($paraValue === null) {
+    foreach ($params as $paramName => $paramValue) {
+        if (is_array($paramValue)) {
+            // 如果值是陣列，遍歷陣列中的每一個元素
+            foreach ($paramValue as $key => $value) {
+                if ($value === null) {
+                    // 如果值為 null，則從查詢字串中移除該參數
+                    unset($query_params[$paramName][$key]);
+                } else {
+                    // 否則，設置或更新該參數
+                    $query_params[$paramName][$key] = $value;
+                }
+            }
+        } elseif ($paramValue === null) {
             // 如果值為 null，則從查詢字串中移除該參數
-            unset($query_params[$paraName]);
+            unset($query_params[$paramName]);
         } else {
             // 否則，設置或更新該參數
-            $query_params[$paraName] = $paraValue;
+            $query_params[$paramName] = $paramValue;
         }
     }
 

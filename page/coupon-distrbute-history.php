@@ -69,11 +69,15 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>訂單資訊</title>
+    <title>優惠券發送歷史</title>
     <?php include("../css/css_Joe.php"); ?>
     <style>
         .coupon-input-bar{
             width: 50px;
+        }
+        p{
+            margin-top: auto;
+            margin-bottom: auto;
         }
     </style>
 </head>
@@ -86,8 +90,10 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
         <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
 
         <div class="main col neumorphic p-5">
+            <h2 class="mb-4 d-flex justify-content-center">優惠券發送歷史</h2>
             <!-- 篩選器 -->
-            <div class="py-2">
+            <div class=""></div>
+            <div class="py-2 mt-5 coupon-filter d-flex justify-content-start">
                 <form action="">
                     <div class="input-group">
                         <input type="search" class="form-control" name="search_coupon" value="<?php echo isset($_GET["search_coupon"]) ? $_GET["search_coupon"] : "" ?>" placeholder="搜尋優惠券名稱">
@@ -97,45 +103,48 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                             <option <?php echo $sort == "couponId_asc" ? "selected" : ""; ?> value="couponId_asc">依優惠券id（少⭢多）</option>
                             <option <?php echo $sort == "couponId_desc" ? "selected" : ""; ?> value="couponId_desc">依優惠券id（多⭢少）</option>
                         </select>
-                        <button class="btn neumorphic" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        <button class="btn btn-custom" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                     </div>
                 </form>
             </div>
-            <hr>
 
             <!-- 資料表格 -->
-            <h2 class="mb-4">優惠券發送歷史</h2>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>優惠券id</th>
-                        <th>優惠券名稱</th>
-                        <th>發送人數</th>
-                        <th>發送時間<br></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($rows as $row) : ?>
+            <div class="d-flex justify-content-center">
+                <table class="table mt-3">
+                    <thead class="table-pink">
                         <tr>
-                            <td><?php echo $row["coupon_id"];?></td>
-                            <td><?php echo $row["coupon_name"];?></td>
-                            <td>
-                                <?php 
-                                $userAmount = count(explode(',', $row['user_ids']));
-                                echo $userAmount;
-                                ?>人
-                                <br>
-                                <form action="./coupon-distrbute-history-detail.php">
-                                    <input type="hidden" name="recieved_time" value="<?= $row['recieved_time'] ?>">
-                                    <input type="hidden" name="coupon_id" value="<?= $row['coupon_id'] ?>">
-                                    <button type="submmit">查看名單</button>
-                                </form>
-                            </td>
-                            <td><?php echo $row["recieved_time"];?></td>
+                            <th class="text-center align-middle">優惠券id</th>
+                            <th class="text-center align-middle">優惠券名稱</th>
+                            <th class="text-center align-middle">發送人數</th>
+                            <th class="text-center align-middle">發送時間<br></th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($rows as $row) : ?>
+                            <tr>
+                                <td class="text-center align-middle"><?php echo $row["coupon_id"];?></td>
+                                <td class="text-center align-middle"><?php echo $row["coupon_name"];?></td>
+                                <td class="text-center align-middle">
+                                    <div class="d-flex justify-content-end">
+                                        <p class="me-3">
+                                            <?php 
+                                            $userAmount = count(explode(',', $row['user_ids']));
+                                            echo $userAmount;
+                                            ?>人
+                                        </p>
+                                        <form action="./coupon-distrbute-history-detail.php">
+                                            <input type="hidden" name="recieved_time" value="<?= $row['recieved_time'] ?>">
+                                            <input type="hidden" name="coupon_id" value="<?= $row['coupon_id'] ?>">
+                                            <button class="btn btn-custom" type="submmit" title="查看發送名單"><i class="fa-solid fa-user-group"></i></button>
+                                        </form>
+                                    </div>
+                                </td>
+                                <td class="text-center align-middle"><?php echo $row["recieved_time"];?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     
     </div>

@@ -48,7 +48,7 @@ $rows_users = $result_users->fetch_all(MYSQLI_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>訂單資訊</title>
+    <title>優惠券發送名單</title>
     <?php include("../css/css_Joe.php"); ?>
     <style>
         .coupon-input-bar{
@@ -66,9 +66,13 @@ $rows_users = $result_users->fetch_all(MYSQLI_ASSOC);
 
         <div class="main col neumorphic p-5">
             <!-- 發送事件的資訊 -->
-            <h2 class="mb-4">優惠券發送歷史</h2>
-            <table class="table table-bordered">
-                <thead>
+            <div class="d-flex justify-content-center">
+                <h2 class="mb-5">優惠券發送名單</h2>
+            </div>
+
+            <h5>發送事件資訊</h5>
+            <table class="table mb-5">
+                <thead class="table-pink">
                     <tr>
                         <th>優惠券id</th>
                         <th>優惠券名稱</th>
@@ -89,9 +93,9 @@ $rows_users = $result_users->fetch_all(MYSQLI_ASSOC);
             </table>
 
             <!-- 發券名單的表格 -->
-            <hr>
-            <table class="table table-bordered">
-                <thead>
+            <h5>發送對象名單</h5>
+            <table class="table">
+                <thead class="table-pink">
                     <tr>
                         <th>使用者id</th>
                         <th>使用者名稱</th>
