@@ -11,4 +11,4 @@ $sql = "UPDATE articles SET activation = 1 WHERE article_id = $id";
 $conn->query($sql);
 
 $conn->close();
-header("location:../page/articles.php?status=off");
+header("location:../page/articles.php?status=on");
