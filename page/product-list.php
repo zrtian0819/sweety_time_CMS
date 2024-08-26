@@ -243,7 +243,7 @@ $photoCount = $photorResult->num_rows;
             }
 
             &:active {
-                transition: 0;
+                transition: 0s;
                 scale: 4.6;
             }
         }
