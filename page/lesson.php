@@ -137,7 +137,7 @@ foreach ($rowsPro as $productClass) {
 <body>
     <?php include("../modules/dashboard-header_Joe.php"); ?>
     <div class="container-fluid d-flex flex-row px-4">
-        <?php include("../modules/dashboard-sidebar_Joe.php"); ?>
+        <?php include("../modules/dashboard-sidebar_Su.php"); ?>
         <div class="main col neumorphic p-5 pt-3">
             <div class="py-1">
                 <form action="" method="GET" class="d-flex flex-row">
