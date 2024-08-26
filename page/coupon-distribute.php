@@ -218,7 +218,7 @@ $row_coupon = $result_coupons->fetch_assoc();
                         <!-- 排序條件 -->
                         <select class="form-select" aria-label="Default select example" name="sort">
                             <option <?php echo $sort == "id_asc" ? "selected" : ""; ?> value="id_asc">依id排序（少⭢多）</option>
-                            <option <?php echo $sort == "id_desc" ? "selected" : ""; ?> value="id_desc">依id排序（少⭢多）</option>
+                            <option <?php echo $sort == "id_desc" ? "selected" : ""; ?> value="id_desc">依id排序（多⭢少）</option>
                             <option <?php echo $sort == "birthday_asc" ? "selected" : ""; ?> value="birthday_asc">依生日（先⭢後）</option>
                             <option <?php echo $sort == "birthday_desc" ? "selected" : ""; ?> value="birthday_desc">依生日（後⭢先）</option>
                             <option <?php echo $sort == "signUp_asc" ? "selected" : ""; ?> value="signUp_asc">依註冊時間（先⭢後）</option>

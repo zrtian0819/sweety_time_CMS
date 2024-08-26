@@ -116,10 +116,10 @@ if (!isset($_GET["sort"])) {
             $sql_userCoupon .= " ORDER BY c.end_date DESC";
             break;
         case "received_asc":
-            $sql_userCoupon .= " ORDER BY uc.received_time ASC";
+            $sql_userCoupon .= " ORDER BY uc.recieved_time ASC";
             break;
         case "received_desc":
-            $sql_userCoupon .= " ORDER BY uc.received_time DESC";
+            $sql_userCoupon .= " ORDER BY uc.recieved_time DESC";
             break;
     }
 }
@@ -319,20 +319,22 @@ $user_row = $user_result->fetch_assoc();
                                 ?>
                             </td>
                             <td class="text-center align-middle">
-                                <?php
-                                if($userCoupon_row['used_status'] == "TRUE"){
-                                    echo 
-                                    "<span class='text-danger'>已使用</span>, 使用時間為: ".
-                                    "<br>".
-                                    $userCoupon_row['used_time'].
-                                    "<br>".
-                                    "<a href='./order-details.php?order_id=".
-                                    $userCoupon_row['order_id'].
-                                    "'>查看訂單資訊</a>";
-                                }else{
-                                    echo "<span class='text-success'>未使用</span>";
-                                }
-                                ?>
+                                <div class="d-flex justify-content-center">
+                                    <?php
+                                    if($userCoupon_row['used_status'] == "TRUE"){
+                                        echo 
+                                        "<div class='d-flex justify-content-center align-items-center'>".
+                                        "<span class='text-danger'>已使用</span>：".
+                                        $userCoupon_row['used_time'].
+                                        "</div>".
+                                        "<a class='btn text-muted' href='./order-details.php?order_id=".
+                                        $userCoupon_row['order_id'].
+                                        "'><i class='fa-solid fa-list'></i></a>";
+                                    }else{
+                                        echo "<span class='text-success'>未使用</span>";
+                                    }
+                                    ?>
+                                </div>
                             </td>
                             <td class="text-center align-middle">
                                 <p class="enabled_status-text <?= $userCoupon_row['enabled'] == 1 ? 'text-success' : 'text-danger'; ?>" data-id="<?= $userCoupon_row['users_coupon_id']; ?>">
@@ -340,7 +342,7 @@ $user_row = $user_result->fetch_assoc();
                                 </p>
                                 
                             </td>
-                            <td>
+                            <td class="text-center align-middle">
                                 <button class="btn enabled_switch <?= $userCoupon_row['enabled'] == 1 ? 'btn-danger' : 'btn-success'; ?>" data-id="<?= $userCoupon_row['users_coupon_id']; ?>" data-is_enabled="<?= $userCoupon_row['enabled'] ?>">
                                     <?= $userCoupon_row['enabled'] == 1? '禁用此張券' : '解禁此張券' ?>
                                 </button>
