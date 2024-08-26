@@ -199,6 +199,18 @@ foreach ($storeRows as $storeRow) {
     $storeArr[$storeRow["shop_id"]] = $storeRow["name"];
 }
 // print_r($storeArr);
+
+
+//撈出照片檔
+$photosql = "SELECT * FROM product_photo 
+WHERE is_valid = 1 ORDER BY product_id";
+
+$photorResult = $conn->query($photosql);
+$photoRows = $photorResult->fetch_all(MYSQLI_ASSOC);
+$photoCount = $photorResult->num_rows;
+
+// print_r($photoRows);
+
 ?>
 
 <!DOCTYPE html>
@@ -217,6 +229,11 @@ foreach ($storeRows as $storeRow) {
 
         .dontNextLine {
             white-space: nowrap;
+        }
+
+        .small-img {
+            width: 50px;
+            height: 50px;
         }
     </style>
 </head>
@@ -300,6 +317,7 @@ foreach ($storeRows as $storeRow) {
                         <thead class="text-center table-pink">
                             <tr>
                                 <th class="dontNextLine">商品編號</th>
+                                <th class="dontNextLine">照片</th>
                                 <th class="dontNextLine">名稱</th>
                                 <?= $SessRole == "admin" ? '<th class="dontNextLine">商家</th>' : ""; ?>
                                 <th class="dontNextLine">商品類別</th>
@@ -312,9 +330,30 @@ foreach ($storeRows as $storeRow) {
                         </thead>
 
                         <tbody>
-                            <?php foreach ($current_filter_rows as $row): ?>
+                            <?php foreach ($current_filter_rows as $row):
+
+                                $productId = $row["product_id"];
+                                $filterProducts = array_filter($photoRows, function ($product) use ($productId) {
+                                    return $product['product_id'] == $productId;
+                                });
+                                $photoResult = reset($filterProducts);
+                                if (isset($photoResult["file_name"])) {
+                                    $photoName = $photoResult["file_name"];
+                                }
+
+                            ?>
                                 <tr>
                                     <td class="text-center"><?= $row["product_id"] ?></td>
+                                    <td>
+
+                                        <div class="small-img rounded overflow-hidden">
+                                            <?php if (isset($photoResult["file_name"])): ?>
+                                                <img class="w-100 h-100 object-fit-cover" src="../images/products/<?= $photoName ?>" alt="">
+                                            <?php else: ?>
+                                                <div class="w-100 h-100 bg-secondary"></div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </td>
                                     <td><?= $row["name"] ?></td>
                                     <?php if ($SessRole == "admin"): ?>
                                         <td class="text-center"><?= $storeArr[$row["shop_id"]] ?></td>
