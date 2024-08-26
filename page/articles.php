@@ -239,7 +239,7 @@ foreach ($rowsUsers as $users) {
                             <?php echo ($articles["activation"] == 1) ? "<td>" . "上架中" : "<td class='text-danger'>" . "已下架"; ?></td>
                             </td>
                             <td><?= $articles["title"] ?></td>
-                            <td><?= getLeftChar($articles["content"], 50) . "..." ?></td>
+                            <td><?= getLeftChar($articles["content"], 70) . "..." ?></td>
                             <td><?= $productClassArr[$articles["product_class_id"]] ?></td>
                             <td><?= $usersArr[$id] ?></td>
                             <td><?= $formartDate ?></td>
