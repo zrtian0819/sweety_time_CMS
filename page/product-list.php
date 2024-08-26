@@ -370,7 +370,14 @@ $photoCount = $photorResult->num_rows;
                                         <td class="text-center"><?= $storeArr[$row["shop_id"]] ?></td>
                                     <?php endif; ?>
                                     <td class="dontNextLine text-center"><?= $classArr[$row["product_class_id"]] ?></td>
-                                    <td class="text-center"><?= number_format($row["price"]) ?></td>
+                                    <td class="text-center align-items-center">
+                                        <?php if ($row["discount"] != 1): ?>
+                                            <s><?= number_format($row["price"]) ?></s>
+                                            <span class="text-danger text-bolder"><?= number_format($row["price"] * $row["discount"]) ?></span>
+                                        <?php else: ?>
+                                            <span><?= number_format($row["price"]) ?></span>
+                                        <?php endif; ?>
+                                    </td>
                                     <td><?= getLeftChar($row["description"], 50) ?></td>
                                     <td class="text-center"><?= $row["stocks"] ?></td>
                                     <td class="text-center">
