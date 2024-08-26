@@ -160,7 +160,7 @@ $shopCount = $result->num_rows;
                                             <td class="align-middle">
                                                 <div class="teacher-profile d-flex align-items-center justify-content-center">
                                                     <?php if (!empty($logoPath) && file_exists("../images/shop_logo/" . $logoPath)): ?>
-                                                        <img src="../images/shop_logo/<?= $logoPath ?>" alt="<?= htmlspecialchars($name) ?> Logo" class="ratio ratio-4x3">
+                                                        <img src="../images/shop_logo/<?= $logoPath ?>?<?= rand(1, 1000) ?>" alt="<?= htmlspecialchars($name) ?> Logo" class="ratio ratio-4x3">
                                                     <?php else: ?>
                                                         <i class="fa-regular fa-image"></i>
                                                     <?php endif; ?>
