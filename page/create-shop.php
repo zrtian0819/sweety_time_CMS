@@ -1,13 +1,35 @@
 <?php
 require_once("../db_connect.php");
 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+if (isset($_SESSION["user"])) {
+    $role = $_SESSION["user"]["role"];
+    $userId = $_SESSION["user"]["user_id"];
+
+    if ($role == "admin") {
+
+        $shopId = "admin";
+    } elseif ($role == "shop") {
+        // $storeSql = "SELECT * from shop WHERE user_id = $userId";
+        // $storeResult = $conn->query($storeSql);
+        // $storeCount = $storeResult->num_rows;
+        // $storeRow = $storeResult->fetch_assoc();
+
+        $shopId = $_SESSION["shop"]["shop_id"];
+    }
+} else {
+    $role = "";
+    $userId = "";
+}
 ?>
 
 <!doctype html>
 <html lang="en">
 
 <head>
-    <title>成為店家</title>
+    <title>註冊申請</title>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta
@@ -75,24 +97,31 @@ require_once("../db_connect.php");
         <div class="row">
             <div class="col-md-6 mx-auto">
                 <div class="d-flex justify-content-center">
-                    <h3 class="mt-4 text-white fw-bolder" style="color: var( --text-color);">會員店家註冊申請</h3>
+                    <h3 class="mt-4 text-white fw-bolder" style="color: var( --text-color);">
+                    <?php if ($role == "admin"): ?>
+                        會員&店家註冊申請
+                    <?php else: ?>
+                        會員註冊
+                    <?php endif; ?>
+                    </h3>
                 </div>
                 <div class="create-shop-card mx-auto mb-5">
                     <div class="w-75">
                         <form action="../function/doCreateShop.php" method="POST" enctype="multipart/form-data">
+                            <h3>創立使用者帳號</h3>
                             <div class="mb-3">
-                                <label for="username" class="form-label">使用者姓名</label>
+                                <label for="username" class="form-label"><span class="text-danger">* </span>使用者姓名</label>
                                 <input class="form-control form-control-custom" type="text" id="username" name="username" required />
                             </div>
                             <div class="mb-3">
-                                <label for="account" class="form-label">帳號</label>
+                                <label for="account" class="form-label"><span class="text-danger">* </span>帳號</label>
                                 <div class="d-flex">
                                     <input class="form-control form-control-custom" type="text" id="account" name="account" required />
                                 </div>
                                 <div id="accountFeedback" class="invalid-feedback"></div>
                             </div>
                             <div class="mb-3">
-                                <label for="password" class="form-label" id="passWord-input">密碼</label>
+                                <label for="password" class="form-label" id="passWord-input"><span class="text-danger">* </span>密碼</label>
                                 <div class="input-group">
                                     <input class="form-control form-control-custom" type="password" id="password" name="password" required />
                                     <button class="btn btn-toggle-password" type="button" id="togglePassword">
@@ -101,7 +130,7 @@ require_once("../db_connect.php");
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <label for="birthday" class="form-label">生日</label>
+                                <label for="birthday" class="form-label"><span class="text-danger">* </span>生日</label>
                                 <input class="form-control form-control-custom" type="date" id="birthday" name="birthday" required />
                             </div>
                             <div class="mb-3">
@@ -112,8 +141,12 @@ require_once("../db_connect.php");
                                 <label for="phone" class="form-label">電話</label>
                                 <input class="form-control form-control-custom" type="text" id="phone" name="phone" required />
                             </div>
+
+                            <?php if ($role == "admin"): ?>
+                            <hr>
+                            <h3>創立店家</h3>
                             <div class="mb-3">
-                                <label for="shopName" class="form-label">店名</label>
+                                <label for="shopName" class="form-label"><span class="text-danger">* </span>店名</label>
                                 <input class="form-control form-control-custom" type="text" id="shopName" name="shopName" required />
                             </div>
                             <div class="mb-3">
@@ -141,9 +174,11 @@ require_once("../db_connect.php");
                                 </div>
 
                                 <hr>
+                            <?php endif; ?>
+                            </div>
+                            <div class="mb-3">
                                 <button type="submit" class="btn btn-neumorphic  fw-bolder">送出</button>
                             </div>
-
                         </form>
                     </div>
                 </div>
