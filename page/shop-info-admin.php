@@ -16,7 +16,7 @@ if ($role != "admin") {
 
 // 預設分頁值
 $page = isset($_GET['p']) ? (int)$_GET['p'] : 1;
-$per_page = 5;
+$per_page = 10;
 $start_item = ($page - 1) * $per_page;
 
 // 搜索條件
@@ -90,6 +90,23 @@ $shopCount = $result->num_rows;
             box-shadow: none;
             border-radius: 20px 20px 0px 0px;
         }
+        .small-img {
+            width: 100px;
+            height: 100px;
+            transition: 0.3s;
+            cursor: pointer;
+
+            &:hover {
+                scale: 2;
+                background-color: white;
+                box-shadow: 0 0 15px 2px pink;
+            }
+
+            &:active {
+                transition: 0s;
+                scale: 4.6;
+            }
+        }
     </style>
 </head>
 <body>
@@ -132,8 +149,8 @@ $shopCount = $result->num_rows;
                         <table class="table table-hover bdrs table-responsive align-middle" style="min-width: 1000px;">
                                 <thead class="text-center">
                                     <tr>
-                                        <th class="dontNextLine text-center">Shop_Logo</th>
                                         <th class="dontNextLine text-center">店家名稱</th>
+                                        <th class="dontNextLine text-center">Shop_Logo</th>
                                         <th class="dontNextLine text-center">用戶名稱</th>
                                         <th class="dontNextLine text-center">電話</th>
                                         <th class="dontNextLine text-center">地址</th>
@@ -157,16 +174,16 @@ $shopCount = $result->num_rows;
                                         $activation = $row['activation'];
                                     ?>
                                         <tr>
-                                            <td class="align-middle">
-                                                <div class="teacher-profile d-flex align-items-center justify-content-center">
+                                            <td class="text-center align-middle"><?= $name ?></td>
+                                            <td>
+                                                <div class="small-img d-flex align-items-center justify-content-center ">
                                                     <?php if (!empty($logoPath) && file_exists("../images/shop_logo/" . $logoPath)): ?>
-                                                        <img src="../images/shop_logo/<?= $logoPath ?>?<?= rand(1, 1000) ?>" alt="<?= htmlspecialchars($name) ?> Logo" class="ratio ratio-4x3">
+                                                        <img class="w-100 h-100 object-fit-fill" src="../images/shop_logo/<?= $logoPath ?>?<?= rand(1, 1000) ?>" alt="<?= htmlspecialchars($name) ?> Logo" class="ratio ratio-4x3">
                                                     <?php else: ?>
                                                         <i class="fa-regular fa-image"></i>
                                                     <?php endif; ?>
                                                 </div>
                                             </td>
-                                            <td class="text-center align-middle"><?= $name ?></td>
                                             <td class="text-center align-middle"><?= $username ?></td>
                                             <td class="text-center dontNextLine align-middle"><?= $phone ?></td>
                                             <td class="dontNextLine align-middle"><?= $address ?></td>
