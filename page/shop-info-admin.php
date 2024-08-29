@@ -176,9 +176,9 @@ $shopCount = $result->num_rows;
                                         <tr>
                                             <td class="text-center align-middle"><?= $name ?></td>
                                             <td>
-                                                <div class="small-img d-flex align-items-center justify-content-center ">
+                                                <div class="small-img d-flex align-items-center justify-content-center rounded overflow-hidden">
                                                     <?php if (!empty($logoPath) && file_exists("../images/shop_logo/" . $logoPath)): ?>
-                                                        <img class="w-100 h-100 object-fit-fill" src="../images/shop_logo/<?= $logoPath ?>?<?= rand(1, 1000) ?>" alt="<?= htmlspecialchars($name) ?> Logo" class="ratio ratio-4x3">
+                                                        <img class="w-100 h-100 object-fit-contain " src="../images/shop_logo/<?= $logoPath ?>?<?= rand(1, 1000) ?>" alt="<?= htmlspecialchars($name) ?> Logo" class="ratio ratio-4x3">
                                                     <?php else: ?>
                                                         <i class="fa-regular fa-image"></i>
                                                     <?php endif; ?>
