@@ -69,7 +69,7 @@
              <li class="nav-item">
                  <a class="nav-link" href="product-list.php?shopId=<?= $shopId ?>">商品管理</a>
              </li>
-        <?php if ($role == "admin"): ?>
+        <?php if ($role == "shop" || $role == "admin"): ?>
              <li class="nav-item">
                  <a class="nav-link" href="order-list.php">訂單管理</a>
              </li>
