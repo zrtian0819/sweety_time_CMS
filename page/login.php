@@ -39,16 +39,16 @@ if (isset($_SESSION['user']) && !empty($_SESSION['user'])) {
                 <img class="h-100" src="../images/sweet_time_logo1.png" alt="">
             </div>
             <!-- <h1>log in</h1> -->
-            <h1>後台系統</h1>
+            <h1 class="mb-5">後台系統</h1>
             <form id="loginForm" action="doLogin.php" method="POST" class="d-flex flex-column">
                 <!-- <input class="form-control form-control-custom mb-4" type="text" placeholder="Account" id="account" name="account" required> -->
                 <div class="form-group">
-                    <input class="form-control form-control-custom mb-4" type="text" placeholder="" id="account" name="account" required>
+                    <input class="form-control form-control-custom mb-3" type="text" placeholder="" id="account" name="account" required>
                     <label for="account" class="form-label">Account</label>
                 </div>
                 <!-- <input class="form-control form-control-custom mb-2" type="password" placeholder="password" id="password" name="password" required> -->
                 <div class="form-group">
-                    <input class="form-control form-control-custom mb-4" type="password" placeholder="" id="password" name="password" required>
+                    <input class="form-control form-control-custom " type="password" placeholder="" id="password" name="password" required>
                     <label for="password" class="form-label">Password</label>
                 </div>
                 <div class="d-flex justify-content-center">
@@ -56,7 +56,7 @@ if (isset($_SESSION['user']) && !empty($_SESSION['user'])) {
                 </div>
             </form>
         </div>
-        <a class="sign-up-link mt-3 text-white" type="button" onclick="window.location.href='../page/create-shop.php'">註冊帳號</a>
+        <a class="sign-up-link mt-1 text-white" type="button" onclick="window.location.href='../page/create-shop.php'">註冊帳號</a>
     </div>
 
 
