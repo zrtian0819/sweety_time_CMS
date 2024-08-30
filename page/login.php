@@ -48,8 +48,8 @@ if (isset($_SESSION['user']) && !empty($_SESSION['user'])) {
                 </div>
                 <!-- <input class="form-control form-control-custom mb-2" type="password" placeholder="password" id="password" name="password" required> -->
                 <div class="form-group">
-                    <input class="form-control form-control-custom mb-4" type="text" placeholder="" id="password" name="password" required>
-                    <label for="account" class="form-label">Password</label>
+                    <input class="form-control form-control-custom mb-4" type="password" placeholder="" id="password" name="password" required>
+                    <label for="password" class="form-label">Password</label>
                 </div>
                 <div class="d-flex justify-content-center">
                     <button class="log-in-button btn-custom" type="submit" id="signIn">登入</button>
