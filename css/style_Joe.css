@@ -348,7 +348,32 @@ h6 {
 .form-select-custom:focus {
   border-color: var(--primary-color);
   box-shadow: 0 0 0 0.25rem rgba(244, 162, 147, 0.25);
+  /* outline: none;
+  border-color: #007bff; */
 }
+
+.form-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+.form-control-custom:focus + .form-label,
+.form-control-custom:not(:placeholder-shown) + .form-label {
+  top: -26px;
+  left: 5px;
+  font-size: 16px;
+  color: var(--primary-color);
+  background-color: rgba(255, 255, 255, 0);
+  padding: 0 5px;
+}
+.form-label {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  transition: 0.2s ease all;
+  pointer-events: none;
+  color: #999;
+}
+
 
 .btn-custom {
   background-color: var(--primary-color);

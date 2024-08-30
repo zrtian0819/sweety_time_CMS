@@ -26,6 +26,7 @@ if (isset($_SESSION['user']) && !empty($_SESSION['user'])) {
     <?php include("../css/css_Joe.php"); ?>
 
     <style>
+
     </style>
 </head>
 
@@ -40,10 +41,17 @@ if (isset($_SESSION['user']) && !empty($_SESSION['user'])) {
             <!-- <h1>log in</h1> -->
             <h1>後台系統</h1>
             <form id="loginForm" action="doLogin.php" method="POST" class="d-flex flex-column">
-                <input class="form-control form-control-custom mb-4" type="text" placeholder="Account" id="account" name="account" required>
-                <input class="form-control form-control-custom mb-2" type="password" placeholder="password" id="password" name="password" required>
+                <!-- <input class="form-control form-control-custom mb-4" type="text" placeholder="Account" id="account" name="account" required> -->
+                <div class="form-group">
+                    <input class="form-control form-control-custom mb-4" type="text" placeholder="" id="account" name="account" required>
+                    <label for="account" class="form-label">Account</label>
+                </div>
+                <!-- <input class="form-control form-control-custom mb-2" type="password" placeholder="password" id="password" name="password" required> -->
+                <div class="form-group">
+                    <input class="form-control form-control-custom mb-4" type="text" placeholder="" id="password" name="password" required>
+                    <label for="account" class="form-label">Password</label>
+                </div>
                 <div class="d-flex justify-content-center">
-
                     <button class="log-in-button btn-custom" type="submit" id="signIn">登入</button>
                 </div>
             </form>

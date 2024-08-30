@@ -201,21 +201,6 @@ body {
   box-shadow: inset 8px 8px 16px #efbeb6, inset -8px -8px 16px #ffffff;
 }
 
-.form-control-neumorphic {
-  background: #ffffff;
-  border: none;
-  border-radius: 10px;
-  padding: 10px;
-  box-shadow: inset 8px 8px 16px #d1d9e6, inset -8px -8px 16px #ffffff;
-}
-
-.form-control-custom {
-  border-color: var(--primary-color);
-  color: var(--text-color);
-  border-radius: 25px;
-}
-
-
 .card-neumorphic {
   background: #ffffff;
   border: .5px solid #f4a1939f;
