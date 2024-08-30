@@ -45,7 +45,7 @@ function getBasePageName()
             <li class="nav-item">
                 <a class="nav-link <?= (getBasePageName() == 'product-list') ? 'active' : '' ?>" href="product-list.php">商品管理</a>
             </li>
-            <?php if ($role == "admin"): ?>
+            <?php if ($role == "shop" || $role == "admin"): ?>
              <li class="nav-item">
                  <a class="nav-link <?= (getBasePageName() == 'order-list') ? 'active' : '' ?>" href="order-list.php">訂單管理</a>
              </li>
