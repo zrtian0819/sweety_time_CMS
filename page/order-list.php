@@ -9,10 +9,10 @@ if (session_status() == PHP_SESSION_NONE) {
 $role = $_SESSION["user"]["role"]; //判斷登入角色
 
 // 根据角色重定向到不同頁面
-if ($role != "admin") {
-    header("Location: shop-info.php");
-    exit;
-}
+// if ($role == "shop" || $role == "admin") {
+//     header("Location: shop-info.php");
+//     exit;
+// }
 
 
 
@@ -22,7 +22,28 @@ $sql = "SELECT users.name AS user_name, shop.name AS shop_name, coupon.name AS c
         JOIN shop ON orders.shop_id = shop.shop_id 
         JOIN users ON orders.user_id = users.user_id 
         LEFT JOIN coupon ON orders.coupon_id = coupon.coupon_id";
-$result = $conn->query($sql);
+
+// 根據角色修改 SQL 查詢
+if ($role == "shop") {
+    $shop_id = $_SESSION["shop"]["shop_id"];
+    $sql .= " WHERE orders.shop_id = ?";
+}
+
+$stmt = $conn->prepare($sql);
+
+if ($role == "shop") {
+    $stmt->bind_param("i", $shop_id);
+}
+
+$stmt->execute();
+$result = $stmt->get_result();
+
+$orders = [];
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        $orders[] = $row;
+    }
+}
 
 ?>
 
@@ -72,25 +93,25 @@ $result = $conn->query($sql);
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    if ($result->num_rows > 0) {
-                        while($row = $result->fetch_assoc()) {
-                            echo "<tr>";
-                            echo "<td>".$row["user_name"]."</td>";
-                            echo "<td>".$row["shop_name"]."</td>";
-                            echo "<td>".$row["coupon_name"]."</td>";
-                            echo "<td>".$row["discount_rate"]."</td>";
-                            echo "<td>".$row["delivery_address"]."</td>";
-                            echo "<td>".$row["delivery_name"]."</td>";
-                            echo "<td>".$row["delivery_phone"]."</td>";
-                            echo "<td>".$row["order_time"]."</td>";
-                            echo "<td>".$row["total_price"]."</td>";
-                            echo "</tr>";
-                        }
-                    } else {
-                        echo "<tr><td colspan='9'>沒有找到訂單</td></tr>";
-                    }
-                    ?>
+                    <?php if (!empty($orders)): ?>
+                        <?php foreach ($orders as $order): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($order["user_name"]) ?></td>
+                                <td><?= htmlspecialchars($order["shop_name"]) ?></td>
+                                <td><?= htmlspecialchars($order["coupon_name"]) ?></td>
+                                <td><?= htmlspecialchars($order["discount_rate"]) ?></td>
+                                <td><?= htmlspecialchars($order["delivery_address"]) ?></td>
+                                <td><?= htmlspecialchars($order["delivery_name"]) ?></td>
+                                <td><?= htmlspecialchars($order["delivery_phone"]) ?></td>
+                                <td><?= htmlspecialchars($order["order_time"]) ?></td>
+                                <td><?= htmlspecialchars($order["total_price"]) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="9">沒有找到訂單</td>
+                        </tr>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
