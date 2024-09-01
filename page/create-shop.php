@@ -35,58 +35,9 @@ if (isset($_SESSION["user"])) {
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <?php include("../css/css_Joe.php"); ?>
     <?php include("../css/login-style.php"); ?>
+    <?php include("../css/css_Joe.php"); ?>
     <style>
-        form label {
-            font-weight: bold;
-        }
-
-        .input-group {
-            display: flex;
-            align-items: stretch;
-        }
-
-        .btn-check-account {
-            height: 100%;
-            width: 50px;
-            display: flex;
-            align-items: center;
-            padding: 0.375rem 0.75rem;
-            margin-left: 10px;
-            white-space: nowrap;
-        }
-
-        #imagePreview {
-            max-width: 100%;
-            max-height: 200px;
-            margin-top: 10px;
-            display: none;
-        }
-
-        .input-group .form-control {
-            border-right: none;
-        }
-
-        .btn-toggle-password {
-            background-color: #f0f0f0;
-            border: 1px solid #ced4da;
-            border-left: none;
-            color: #495057;
-            padding: 0.375rem 0.75rem;
-        }
-
-        .btn-toggle-password:hover,
-        .btn-toggle-password:focus {
-            background-color: #e9ecef;
-            color: #495057;
-        }
-
-        .input-group:focus-within .form-control,
-        .input-group:focus-within .btn-toggle-password {
-            border-color: #80bdff;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
-        }
 
     </style>
 </head>
@@ -107,64 +58,61 @@ if (isset($_SESSION["user"])) {
                 </div>
                 <div class="create-shop-card mx-auto mb-5">
                     <div class="w-75">
-                        <form action="../function/doCreateShop.php" method="POST" enctype="multipart/form-data">
-                            <h3>創立使用者帳號</h3>
-                            <div class="mb-3">
+                        <form id="loginForm" action="../function/doCreateShop.php" method="POST" enctype="multipart/form-data">
+                            <h3 class="mb-5">創立使用者帳號</h3>
+                            <div class="form-group">
+                                <input class="form-control form-control-custom mb-3" type="text" placeholder="" id="username" name="username" required />
                                 <label for="username" class="form-label"><span class="text-danger">* </span>使用者姓名</label>
-                                <input class="form-control form-control-custom" type="text" id="username" name="username" required />
                             </div>
-                            <div class="mb-3">
+                            <div class="form-group">
+                                <input class="form-control form-control-custom" type="text" placeholder="" id="account" name="account" required />
                                 <label for="account" class="form-label"><span class="text-danger">* </span>帳號</label>
-                                <div class="d-flex">
-                                    <input class="form-control form-control-custom" type="text" id="account" name="account" required />
-                                </div>
                                 <div id="accountFeedback" class="invalid-feedback"></div>
                             </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label" id="passWord-input"><span class="text-danger">* </span>密碼</label>
+                            <div class="form-group">
                                 <div class="input-group">
-                                    <input class="form-control form-control-custom" type="password" id="password" name="password" required />
+                                    <input class="form-control form-control-custom" type="password" placeholder="" id="password" name="password" required />
+                                    <label for="password" class="form-label" id="passWord-input"><span class="text-danger">* </span>密碼</label>
                                     <button class="btn btn-toggle-password" type="button" id="togglePassword">
                                         <i class="fa-solid fa-eye"></i>
                                     </button>
                                 </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="birthday" class="form-label"><span class="text-danger">* </span>生日</label>
-                                <input class="form-control form-control-custom" type="date" id="birthday" name="birthday" required />
+                            <div class="form-group">
+                                <input class="form-control form-control-custom" type="date" placeholder="" id="birthday" name="birthday" required aria-label="生日" />
+                                <label for="birthday" class="form-label"></label>
                             </div>
-                            <div class="mb-3">
+                            <div class="form-group">
+                                <input class="form-control form-control-custom" type="text" placeholder="" id="email" name="email" required />
                                 <label for="email" class="form-label">E-mail</label>
-                                <input class="form-control form-control-custom" type="text" id="email" name="email" required />
                             </div>
-                            <div class="mb-3">
+                            <div class="form-group">
+                                <input class="form-control form-control-custom" type="text" placeholder="" id="phone" name="phone" required />
                                 <label for="phone" class="form-label">電話</label>
-                                <input class="form-control form-control-custom" type="text" id="phone" name="phone" required />
                             </div>
 
                             <?php if ($role == "admin"): ?>
                             <hr>
-                            <h3>創立店家</h3>
-                            <div class="mb-3">
+                            <h3 class="mb-5">創立店家</h3>
+                            <div class="form-group">
+                                <input class="form-control form-control-custom" type="text" placeholder="" id="shopName" name="shopName" required />
                                 <label for="shopName" class="form-label"><span class="text-danger">* </span>店名</label>
-                                <input class="form-control form-control-custom" type="text" id="shopName" name="shopName" required />
                             </div>
-                            <div class="mb-3">
+                            <div class="form-group">
+                                <input class="form-control form-control-custom" type="text" placeholder="" id="shopAddress" name="shopAddress" required />
                                 <label for="shopAddress" class="form-label">店家地址</label>
-                                <input class="form-control form-control-custom" type="text" id="shopAddress" name="shopAddress" required />
                             </div>
-                            <div class="mb-3">
+                            <div class="form-group">
+                                <input class="form-control form-control-custom" type="text" placeholder="" id="shopPhone" name="shopPhone" required />
                                 <label for="shopPhone" class="form-label">店家電話</label>
-                                <input class="form-control form-control-custom" type="text" id="shopPhone" name="shopPhone" required />
                             </div>
-                            <div class="mb-3">
+                            <div class="form-group">
+                                <textarea class="form-control form-control-custom" placeholder="" id="shopDescription" name="shopDescription" rows="3" required></textarea>
                                 <label for="shopDescription" class="form-label">店家描述</label>
-                                <textarea class="form-control form-control-custom" id="shopDescription" name="shopDescription" rows="3" required></textarea>
                             </div>
                             <div class="mb-3">
-                                <label for="shopImage" class="form-label">店家圖片</label>
                                 <div class="d-flex align-items-center">
-                                    <input type="file" class="form-control form-control-custom" id="shopImage" name="shopImage" accept="image/*">
+                                    <input type="file" class="form-control form-control-custom" placeholder="" id="shopImage" name="shopImage" accept="image/*">
                                     <button type="button" class="btn btn-neumorphic" id="uploadButton">
                                         上傳照片
                                     </button>
