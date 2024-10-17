@@ -258,10 +258,14 @@ foreach ($rowsUsers as $users) {
                             <!-- 右側按鈕 -->
                             <td>
                                 <div class="d-flex justify-content-center ">
+                                    <!-- modal -->
                                     <div class="me-1">
-                                        <a href="article.php?id=<?= $articles["article_id"] ?>" id="" class="btn btn-custom"><i class="fa-solid fa-eye"></i></a>
+                                        <button type="button" class="btn btn-custom view-details" data-id="<?=$articles["article_id"] ?>" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </button>
                                     </div>
 
+                                    <!-- 編輯資料 -->
                                     <div class="me-1">
                                         <a href="articles-edit.php?id=<?= $articles["article_id"] ?>" class="btn btn-custom"><i class="fa-solid fa-pen"></i></a>
                                     </div>
@@ -327,8 +331,50 @@ foreach ($rowsUsers as $users) {
         </div>
     </div>
 
+    <!-- 詳細資訊彈跳視窗 -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">詳細資訊</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="artDetails"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn btn-custom" data-bs-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <?php include("../js.php"); ?>
+
+    <script>
+         // 當點擊查看詳細資料
+         document.querySelectorAll('.view-details').forEach(button => {
+            button.addEventListener('click', function() {
+                let articleId = this.getAttribute('data-id');
+
+                // 使用 fetch 從 PHP 獲取教師詳細資料
+                fetch(`articleView.php?id=${articleId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // 動態填充彈跳視窗中的內容
+                        document.getElementById('artDetails').innerHTML = `
+                            <img src="../images/articles/${data.img_path}" alt="${data.title}" class="img-fluid">
+                            <p><strong>title:</strong> ${data.title}</p>
+                            <p><strong>ID:</strong> ${data.article_id}</p>
+                             <p><strong>status:</strong> ${data.artValid ? '上架中' : '已下架'}</p>
+                            <p><strong>created at:</strong> ${data.created_at}</p>
+                            <p><strong>content:</strong> ${data.content}</p>
+                        `;
+                    });
+            });
+        });
+    </script>
+
     <?php $conn->close() ?>
 </body>
 
