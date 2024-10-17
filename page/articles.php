@@ -258,10 +258,6 @@ foreach ($rowsUsers as $users) {
                             <!-- 右側按鈕 -->
                             <td>
                                 <div class="d-flex justify-content-center ">
-                                    <div class="me-1">
-                                        <a href="article.php?id=<?= $articles["article_id"] ?>" id="" class="btn btn-custom"><i class="fa-solid fa-eye"></i></a>
-                                    </div>
-
                                     <!-- modal -->
                                     <div class="me-1">
                                         <button type="button" class="btn btn-custom view-details" data-id="<?=$articles["article_id"] ?>" data-bs-toggle="modal" data-bs-target="#exampleModal">
