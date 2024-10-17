@@ -261,12 +261,15 @@ foreach ($rowsUsers as $users) {
                                     <div class="me-1">
                                         <a href="article.php?id=<?= $articles["article_id"] ?>" id="" class="btn btn-custom"><i class="fa-solid fa-eye"></i></a>
                                     </div>
+
                                     <!-- modal -->
                                     <div class="me-1">
-                                        <button type="button" class="btn btn-custom view-details" data-id="<?= htmlspecialchars($articles["article_id"]) ?>" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                        <button type="button" class="btn btn-custom view-details" data-id="<?=$articles["article_id"] ?>" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                             <i class="fa-solid fa-eye"></i>
                                         </button>
                                     </div>
+
+                                    <!-- 編輯資料 -->
                                     <div class="me-1">
                                         <a href="articles-edit.php?id=<?= $articles["article_id"] ?>" class="btn btn-custom"><i class="fa-solid fa-pen"></i></a>
                                     </div>
@@ -359,17 +362,17 @@ foreach ($rowsUsers as $users) {
                 let articleId = this.getAttribute('data-id');
 
                 // 使用 fetch 從 PHP 獲取教師詳細資料
-                fetch(`article.php?id=${articleId}`)
+                fetch(`articleView.php?id=${articleId}`)
                     .then(response => response.json())
                     .then(data => {
                         // 動態填充彈跳視窗中的內容
                         document.getElementById('artDetails').innerHTML = `
-                            <img src="../images/articles/${data.img_path}" alt="${data.name}" class="img-fluid">
-                            <p><strong>標題:</strong> ${data.title}</p>
+                            <img src="../images/articles/${data.img_path}" alt="${data.title}" class="img-fluid">
+                            <p><strong>title:</strong> ${data.title}</p>
                             <p><strong>ID:</strong> ${data.article_id}</p>
-                             <p><strong>狀態:</strong> ${data.artValid ? '開課中' : '已下架'}</p>
-                            <p><strong>建立時間:</strong> ${data.created_at}</p>
-                            <p><strong>內文:</strong> ${data.content}</p>
+                             <p><strong>status:</strong> ${data.artValid ? '上架中' : '已下架'}</p>
+                            <p><strong>created at:</strong> ${data.created_at}</p>
+                            <p><strong>content:</strong> ${data.content}</p>
                         `;
                     });
             });
